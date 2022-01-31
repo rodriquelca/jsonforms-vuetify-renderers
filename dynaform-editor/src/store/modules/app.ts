@@ -1,41 +1,32 @@
 // Pathify
-import { CategorizationService } from '../../api/categorizationService';
-import { make, Payload } from 'vuex-pathify';
+import { CategorizationService } from '@/api/categorizationService';
+import { make } from 'vuex-pathify';
 import { AppState } from './types';
 import { RootState } from '../types';
-import { Module } from 'vuex';
+import { ActionTree, Module, MutationTree } from 'vuex';
 import { createAjv, extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
-import {
-  DefaultPaletteService,
-  PaletteService,
-} from '../../api/paletteService';
+import { DefaultPaletteService } from '@/api/paletteService';
 const ajv = createAjv({ useDefaults: true });
-
-import { withCloneTree, withCloneTrees } from '../../util/clone';
+import { withCloneTree, withCloneTrees } from '@/util/clone';
 import {
   findByUUID,
   getRoot,
-  isEditorControl,
-  isEditorLayout,
   isUUIDError,
   linkElements,
   linkSchemas,
-  traverse,
   UUIDError,
-} from '../../util/schemasUtil';
-import { buildSchemaTree, cleanLinkedElements, SchemaElement } from '../../model/schema';
+} from '@/util/schemasUtil';
+import { buildSchemaTree, SchemaElement } from '@/model/schema';
 import {
-  buildEditorUiSchemaTree,
   cleanUiSchemaLinks,
   EditorLayout,
   EditorUISchemaElement,
-} from '../../model/uischema';
-import { setSchema } from '@jsonforms/core';
+} from '@/model/uischema';
 
 /** Removes the given UI element from its tree.
  *  If a SchemaElement is provided, the element to remove will be cleaned up from all linkedUISchemaElements fields in the schema.
  */
- const removeUiElement = (
+const removeUiElement = (
   elementToRemove: EditorUISchemaElement,
   schema?: SchemaElement,
   categorizationService?: CategorizationService
@@ -117,11 +108,12 @@ const state: AppState = {
   },
 };
 // make all mutations
-const mutations = {
+const mutations: MutationTree<AppState> = {
   ...make.mutations(state),
-  SET_PALLETE_ELEMENTS: (state, value) => state.editor.paletteElements = value,
-  REMOVE_UISCHEMA_ELEMENT: (state, elementUUID ) => {
-    const clone = withCloneTrees(
+  SET_PALLETE_ELEMENTS: (state, value) =>
+    (state.editor.paletteElements = value),
+  REMOVE_UISCHEMA_ELEMENT: (state, elementUUID) => {
+    const clone: any = withCloneTrees(
       state.editor.uiSchema,
       elementUUID,
       state.editor.schema,
@@ -134,11 +126,7 @@ const mutations = {
           console.error('Could not remove ui element ', elementToRemove);
           return state;
         }
-        const removeResult = removeUiElement(
-          elementToRemove,
-          newSchema,
-          state.categorizationService
-        );
+        const removeResult = removeUiElement(elementToRemove, newSchema);
         if (isUUIDError(removeResult)) {
           console.error('Could not remove ui element ', removeResult);
           return state;
@@ -174,8 +162,8 @@ const mutations = {
     );
     state.editor.uiSchema = clone;
   },
-  ADD_SCOPED_ELEMENT_TO_LAYOUT: (state, payload) => { 
-    const clone = withCloneTrees(
+  ADD_SCOPED_ELEMENT_TO_LAYOUT: (state, payload) => {
+    const clone: any = withCloneTrees(
       state.editor.uiSchema,
       payload.layoutUUID,
       state.editor.schema,
@@ -196,7 +184,6 @@ const mutations = {
           console.error('Could not add new UI element', newUIElement);
           return state;
         }
-        
 
         return {
           schema: getRoot(newSchema),
@@ -207,25 +194,24 @@ const mutations = {
     console.log(clone);
     state.editor.uiSchema = clone.uiSchema;
   },
-  SET_SCHEMA:(state, payload)=>{
-
-  const clone = withCloneTree(
-        state.editor.uiSchema,
-        undefined,
-        state,
-        (clonedUiSchema) => {
-          return linkSchemas(
-            buildSchemaTree(payload),
-            cleanUiSchemaLinks(clonedUiSchema)
-          );
-        }
-      );
-      state.editor.schema = clone.schema;
-  }
+  SET_SCHEMA: (state, payload) => {
+    const clone = withCloneTree(
+      state.editor.uiSchema,
+      undefined,
+      state,
+      (clonedUiSchema) => {
+        return linkSchemas(
+          buildSchemaTree(payload),
+          cleanUiSchemaLinks(clonedUiSchema)
+        );
+      }
+    );
+    state.editor.schema = clone.schema;
+  },
 };
 
 // const actions = make.actions(state);
-const actions = {
+const actions: ActionTree<AppState, RootState> = {
   // automatically create only `setItems()` action
   ...make.actions(state),
 
@@ -235,22 +221,19 @@ const actions = {
     const palleteElements = paletteService.getPaletteElements();
     commit('SET_PALLETE_ELEMENTS', palleteElements);
   },
-  removeUiSchemaElement({commit}, payload){
+  removeUiSchemaElement({ commit }, payload) {
     console.log(payload);
-    commit ('REMOVE_UISCHEMA_ELEMENT', payload);
+    commit('REMOVE_UISCHEMA_ELEMENT', payload);
   },
-  addScopedElementToLayout({commit}, payload){
-    commit ('ADD_SCOPED_ELEMENT_TO_LAYOUT', payload);
+  addScopedElementToLayout({ commit }, payload) {
+    commit('ADD_SCOPED_ELEMENT_TO_LAYOUT', payload);
   },
-  addUnscopedElementToLayout({commit}, payload){
-    commit ('ADD_UNSCOPED_ELEMENT_TO_LAYOUT', payload);
+  addUnscopedElementToLayout({ commit }, payload) {
+    commit('ADD_UNSCOPED_ELEMENT_TO_LAYOUT', payload);
   },
-  setSchema({commit}, payload) {
-    commit ('SET_SCHEMA', payload);
-  }
-  // setSchema(){
-  //   commit('SET_SCHEMA', palleteElements);
-  // }
+  setSchema({ commit }, payload) {
+    commit('SET_SCHEMA', payload);
+  },
 };
 
 const getters = {};
