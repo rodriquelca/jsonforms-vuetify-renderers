@@ -1,12 +1,13 @@
 <template>
   <div>
-     <json-forms v-if="useUiSchema" 
+    <json-forms
+      v-if="uischema"
       :renderers="editorRenderers"
       :data="data"
-      :uischema="useUiSchema"
-      :schema="useExportSchema"
+      :uischema="uischema"
+      :schema="schema"
     />
-    <EmptyEditor v-else/>
+    <EmptyEditor v-else />
   </div>
 </template>
 
@@ -16,40 +17,24 @@ import { PropType } from 'vue';
 import { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
 import EmptyEditor from './EmptyEditor.vue';
 import { sync } from 'vuex-pathify';
-import {useExportSchema} from '../../../util'
-export default {
+
+import { defineComponent, ref } from '../../../util/vue';
+import { editorRendererProps } from '../../../util/composition';
+
+const Editor = defineComponent({
   name: 'Editor',
   props: {
-    editorRenderers: {
-      required: false,
-      type: Array as PropType<JsonFormsRendererRegistryEntry[]>,
-    },
-    schema: {
-        type: Object,
-      default:() => undefined
-    }
+     ...editorRendererProps(),
   },
-  
   components: {
     JsonForms,
     EmptyEditor,
   },
   data() {
-    return{
-
+    return {
       data: {},
-      useExportSchema:useExportSchema(this.schema)
-     }
-    
+    };
   },
-  computed: {
-     useUiSchema: sync('app/editor@uiSchema'),
-    //  useExportSchema: function (){
-    //    return useExportSchema(this.schema);
-    //  }
-  },
-  methods:{
-   
-  }
-};
+});
+export default Editor;
 </script>

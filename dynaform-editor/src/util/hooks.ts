@@ -29,6 +29,5 @@ export const useExportSchema = (editorSchema: SchemaElement) => {
   element: T1,
   transform: (el: T1) => T2
 ) => {
-  console.log(transform(element));   
   return transform(element);
 };

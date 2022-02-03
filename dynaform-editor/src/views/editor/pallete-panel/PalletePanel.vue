@@ -60,7 +60,7 @@ export default {
   },
   props: {
     schema: {
-      type: Object,
+      type: [Object , Boolean],
     },
   },
   data() {

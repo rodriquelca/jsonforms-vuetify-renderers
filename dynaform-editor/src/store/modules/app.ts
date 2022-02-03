@@ -81,6 +81,25 @@ const removeUiElement = (
   return true;
 };
 
+const createUnscopedUiSchema = (state: AppState, payload: any) => {
+  return withCloneTree(
+    state.editor.uiSchema,
+    payload.layoutUUID,
+    state.editor.uiSchema,
+    (newUiSchema) => {
+      const newUIElement = payload.uiSchemaElement;
+      newUIElement.parent = newUiSchema;
+      (newUiSchema as EditorLayout).elements.splice(
+        payload.index,
+        0,
+        newUIElement
+      );
+      // state.editor.uiSchema = getRoot(newUiSchema as EditorUISchemaElement);;
+      return getRoot(newUiSchema as EditorUISchemaElement);
+    }
+  );
+};
+
 const state: AppState = {
   editor: {
     paletteElements: [],
@@ -110,6 +129,9 @@ const state: AppState = {
 // make all mutations
 const mutations: MutationTree<AppState> = {
   ...make.mutations(state),
+  SET_UI_SCHEMA: (state, value) => {
+    state.editor.uiSchema = value;
+  },
   SET_PALLETE_ELEMENTS: (state, value) =>
     (state.editor.paletteElements = value),
   REMOVE_UISCHEMA_ELEMENT: (state, elementUUID) => {
@@ -120,8 +142,6 @@ const mutations: MutationTree<AppState> = {
       undefined,
       state,
       (elementToRemove, newSchema) => {
-        console.log(elementToRemove);
-        console.log(newSchema);
         if (!elementToRemove) {
           console.error('Could not remove ui element ', elementToRemove);
           return state;
@@ -149,7 +169,6 @@ const mutations: MutationTree<AppState> = {
       payload.layoutUUID,
       state.editor.uiSchema,
       (newUiSchema) => {
-        // console.log(newUiSchema);
         const newUIElement = payload.uiSchemaElement;
         newUIElement.parent = newUiSchema;
         (newUiSchema as EditorLayout).elements.splice(
@@ -171,14 +190,12 @@ const mutations: MutationTree<AppState> = {
       state,
       (newUiSchema, newSchema) => {
         const newUIElement = payload.uiSchemaElement;
-        newUIElement.parent = newUiSchema;
+        // newUIElement.parent = newUiSchema;
         (newUiSchema as EditorLayout).elements.splice(
           payload.index,
           0,
           newUIElement
         );
-        console.log(newUIElement);
-        console.log(newSchema);
 
         if (!newSchema || !linkElements(newUIElement, newSchema)) {
           console.error('Could not add new UI element', newUIElement);
@@ -191,7 +208,6 @@ const mutations: MutationTree<AppState> = {
         };
       }
     );
-    console.log(clone);
     state.editor.uiSchema = clone.uiSchema;
   },
   SET_SCHEMA: (state, payload) => {
@@ -222,17 +238,21 @@ const actions: ActionTree<AppState, RootState> = {
     commit('SET_PALLETE_ELEMENTS', palleteElements);
   },
   removeUiSchemaElement({ commit }, payload) {
-    console.log(payload);
     commit('REMOVE_UISCHEMA_ELEMENT', payload);
   },
   addScopedElementToLayout({ commit }, payload) {
     commit('ADD_SCOPED_ELEMENT_TO_LAYOUT', payload);
   },
-  addUnscopedElementToLayout({ commit }, payload) {
-    commit('ADD_UNSCOPED_ELEMENT_TO_LAYOUT', payload);
+  addUnscopedElementToLayout({ commit, state }, payload) {
+    const clone = createUnscopedUiSchema(state, payload);
+    commit('SET_UI_SCHEMA', clone);
+    // commit ('ADD_UNSCOPED_ELEMENT_TO_LAYOUT', payload);
   },
   setSchema({ commit }, payload) {
     commit('SET_SCHEMA', payload);
+  },
+  setUiSchema({ commit }, payload) {
+    commit('SET_UI_SCHEMA', payload);
   },
 };
 

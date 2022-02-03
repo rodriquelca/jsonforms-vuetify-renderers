@@ -18,15 +18,20 @@ import {
 export const createControl = (
   schemaElement: SchemaElement
 ): ControlElement & EditorUISchemaElement => {
-  return createControlWithScope(`#${getScope(schemaElement)}`);
+  return createControlWithScope(
+    `#${getScope(schemaElement)}`,
+    schemaElement.options
+  );
 };
 
 export const createControlWithScope = (
-  scope: string
+  scope: string,
+  options: Record<string, unknown>
 ): ControlElement & EditorUISchemaElement => {
   return {
     type: 'Control',
     scope: scope,
+    options: options,
     uuid: uuid(),
   } as ControlElement & EditorUISchemaElement;
 };

@@ -1,6 +1,6 @@
 <template>
   <v-card outlined>
-    <v-row @mouseover="hover = true" @mouseleave="hover = false">
+    <v-row @mouseover="hover = true" @mouseleave="hover = false" @click="onClick">
       <v-col>
         <Icon :type="wrappedElement.type" />
       </v-col>
@@ -12,7 +12,7 @@
           absolute
           x-small
           v-if="hover"
-          @click="onClick"
+          @click="onRemove"
         >
           <v-icon dark> mdi-delete </v-icon>
         </v-btn>
@@ -51,16 +51,17 @@ export default {
     };
   },
   methods: {
-    onClick: function () {
+    onRemove: function () {
       if (!hasChildren(this.wrappedElement)) {
         this.$store.dispatch(
           'app/removeUiSchemaElement',
           this.wrappedElement.uuid
         );
       }
-      // ? setOpenConfirmRemoveDialog(true)
-      // : dispatch(Actions.removeUiSchemaElement(wrappedElement.uuid));
     },
+    onClick: function () {
+      console.log("click");
+    }
   },
 };
 </script>

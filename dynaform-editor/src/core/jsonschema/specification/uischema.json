@@ -49,6 +49,9 @@
       "type": "object",
       "$id": "#control",
       "properties": {
+        "sql": {
+          "type": "string"
+        },
         "type": {
           "type": "string",
           "const": "Control",

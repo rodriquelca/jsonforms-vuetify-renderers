@@ -79,14 +79,12 @@ export default {
   },
   watch: {
     locale(newLocale: string): void {
-      console.log('LOCALE SWITCH', newLocale);
       this.i18n.locale = newLocale;
       this.i18n.translate = createTranslator(newLocale);
     },
   },
   computed: {
     useUiSchema:function() { 
-      // console.log(sync('app/editor@uiSchema'));
       return useExportUiSchema(this.$store.get('app/editor@uiSchema'))
     },
   },

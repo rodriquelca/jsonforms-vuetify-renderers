@@ -11,11 +11,18 @@ const exampleSchema = {
   type: 'object',
   title: 'Person',
   properties: {
+    checkbox: {
+      type: "boolean"
+    },
     name: {
       type: 'string',
       minLength: 3,
     },
-    birthDate: {
+    suggest: {
+      type: 'string',
+      minLength: 3
+    },
+    date: {
       type: 'string',
       format: 'date',
     },

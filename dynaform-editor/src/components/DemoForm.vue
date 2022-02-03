@@ -133,7 +133,6 @@ export default {
       },
     },
     locale(newLocale: string): void {
-      console.log('LOCALE SWITCH', newLocale);
       this.i18n.locale = newLocale;
       this.i18n.translate = createTranslator(newLocale);
     },
