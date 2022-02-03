@@ -2,17 +2,18 @@
   <v-container fill-height fluid>
     <v-row>
       <v-col cols="3">
-        <PalletePanel :schema="editorSchema"/>
+        <PalletePanel :schema="editorSchema" />
       </v-col>
       <v-col cols="6">
         <EditorPanel
           :editorTabs="editorTabs"
-          :editorRenderers="editorRenderers"
-          :schema="editorSchema"
+          :editorRenderers="editorRenderers "
+          :schema="useExportSchema() || false"
+          :uischema="useExportUiSchema() || false"
         />
       </v-col>
       <v-col cols="3">
-        <PropertiesPanel />
+        <PropertiesPanel :propertyRenderers="propertyRenderers" />
       </v-col>
     </v-row>
   </v-container>
@@ -22,36 +23,76 @@
 import PalletePanel from './pallete-panel';
 import EditorPanel from './editor-panel';
 import PropertiesPanel from './properties-panel';
-import DynaformPreview from '../../components/DynaformPreview.vue'
+import DynaformPreview from '../../components/DynaformPreview.vue';
 import { defaultEditorRenderers } from '../../renderers';
 import { ExampleSchemaService } from '../../api/exampleSchemaService';
+import { SelectedElement } from './../../selection';
+import {
+  defaultSchemaDecorators,
+  defaultSchemaProviders,
+  defaultPropertyRenderers,
+} from './properties-panel';
+import {
+  PropertiesService,
+  PropertiesServiceImpl,
+  PropertySchemasDecorator,
+  PropertySchemasProvider,
+} from './properties-panel/propertiesService';
+
 import { sync } from 'vuex-pathify';
+import {useExportSchema, useExportUiSchema} from '../../util'
 export default {
   name: 'EditorView',
+  props: {},
   components: {
     PalletePanel,
     EditorPanel,
-    PropertiesPanel
+    PropertiesPanel,
   },
   data() {
     return {
-      editorTabs: [{
-        name: "Preview",
-        component: DynaformPreview,
-      }],
+      editorTabs: [
+        {
+          name: 'Preview',
+          component: DynaformPreview,
+        },
+      ],
       editorRenderers: defaultEditorRenderers,
-      schemaService: new ExampleSchemaService(),
-    };
+      propertyRenderers: defaultPropertyRenderers,
 
+      schemaService: new ExampleSchemaService(),
+      schemaDecorators: defaultSchemaDecorators,
+    };
   },
-  mounted(){
+  watch: {
+    // whenever question changes, this function will run
+
+    selection: {
+      handler: (newValue, oldValue) => {
+        console.log('new client: ', newValue);
+      },
+      deep: true,
+    },
+  },
+
+  mounted() {
     this.schemaService
       .getSchema()
       .then((schema) => this.$store.dispatch('app/setSchema', schema));
   },
 
- computed: {
+  computed: {
     editorSchema: sync('app/editor@schema'),
+    useUiSchema: sync('app/editor@uiSchema'),
+
   },
+  methods: {
+   useExportSchema(){
+      return useExportSchema(this.$store.get('app/editor@schema'));
+    },
+    useExportUiSchema(){
+      return this.$store.get('app/editor@uiSchema');
+    }
+  }
 };
 </script>

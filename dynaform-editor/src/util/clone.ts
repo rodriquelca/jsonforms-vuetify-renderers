@@ -16,7 +16,6 @@ import { findByUUID, isUUIDError, UUIDError } from './schemasUtil';
  */
 export const cloneTree = <T>(root: T, uuid?: string): T | UUIDError => {
   const clonedRoot = cloneDeep(root);
-  console.log(clonedRoot);
   return uuid ? findByUUID(clonedRoot, uuid) : clonedRoot;
 };
 

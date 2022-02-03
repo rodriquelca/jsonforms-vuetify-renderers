@@ -8,7 +8,10 @@
       </v-tab>
 
       <v-tab-item>
-        <Editor :editorRenderers="editorRenderers" :schema="schema" />
+        <Editor 
+        :editorRenderers="editorRenderers" 
+        :schema="schema || false" 
+        :uischema="uischema"/>
       </v-tab-item>
       <v-tab-item v-for="(item, index) in editorTabs" :key="'content' + index">
         <component v-bind:is="item.component"></component>
@@ -19,31 +22,28 @@
 
 <script lang="ts">
 import Editor from './Editor.vue';
-export default {
+import { defineComponent, ref } from '../../../util/vue';
+import { editorRendererProps, useJsonTest} from '../../../util/composition';
+const EditorPanel = defineComponent({
   name: 'EditorPanel',
   components: {
     Editor,
   },
+  mounted(){
+    console.log(this);
+  },
   props: {
-    editorTabs: {
-      required: false,
-      type: Array,
-      default: () => [],
-    },
-    editorRenderers: {
-      required: false,
-      type: Array,
-      default: () => [],
-    },
-    schema:{
-      type: Object,
-      default:() => undefined
-    }
+     ...editorRendererProps(),
+  },
+  setup(props) {
+    return useJsonTest(props);
+    //  return useVuetifyLayout(useJsonFormsLayout(props));
   },
   methods: {
     updateConfig: function (items) {
       alert('upadete config');
     },
   },
-};
+});
+export default EditorPanel;
 </script>
