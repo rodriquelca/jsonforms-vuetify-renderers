@@ -4,25 +4,16 @@ import {
 } from '@jsonforms/core';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import Ajv from 'ajv';
-import { PaletteService } from '../api/paletteService';
-import {
-  EditorUISchemaElement,
-  getUISchemaPath,
-  hasChildren,
-} from '../../model/uischema';
-import {
-  SchemaElement,
-
-} from '../../model/schema';
+import { EditorUISchemaElement } from '@/model/uischema';
+import { SchemaElement } from '@/model/schema';
 // declare your own store states
 
 export interface AppState {
-  editor :{
-    paletteElements: Array<any>,
-    uiSchema: EditorUISchemaElement | undefined,
-    schema: SchemaElement | undefined
-  }
-  
+  editor: {
+    paletteElements: Array<any>;
+    uiSchema: EditorUISchemaElement | undefined;
+    schema: SchemaElement | undefined;
+  };
   jsonforms: {
     readonly: boolean;
     validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation';
