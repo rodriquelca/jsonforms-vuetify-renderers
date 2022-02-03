@@ -150,8 +150,6 @@ const mutations = {
       undefined,
       state,
       (elementToRemove, newSchema) => {
-        console.log(elementToRemove);
-        console.log(newSchema);
         if (!elementToRemove) {
           console.error('Could not remove ui element ', elementToRemove);
           return state;
@@ -183,7 +181,6 @@ const mutations = {
       payload.layoutUUID,
       state.editor.uiSchema,
       (newUiSchema) => {
-        // console.log(newUiSchema);
         const newUIElement = payload.uiSchemaElement;
         newUIElement.parent = newUiSchema;
         (newUiSchema as EditorLayout).elements.splice(

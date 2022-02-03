@@ -29,9 +29,6 @@ const EditorPanel = defineComponent({
   components: {
     Editor,
   },
-  mounted(){
-    console.log(this);
-  },
   props: {
      ...editorRendererProps(),
   },

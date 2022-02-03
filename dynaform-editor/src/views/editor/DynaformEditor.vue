@@ -69,7 +69,6 @@ export default {
 
     selection: {
       handler: (newValue, oldValue) => {
-        console.log('new client: ', newValue);
       },
       deep: true,
     },

@@ -63,7 +63,6 @@ export interface RendererProps<U = UISchemaElement> {
 export const useJsonTest =  (props: RendererProps) => {
   const test = {
       direction: "row"
-
   };
   return test;
 };

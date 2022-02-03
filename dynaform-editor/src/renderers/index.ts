@@ -1,5 +1,4 @@
 
-// import {extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import {extendedDynaformRenderers} from "./dynaformControls"
 import { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
 import  {DroppableHorizontalLayoutRegistration}  from './DroppableHorizontalLayoutRegistration.vue';

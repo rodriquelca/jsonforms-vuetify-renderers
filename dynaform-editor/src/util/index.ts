@@ -11,3 +11,4 @@ export * from './clone';
 export * from './hooks';
 export * from './schemasUtil';
 export * from './tree';
+export * from './composition';
