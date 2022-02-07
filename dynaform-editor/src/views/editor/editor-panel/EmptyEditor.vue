@@ -23,6 +23,8 @@
 
 <script lang="ts">
 import draggable from 'vuedraggable';
+import { EditorUISchemaElement } from '../../../model/uischema';
+import { createControl } from '../../../util/generators/uiSchema';
 export default {
   name: 'EmptyEditor',
   components: {
@@ -36,8 +38,15 @@ export default {
   methods: {
     handleChange(e: any) {
       if (e.added) {
-        const provider = e.added.element.uiSchemaElementProvider();
-        this.$store.dispatch('app/setUiSchema', {uiSchema: provider});
+        if (e.added.element.uuid) {
+          const provider: EditorUISchemaElement = createControl(
+            e.added.element
+          );
+           this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
+        } else {
+          const provider:EditorUISchemaElement  = e.added.element.uiSchemaElementProvider();
+          this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
+        }
       }
     },
   },
