@@ -1,10 +1,4 @@
-/**
- * ---------------------------------------------------------------------
- * Copyright (c) 2021 EclipseSource Munich
- * Licensed under MIT
- * https://github.com/eclipsesource/jsonforms-editor/blob/master/LICENSE
- * ---------------------------------------------------------------------
- */
+
 import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 import { maxBy } from 'lodash';
 
@@ -78,5 +72,6 @@ export class PropertiesServiceImpl implements PropertiesService {
       elementSchemas
     );
     return decoratedSchemas;
+    
   };
 }

@@ -36,7 +36,7 @@ export const editorRendererProps = <U = UISchemaElement>() => ({
     type: String,
     default: undefined,
   },
-  editorRenderers: {
+  renderers: {
     required: false,
     type: Array as CompType<JsonFormsRendererRegistryEntry[], ArrayConstructor>,
     default: undefined,

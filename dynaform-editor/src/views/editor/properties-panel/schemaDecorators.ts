@@ -1,10 +1,4 @@
-/**
- * ---------------------------------------------------------------------
- * Copyright (c) 2021 EclipseSource Munich
- * Licensed under MIT
- * https://github.com/eclipsesource/jsonforms-editor/blob/master/LICENSE
- * ---------------------------------------------------------------------
- */
+
 import { ControlElement, JsonSchema, Layout } from '@jsonforms/core';
 import { assign } from 'lodash';
 
@@ -97,6 +91,24 @@ export const addSchemaOptionsProperty = (
   assign(schema.properties.options.properties, newOption);
 };
 
+export const urlDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (
+    uiElement && uiElement.options && uiElement.options.pmType === "suggest"
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      url: { type: 'string' },
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/options/properties/url')
+    );
+  }
+  return schemas;
+};
+
 export const createPropertyControl = (
   controlScope: string
 ): ControlElement => ({
@@ -108,5 +120,6 @@ export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
   labelDecorator,
   multilineStringOptionDecorator,
   labelUIElementDecorator,
-  ruleDecorator,
+  // ruleDecorator,
+  urlDecorator,
 ];

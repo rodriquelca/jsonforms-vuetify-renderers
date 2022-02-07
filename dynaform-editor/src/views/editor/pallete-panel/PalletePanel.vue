@@ -60,7 +60,7 @@ export default {
   },
   props: {
     schema: {
-      type: [Object , Boolean],
+      type: [Object, Boolean],
     },
   },
   data() {
@@ -84,17 +84,19 @@ export default {
 
   methods: {
     getChildrenToRender: function (schemaElement: SchemaElement) {
-      return schemaElement ? getChildren(schemaElement).flatMap((child) => {
-        // if the child is the only item of an array, use its children instead
-        if (
-          isObjectElement(child) &&
-          isArrayElement(child.parent) &&
-          child.parent.items === child
-        ) {
-          return getChildren(child);
-        }
-        return [child];
-      }): [];
+      let items: any[] = [];
+      if (schemaElement) {
+        schemaElement.properties.forEach((value: boolean, key: string) => {
+          if (key === 'suggest') {
+            value.options = {
+              pmType: 'suggest',
+              url: '',
+            };
+          }
+          items.push(value);
+        });
+      }
+      return items;
     },
     getLabel: function (schemaElement: SchemaElement) {
       return getLabel(schemaElement);

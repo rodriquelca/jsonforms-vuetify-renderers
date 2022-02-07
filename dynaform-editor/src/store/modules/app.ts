@@ -1,4 +1,6 @@
+import { assign } from 'lodash';
 // Pathify
+
 import { CategorizationService } from '../../api/categorizationService';
 import { make, Payload } from 'vuex-pathify';
 import { AppState } from './types';
@@ -90,6 +92,27 @@ import { setSchema } from '@jsonforms/core';
   return true;
 };
 
+const createSchema = (state, payload) => {
+  return withCloneTree(
+    state.editor.uiSchema,
+    undefined,
+    state.editor,
+    (clonedUiSchema) => {
+      return linkSchemas(
+        buildSchemaTree(payload.schema),
+        cleanUiSchemaLinks(clonedUiSchema)
+      );
+    }
+  );
+};
+const createUiSchema = (state, payload) => {
+  return withCloneTree(state.editor.schema, undefined, state.editor, (clonedSchema) => {
+    return linkSchemas(
+      cleanLinkedElements(clonedSchema),
+      buildEditorUiSchemaTree(payload.uiSchema)
+    );
+  });
+};
 const createUnscopedUiSchema= (state, payload)=>{
   return withCloneTree(
     state.editor.uiSchema,
@@ -107,7 +130,54 @@ const createUnscopedUiSchema= (state, payload)=>{
       return getRoot(newUiSchema as EditorUISchemaElement);
     }
   );
+};
+const createScopedElementToLayout = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    payload.layoutUUID,
+    state.editor.schema,
+    payload.schemaUUID,
+    state,
+    (newUiSchema, newSchema) => {
+      const newUIElement = payload.uiSchemaElement;
+      newUIElement.parent = newUiSchema;
+      (newUiSchema as EditorLayout).elements.splice(
+        payload.index,
+        0,
+        newUIElement
+      );
+
+      if (!newSchema || !linkElements(newUIElement, newSchema)) {
+        console.error('Could not add new UI element', newUIElement);
+        return state;
+      }
+      
+
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
 }
+const updateUISchemaElement = (state, payload) => {
+  return withCloneTree(
+    state.editor.uiSchema,
+    payload.elementUUID,
+    state.editor.uiSchema,
+    (newUiSchema) => {
+      // options.detail is not part of the editable properties
+      const optionsDetail = newUiSchema.options?.detail;
+      assign(newUiSchema, payload.changedProperties);
+      if (optionsDetail && !newUiSchema.options?.detail) {
+        newUiSchema.options = newUiSchema.options || {};
+        newUiSchema.options.detail = optionsDetail;
+      }
+      return getRoot(newUiSchema as EditorUISchemaElement);
+    }
+  );
+}
+
 
 const state: AppState = {
   editor: {
@@ -138,6 +208,9 @@ const state: AppState = {
 // make all mutations
 const mutations = {
    ...make.mutations(state),
+   SET_SCHEMA:(state, value)=>{
+      state.editor.schema = value;
+  },
   SET_UI_SCHEMA:(state, value) => {
     state.editor.uiSchema = value;
   },
@@ -175,69 +248,8 @@ const mutations = {
     );
     state.editor.uiSchema = clone.uiSchema;
   },
-  ADD_UNSCOPED_ELEMENT_TO_LAYOUT: (state, payload) => {
-    const clone = withCloneTree(
-      state.editor.uiSchema,
-      payload.layoutUUID,
-      state.editor.uiSchema,
-      (newUiSchema) => {
-        const newUIElement = payload.uiSchemaElement;
-        newUIElement.parent = newUiSchema;
-        (newUiSchema as EditorLayout).elements.splice(
-          payload.index,
-          0,
-          newUIElement
-        );
-        return getRoot(newUiSchema as EditorUISchemaElement);
-      }
-    );
-    state.editor.uiSchema = clone;
-  },
-  ADD_SCOPED_ELEMENT_TO_LAYOUT: (state, payload) => { 
-    const clone = withCloneTrees(
-      state.editor.uiSchema,
-      payload.layoutUUID,
-      state.editor.schema,
-      payload.schemaUUID,
-      state,
-      (newUiSchema, newSchema) => {
-        const newUIElement = payload.uiSchemaElement;
-        // newUIElement.parent = newUiSchema;
-        (newUiSchema as EditorLayout).elements.splice(
-          payload.index,
-          0,
-          newUIElement
-        );
-
-        if (!newSchema || !linkElements(newUIElement, newSchema)) {
-          console.error('Could not add new UI element', newUIElement);
-          return state;
-        }
-        
-
-        return {
-          schema: getRoot(newSchema),
-          uiSchema: getRoot(newUiSchema),
-        };
-      }
-    );
-    state.editor.uiSchema = clone.uiSchema;
-  },
-  SET_SCHEMA:(state, payload)=>{
-
-  const clone = withCloneTree(
-        state.editor.uiSchema,
-        undefined,
-        state,
-        (clonedUiSchema) => {
-          return linkSchemas(
-            buildSchemaTree(payload),
-            cleanUiSchemaLinks(clonedUiSchema)
-          );
-        }
-      );
-      state.editor.schema = clone.schema;
-  }
+  
+  
 };
 
 // const actions = make.actions(state);
@@ -255,22 +267,25 @@ const actions = {
     commit ('REMOVE_UISCHEMA_ELEMENT', payload);
   },
   addScopedElementToLayout({commit}, payload){
-    commit ('ADD_SCOPED_ELEMENT_TO_LAYOUT', payload);
+    const clone = createScopedElementToLayout(state, payload);
+    commit ('SET_UI_SCHEMA', clone.uiSchema);
   },
   addUnscopedElementToLayout({commit, state}, payload){
     const clone = createUnscopedUiSchema(state, payload);
     commit ('SET_UI_SCHEMA', clone);
-    // commit ('ADD_UNSCOPED_ELEMENT_TO_LAYOUT', payload);
   },
   setSchema({commit}, payload) {
-    commit ('SET_SCHEMA', payload);
+    const clone = createSchema(state, payload);
+    commit ('SET_SCHEMA', clone.schema);
   },
   setUiSchema({commit}, payload) {
-    commit ('SET_UI_SCHEMA', payload);
+    const clone = createUiSchema(state, payload);
+    commit ('SET_UI_SCHEMA', clone.uiSchema);
   },
-  // setSchema(){
-  //   commit('SET_SCHEMA', palleteElements);
-  // }
+  updateUISchemaElement( {commit, state}, payload) {
+    const clone = updateUISchemaElement(state,payload);
+    commit ('SET_UI_SCHEMA', clone);
+  },
 };
 
 const getters = {};

@@ -49,7 +49,7 @@ import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import JsonRefs from 'json-refs';
 import { createTranslator } from '../i18n';
 import { useExportSchema, useExportUiSchema} from '../util';
-import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
+import { extendedDynaformRenderers } from '../renderers/dynaformControls';
 import { sync } from 'vuex-pathify';
 export default {
   name: 'dymaform-preview',
@@ -74,7 +74,7 @@ export default {
         locale: this.locale,
         translate: createTranslator(this.locale),
       } as JsonFormsI18nState,
-      renderers: extendedVuetifyRenderers,
+      renderers: extendedDynaformRenderers,
     };
   },
   watch: {

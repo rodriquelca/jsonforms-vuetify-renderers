@@ -2,7 +2,7 @@
   <div>
     <json-forms
       v-if="uischema"
-      :renderers="editorRenderers"
+      :renderers="renderers"
       :data="data"
       :uischema="uischema"
       :schema="schema"

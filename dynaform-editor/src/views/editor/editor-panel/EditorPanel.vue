@@ -9,9 +9,10 @@
 
       <v-tab-item>
         <Editor 
-        :editorRenderers="editorRenderers" 
+        :renderers="renderers" 
         :schema="schema || false" 
-        :uischema="uischema"/>
+        :uischema="uischema"
+        :selection="selection"/>
       </v-tab-item>
       <v-tab-item v-for="(item, index) in editorTabs" :key="'content' + index">
         <component v-bind:is="item.component"></component>

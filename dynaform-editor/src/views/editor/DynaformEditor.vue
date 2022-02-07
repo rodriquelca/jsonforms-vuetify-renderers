@@ -7,13 +7,20 @@
       <v-col cols="6">
         <EditorPanel
           :editorTabs="editorTabs"
-          :editorRenderers="editorRenderers "
+          :renderers="editorRenderers"
           :schema="useExportSchema() || false"
           :uischema="useExportUiSchema() || false"
+          :selection="selection"
         />
       </v-col>
       <v-col cols="3">
-        <PropertiesPanel :propertyRenderers="propertyRenderers" />
+        <PropertiesPanel
+          :renderers="propertyRenderers"
+          :selection="selection"
+          :schema="editorSchema || false"
+          :uischema="editorUischema || false"
+          :propertiesService="propertiesService"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -40,7 +47,7 @@ import {
 } from './properties-panel/propertiesService';
 
 import { sync } from 'vuex-pathify';
-import {useExportSchema, useExportUiSchema} from '../../util'
+import { useExportSchema, useExportUiSchema } from '../../util';
 export default {
   name: 'EditorView',
   props: {},
@@ -51,6 +58,7 @@ export default {
   },
   data() {
     return {
+      selection: '' as string,
       editorTabs: [
         {
           name: 'Preview',
@@ -62,36 +70,48 @@ export default {
 
       schemaService: new ExampleSchemaService(),
       schemaDecorators: defaultSchemaDecorators,
+      propertiesService: {},
     };
   },
   watch: {
     // whenever question changes, this function will run
-
-    selection: {
-      handler: (newValue, oldValue) => {
-      },
-      deep: true,
-    },
   },
 
   mounted() {
     this.schemaService
       .getSchema()
-      .then((schema) => this.$store.dispatch('app/setSchema', schema));
+      .then((schema) => this.$store.dispatch('app/setSchema', { schema }));
+    const propertiesServiceProvider = (
+      schemaProviders: PropertySchemasProvider[],
+      schemaDecorators: PropertySchemasDecorator[]
+    ) => new PropertiesServiceImpl(schemaProviders, schemaDecorators);
+
+    this.propertiesService = propertiesServiceProvider(
+      defaultSchemaProviders,
+      defaultSchemaDecorators
+    );
   },
 
   computed: {
     editorSchema: sync('app/editor@schema'),
-    useUiSchema: sync('app/editor@uiSchema'),
-
+    editorUischema: sync('app/editor@uiSchema'),
   },
   methods: {
-   useExportSchema(){
+    useExportSchema() {
       return useExportSchema(this.$store.get('app/editor@schema'));
     },
-    useExportUiSchema(){
+    useExportUiSchema() {
       return this.$store.get('app/editor@uiSchema');
-    }
-  }
+    },
+    setSelection(data) {
+      this.selection = data;
+    },
+  },
+  provide: function () {
+    return {
+      setSelection: this.setSelection,
+      selection: this.selection,
+    };
+  },
 };
 </script>

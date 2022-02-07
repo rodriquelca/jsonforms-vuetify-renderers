@@ -7,7 +7,7 @@
  */
 import { Layout } from '@jsonforms/core';
 
-import { EditorUISchemaElement } from '../core/model/uischema';
+import { EditorUISchemaElement } from '../../../model/uischema';
 import {
   NOT_APPLICABLE,
   PropertySchemas,

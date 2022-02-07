@@ -36,9 +36,8 @@ export default {
   methods: {
     handleChange(e: any) {
       if (e.added) {
-        let provider = e.added.element.uiSchemaElementProvider();
-        // this.$store.set('app/editor@uiSchema', provider);
-        this.$store.dispatch('app/setUiSchema', provider);
+        const provider = e.added.element.uiSchemaElementProvider();
+        this.$store.dispatch('app/setUiSchema', {uiSchema: provider});
       }
     },
   },

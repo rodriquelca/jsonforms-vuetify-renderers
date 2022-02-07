@@ -45,6 +45,7 @@ export default {
   components: {
     Icon,
   },
+  inject: ["setSelection"],
   data() {
     return {
       hover: false,
@@ -60,7 +61,7 @@ export default {
       }
     },
     onClick: function () {
-      console.log("click");
+      this.setSelection(this.wrappedElement.uuid);
     }
   },
 };
