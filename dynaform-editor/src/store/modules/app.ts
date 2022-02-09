@@ -261,7 +261,7 @@ const actions = {
   // manually add load items action
   getPaletteElements({ commit }) {
     const paletteService = new DefaultPaletteService();
-    const palleteElements = paletteService.getPaletteElements();
+    const palleteElements = paletteService.getPaletteElementsTree();
     commit('SET_PALLETE_ELEMENTS', palleteElements);
   },
   removeUiSchemaElement({commit}, payload){
