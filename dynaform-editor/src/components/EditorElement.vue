@@ -1,10 +1,22 @@
 <template>
   <v-card outlined>
-    <v-row @mouseover="hover = true" @mouseleave="hover = false" @click="onClick">
+    <v-row
+      @mouseover="hover = true"
+      @mouseleave="hover = false"
+      @click="onClick"
+    >
       <v-col>
         <Icon :type="wrappedElement.type" />
+        <div class="d-inline caption" v-if="ruleEffect">
+          R ({{ ruleEffect }})
+        </div>
+        <v-divider vertical></v-divider>
+        <div class="d-inline caption">
+          {{ this.wrappedElement.scope }}
+        </div>
       </v-col>
-      <v-col>
+
+      <v-col cols="1">
         <v-btn
           class="mx-2"
           fab
@@ -45,11 +57,16 @@ export default {
   components: {
     Icon,
   },
-  inject: ["setSelection"],
+  inject: ['setSelection'],
   data() {
     return {
       hover: false,
     };
+  },
+  computed: {
+    ruleEffect() {
+      return this.wrappedElement.rule?.effect.toLocaleUpperCase();
+    },
   },
   methods: {
     onRemove: function () {
@@ -62,7 +79,7 @@ export default {
     },
     onClick: function () {
       this.setSelection(this.wrappedElement.uuid);
-    }
+    },
   },
 };
 </script>

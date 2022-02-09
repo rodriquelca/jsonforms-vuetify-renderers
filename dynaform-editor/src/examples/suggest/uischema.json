@@ -1,0 +1,14 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/suggest",
+      "lacation": "localizacion",
+      "options": {
+        "url": "https://api.publicapis.org/entries",
+        "query": "SELECT ic_uid, ic_name FROM ISO_COUNTRY"
+      }
+    }
+  ]
+}

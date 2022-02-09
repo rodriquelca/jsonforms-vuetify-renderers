@@ -99,12 +99,15 @@ export const getMonacoModelForUri = (
   modelUri: monaco.Uri,
   initialValue: string | undefined
 ): editorApi.editor.ITextModel => {
+  
   const value = initialValue ?? '';
   let model = monaco.editor.getModel(modelUri);
+  console.log(model);
   if (model) {
     model.setValue(value);
   } else {
     model = monaco.editor.createModel(value, 'json', modelUri);
   }
-  return model;
+  console.log(model);
+  return model; 
 };

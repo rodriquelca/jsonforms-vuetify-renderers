@@ -120,6 +120,6 @@ export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
   labelDecorator,
   multilineStringOptionDecorator,
   labelUIElementDecorator,
-  // ruleDecorator,
+  ruleDecorator,
   urlDecorator,
 ];

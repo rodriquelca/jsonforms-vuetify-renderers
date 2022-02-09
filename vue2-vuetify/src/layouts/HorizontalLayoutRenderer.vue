@@ -50,6 +50,10 @@ const layoutRenderer = defineComponent({
   props: {
     ...rendererProps<Layout>(),
   },
+  mounted() {
+    console.log('horizoantal');
+    console.log(this);
+  },
   setup(props: RendererProps<Layout>) {
     return useVuetifyLayout(useJsonFormsLayout(props));
   },

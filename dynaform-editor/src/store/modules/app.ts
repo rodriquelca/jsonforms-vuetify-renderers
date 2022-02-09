@@ -7,6 +7,7 @@ import { AppState } from './types';
 import { RootState } from '../types';
 import { Module } from 'vuex';
 import { createAjv, extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
+import {extendedDynaformRenderers} from '../../renderers/dynaformControls'
 import {
   DefaultPaletteService,
   PaletteService,
@@ -194,8 +195,8 @@ const state: AppState = {
       showUnfocusedDescription: false,
       hideRequiredAsterisk: true,
     },
-    renderers: extendedVuetifyRenderers,
-    cells: extendedVuetifyRenderers,
+    renderers: extendedDynaformRenderers,
+    cells: extendedDynaformRenderers,
     ajv,
     locale: 'en',
   },

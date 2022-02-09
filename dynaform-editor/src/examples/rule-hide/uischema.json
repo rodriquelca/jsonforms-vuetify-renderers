@@ -1,0 +1,33 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/name"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/nationality",
+      "rule": {
+        "effect": "DISABLE",
+        "condition": {
+          "type": "LEAF",
+          "scope": "#/properties/name",
+          "expectedValue": "foo"
+        }
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/birthDate",
+      "rule": {
+        "effect": "HIDE",
+        "condition": {
+          "type": "LEAF",
+          "scope": "#/properties/name",
+          "expectedValue": "foo"
+        }
+      }
+    }
+  ]
+}
