@@ -12,7 +12,7 @@
         </div>
         <v-divider vertical></v-divider>
         <div class="d-inline caption">
-          {{ this.wrappedElement.scope }}
+          {{ wrappedElement.scope }}
         </div>
       </v-col>
 
