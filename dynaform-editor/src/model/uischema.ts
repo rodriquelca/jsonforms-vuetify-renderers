@@ -12,6 +12,7 @@ import {
   isLayout,
   Layout,
   UISchemaElement,
+  JsonSchema
 } from '@jsonforms/core';
 import { cloneDeep } from 'lodash';
 import { v4 as uuid } from 'uuid';

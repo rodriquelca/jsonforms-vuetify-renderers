@@ -10,15 +10,15 @@
         :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
         :language="`json`"
         height="200"
-        :options="{minimap:{enabled: false}}"
+        :options="{ minimap: { enabled: false } }"
         v-model="ruleSchema"
         :editorBeforeMount="registerValidations"
       >
       </monaco-editor>
-      <v-btn depressed color="primary" @click="onClick"> Apply </v-btn>
       <div class="red--text text--lighten-1" :hidden="!invalidJson">
-       {{invalidJsonMessage}}
+        {{ invalidJsonMessage }}
       </div>
+      <v-btn depressed color="primary" @click="onClick"> Apply </v-btn>
     </v-container>
   </v-card>
 </template>
@@ -67,7 +67,7 @@ const controlRenderer = defineComponent({
     monacoHeight: '200',
     monacoWidth: '200',
     invalidJson: false,
-    invalidJsonMessage: 'Not a valid rule JSON.'
+    invalidJsonMessage: 'Not a valid rule JSON.',
   }),
   mounted() {
     this.setMonacoSchema({
@@ -86,15 +86,15 @@ const controlRenderer = defineComponent({
       const modelUri = Uri.parse('json://core/specification/rules.json');
       this.ruleSchema = getMonacoModelForUri(modelUri, '');
     },
-     registerValidations(editor: EditorApi) {
+    registerValidations(editor: EditorApi) {
       configureJsonSchemaValidation(editor, ['*.schema.json']);
       configureUISchemaValidation(editor, ['*.uischema.json', '*.rule.json']);
     },
-    setInvalidJson(value){
+    setInvalidJson(value) {
       this.invalidJson = value;
     },
     onClick() {
-       try {
+      try {
         // this.handleChange('rule', JSON.parse(this.ruleSchema.getValue()));
         const rule = JSON.parse(this.ruleSchema.getValue());
         if (isValidRule(rule)) {
@@ -106,7 +106,6 @@ const controlRenderer = defineComponent({
       } catch (error) {
         this.setInvalidJson(true);
       }
-
     },
   },
 });
