@@ -7,6 +7,7 @@
     >
       <v-col>
         <Icon :type="wrappedElement.type" />
+        <v-divider vertical></v-divider>
         <div class="d-inline caption" v-if="ruleEffect">
           R ({{ ruleEffect }})
         </div>

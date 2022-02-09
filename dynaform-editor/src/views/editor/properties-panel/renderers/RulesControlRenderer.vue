@@ -10,6 +10,7 @@
         :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
         :language="`json`"
         height="200"
+        :options="{minimap:{enabled: false}}"
         v-model="ruleSchema"
         :editorBeforeMount="registerValidations"
       >
