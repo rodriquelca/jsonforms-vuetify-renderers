@@ -2,12 +2,12 @@
   "type": "VerticalLayout",
   "elements": [
     {
-      "type": "Control",
+      "type": "Suggest",
       "scope": "#/properties/suggest",
-      "lacation": "localizacion",
       "options": {
         "url": "https://api.publicapis.org/entries",
-        "query": "SELECT ic_uid, ic_name FROM ISO_COUNTRY"
+        "query": "test",
+        "placeholder": "Start typing to Search"
       }
     }
   ]

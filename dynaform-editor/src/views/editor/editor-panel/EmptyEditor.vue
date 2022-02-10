@@ -38,14 +38,11 @@ export default {
   methods: {
     handleChange(e: any) {
       if (e.added) {
-        debugger;
-        if (e.added.element.schema) {
-          const provider:EditorUISchemaElement  = e.added.element.uiSchemaElementProvider(e.added.element.schema);
-          this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
-        //   const provider: EditorUISchemaElement = createControl(
-        //     e.added.element
-        //   );
-        //    this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
+        if (e.added.element.uuid) {
+          const provider: EditorUISchemaElement = createControl(
+            e.added.element
+          );
+           this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
         } else {
           const provider:EditorUISchemaElement  = e.added.element.uiSchemaElementProvider();
           this.$store.dispatch('app/setUiSchema', { uiSchema: provider });

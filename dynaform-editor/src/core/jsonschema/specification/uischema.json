@@ -25,6 +25,9 @@
       "items": {
         "anyOf": [
           {
+            "$ref": "#/definitions/suggest"
+          },
+          {
             "$ref": "#/definitions/control"
           },
           {
@@ -49,7 +52,6 @@
       "type": "object",
       "$id": "#control",
       "properties": {
-        
         "type": {
           "type": "string",
           "const": "Control",
@@ -60,9 +62,6 @@
         },
         "scope": {
           "$ref": "#/definitions/scope"
-        },
-        "test":{
-          "type": "string"
         },
         "options": {
           "$ref": "#/definitions/options"
@@ -86,6 +85,45 @@
           "type": "Control should have a string property \"type\""
         },
         "additionalProperties": "Control should not have properties other than type, label, scope, options, suggestion and rule"
+      }
+    },
+    "suggest": {
+      "type": "object",
+      "$id": "#suggest",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "Suggest",
+          "default": "Suggest"
+        },
+        "label": {
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/definitions/scope"
+        },
+        "options": {
+          "$ref": "#/definitions/options"
+        },
+        "rule": {
+          "$ref": "#/definitions/rule"
+        }
+      },
+      "required": ["type", "scope"],
+      "additionalProperties": false,
+      "errorMessage": {
+        "properties": {
+          "type": "type should be equal to one of the allowed values",
+          "scope": "Suggest Control scope should match pattern \"^#\\/properties\\/{1}\"",
+          "suggestion": "Suggest Control suggestion should be array",
+          "options": "Suggest Control options should be object",
+          "label": "Suggest Control label should be string, boolean or label object"
+        },
+        "required": {
+          "scope": "Suggest Control should have an object property \"scope\"",
+          "type": " Suggest Control should have a string property \"type\""
+        },
+        "additionalProperties": "Suggest Control should not have properties other than type, label, scope, options, suggestion and rule"
       }
     },
     "horizontallayout": {

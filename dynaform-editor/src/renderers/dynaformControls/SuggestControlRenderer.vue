@@ -1,8 +1,9 @@
 <template>
   <v-form>
     <v-container>
+      
       <v-autocomplete
-        v-model="model"
+        :value="control.data"
         :items="items"
         :loading="isLoading"
         :search-input.sync="search"
@@ -10,9 +11,10 @@
         item-text="Description"
         item-value="API"
         :label="appliedOptions.sql"
-        placeholder="Start typing to Search"
+        :placeholder="appliedOptions.placeholder"
         prepend-icon="mdi-database-search"
         return-object
+        @change="onChange"
       ></v-autocomplete>
     </v-container>
   </v-form>
@@ -21,10 +23,8 @@
 <script lang="ts">
 import {
   ControlElement,
-  JsonFormsRendererRegistryEntry,
   rankWith,
-  scopeEndsWith,
-  isStringControl,
+  uiTypeIs
 } from '@jsonforms/core';
 
 import { defineComponent } from '@vue/composition-api';
@@ -34,9 +34,6 @@ import {
   RendererProps,
 } from '@jsonforms/vue2';
 import { useVuetifyControl } from '@jsonforms/vue2-vuetify';
-import isArray from 'lodash/isArray';
-import every from 'lodash/every';
-import isString from 'lodash/isString';
 
 const controlRenderer = defineComponent({
   name: 'suggest-control-renderer',
@@ -50,6 +47,9 @@ const controlRenderer = defineComponent({
     model: null,
     search: null,
   }),
+  mounted() {
+    this.entries = [this.control.data];
+  },
 
   setup(props: RendererProps<ControlElement>) {
     return useVuetifyControl(
@@ -58,16 +58,6 @@ const controlRenderer = defineComponent({
     );
   },
   computed: {
-    fields() {
-      if (!this.model) return [];
-
-      return Object.keys(this.model).map((key) => {
-        return {
-          key,
-          value: this.model[key] || 'n/a',
-        };
-      });
-    },
     items() {
       return this.entries.map((entry) => {
         const Description =
@@ -83,7 +73,7 @@ const controlRenderer = defineComponent({
   watch: {
     search(val) {
       // Items have already been loaded
-      if (this.items.length > 0) return;
+      // if (this.items.length > 0) return;
 
       // Items have already been requested
       if (this.isLoading) return;
@@ -111,6 +101,6 @@ export default controlRenderer;
 
 export const SuggestControlRenderer = {
   renderer: controlRenderer,
-  tester: rankWith(2, scopeEndsWith('suggest')),
+  tester: rankWith(2, uiTypeIs('Suggest')),
 };
 </script>
