@@ -38,9 +38,10 @@ export default {
   methods: {
     handleChange(e: any) {
       if (e.added) {
-        if (e.added.element.uuid) {
+        console.log(e);
+        if (e.added.element.element && e.added.element.element.uuid) {
           const provider: EditorUISchemaElement = createControl(
-            e.added.element
+            e.added.element.element, e.added.element.uiSchemaType
           );
            this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
         } else {

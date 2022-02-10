@@ -29,10 +29,10 @@
           :sort="false"
         >
           <div
-            v-for="element in getChildrenToRender(schema)"
-            :key="element.uuid"
+            v-for="item in getChildrenToRender(schema)"
+            :key="item.element.uuid"
           >
-            <span v-text="getLabel(element)"></span>
+            <span v-text="getLabel(item.element)"></span>
           </div>
         </draggable>
       </v-tab-item>
@@ -84,14 +84,19 @@ export default {
     getChildrenToRender: function (schemaElement: SchemaElement) {
       let items: any[] = [];
       if (schemaElement) {
-        schemaElement.properties.forEach((value: boolean, key: string) => {
+        schemaElement.properties.forEach((element: boolean, key: string) => {
+          let uiSchemaType = 'Control';
           if (key === 'suggest') {
-            value.options = {
-              pmType: 'suggest',
-              url: '',
-            };
+            uiSchemaType = 'Suggest';
           }
-          items.push(value);
+           if (key === 'multiplefile') {
+            uiSchemaType = 'MultipleFile';
+          }
+
+          items.push({
+            uiSchemaType,
+            element,
+          });
         });
       }
       return items;

@@ -59,7 +59,7 @@ export const labelDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement
 ) => {
   if (
-    ['Group', 'Control', 'Categorization', 'Category'].includes(uiElement?.type)
+    ['Group', 'Control','Suggest','MultipleFile', 'Categorization', 'Category'].includes(uiElement?.type)
   ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
@@ -96,7 +96,7 @@ export const urlDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement
 ) => {
   if (
-    uiElement && uiElement.options && uiElement.options.pmType === "suggest"
+    ['Suggest'].includes(uiElement?.type)
   ) {
     addSchemaOptionsProperty(schemas.schema, {
       url: { type: 'string' },

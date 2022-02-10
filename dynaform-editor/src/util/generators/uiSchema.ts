@@ -16,20 +16,26 @@ import {
 } from '../../model/uischema';
 
 export const createControl = (
-  schemaElement: SchemaElement
+  schemaElement: SchemaElement,
+  uiSchemaType: string,
 ): ControlElement & EditorUISchemaElement => {
+  console.log("schemaElement");
+  console.log(schemaElement);
   return createControlWithScope(
     `#${getScope(schemaElement)}`,
-    schemaElement.options
+    schemaElement.options,
+    uiSchemaType
   );
 };
 
 export const createControlWithScope = (
   scope: string,
-  options: Record<string, unknown>
+  options: Record<string, unknown>,
+  uiSchemaType: string
 ): ControlElement & EditorUISchemaElement => {
+
   return {
-    type: 'Control',
+    type: uiSchemaType,
     scope: scope,
     options: options,
     uuid: uuid(),

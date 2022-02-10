@@ -48,7 +48,7 @@ const controlRenderer = defineComponent({
     search: null,
   }),
   mounted() {
-    this.entries = [this.control.data];
+    //this.entries = [this.control.data];
   },
 
   setup(props: RendererProps<ControlElement>) {

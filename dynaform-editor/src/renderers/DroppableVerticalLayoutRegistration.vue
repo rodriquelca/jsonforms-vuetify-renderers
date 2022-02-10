@@ -75,9 +75,14 @@ const layoutRenderer = defineComponent({
   methods: {
     handleChange(evt: any) {
       if (evt.added) {
-        if (evt.added.element.uuid) {
+       if (evt.added.element.element && evt.added.element.element.uuid) {
+          const provider: EditorUISchemaElement = createControl(
+            evt.added.element.element,
+            evt.added.element.uiSchemaType
+          );
           const uiSchemaElement: EditorUISchemaElement = createControl(
-              evt.added.element
+            evt.added.element.element,
+            evt.added.element.uiSchemaType
           );
           this.$store.dispatch('app/addScopedElementToLayout', {
             uiSchemaElement: uiSchemaElement,

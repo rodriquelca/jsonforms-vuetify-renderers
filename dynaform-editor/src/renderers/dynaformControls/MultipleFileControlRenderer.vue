@@ -4,7 +4,7 @@
     color="deep-purple accent-4"
     counter
     :label="computedLabel"
-    :multiple="appliedOptions.multiple"
+    multiple
     :placeholder="appliedOptions.placeholder"
     prepend-icon="mdi-paperclip"
     outlined
@@ -62,13 +62,13 @@ const controlRenderer = defineComponent({
     },
     computedData: {
       get() {
-        const newFiles: Array<any> = this.control.data.map((file: any) => {
+        const newFiles: Array<any> = this.control.data ? this.control.data.map((file: any) => {
           return {
             name: file.name,
             size: file.size,
             type: file.mimetype,
           };
-        });
+        }): []
         return newFiles;
       },
       set(files: Array<any>) {

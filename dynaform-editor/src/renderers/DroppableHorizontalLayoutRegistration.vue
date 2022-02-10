@@ -61,7 +61,7 @@ const layoutRenderer = defineComponent({
   },
   data() {
     return {
-      list1: []
+      list1: [],
     };
   },
   setup(props: RendererProps<Layout>) {
@@ -80,9 +80,14 @@ const layoutRenderer = defineComponent({
   methods: {
     handleChange(e) {
       if (e.added) {
-        if (e.added.element.uuid) {
+        if (e.added.element.element && e.added.element.element.uuid) {
+          const provider: EditorUISchemaElement = createControl(
+            e.added.element.element,
+            e.added.element.uiSchemaType
+          );
           const uiSchemaElement: EditorUISchemaElement = createControl(
-            e.added.element
+            e.added.element.element,
+            e.added.element.uiSchemaType
           );
           this.$store.dispatch('app/addScopedElementToLayout', {
             uiSchemaElement: uiSchemaElement,

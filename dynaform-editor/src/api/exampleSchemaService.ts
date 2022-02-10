@@ -22,6 +22,20 @@ const exampleSchema = {
       type: 'string',
       minLength: 3
     },
+    multiplefile: {
+      type: "array",
+      items: {
+        name: {
+          type: "string"
+        },
+        size: {
+          type: "string"
+        },
+        mimetype: {
+          "type": "string"
+        }
+      }
+    },
     date: {
       type: 'string',
       format: 'date',
