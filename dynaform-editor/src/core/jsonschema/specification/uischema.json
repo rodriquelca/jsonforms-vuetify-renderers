@@ -28,6 +28,9 @@
             "$ref": "#/definitions/suggest"
           },
           {
+            "$ref": "#/definitions/multiplefile"
+          },
+          {
             "$ref": "#/definitions/control"
           },
           {
@@ -85,6 +88,45 @@
           "type": "Control should have a string property \"type\""
         },
         "additionalProperties": "Control should not have properties other than type, label, scope, options, suggestion and rule"
+      }
+    },
+    "multiplefile": {
+      "type": "object",
+      "$id": "#multiplefile",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "MultipleFile",
+          "default": "MultipleFile"
+        },
+        "label": {
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/definitions/scope"
+        },
+        "options": {
+          "$ref": "#/definitions/options"
+        },
+        "rule": {
+          "$ref": "#/definitions/rule"
+        }
+      },
+      "required": ["type", "scope"],
+      "additionalProperties": false,
+      "errorMessage": {
+        "properties": {
+          "type": "type should be equal to one of the allowed values",
+          "scope": "Multiple File Control scope should match pattern \"^#\\/properties\\/{1}\"",
+          "suggestion": "Multiple File Control suggestion should be array",
+          "options": "Multiple File Control options should be object",
+          "label": "Multiple File Control label should be string, boolean or label object"
+        },
+        "required": {
+          "scope": "Multiple File Control should have an object property \"scope\"",
+          "type": " Multiple File Control should have a string property \"type\""
+        },
+        "additionalProperties": "Multiple File Control should not have properties other than type, label, scope, options, suggestion and rule"
       }
     },
     "suggest": {

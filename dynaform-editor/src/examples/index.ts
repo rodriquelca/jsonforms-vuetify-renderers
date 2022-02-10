@@ -37,10 +37,15 @@ import { input as verticalLayout } from './vertical-layout';
 import { input as huge } from './huge';
 import { input as ifThenElse } from './if-then-else';
 import { input as suggest } from './suggest';
+import { input as multipleFile } from './multiple-file';
 import { input as ruleHide } from './rule-hide';
 import { input as ruleMultiple } from './rule-multiple';
 
 export const examples = [
+  { id: 'multiple-file',
+    title: 'Multiple File', 
+    input: multipleFile 
+  },
   {
     id: 'rule-multiple',
     title: 'Rule Multiple',

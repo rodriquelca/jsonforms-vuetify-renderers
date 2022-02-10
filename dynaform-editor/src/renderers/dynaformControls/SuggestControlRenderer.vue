@@ -10,7 +10,7 @@
         hide-no-data
         item-text="Description"
         item-value="API"
-        :label="appliedOptions.sql"
+        :label="computedLabel"
         :placeholder="appliedOptions.placeholder"
         prepend-icon="mdi-database-search"
         return-object
