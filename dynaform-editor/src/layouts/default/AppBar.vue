@@ -1,10 +1,5 @@
 <template>
   <v-app-bar app>
-    <!-- <v-app-bar-nav-icon
-      aria-label="Toggle Navigation Drawer"
-      @click="app.drawer = !app.drawer"
-    /> -->
-
     <v-toolbar-title>
       <v-container fill-height fluid
         ><v-row align="center" justify="center">
@@ -19,9 +14,7 @@
         </v-row></v-container
       ></v-toolbar-title
     >
-
     <v-spacer expand></v-spacer>
-
     <v-toolbar-items>
       <v-container fill-height fluid justify-end
         ><v-row dense>

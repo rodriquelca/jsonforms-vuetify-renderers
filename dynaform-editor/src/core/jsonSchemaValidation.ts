@@ -102,12 +102,10 @@ export const getMonacoModelForUri = (
   
   const value = initialValue ?? '';
   let model = monaco.editor.getModel(modelUri);
-  console.log(model);
   if (model) {
     model.setValue(value);
   } else {
     model = monaco.editor.createModel(value, 'json', modelUri);
   }
-  console.log(model);
   return model; 
 };
