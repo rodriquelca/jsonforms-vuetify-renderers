@@ -40,11 +40,13 @@ import { input as suggest } from './suggest';
 import { input as multipleFile } from './multiple-file';
 import { input as ruleHide } from './rule-hide';
 import { input as ruleMultiple } from './rule-multiple';
+import { input as subForm } from './sub-form';
 
 export const examples = [
-  { id: 'multiple-file',
-    title: 'Multiple File', 
-    input: multipleFile 
+  {
+    id: 'multiple-file',
+    title: 'Multiple File',
+    input: multipleFile,
   },
   {
     id: 'rule-multiple',
@@ -250,5 +252,10 @@ export const examples = [
     id: 'huge',
     title: 'Huge',
     input: huge,
+  },
+  {
+    id: 'sub-form',
+    title: 'subForms',
+    input: subForm,
   },
 ];

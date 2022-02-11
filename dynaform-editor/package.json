@@ -8,6 +8,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^9.0.9",
     "@jsonforms/core": "3.0.0-alpha.2",
     "@jsonforms/vue2": "3.0.0-alpha.2",
     "@jsonforms/vue2-vuetify": "3.0.0-alpha.2",
