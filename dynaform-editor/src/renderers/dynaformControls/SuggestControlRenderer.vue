@@ -14,7 +14,7 @@
         :placeholder="appliedOptions.placeholder"
         prepend-icon="mdi-database-search"
         return-object
-        @change="onChange"
+        @change="changeHandler"
       ></v-autocomplete>
     </v-container>
   </v-form>
@@ -26,14 +26,25 @@ import {
   rankWith,
   uiTypeIs
 } from '@jsonforms/core';
-
-import { defineComponent } from '@vue/composition-api';
+import { Emitter } from 'mitt';
+import { defineComponent, inject } from '@vue/composition-api';
 import {
   rendererProps,
   useJsonFormsControl,
   RendererProps,
 } from '@jsonforms/vue2';
 import { useVuetifyControl } from '@jsonforms/vue2-vuetify';
+// type ValidateFunc = () => number;
+// type Emits<EventType extends string | symbol, T> = {
+//   on(type: EventType, handler: (arg: T) => void): void
+//   off(type: EventType, handler: (arg: T) => void): void
+//   emit(type: EventType, arg: T): void
+// }
+// type Emitter = Emits<'myevent', ValidateFunc>
+type Events = {
+  test: string, 
+  value: number
+}
 
 const controlRenderer = defineComponent({
   name: 'suggest-control-renderer',
@@ -47,21 +58,23 @@ const controlRenderer = defineComponent({
     model: null,
     search: null,
   }),
-  mounted() {
-    //this.entries = [this.control.data];
-  },
-
+  
   setup(props: RendererProps<ControlElement>) {
+    const emitter = inject("emitter") as Emitter<Events>;   // Inject `emitter`
+    emitter.on("myevent", (value) => {   // *Listen* for event
+      console.log("myevent received!", `value: ${value}`);
+    });
+    emitter.emit("myevent", 100);
     return useVuetifyControl(
       useJsonFormsControl(props),
       (value) => value || undefined
     );
   },
   computed: {
-    items() {
+    items():any {
       return this.entries.map((entry) => {
         const Description =
-          entry.Description.length > this.descriptionLimit
+          entry.Description.length > this.descriptionLimit 
             ? entry.Description.slice(0, this.descriptionLimit) + '...'
             : entry.Description;
 
@@ -69,7 +82,14 @@ const controlRenderer = defineComponent({
       });
     },
   },
+  methods: {
+    changeHandler(value: Array<any>): any{
+      console.log('changeHandler');
+      console.log(value);
 
+
+    }
+  },
   watch: {
     search(val) {
       // Items have already been loaded

@@ -41,6 +41,7 @@ import { input as multipleFile } from './multiple-file';
 import { input as ruleHide } from './rule-hide';
 import { input as ruleMultiple } from './rule-multiple';
 import { input as subForm } from './sub-form';
+import { input as dependentSuggest } from './dependent-suggest';
 
 export const examples = [
   {
@@ -48,6 +49,12 @@ export const examples = [
     title: 'Multiple File',
     input: multipleFile,
   },
+  {
+    id: 'dependent-suggest',
+    title: 'Dependent Suggest',
+    input: dependentSuggest,
+  },
+  { id: 'multiple-file', title: 'Multiple File', input: multipleFile },
   {
     id: 'rule-multiple',
     title: 'Rule Multiple',
