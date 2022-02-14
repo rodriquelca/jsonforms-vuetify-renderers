@@ -17,22 +17,22 @@ import { CompType } from './vue';
  */
 export const editorRendererProps = <U = UISchemaElement>() => ({
   editorTabs: {
-    required: false as false,
+    required: false,
     type: Array,
   },
   schema: {
-    required: true as true,
+    required: true,
     type: [Object, Boolean] as CompType<
       JsonSchema,
       [ObjectConstructor, BooleanConstructor]
     >,
   },
   uischema: {
-    required: true as true,
+    required: true,
     type: [Object, Boolean] as CompType<U, [ObjectConstructor,BooleanConstructor]>,
   },
   selection: {
-    required: false as false,
+    required: false,
     type: String,
     default: undefined,
   },

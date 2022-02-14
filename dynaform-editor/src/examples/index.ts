@@ -41,6 +41,7 @@ import { input as multipleFile } from './multiple-file';
 import { input as ruleHide } from './rule-hide';
 import { input as ruleMultiple } from './rule-multiple';
 import { input as subForm } from './sub-form';
+import { input as variables } from './variables';
 
 export const examples = [
   {
@@ -62,6 +63,11 @@ export const examples = [
     id: 'suggest',
     title: 'Suggest',
     input: suggest,
+  },
+  {
+    id: 'variables',
+    title: 'Suggest',
+    input: variables,
   },
   {
     id: 'main',

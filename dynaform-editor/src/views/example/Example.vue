@@ -10,7 +10,7 @@
             <v-tab :key="1">Schema</v-tab>
             <v-tab :key="2">UI Schema</v-tab>
             <v-tab :key="3">Data</v-tab>
-
+            <v-tab :key="4">Variables</v-tab>
             <v-tab-item :key="0">
               <demo-form
                 :example="example"
@@ -138,6 +138,40 @@
                 ></monaco-editor>
               </v-card>
             </v-tab-item>
+            <v-tab-item :key="4">
+              <v-card>
+                <v-card-title>
+                  <v-toolbar flat>
+                    <v-toolbar-title>Variables</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on: onTooltip }">
+                        <v-btn icon @click="reloadMonacoData" v-on="onTooltip">
+                          <v-icon>mdi-reload</v-icon>
+                        </v-btn>
+                      </template>
+                      {{ `Reload Example Data` }}
+                    </v-tooltip>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on: onTooltip }">
+                        <v-btn icon @click="saveVariablesData" v-on="onTooltip">
+                          <v-icon>mdi-content-save</v-icon>
+                        </v-btn>
+                      </template>
+                      {{ `Apply Change To Example Variables` }}
+                    </v-tooltip>
+                  </v-toolbar>
+                </v-card-title>
+                <v-divider class="mx-4"></v-divider>
+                <monaco-editor
+                  :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
+                  height="500"
+                  language="json"
+                  v-model="monacoDataVariables"
+                  :editorBeforeMount="registerValidations"
+                ></monaco-editor>
+              </v-card>
+            </v-tab-item>
           </v-tabs>
         </v-card-text>
       </v-card>
@@ -201,6 +235,7 @@ export default {
     monacoSchemaModel: sync('app/monaco@schemaModel'),
     monacoUiSchemaModel: sync('app/monaco@uischemaModel'),
     monacoDataModel: sync('app/monaco@dataModel'),
+    monacoDataVariables: sync('app/monaco@dataVariables'),
     locale: sync('app/jsonforms@locale'),
   },
   mounted() {
@@ -232,6 +267,7 @@ export default {
             schema: example.input.schema,
             uischema: example.input.uischema,
             data: example.input.data,
+            vars: example.input.vars || undefined
           },
         };
         this.updateMonacoModels(this.example);
@@ -365,6 +401,30 @@ export default {
         }
       }
     },
+    saveVariablesData() {
+      const model = this.monacoDataVariables as monaco.editor.ITextModel;
+      const example = this.example;
+      console.log("SAVE");
+      if (model && example) {
+        // do not check for monaco errors just if this is valid JSON becase we want to see when we have validation errors
+
+        const modelValue = model.getValue();
+        if (modelValue) {
+          let newJson: Record<string, any> | undefined = undefined;
+
+          try {
+            newJson = JSON.parse(modelValue);
+          } catch (error) {
+            this.toast(`Error: ${error}`);
+          }
+
+          if (newJson) {
+            example.input.vars = newJson;
+            this.toast('New data applied');
+          }
+        }
+      }
+    },
     registerValidations(editor: EditorApi) {
       configureJsonSchemaValidation(editor, ['*.schema.json']);
       configureUISchemaValidation(editor, ['*.uischema.json']);
@@ -384,7 +444,7 @@ export default {
         }
       }
     },
-    updateMonacoModels(example) {
+    updateMonacoModels(example: any) {
       this.$store.set(
         'app/monaco@schemaModel',
         getMonacoModelForUri(
@@ -410,6 +470,15 @@ export default {
           example.input.data ? JSON.stringify(example.input.data, null, 2) : ''
         )
       );
+      if(example.input.vars){
+        this.$store.set(
+          'app/monaco@dataVariables',
+          getMonacoModelForUri(
+            monaco.Uri.parse(this.toVariableUri(example.id)),
+            example.input.vars ? JSON.stringify(example.input.vars, null, 2) : ''
+          )
+        );
+      }
     },
     toSchemaUri(id: string): string {
       return `${id}.schema.json`;
@@ -419,6 +488,9 @@ export default {
     },
     toDataUri(id: string): string {
       return `${id}.data.json`;
+    },
+    toVariableUri(id: string): string {
+      return `${id}.vars.json`;
     },
     toast(message: string): void {
       this.snackbar = true;

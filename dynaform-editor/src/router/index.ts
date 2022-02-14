@@ -23,7 +23,7 @@ export default new Router({
           component: () => import('../views/editor'),
         },
         {
-          path: 'example/:id',
+          path: '/example/:id',
           name: 'example',
           component: () => import('../views/example'),
         },

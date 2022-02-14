@@ -64,6 +64,8 @@ import {
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import JsonRefs from 'json-refs';
 import { createTranslator } from '../i18n';
+import _ from "lodash";
+import {VariableBuilder} from "./../util/mixutils";
 
 export default {
   name: 'demo-form',
@@ -129,7 +131,7 @@ export default {
     example: {
       deep: true,
       handler(newExample: Example, oldExample: Example): void {
-        this.resolveSchema(newExample.input.schema);
+        this.resolveSchema(newExample.input.schema, newExample.input.vars);
       },
     },
     locale(newLocale: string): void {
@@ -138,14 +140,15 @@ export default {
     },
   },
   mounted() {
-    this.resolveSchema(this.example.input.schema);
+    this.resolveSchema(this.example.input.schema, this.example.input.vars);
   },
   methods: {
     onChange(event: JsonFormsChangeEvent): void {
       this.$emit('change', event);
     },
-    resolveSchema(schema?: JsonSchema): void {
+    resolveSchema(schema?: JsonSchema, schemavars?: JsonSchema): void {
       const resolvedSchema = this.resolvedSchema;
+
       resolvedSchema.schema = undefined;
       resolvedSchema.resolved = false;
       resolvedSchema.error = undefined;
@@ -153,8 +156,11 @@ export default {
       if (schema) {
         JsonRefs.resolveRefs(schema).then(
           function (res) {
-            resolvedSchema.schema = res.resolved;
+            let j = _.clone(res.resolved);
+            VariableBuilder.build(schemavars,j);
+            resolvedSchema.schema = j;
             resolvedSchema.resolved = true;
+          
           },
           function (err: Error) {
             resolvedSchema.resolved = true;
