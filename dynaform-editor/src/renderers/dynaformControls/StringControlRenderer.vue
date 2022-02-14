@@ -81,13 +81,13 @@ import {
   RendererProps,
   
 } from '@jsonforms/vue2';
-// import { default as ControlWrapper } from './ControlWrapper.vue';
-import { useVuetifyControl,ControlWrapper } from '@jsonforms/vue2-vuetify';
+import { ControlWrapper } from '@jsonforms/vue2-vuetify'; 
 import { VHover, VTextField, VCombobox } from 'vuetify/lib';
 import { DisabledIconFocus } from './directives';
 import isArray from 'lodash/isArray';
 import every from 'lodash/every';
 import isString from 'lodash/isString';
+import { useDynaformControl } from '../../util'
 
 const controlRenderer = defineComponent({
   name: 'string-control-renderer',
@@ -105,7 +105,7 @@ const controlRenderer = defineComponent({
   },
   setup(props: RendererProps<ControlElement>) {
     debugger;
-    return useVuetifyControl(
+    return useDynaformControl(
       useJsonFormsControl(props),
       (value) => value || undefined
     );

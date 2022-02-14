@@ -1,10 +1,17 @@
 import {
   JsonSchema,
+  computeLabel,
   UISchemaElement,
+  isDescriptionHidden,
   JsonFormsRendererRegistryEntry,
   JsonFormsCellRendererRegistryEntry,
+  composeWithUi,
+  resolveData,
 } from '@jsonforms/core';
-import { CompType } from './vue';
+import cloneDeep from 'lodash/cloneDeep';
+import merge from 'lodash/merge';
+import { useStyles } from '@jsonforms/vue2-vuetify';
+import { CompType, computed, ComputedRef, ref } from './vue';
 
 /**
  * Constructs a props declaration for Vue components which can be used
@@ -15,24 +22,25 @@ import { CompType } from './vue';
  * `rendererProps<Layout>()` in combination with `useJsonFormsLayout` or
  * `rendererProps<ControlElement>()` in combination with `useJsonFormsControl`.
  */
-export const editorRendererProps = <U = UISchemaElement>() => ({
+export const editorRendererProp = <U = UISchemaElement>() => ({
   editorTabs: {
-    required: false as false,
-    type: Array,
+    required: false as const,
+    type: Array as CompType<[],ArrayConstructor>,
+    default: []
   },
   schema: {
-    required: true as true,
+    required: true as const,
     type: [Object, Boolean] as CompType<
       JsonSchema,
       [ObjectConstructor, BooleanConstructor]
     >,
   },
   uischema: {
-    required: true as true,
-    type: [Object, Boolean] as CompType<U, [ObjectConstructor,BooleanConstructor]>,
+    required: true as const,
+    type: [Object, Boolean] as CompType<U, [ObjectConstructor, BooleanConstructor]>,
   },
   selection: {
-    required: false as false,
+    required: false as const,
     type: String,
     default: undefined,
   },
@@ -58,11 +66,90 @@ export interface RendererProps<U = UISchemaElement> {
   enabled?: boolean;
   renderers?: JsonFormsRendererRegistryEntry[];
   cells?: JsonFormsCellRendererRegistryEntry[];
-  selection?:string;
+  selection?: string;
 }
-export const useJsonTest =  (props: RendererProps) => {
+export const useJsonTest = (props: RendererProps) => {
   const test = {
-      direction: "row"
+    direction: "row"
   };
   return test;
+};
+
+
+
+
+const useControlAppliedOptions = <I extends { control: any }>(input: I) => {
+  return computed(() =>
+    merge(
+      {},
+      cloneDeep(input.control.value.config),
+      cloneDeep(input.control.value.uischema.options)
+    )
+  );
+};
+
+const useComputedLabel = <I extends { control: any }>(
+  input: I,
+  appliedOptions: ComputedRef<any>
+) => {
+  return computed((): string => {
+    return computeLabel(
+      input.control.value.label,
+      input.control.value.required,
+      !!appliedOptions.value?.hideRequiredAsterisk
+    );
+  });
+};
+/**
+ * Adds styles, isFocused, appliedOptions and onChange
+ */
+export const useDynaformControl = <
+  I extends { control: any; handleChange: any }
+>(
+  input: I,
+  adaptValue: (target: any) => any = (v) => v
+) => {
+  const appliedOptions = useControlAppliedOptions(input);
+
+  const isFocused = ref(false);
+  const onChange = (value: any) => {
+    input.handleChange(input.control.value.path, adaptValue(value));
+  };
+
+  const persistentHint = (): boolean => {
+    return !isDescriptionHidden(
+      input.control.value.visible,
+      input.control.value.description,
+      isFocused.value,
+      !!appliedOptions.value?.showUnfocusedDescription
+    );
+  };
+
+  const computedLabel = useComputedLabel(input, appliedOptions);
+
+  const controlWrapper = computed(() => {
+    const { id, description, errors, label, visible, required } =
+      input.control.value;
+    return { id, description, errors, label, visible, required };
+  });
+
+  const styles = useStyles(input.control.value.uischema);
+  debugger;
+  if(input.control.value.uischema.rule) {
+    console.log(composeWithUi(input.control.value.uischema.rule.condition,input.control.value.path));
+  }
+  
+  const dependent = false;
+
+  return {
+    ...input,
+    styles,
+    isFocused,
+    appliedOptions,
+    controlWrapper,
+    onChange,
+    persistentHint,
+    computedLabel,
+    dependent,
+  };
 };
