@@ -28,7 +28,12 @@
 </template>
 
 <script lang="ts">
-import { ControlElement, rankWith, uiTypeIs } from '@jsonforms/core';
+import {
+  ControlElement,
+  rankWith,
+  uiTypeIs,
+  JsonFormsRendererRegistryEntry,
+} from '@jsonforms/core';
 import { cloneDeepWith } from 'lodash';
 import { defineComponent } from '@vue/composition-api';
 import {
@@ -45,6 +50,8 @@ const controlRenderer = defineComponent({
   },
   data: () => ({}),
   setup(props: RendererProps<ControlElement>) {
+    debugger;
+    //console.log(props);
     return useVuetifyControl(
       useJsonFormsControl(props),
       (value) => value || undefined
@@ -62,13 +69,15 @@ const controlRenderer = defineComponent({
     },
     computedData: {
       get() {
-        const newFiles: Array<any> = this.control.data ? this.control.data.map((file: any) => {
-          return {
-            name: file.name,
-            size: file.size,
-            type: file.mimetype,
-          };
-        }): []
+        const newFiles: Array<any> = this.control.data
+          ? this.control.data.map((file: any) => {
+              return {
+                name: file.name,
+                size: file.size,
+                type: file.mimetype,
+              };
+            })
+          : [];
         return newFiles;
       },
       set(files: Array<any>) {
@@ -89,8 +98,8 @@ const controlRenderer = defineComponent({
 
 export default controlRenderer;
 
-export const MultipleFileControlRenderer = {
+export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(3, uiTypeIs('MultipleFile')),
+  tester: rankWith(2, uiTypeIs('MultipleFile')),
 };
 </script>

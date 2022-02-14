@@ -24,7 +24,8 @@
 import {
   ControlElement,
   rankWith,
-  uiTypeIs
+  uiTypeIs,
+  JsonFormsRendererRegistryEntry
 } from '@jsonforms/core';
 import { Emitter } from 'mitt';
 import { defineComponent, inject } from '@vue/composition-api';
@@ -60,11 +61,12 @@ const controlRenderer = defineComponent({
   }),
   
   setup(props: RendererProps<ControlElement>) {
-    const emitter = inject("emitter") as Emitter<Events>;   // Inject `emitter`
-    emitter.on("myevent", (value) => {   // *Listen* for event
-      console.log("myevent received!", `value: ${value}`);
-    });
-    emitter.emit("myevent", 100);
+    // const emitter = inject("emitter") as Emitter<Events>;   // Inject `emitter`
+    // emitter.on("myevent", (value) => {   // *Listen* for event
+    //   console.log("myevent received!", `value: ${value}`);
+    // });
+    // emitter.emit("myevent", 100);
+    
     return useVuetifyControl(
       useJsonFormsControl(props),
       (value) => value || undefined
@@ -119,7 +121,7 @@ const controlRenderer = defineComponent({
 
 export default controlRenderer;
 
-export const SuggestControlRenderer = {
+export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
   tester: rankWith(2, uiTypeIs('Suggest')),
 };

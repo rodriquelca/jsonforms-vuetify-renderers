@@ -142,6 +142,7 @@ export default {
   },
   methods: {
     onChange(event: JsonFormsChangeEvent): void {
+      debugger;
       this.$emit('change', event);
     },
     resolveSchema(schema?: JsonSchema): void {

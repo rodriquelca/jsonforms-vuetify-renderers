@@ -1,0 +1,22 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/name"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/dependent",
+      "rule": {
+        "effect": "ENABLE",
+        "condition": {
+          "scope": "#/properties/name",
+          "schema": {
+            "const": "test"
+          }
+        }
+      }
+    }
+  ]
+}
