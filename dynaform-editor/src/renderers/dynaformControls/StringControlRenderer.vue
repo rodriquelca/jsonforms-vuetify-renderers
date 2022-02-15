@@ -5,7 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-  custom
+  {{fireDependency}}
     <v-hover v-slot="{ hover }">
       <v-combobox
         v-if="suggestions !== undefined"
@@ -78,8 +78,7 @@ import { defineComponent, inject } from '@vue/composition-api';
 import {
   rendererProps,
   useJsonFormsControl,
-  RendererProps,
-  
+  RendererProps
 } from '@jsonforms/vue2';
 import { ControlWrapper } from '@jsonforms/vue2-vuetify'; 
 import { VHover, VTextField, VCombobox } from 'vuetify/lib';
@@ -104,13 +103,16 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    debugger;
     return useDynaformControl(
       useJsonFormsControl(props),
       (value) => value || undefined
     );
   },
   computed: {
+    // noData(): boolean {
+    //   return !this.control.data || this.control.data.length === 0;
+    // },
+
     suggestions(): string[] | undefined {
       const suggestions = this.control.uischema.options?.suggestion;
 

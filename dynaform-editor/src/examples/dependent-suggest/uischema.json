@@ -9,12 +9,20 @@
       "type": "Control",
       "scope": "#/properties/dependent",
       "rule": {
-        "effect": "ENABLE",
+        "effect": "RELOAD",
         "condition": {
-          "scope": "#/properties/name",
-          "schema": {
-            "const": "test"
-          }
+          "type": "AND",
+          "conditions": [
+            {
+              "type": "DEPENDENCY",
+              "scope": "#/properties/name"
+            },
+            {
+              "type": "LEAF",
+              "scope": "#/properties/name",
+              "expectedValue": "123"
+            }
+          ]
         }
       }
     }

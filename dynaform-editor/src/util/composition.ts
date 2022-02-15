@@ -5,14 +5,22 @@ import {
   isDescriptionHidden,
   JsonFormsRendererRegistryEntry,
   JsonFormsCellRendererRegistryEntry,
-  composeWithUi,
+  ControlProps,
   resolveData,
+  getData,
+  getSchema,
+  JsonFormsSubStates,
 } from '@jsonforms/core';
+import {
+  rendererProps,
+  useControl,
+   
+} from '@jsonforms/vue2';
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 import { useStyles } from '@jsonforms/vue2-vuetify';
-import { CompType, computed, ComputedRef, ref } from './vue';
-
+import { CompType, computed, ComputedRef, ref, inject} from './vue';
+import { fireDependencyHandler } from './runtime';
 /**
  * Constructs a props declaration for Vue components which can be used
  * for registered renderers and cells. These are typically used in combination
@@ -22,11 +30,10 @@ import { CompType, computed, ComputedRef, ref } from './vue';
  * `rendererProps<Layout>()` in combination with `useJsonFormsLayout` or
  * `rendererProps<ControlElement>()` in combination with `useJsonFormsControl`.
  */
-export const editorRendererProp = <U = UISchemaElement>() => ({
+export const editorRendererProps = <U = UISchemaElement>() => ({
   editorTabs: {
     required: false as const,
-    type: Array as CompType<[],ArrayConstructor>,
-    default: []
+    type: Array as CompType<[], ArrayConstructor>,
   },
   schema: {
     required: true as const,
@@ -37,7 +44,10 @@ export const editorRendererProp = <U = UISchemaElement>() => ({
   },
   uischema: {
     required: true as const,
-    type: [Object, Boolean] as CompType<U, [ObjectConstructor, BooleanConstructor]>,
+    type: [Object, Boolean] as CompType<
+      U,
+      [ObjectConstructor, BooleanConstructor]
+    >,
   },
   selection: {
     required: false as const,
@@ -70,13 +80,10 @@ export interface RendererProps<U = UISchemaElement> {
 }
 export const useJsonTest = (props: RendererProps) => {
   const test = {
-    direction: "row"
+    direction: 'row',
   };
   return test;
 };
-
-
-
 
 const useControlAppliedOptions = <I extends { control: any }>(input: I) => {
   return computed(() =>
@@ -100,6 +107,7 @@ const useComputedLabel = <I extends { control: any }>(
     );
   });
 };
+
 /**
  * Adds styles, isFocused, appliedOptions and onChange
  */
@@ -134,12 +142,25 @@ export const useDynaformControl = <
   });
 
   const styles = useStyles(input.control.value.uischema);
-  debugger;
-  if(input.control.value.uischema.rule) {
-    console.log(composeWithUi(input.control.value.uischema.rule.condition,input.control.value.path));
-  }
-  
-  const dependent = false;
+
+  const fireDependency = computed(() => {
+    if (input.control.value.uischema.rule) {
+      const jsonforms = inject<JsonFormsSubStates>('jsonforms');
+      const { uischema, rootSchema,config} = input.control.value;
+      const rootData = getData({jsonforms});
+
+      return fireDependencyHandler(
+        {jsonforms},
+        input.control.value,
+        uischema,
+        rootSchema,
+        rootData,
+        config
+      );
+      // console.log(composeWithUi(input.control.value.uischema.rule.condition,input.control.value.path));
+    }
+    return input.control.value?.data || '';
+  });
 
   return {
     ...input,
@@ -150,6 +171,6 @@ export const useDynaformControl = <
     onChange,
     persistentHint,
     computedLabel,
-    dependent,
+    fireDependency,
   };
 };
