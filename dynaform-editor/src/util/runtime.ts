@@ -36,7 +36,7 @@ import {
   AndCondition,
   LeafCondition,
   Scopable,
-  resolveData
+  resolveData,
 } from '@jsonforms/core';
 import Ajv from 'ajv';
 
@@ -45,19 +45,16 @@ import Ajv from 'ajv';
  * Checks the global readonly flag, uischema rule, uischema options (including the config),
  * the schema and the enablement indicator of the parent.
  */
-export const fireDependencyHandler= (
+export const fireDependencyHandler = (
   state: JsonFormsState,
   ownProps: any,
   uischema: UISchemaElement,
-  schema: JsonSchema & { readOnly?: boolean } | undefined,
+  schema: (JsonSchema & { readOnly?: boolean }) | undefined,
   rootData: any,
   config: any
 ) => {
   if (uischema && hasReloadRule(uischema)) {
-    // console.log(hasReloadRule(uischema, rootData, ownProps?.path, getAjv(state)));
-
     return fireReload(uischema, rootData, ownProps?.path, getAjv(state));
-    // return hasReloadRule(uischema, rootData, ownProps?.path, getAjv(state));
   }
   return true;
 };
@@ -83,8 +80,9 @@ const isAndCondition = (condition: Condition): condition is AndCondition =>
 const isLeafCondition = (condition: Condition): condition is LeafCondition =>
   condition.type === 'LEAF';
 
-  const isDependencyCondition = (condition: Condition): condition is AndCondition =>
-  condition.type === 'DEPENDENCY';
+const isDependencyCondition = (
+  condition: Condition
+): condition is AndCondition => condition.type === 'DEPENDENCY';
 
 const isSchemaCondition = (
   condition: Condition
@@ -111,11 +109,10 @@ const evaluateCondition = (
       false
     );
   } else if (isLeafCondition(condition)) {
-    const value = resolveData(data, getConditionScope(condition, path));
+    const value = resolveData(data, getConditionScope(condition, undefined));
     return value === condition.expectedValue;
   } else if (isDependencyCondition(condition)) {
-    // const value = resolveData(data, getConditionScope(condition, path));
-    // return value === condition.expectedValue;
+    const value = resolveData(data, getConditionScope(condition, undefined));
     return true;
   } else if (isSchemaCondition(condition)) {
     const value = resolveData(data, getConditionScope(condition, path));
@@ -144,28 +141,25 @@ export const evalReload = (
 
   switch (uischema.rule.effect) {
     case RuleEffect.RELOAD:
-      return !fulfilled;
-    // enabled by default
+      return fulfilled;
+    // false by default
     default:
-      return true;
+      return false;
   }
 };
 
 /**
  * The different rule effects.
  */
- export enum RuleEffect {
+export enum RuleEffect {
   /**
    * Effect that reload the associated element.
    */
-   RELOAD = 'RELOAD',
-};
+  RELOAD = 'RELOAD',
+}
 
 export const hasReloadRule = (uischema: UISchemaElement): boolean => {
-  if (
-    uischema.rule &&
-    (uischema.rule.effect === RuleEffect.RELOAD)
-  ) {
+  if (uischema.rule && uischema.rule.effect === RuleEffect.RELOAD) {
     return true;
   }
   return false;

@@ -11,15 +11,11 @@ import {
   getSchema,
   JsonFormsSubStates,
 } from '@jsonforms/core';
-import {
-  rendererProps,
-  useControl,
-   
-} from '@jsonforms/vue2';
+import { rendererProps, useControl } from '@jsonforms/vue2';
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 import { useStyles } from '@jsonforms/vue2-vuetify';
-import { CompType, computed, ComputedRef, ref, inject} from './vue';
+import { CompType, computed, ComputedRef, ref, inject } from './vue';
 import { fireDependencyHandler } from './runtime';
 /**
  * Constructs a props declaration for Vue components which can be used
@@ -146,20 +142,25 @@ export const useDynaformControl = <
   const fireDependency = computed(() => {
     if (input.control.value.uischema.rule) {
       const jsonforms = inject<JsonFormsSubStates>('jsonforms');
-      const { uischema, rootSchema,config} = input.control.value;
-      const rootData = getData({jsonforms});
+      const { uischema, rootSchema, config } = input.control.value;
+      const rootData = getData({ jsonforms });
 
-      return fireDependencyHandler(
-        {jsonforms},
-        input.control.value,
-        uischema,
-        rootSchema,
-        rootData,
-        config
-      );
+      if (
+        fireDependencyHandler(
+          { jsonforms },
+          input.control.value,
+          uischema,
+          rootSchema,
+          rootData,
+          config
+        )
+      ) {
+        input.control.value.data = 'reloaded';
+      }
+
       // console.log(composeWithUi(input.control.value.uischema.rule.condition,input.control.value.path));
     }
-    return input.control.value?.data || '';
+    return '';
   });
 
   return {
