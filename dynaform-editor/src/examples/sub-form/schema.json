@@ -13,5 +13,5 @@
     },
     "required": ["age", "height"]
   },
-  "$ref": "defs.json"
+  "$ref": "subForm/subForm.json"
 }
