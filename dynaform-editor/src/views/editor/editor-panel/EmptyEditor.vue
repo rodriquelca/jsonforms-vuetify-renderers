@@ -38,7 +38,6 @@ export default {
   methods: {
     handleChange(e: any) {
       if (e.added) {
-        console.log(e);
         if (e.added.element.element && e.added.element.element.uuid) {
           const provider: EditorUISchemaElement = createControl(
             e.added.element.element, e.added.element.uiSchemaType

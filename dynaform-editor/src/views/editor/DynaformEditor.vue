@@ -1,5 +1,6 @@
 <template>
   <v-container fill-height fluid>
+    TODOO
     <v-row>
       <v-col cols="3">
         <PalletePanel :schema="editorSchema" />

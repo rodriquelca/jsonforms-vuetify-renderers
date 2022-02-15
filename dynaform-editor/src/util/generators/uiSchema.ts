@@ -19,8 +19,6 @@ export const createControl = (
   schemaElement: SchemaElement,
   uiSchemaType: string,
 ): ControlElement & EditorUISchemaElement => {
-  console.log("schemaElement");
-  console.log(schemaElement);
   return createControlWithScope(
     `#${getScope(schemaElement)}`,
     schemaElement.options,

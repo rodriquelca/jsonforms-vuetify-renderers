@@ -41,7 +41,11 @@ import { input as multipleFile } from './multiple-file';
 import { input as ruleHide } from './rule-hide';
 import { input as ruleMultiple } from './rule-multiple';
 import { input as subForm } from './sub-form';
+<<<<<<< HEAD
 import { input as dependentField } from './dependent-field';
+=======
+import { input as variables } from './variables';
+>>>>>>> 4b153cb8c515b34f15202d64be0b66827cb4e695
 
 export const examples = [
   {
@@ -69,6 +73,11 @@ export const examples = [
     id: 'suggest',
     title: 'Suggest',
     input: suggest,
+  },
+  {
+    id: 'variables',
+    title: 'Suggest',
+    input: variables,
   },
   {
     id: 'main',

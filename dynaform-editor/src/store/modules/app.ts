@@ -204,6 +204,7 @@ const state: AppState = {
     schemaModel: undefined,
     uischemaModel: undefined,
     dataModel: undefined,
+    dataVariables: undefined
   },
 };
 // make all mutations

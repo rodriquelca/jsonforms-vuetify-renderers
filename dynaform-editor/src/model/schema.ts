@@ -12,13 +12,13 @@ import { v4 as uuid } from 'uuid';
 
 import { getHierarchy, TreeElement } from '../util/tree';
 
-export const OBJECT: 'object' = 'object';
+export const OBJECT: string = 'object';
 
-export const ARRAY: 'array' = 'array';
+export const ARRAY:string= 'array';
 
-export const PRIMITIVE: 'primitive' = 'primitive';
+export const PRIMITIVE: string = 'primitive';
 
-export const OTHER: 'other' = 'other';
+export const OTHER: string = 'other';
 
 export type SchemaElementType = 'object' | 'array' | 'primitive' | 'other';
 
