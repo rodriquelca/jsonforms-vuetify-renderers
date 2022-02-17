@@ -43,8 +43,14 @@ import { input as ruleMultiple } from './rule-multiple';
 import { input as subForm } from './sub-form';
 import { input as dependentField } from './dependent-field';
 import { input as variables } from './variables';
+import { input as grid } from './grid';
 
 export const examples = [
+  {
+    id: "grid",
+    title: "Dynagorm Grid",
+    input: grid
+  },
   {
     id: 'multiple-file',
     title: 'Multiple File',
@@ -73,7 +79,7 @@ export const examples = [
   },
   {
     id: 'variables',
-    title: 'Suggest',
+    title: 'Variables',
     input: variables,
   },
   {
