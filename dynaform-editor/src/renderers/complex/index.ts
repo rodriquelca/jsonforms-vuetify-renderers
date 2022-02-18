@@ -15,11 +15,11 @@ import { entry as oneOfRendererEntry } from './OneOfRenderer.vue';
 import { entry as gridControlRendererEntry } from './GridControlRenderer.vue';
 
 export const complexRenderers = [
-  // allOfRendererEntry,
-  // anyOfRendererEntry,
-  // arrayControlRendererEntry,
-  // enumArrayRendererEntry,
-  // objectRendererEntry,
-  // oneOfRendererEntry,
-  // gridControlRendererEntry,
+  allOfRendererEntry,
+  anyOfRendererEntry,
+  arrayControlRendererEntry,
+  enumArrayRendererEntry,
+  objectRendererEntry,
+  oneOfRendererEntry,
+  gridControlRendererEntry,
 ];

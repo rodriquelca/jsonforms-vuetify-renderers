@@ -11,5 +11,5 @@ export const arrayListRendererEntry: JsonFormsRendererRegistryEntry = {
 };
 
 export const arrayRenderers = [
-  //arrayListRendererEntry
+  arrayListRendererEntry
 ];
