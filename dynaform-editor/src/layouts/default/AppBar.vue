@@ -18,6 +18,7 @@
     <v-toolbar-items>
       <v-container fill-height fluid justify-end
         ><v-row dense>
+          <v-col><download-json /></v-col>
           <v-col><settings /> </v-col>
           <v-col><theme-changer /> </v-col>
         </v-row>
@@ -28,6 +29,7 @@
 
 <script lang="ts">
 import { sync } from 'vuex-pathify';
+import DownloadJson from '@/components/DownloadJson.vue';
 import Settings from '@/components/Settings.vue';
 import ThemeChanger from '@/components/ThemeChanger.vue';
 import { AppStore } from '../store/modules/types';
@@ -37,6 +39,7 @@ export default {
   components: {
     ThemeChanger,
     Settings,
+    DownloadJson,
   },
   computed: {
     app: sync<AppStore>('app/'),
