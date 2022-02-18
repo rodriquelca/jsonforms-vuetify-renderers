@@ -43,10 +43,7 @@
           <v-simple-table class="array-container flex">
             <thead v-if="control.schema.type === 'object'">
               <tr>
-                <th
-                  
-                  scope="col"
-                ></th>
+                <th scope="col"></th>
                 <th
                   v-for="(prop, index) in getValidColumnProps(control.schema)"
                   :key="`${control.path}-header-${index}`"
@@ -68,17 +65,22 @@
             <tbody>
               <tr
                 v-for="(element, index) in paginate"
-                :key="`${control.path}-${page * (index + 1) -1}`"
+                :key="`${control.path}-${
+                  (page - 1) * appliedOptions.pageSize + index
+                }`"
                 :class="styles.arrayList.item"
               >
-              <td>
-                {{page * (index + 1)}}
+                <td>
+                  {{ (page - 1) * appliedOptions.pageSize + index + 1}}
                 </td>
                 <td
                   v-for="propName in getValidColumnProps(control.schema)"
                   :key="
                     composePaths(
-                      composePaths(control.path, `${page * (index + 1) -1}`),
+                      composePaths(
+                        control.path,
+                        `${(page - 1) * appliedOptions.pageSize + index}`
+                      ),
                       propName
                     )
                   "
@@ -86,7 +88,12 @@
                   <dispatch-renderer
                     :schema="control.schema"
                     :uischema="resolveUiSchema(propName)"
-                    :path="composePaths(control.path, `${page * (index + 1) - 1}`)"
+                    :path="
+                      composePaths(
+                        control.path,
+                        `${(page - 1) * appliedOptions.pageSize + index}`
+                      )
+                    "
                     :enabled="control.enabled"
                     :renderers="control.renderers"
                     :cells="control.cells"
@@ -112,7 +119,12 @@
                         aria-label="Move up"
                         :disabled="index <= 0 || !control.enabled"
                         :class="styles.arrayList.itemMoveUp"
-                        @click.native="moveUpClick($event, page * (index + 1) - 1)"
+                        @click.native="
+                          moveUpClick(
+                            $event,
+                            (page - 1) * appliedOptions.pageSize + index
+                          )
+                        "
                       >
                         <v-icon class="notranslate">mdi-arrow-up</v-icon>
                       </v-btn>
@@ -133,7 +145,9 @@
                           index >= control.data.length - 1 || !control.enabled
                         "
                         :class="styles.arrayList.itemMoveDown"
-                        @click.native="moveDownClick($event, page * (index + 1) - 1)"
+                        @click.native="
+                          moveDownClick($event, page * (index + 1) - 1)
+                        "
                       >
                         <v-icon class="notranslate">mdi-arrow-down</v-icon>
                       </v-btn>
@@ -157,7 +171,9 @@
                             arraySchema.minItems !== undefined &&
                             control.data.length <= arraySchema.minItems)
                         "
-                        @click.native="removeItemsClick($event, [page * (index + 1) - 1])"
+                        @click.native="
+                          removeItemsClick($event, [page * (index + 1) - 1])
+                        "
                       >
                         <v-icon class="notranslate">mdi-delete</v-icon>
                       </v-btn>
@@ -171,7 +187,7 @@
           <div class="text-center">
             <v-pagination
               v-model="page"
-              :length="totalPages || 10"
+              :length="totalPages"
               prev-icon="mdi-menu-left"
               next-icon="mdi-menu-right"
             ></v-pagination>
@@ -225,7 +241,7 @@ import {
   VSimpleTable,
 } from 'vuetify/lib';
 import { ValidationIcon, ValidationBadge } from '../controls/components/index';
-import {cloneDeep} from 'lodash';
+import { cloneDeep } from 'lodash';
 const controlRenderer = defineComponent({
   name: 'array-control-renderer',
   components: {
@@ -265,23 +281,23 @@ const controlRenderer = defineComponent({
         this.control.rootSchema
       );
     },
-    totalPages: function() {
-          return this.appliedOptions.pageSize ? Math.ceil(this.control.data.length / this.appliedOptions.pageSize): 1
-        },
+    totalPages(): number {
+      return this.appliedOptions.pageSize
+        ? Math.ceil(this.control.data.length / this.appliedOptions.pageSize)
+        : 1;
+    },
     noData(): boolean {
       return !this.control.data || this.control.data.length === 0;
     },
     paginate(): Array<any> {
-      debugger;
-      let size = this.appliedOptions.pageSize?  this.appliedOptions.pageSize: this.control.data.length; 
-      let list = cloneDeep(this.control.data)
-      let temp = this.page;
-      if (this.page >= this.totalPages) {
-            temp -= 1;
-          }
-      var index = temp * size;
+      let size = this.appliedOptions.pageSize
+        ? this.appliedOptions.pageSize
+        : this.control.data.length;
+      let list = cloneDeep(this.control.data);
+      const temp = this.page - 1;
+      const index = temp * size;
       return list.slice(index, index + size);
-    }
+    },
   },
   methods: {
     composePaths,
@@ -291,6 +307,7 @@ const controlRenderer = defineComponent({
         this.control.path,
         createDefaultValue(this.control.schema)
       )();
+      this.page = this.totalPages;
     },
     moveUpClick(event: Event, toMove: number): void {
       event.stopPropagation();
@@ -327,7 +344,7 @@ const controlRenderer = defineComponent({
     controlWithoutLabel(scope: string): ControlElement {
       return { type: 'Control', scope: scope, label: false };
     },
-  }
+  },
 });
 
 export default controlRenderer;
