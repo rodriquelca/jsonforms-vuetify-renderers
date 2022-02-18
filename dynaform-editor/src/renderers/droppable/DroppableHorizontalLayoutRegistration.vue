@@ -41,12 +41,12 @@ import {
 } from '@jsonforms/vue2';
 import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
 import { VContainer, VRow, VCol } from 'vuetify/lib';
-import { DroppableElementRegistration } from './DroppableElement.vue';
+import { entry as DroppableElementRegistration } from './DroppableElement.vue';
 
-import { EditorUISchemaElement } from '../model/uischema';
-import { createControl } from '../util/generators/uiSchema';
+import { EditorUISchemaElement } from '../../model/uischema';
+import { createControl } from '../../util/generators/uiSchema';
 
-const layoutRenderer = defineComponent({
+const droppableRenderer = defineComponent({
   name: 'horizontal-layout-renderer',
   components: {
     DispatchRenderer,
@@ -104,10 +104,10 @@ const layoutRenderer = defineComponent({
   },
 });
 
-export default layoutRenderer;
+export default droppableRenderer;
 
-export const DroppableHorizontalLayoutRegistration = {
-  renderer: layoutRenderer,
+export const entry: JsonFormsRendererRegistryEntry = {
+  renderer: droppableRenderer,
   tester: rankWith(45, uiTypeIs('HorizontalLayout')),
 };
 </script>

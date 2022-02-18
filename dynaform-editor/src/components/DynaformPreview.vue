@@ -49,7 +49,7 @@ import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import JsonRefs from 'json-refs';
 import { createTranslator } from '../i18n';
 import { useExportSchema, useExportUiSchema } from '../util';
-import { extendedDynaformRenderers } from '../renderers/dynaformControls';
+import { extendedDynaformRenderers } from '../renderers';
 import {VariableBuilder} from "./../util/mixutils.js";
 import { sync } from 'vuex-pathify';
 import _ from 'lodash';

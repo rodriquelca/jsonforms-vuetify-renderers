@@ -10,6 +10,7 @@ import { input as categorizationStepper } from './categorization-stepper';
 import { input as categorizationStepperNav } from './categorization-stepper-nav';
 import { input as control } from './control';
 import { input as controlOptions } from './control-options';
+import { input as controlDinamicRequired} from './control-dinamic-requiered';
 import { input as enumExample } from './enum';
 import { input as enumInArray } from './enum-in-array';
 import { input as groupLayout } from './group-layout';
@@ -41,14 +42,27 @@ import { input as multipleFile } from './multiple-file';
 import { input as ruleHide } from './rule-hide';
 import { input as ruleMultiple } from './rule-multiple';
 import { input as subForm } from './sub-form';
+import { input as dependentField } from './dependent-field';
 import { input as variables } from './variables';
+import { input as grid } from './grid';
 
 export const examples = [
+  {
+    id: "grid",
+    title: "Dynagorm Grid",
+    input: grid
+  },
   {
     id: 'multiple-file',
     title: 'Multiple File',
     input: multipleFile,
   },
+  {
+    id: 'dependent-field',
+    title: 'Dependent Field',
+    input: dependentField,
+  },
+  { id: 'multiple-file', title: 'Multiple File', input: multipleFile },
   {
     id: 'rule-multiple',
     title: 'Rule Multiple',
@@ -66,7 +80,7 @@ export const examples = [
   },
   {
     id: 'variables',
-    title: 'Suggest',
+    title: 'Variables',
     input: variables,
   },
   {
@@ -88,6 +102,11 @@ export const examples = [
     id: 'control-options',
     title: 'Control Options',
     input: controlOptions,
+  },
+  {
+    id: 'control-dinamic-required',
+    title: 'Control Dinamic Required',
+    input: controlDinamicRequired
   },
   {
     id: 'enum',

@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "fileWillBeRequired": {
+      "type": "boolean"
+    },
+    "name": {
+      "type": "string"
+    },
+    "multiplefile": {
+      "type": "array",
+      "items": {
+        "name": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        },
+        "mimetype": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "if": {
+    "properties": {
+      "fileWillBeRequired": {
+        "enum": [
+          true
+        ]
+      }
+    }
+  },
+  "then": {
+    "required": [
+      "name","multiplefile"
+    ]
+  }
+}

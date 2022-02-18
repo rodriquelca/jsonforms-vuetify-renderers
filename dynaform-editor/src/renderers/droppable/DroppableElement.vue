@@ -27,9 +27,9 @@ import {
 } from '@jsonforms/vue2';
 import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
 import { VContainer, VRow, VCol } from 'vuetify/lib';
-import  EditorElement  from '../components/EditorElement.vue';
+import  EditorElement  from '../../components/EditorElement.vue';
 import { omit } from 'lodash';
-const DroppableElement = defineComponent({
+const droppableRenderer = defineComponent({
   name: 'droppable-element',
   components: {
     DispatchRenderer,
@@ -44,7 +44,7 @@ const DroppableElement = defineComponent({
   computed: {
     customRenderers (): Array<any> {
       const renderers = this.layout.renderers?.filter(
-          (r) => r.renderer !== DroppableElementRenderer
+          (r) => r.renderer !== droppableRenderer
         );
       return renderers;
       },
@@ -58,10 +58,10 @@ const DroppableElement = defineComponent({
   },
 });
 
-const DroppableElementRenderer = DroppableElement;
-export default DroppableElement;
-export const DroppableElementRegistration = {
-  renderer: DroppableElement,
+export default droppableRenderer;
+
+export const entry: JsonFormsRendererRegistryEntry = {
+  renderer: droppableRenderer,
   tester: rankWith(50, () => true),
 };
 </script>

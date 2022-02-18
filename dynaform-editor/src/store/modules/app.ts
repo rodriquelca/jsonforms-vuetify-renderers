@@ -7,7 +7,7 @@ import { AppState } from './types';
 import { RootState } from '../types';
 import { Module } from 'vuex';
 import { createAjv, extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
-import {extendedDynaformRenderers} from '../../renderers/dynaformControls'
+import {extendedDynaformRenderers} from '../../renderers'
 import {
   DefaultPaletteService,
   PaletteService,

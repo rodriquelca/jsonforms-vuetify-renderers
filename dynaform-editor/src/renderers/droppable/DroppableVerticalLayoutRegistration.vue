@@ -33,6 +33,7 @@ import {
   uiTypeIs,
   Layout,
   rankWith,
+  JsonFormsRendererRegistryEntry
 } from '@jsonforms/core';
 import { defineComponent } from '@vue/composition-api';
 import {
@@ -43,11 +44,11 @@ import {
 } from '@jsonforms/vue2';
 import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
 import { VContainer, VRow, VCol } from 'vuetify/lib';
-import { DroppableElementRegistration } from "@/renderers/DroppableElement.vue";
+import { entry as DroppableElementRegistration } from "./DroppableElement.vue";
 import { EditorUISchemaElement } from "@/model";
 import { createControl } from "@/util";
 
-const layoutRenderer = defineComponent({
+const droppableRenderer = defineComponent({
   name: 'vertical-layout-renderer',
   components: {
     DispatchRenderer,
@@ -99,10 +100,10 @@ const layoutRenderer = defineComponent({
   }
 });
 
-export default layoutRenderer;
+export default droppableRenderer;
 
-export const DroppableVerticalLayoutRegistration = {
-  renderer: layoutRenderer,
+export const entry: JsonFormsRendererRegistryEntry = {
+  renderer: droppableRenderer,
   tester: rankWith(45, uiTypeIs('VerticalLayout')),
 };
 </script>

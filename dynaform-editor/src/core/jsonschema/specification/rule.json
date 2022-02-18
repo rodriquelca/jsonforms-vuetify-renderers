@@ -7,11 +7,12 @@
     "effect": {
       "description": "The effect of the rule",
       "type": "string",
-      "enum": ["HIDE", "SHOW", "ENABLE", "DISABLE"]
+      "enum": ["HIDE", "SHOW", "ENABLE", "DISABLE", "RELOAD"]
     },
     "condition": {
       "description": "The condition of the rule that must evaluate to true in order to trigger the effect.",
       "oneOf": [
+        { "$ref": "#/definitions/dependencyCondition" },
         { "$ref": "#/definitions/leafCondition" },
         { "$ref": "#/definitions/schemaBasedCondition" },
         { "$ref": "#/definitions/orCondition" },
@@ -41,6 +42,17 @@
             "expectedValue": {}
           },
           "required": ["type", "expectedValue"]
+        }
+      ]
+    },
+    "dependencyCondition": {
+      "allOf": [
+        { "$ref": "#/definitions/scopable" },
+        {
+          "properties": {
+            "type": { "const": "DEPENDENCY" }
+          },
+          "required": ["type"]
         }
       ]
     },
