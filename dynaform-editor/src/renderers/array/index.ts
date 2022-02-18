@@ -10,4 +10,6 @@ export const arrayListRendererEntry: JsonFormsRendererRegistryEntry = {
   tester: rankWith(2, schemaTypeIs('array')),
 };
 
-export const arrayRenderers = [arrayListRendererEntry];
+export const arrayRenderers = [
+  //arrayListRendererEntry
+];

@@ -404,7 +404,6 @@ export default {
     saveVariablesData() {
       const model = this.monacoDataVariables as monaco.editor.ITextModel;
       const example = this.example;
-      console.log("SAVE");
       if (model && example) {
         // do not check for monaco errors just if this is valid JSON becase we want to see when we have validation errors
 

@@ -61,12 +61,7 @@ const controlRenderer = defineComponent({
   }),
   
   setup(props: RendererProps<ControlElement>) {
-    // const emitter = inject("emitter") as Emitter<Events>;   // Inject `emitter`
-    // emitter.on("myevent", (value) => {   // *Listen* for event
-    //   console.log("myevent received!", `value: ${value}`);
-    // });
-    // emitter.emit("myevent", 100);
-    
+   
     return useVuetifyControl(
       useJsonFormsControl(props),
       (value) => value || undefined

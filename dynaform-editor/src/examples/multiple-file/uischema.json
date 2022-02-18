@@ -2,10 +2,11 @@
   "type": "VerticalLayout",
   "elements": [
     {
-      "type": "MultipleFile",
+      "type": "Control",
       "scope": "#/properties/multiplefile",
       "label": "Multiple File",
       "options": {
+        "multipleFile":true,
         "placeholder": "Select your files",
         "multiple": true,
         "accept": ".png",

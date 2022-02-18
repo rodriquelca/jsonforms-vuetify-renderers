@@ -157,8 +157,6 @@ export const useDynaformControl = <
       ) {
         input.control.value.data = 'reloaded';
       }
-
-      // console.log(composeWithUi(input.control.value.uischema.rule.condition,input.control.value.path));
     }
     return '';
   });

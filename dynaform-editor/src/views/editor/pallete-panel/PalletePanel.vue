@@ -90,7 +90,8 @@ export default {
             uiSchemaType = 'Suggest';
           }
            if (key === 'multiplefile') {
-            uiSchemaType = 'MultipleFile';
+            element.options={};
+            element.options.multipleFile=true;
           }
 
           items.push({

@@ -5,12 +5,14 @@ import { controlRenderers } from './controls';
 import { arrayRenderers } from './array';
 import { complexRenderers } from './complex';
 import { droppableRenderers } from './droppable';
+import { fileRenderers } from './files';
 
 export const dynaformRenderers = [
   ...controlRenderers,
   ...layoutRenderers,
   ...arrayRenderers,
-  ...complexRenderers
+  ...complexRenderers,
+  ...fileRenderers
 ];
 
 export const extendedDynaformRenderers = [
@@ -18,17 +20,5 @@ export const extendedDynaformRenderers = [
 ];
 export const defaultEditorRenderers = [
   ...extendedDynaformRenderers,
-  // ...droppableRenderers
+  ...droppableRenderers
 ];
-
-// import {*} from "./controls"
-// import { JsonFormsRendererRegistryEntry } from '@jsonforms/core';
-// import  {DroppableHorizontalLayoutRegistration}  from './DroppableHorizontalLayoutRegistration.vue';
-// import  {DroppableVerticalLayoutRegistration}  from './DroppableVerticalLayoutRegistration.vue';
-// import {DroppableElementRegistration} from './DroppableElement.vue'
-// export const defaultEditorRenderers: JsonFormsRendererRegistryEntry[] = [
-//   ...extendedDynaformRenderers,
-//     DroppableHorizontalLayoutRegistration,
-//     DroppableVerticalLayoutRegistration,
-//     DroppableElementRegistration
-//   ];

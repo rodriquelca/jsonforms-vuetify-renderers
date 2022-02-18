@@ -5,7 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-  {{fireDependency}}
+    {{ fireDependency }}
     <v-hover v-slot="{ hover }">
       <v-combobox
         v-if="suggestions !== undefined"
@@ -78,15 +78,15 @@ import { defineComponent, inject } from '@vue/composition-api';
 import {
   rendererProps,
   useJsonFormsControl,
-  RendererProps
+  RendererProps,
 } from '@jsonforms/vue2';
-import { ControlWrapper } from '@jsonforms/vue2-vuetify'; 
+import { ControlWrapper } from '@jsonforms/vue2-vuetify';
 import { VHover, VTextField, VCombobox } from 'vuetify/lib';
 import { DisabledIconFocus } from './directives';
 import isArray from 'lodash/isArray';
 import every from 'lodash/every';
 import isString from 'lodash/isString';
-import { useDynaformControl } from '../../util'
+import { useDynaformControl } from '../../util';
 
 const controlRenderer = defineComponent({
   name: 'string-control-renderer',
