@@ -4,18 +4,24 @@
     <v-tabs>
       <v-tabs-slider></v-tabs-slider>
       <v-tab class="primary--text">Palete </v-tab>
-
-      <v-tab class="primary--text"> JSON Schema </v-tab>
-      <v-tab class="primary--text"> UI Schema </v-tab>
-
       <v-tab-item>
         <draggable
-          class="dragArea list-group"
+          class="list-group"
           :list="paletteElements"
+          :disabled="!enabled"
           :group="{ name: 'people', pull: 'clone', put: false }"
           :sort="false"
         >
-          <div v-for="element in paletteElements" :key="element.type">
+        <!--<template #item="{ element }">
+          <div class="list-group-item" :class="{ 'not-draggable': !enabled }">
+            {{ element.name }}
+          </div>
+        </template>-->
+          <div
+            v-for="element in paletteElements"
+            :key="element.type"
+            class="item"
+          >
             <v-icon v-text="element.icon"></v-icon>
 
             <span v-text="element.label"></span>
@@ -23,14 +29,15 @@
         </draggable>
         <h4>Controls</h4>
         <draggable
-          class="dragArea list-group"
+          class="list-group"
           :list="getChildrenToRender(schema)"
           :group="{ name: 'people', pull: 'clone', put: false }"
-          :sort="false"
+          :sort="true"
         >
           <div
             v-for="item in getChildrenToRender(schema)"
             :key="item.element.uuid"
+            class="item"
           >
             <span v-text="getLabel(item.element)"></span>
           </div>
@@ -64,6 +71,8 @@ export default {
   },
   data() {
     return {
+      enabled: true,
+      dragging: false,
       tabs: [],
       list1: [
         { name: 'John', id: 1 },
@@ -108,3 +117,24 @@ export default {
   },
 };
 </script>
+<style>
+  .item span {
+    cursor: grab;
+  }
+  /*.list-group {
+    position: relative;
+    display: block;
+    padding: 0.75rem 1.25rem;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125)
+  }*/
+  .list-group .item {
+    border-width: 0 0 1px;
+    position: relative;
+    display: block;
+    padding: 0.75rem 1.25rem;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125)
+  }
+
+</style>
