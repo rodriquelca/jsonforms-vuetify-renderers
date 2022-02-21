@@ -157,24 +157,22 @@ export default {
       this.setMonacoUiSchema(this.monacoUiSchemaModel);
     },
     monacoSchemaModel(): void {
-      console.log('schema change');
+      this.setMonacoSchema(this.monacoSchemaModel);
     },
   },
   methods: {
     setMonacoUiSchema(schemaModel): void {
-      debugger;
       const modelUri = Uri.parse('json://core/specification/uischema.json');
       this.schemaDesigner.uiSchemaEditor = getMonacoModelForUri(
         modelUri,
-        JSON.stringify(useExportUiSchema(schemaModel))
+        JSON.stringify(useExportUiSchema(schemaModel), null, 2)
       );
     },
     setMonacoSchema(schemaModel): void {
-      debugger;
       const modelUri = Uri.parse('json://core/specification/schema.json');
       this.schemaDesigner.schemaEditor = getMonacoModelForUri(
         modelUri,
-        JSON.stringify(useExportSchema(schemaModel))
+        JSON.stringify(useExportSchema(schemaModel), null, 2)
       );
     },
   },
