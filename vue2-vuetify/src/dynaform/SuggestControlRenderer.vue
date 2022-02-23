@@ -1,6 +1,11 @@
 <template>
-  <v-form>
-    <v-container>
+  <control-wrapper
+    v-bind="controlWrapper"
+    :styles="styles"
+    :isFocused="isFocused"
+    :appliedOptions="appliedOptions"
+  >
+    <v-hover v-slot="{ hover }">
       <v-autocomplete
         :value="control.data"
         :items="items"
@@ -13,10 +18,11 @@
         :placeholder="appliedOptions.placeholder"
         prepend-icon="mdi-database-search"
         return-object
+        :clearable="hover"
         @change="changeHandler"
       ></v-autocomplete>
-    </v-container>
-  </v-form>
+    </v-hover>
+  </control-wrapper>
 </template>
 
 <script lang="ts">
@@ -32,14 +38,10 @@ import {
   RendererProps,
   useJsonFormsControl,
 } from '@jsonforms/vue2';
+
+import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-// type ValidateFunc = () => number;
-// type Emits<EventType extends string | symbol, T> = {
-//   on(type: EventType, handler: (arg: T) => void): void
-//   off(type: EventType, handler: (arg: T) => void): void
-//   emit(type: EventType, arg: T): void
-// }
-// type Emitter = Emits<'myevent', ValidateFunc>
+import { VHover, VAutocomplete } from 'vuetify/lib';
 
 const controlRenderer = defineComponent({
   name: 'suggest-control-renderer',
@@ -54,6 +56,11 @@ const controlRenderer = defineComponent({
     search: null,
   }),
 
+  components: {
+    ControlWrapper,
+    VAutocomplete,
+    VHover,
+  },
   setup(props: RendererProps<ControlElement>) {
     return useVuetifyControl(
       useJsonFormsControl(props),
@@ -102,6 +109,6 @@ const controlRenderer = defineComponent({
 export default controlRenderer;
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(2, uiTypeIs('Suggest')),
+  tester: rankWith(1, uiTypeIs('Suggest')),
 };
 </script>

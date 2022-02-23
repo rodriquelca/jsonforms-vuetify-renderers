@@ -37,6 +37,8 @@ import { input as verticalLayout } from './vertical-layout';
 import { input as huge } from './huge';
 import { input as ifThenElse } from './if-then-else';
 
+import { input as suggest } from './suggest';
+
 export const examples = [
   {
     id: 'main',
@@ -227,5 +229,10 @@ export const examples = [
     id: 'huge',
     title: 'Huge',
     input: huge,
+  },
+  {
+    id: 'suggest',
+    title: 'Suggest',
+    input: suggest,
   },
 ];

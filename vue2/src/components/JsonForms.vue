@@ -1,6 +1,6 @@
 <template>
   <div>
-    jsonform
+    jsonform asdfasdfas 1231231
 
     <dispatch-renderer
       v-bind:schema="jsonforms.core.schema"
