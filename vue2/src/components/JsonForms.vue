@@ -1,7 +1,5 @@
 <template>
   <div>
-    jsonform asdfasdfas 1231231
-
     <dispatch-renderer
       v-bind:schema="jsonforms.core.schema"
       v-bind:uischema="jsonforms.core.uischema"
