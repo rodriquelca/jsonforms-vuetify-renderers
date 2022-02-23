@@ -38,6 +38,7 @@ import { input as huge } from './huge';
 import { input as ifThenElse } from './if-then-else';
 
 import { input as suggest } from './suggest';
+import { input as multipleFile } from './multiple-file';
 
 export const examples = [
   {
@@ -234,5 +235,10 @@ export const examples = [
     id: 'suggest',
     title: 'Suggest',
     input: suggest,
+  },
+  {
+    id: 'multiple-file',
+    title: 'Multiple File',
+    input: multipleFile,
   },
 ];
