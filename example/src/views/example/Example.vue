@@ -282,7 +282,7 @@ export default {
     reloadMonacoUiSchema() {
       const example = find(
         this.examples,
-        (example) => example.id === this.$route.params.id
+        (example: Example) => example.id === this.$route.params.id
       );
 
       if (example) {
