@@ -39,6 +39,7 @@ import { input as ifThenElse } from './if-then-else';
 
 import { input as suggest } from './suggest';
 import { input as multipleFile } from './multiple-file';
+import { input as grid } from './grid';
 
 export const examples = [
   {
@@ -240,5 +241,10 @@ export const examples = [
     id: 'multiple-file',
     title: 'Multiple File',
     input: multipleFile,
+  },
+  {
+    id: 'grid',
+    title: 'Grid',
+    input: grid,
   },
 ];
