@@ -1,12 +1,11 @@
 <template>
-  <!-- <v-main> -->
-  <v-container fill-height fluid>
+  <div class="ps-6">
     <v-tabs>
       <v-tabs-slider></v-tabs-slider>
       <v-tab class="primary--text">Palete </v-tab>
 
-      <v-tab class="primary--text"> JSON Schema </v-tab>
-      <v-tab class="primary--text"> UI Schema </v-tab>
+      <!-- <v-tab class="primary--text"> JSON Schema </v-tab>
+      <v-tab class="primary--text"> UI Schema </v-tab> -->
 
       <v-tab-item>
         <draggable
@@ -36,9 +35,9 @@
           </div>
         </draggable>
       </v-tab-item>
-      <v-tab-item> </v-tab-item>
+      <!-- <v-tab-item> </v-tab-item> -->
     </v-tabs>
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts">
@@ -89,9 +88,9 @@ export default {
           if (key === 'suggest') {
             uiSchemaType = 'Suggest';
           }
-           if (key === 'multiplefile') {
-            element.options={};
-            element.options.multipleFile=true;
+          if (key === 'multiplefile') {
+            element.options = {};
+            element.options.multipleFile = true;
           }
 
           items.push({

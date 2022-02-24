@@ -1,10 +1,12 @@
 <template>
-  <v-container fill-height fluid>
-    TODOO
+  <!-- <v-container fill-height fluid>
+    TODOO -->
+  <div class="px-2 my-8" height="100%">
     <v-row>
       <v-col cols="3">
         <PalletePanel :schema="editorSchema" />
       </v-col>
+      <v-divider vertical></v-divider>
       <v-col cols="6">
         <EditorPanel
           :editorTabs="editorTabs"
@@ -14,6 +16,7 @@
           :selection="selection"
         />
       </v-col>
+      <v-divider vertical></v-divider>
       <v-col cols="3">
         <PropertiesPanel
           :renderers="propertyRenderers"
@@ -24,7 +27,7 @@
         />
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts">

@@ -49,10 +49,8 @@ import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import JsonRefs from 'json-refs';
 import { createTranslator } from '../i18n';
 import { useExportSchema, useExportUiSchema } from '../util';
-import { extendedDynaformRenderers } from '../renderers';
-import {VariableBuilder} from "./../util/mixutils.js";
-import { sync } from 'vuex-pathify';
-import _ from 'lodash';
+import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
+import { VariableBuilder } from './../util/mixutils.js';
 export default {
   name: 'dymaform-preview',
   components: {
@@ -76,7 +74,7 @@ export default {
         locale: this.locale,
         translate: createTranslator(this.locale),
       } as JsonFormsI18nState,
-      renderers: extendedDynaformRenderers,
+      renderers: extendedVuetifyRenderers,
     };
   },
   watch: {
@@ -101,27 +99,6 @@ export default {
     buildVariables(json: JSON): void {
       let y = VariableBuilder.build(json);
       console.log(y);
-    },
-    findVariables(j:JSON, str: string) {
-      /*let json = {
-        'var1': 'Variable1',
-        'var2': 'Variable2',
-        'var3': 'Variable3',
-        'var4': 'Variable4',
-        'var5': 'Variable5',
-        'var6': 'Variable6',
-        'var7': 'Variable7',
-      };
-
-      let res = str.match(/@@[A-Za-z0-9]+/g);
-      res?.forEach((el: string) => {
-        let r:string = el.replace('@@', '') ;
-        if(_.has(json, r)){
-          j[str] =  
-        }
-        
-
-      });*/
     },
     resolveSchema(schema?: JsonSchema): void {
       const resolvedSchema = this.resolvedSchema;
