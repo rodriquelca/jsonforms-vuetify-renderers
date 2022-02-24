@@ -1,0 +1,14 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Suggest",
+      "scope": "#/properties/suggest",
+      "options": {
+        "url": "https://api.publicapis.org/entries",
+        "query": "test",
+        "placeholder": "Start typing to Search"
+      }
+    }
+  ]
+}
