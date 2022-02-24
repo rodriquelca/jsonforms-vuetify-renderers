@@ -40,6 +40,7 @@ import { input as ifThenElse } from './if-then-else';
 import { input as suggest } from './suggest';
 import { input as multipleFile } from './multiple-file';
 import { input as grid } from './grid';
+import { input as variables } from './variables';
 
 export const examples = [
   {
@@ -246,5 +247,10 @@ export const examples = [
     id: 'grid',
     title: 'Grid',
     input: grid,
+  },
+  {
+    id: 'variables',
+    title: 'Variables',
+    input: variables,
   },
 ];

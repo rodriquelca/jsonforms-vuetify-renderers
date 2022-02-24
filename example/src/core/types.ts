@@ -7,6 +7,7 @@ export type Example = {
     schema?: JsonSchema;
     uischema?: UISchemaElement;
     data: Record<string, any>;
+    vars: Record<string, any>;
   };
 };
 
