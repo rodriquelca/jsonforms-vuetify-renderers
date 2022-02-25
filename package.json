@@ -14,5 +14,8 @@
   },
   "devDependencies": {
     "lerna": "^4.0.0"
+  },
+  "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^9.0.9"
   }
 }
