@@ -193,9 +193,9 @@
 <script lang="ts">
 import {
   isObjectArrayControl,
-  isPrimitiveArrayControl,
+  optionIs,
   JsonFormsRendererRegistryEntry,
-  or,
+  and,
   rankWith,
   composePaths,
   createDefaultValue,
@@ -342,7 +342,10 @@ const controlRenderer = defineComponent({
 export default controlRenderer;
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(5, or(isObjectArrayControl, isPrimitiveArrayControl)),
+  tester: rankWith(
+    5,
+    and(isObjectArrayControl, optionIs('extendedType', 'grid'))
+  ),
 };
 </script>
 
