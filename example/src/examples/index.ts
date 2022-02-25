@@ -41,6 +41,7 @@ import { input as suggest } from './suggest';
 import { input as multipleFile } from './multiple-file';
 import { input as grid } from './grid';
 import { input as variables } from './variables';
+import { input as subForm } from './sub-form';
 
 export const examples = [
   {
@@ -252,5 +253,10 @@ export const examples = [
     id: 'variables',
     title: 'Variables',
     input: variables,
+  },
+  {
+    id: 'sub-form',
+    title: 'Sub Form',
+    input: subForm,
   },
 ];
