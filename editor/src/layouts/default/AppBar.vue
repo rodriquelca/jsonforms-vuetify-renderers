@@ -4,11 +4,7 @@
       <v-container fill-height fluid
         ><v-row align="center" justify="center">
           <v-col>
-            <v-img
-              :src="require('@/assets/jsonforms.svg')"
-              max-height="64"
-              max-width="64"
-            />
+            <v-icon size="64" color="blue darken-2">mdi-code-json</v-icon>
           </v-col>
           <v-col>JSON Dynaform Editor</v-col>
         </v-row></v-container
