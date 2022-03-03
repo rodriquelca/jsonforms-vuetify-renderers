@@ -40,11 +40,13 @@ export default {
       if (e.added) {
         if (e.added.element.element && e.added.element.element.uuid) {
           const provider: EditorUISchemaElement = createControl(
-            e.added.element.element, e.added.element.uiSchemaType
+            e.added.element.element,
+            e.added.element.uiSchemaType
           );
-           this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
+          this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
         } else {
-          const provider:EditorUISchemaElement  = e.added.element.uiSchemaElementProvider();
+          const provider: EditorUISchemaElement =
+            e.added.element.uiSchemaElementProvider();
           this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
         }
       }

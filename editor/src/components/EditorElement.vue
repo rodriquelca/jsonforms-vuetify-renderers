@@ -6,12 +6,13 @@
       @click="onClick"
     >
       <v-col>
-        <Icon :type="wrappedElement.type" />
-        <v-divider vertical></v-divider>
-        <div class="d-inline caption" v-if="ruleEffect">
-          R ({{ ruleEffect }})
-        </div>
-        <v-divider vertical></v-divider>
+        <Icon :type="wrappedElement.type" class="px-4" />
+
+        <p class="d-inline caption" v-if="ruleEffect">
+          <span class="font-weight-bold">R</span>
+          <span class="font-italic"> ({{ ruleEffect }})</span>
+        </p>
+
         <div class="d-inline caption">
           {{ wrappedElement.scope }}
         </div>
@@ -27,7 +28,7 @@
           v-if="hover"
           @click="onRemove"
         >
-          <v-icon dark> mdi-delete </v-icon>
+          <v-icon> mdi-delete </v-icon>
         </v-btn>
       </v-col>
     </v-row>

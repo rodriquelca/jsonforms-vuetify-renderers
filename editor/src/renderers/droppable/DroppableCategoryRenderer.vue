@@ -1,14 +1,9 @@
 <template>
-  <EditorElement :wrappedElement="layout.uischema">
-    <dispatch-renderer
-      :schema="layout.schema"
-      :uischema="customEditorUiSchema"
-      :path="layout.path"
-      :enabled="layout.enabled"
-      :renderers="customRenderers"
-      :cells="layout.cells"
-    />
-  </EditorElement>
+  <v-card v-if="layout.visible" elevation="2">
+    <v-card-text>
+      <component v-bind:is="determinedRenderer" v-bind="layout"></component>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -20,19 +15,18 @@ import {
 } from '@jsonforms/core';
 import { defineComponent } from '@vue/composition-api';
 import {
-  DispatchRenderer,
   rendererProps,
   useJsonFormsLayout,
   RendererProps,
+  UnknownRenderer,
 } from '@jsonforms/vue2';
 import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
 import { VContainer, VRow, VCol } from 'vuetify/lib';
 import EditorElement from '../../components/EditorElement.vue';
-import { omit } from 'lodash';
+import { entry as DroppableVerticalLayoutRenderer } from './DroppableVerticalLayoutRegistration.vue';
 const droppableRenderer = defineComponent({
-  name: 'droppable-element',
+  name: 'droppable-category-renderer',
   components: {
-    DispatchRenderer,
     VContainer,
     VRow,
     VCol,
@@ -42,15 +36,14 @@ const droppableRenderer = defineComponent({
     ...rendererProps<Layout>(),
   },
   computed: {
-    customRenderers(): Array<any> {
-      const renderers = this.layout.renderers?.filter(
-        (r) => r.renderer !== droppableRenderer
-      );
-      return renderers;
-    },
-    customEditorUiSchema() {
-      const uischema = omit(this.layout.uischema, ['rule']);
-      return uischema;
+    determinedRenderer(): any {
+      debugger;
+      const renderer = DroppableVerticalLayoutRenderer;
+      if (renderer === undefined) {
+        return UnknownRenderer;
+      } else {
+        return renderer.renderer;
+      }
     },
   },
   setup(props: RendererProps<Layout>) {
@@ -62,6 +55,6 @@ export default droppableRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: droppableRenderer,
-  tester: rankWith(50, () => true),
+  tester: rankWith(45, uiTypeIs('Category')),
 };
 </script>

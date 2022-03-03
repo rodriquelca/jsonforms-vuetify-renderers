@@ -1,28 +1,32 @@
 <template>
-  <div>
-    <draggable
-      :class="dragableClass"
-      :list="list1"
-      group="people"
-      @change="handleChange"
-    >
-      <v-col
-        v-for="(element, index) in uischema.elements"
-        :key="`${layout.path}-${index}`"
-        fill-height
+  <!-- <div> -->
+  <v-container class="grey lighten-5">
+    <v-row no-gutters>
+      <draggable
+        :class="draggableClass"
+        :value="[]"
+        group="people"
+        @change="handleChange"
+        :key="'draggable' + uischema.uuid"
       >
-        <dispatch-renderer
-          :key="element.uuid"
-          :schema="schema"
-          :uischema="element"
-          :path="path"
-          :enabled="enabled"
-          :renderers="customRenderers"
-          :cells="cells"
-        />
-      </v-col>
-    </draggable>
-  </div>
+        <v-col
+          v-for="(element, index) in uischema.elements"
+          :key="`${layout.path}-${index}`"
+        >
+          <dispatch-renderer
+            :key="element.uuid"
+            :schema="schema"
+            :uischema="element"
+            :path="path"
+            :enabled="enabled"
+            :renderers="customRenderers"
+            :cells="cells"
+          />
+        </v-col>
+      </draggable>
+      <!-- </div> -->
+    </v-row>
+  </v-container>
 </template>
 <script lang="ts">
 import draggable from 'vuedraggable';
@@ -47,7 +51,7 @@ import { EditorUISchemaElement } from '../../model/uischema';
 import { createControl } from '../../util/generators/uiSchema';
 
 const droppableRenderer = defineComponent({
-  name: 'horizontal-layout-renderer',
+  name: 'droppable-horizontal-layout-renderer',
   components: {
     DispatchRenderer,
     VContainer,
@@ -59,17 +63,12 @@ const droppableRenderer = defineComponent({
   props: {
     ...rendererProps<Layout>(),
   },
-  data() {
-    return {
-      list1: [],
-    };
-  },
   setup(props: RendererProps<Layout>) {
     return useVuetifyLayout(useJsonFormsLayout(props));
   },
   computed: {
-    dragableClass(): string {
-      return 'dragArea list-group row ' + this.styles.horizontalLayout.item;
+    draggableClass(): string {
+      return 'dragArea row ' + this.styles.horizontalLayout.item;
     },
     customRenderers(): Array<any> {
       return (
@@ -115,5 +114,10 @@ export const entry: JsonFormsRendererRegistryEntry = {
 .test {
   background: #e5e5e5;
   height: 100%;
+}
+.dragArea {
+  border: 1px dashed #000;
+  min-height: 80px;
+  content: 'Drag Controls';
 }
 </style>

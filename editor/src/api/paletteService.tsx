@@ -20,25 +20,25 @@ const paletteElements: PaletteElement[] = [
   {
     type: 'HorizontalLayout',
     label: 'Horizontal Layout',
-    icon: 'mdi-arrow-expand-horizontal',
+    icon: 'mdi-arrow-left-right',
     uiSchemaElementProvider: () => createLayout('HorizontalLayout'),
   } as PaletteElement,
   {
     type: 'VerticalLayout',
     label: 'Vertical Layout',
-    icon: 'mdi-arrow-expand-vertical',
+    icon: 'mdi-arrow-up-down',
     uiSchemaElementProvider: () => createLayout('VerticalLayout'),
   },
   {
     type: 'Group',
     label: 'Group',
-    icon: 'mdi-group',
+    icon: 'mdi-focus-field',
     uiSchemaElementProvider: () => createLayout('Group'),
   },
   {
     type: 'Label',
     label: 'Label',
-    icon: 'mdi-format-letter-case-lower',
+    icon: 'mdi-format-text',
     uiSchemaElementProvider: () => createLabel(),
   },
   {

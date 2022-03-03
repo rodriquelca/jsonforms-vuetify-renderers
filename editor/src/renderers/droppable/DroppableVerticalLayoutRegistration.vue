@@ -33,7 +33,7 @@ import {
   uiTypeIs,
   Layout,
   rankWith,
-  JsonFormsRendererRegistryEntry
+  JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
 import { defineComponent } from '@vue/composition-api';
 import {
@@ -44,12 +44,12 @@ import {
 } from '@jsonforms/vue2';
 import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
 import { VContainer, VRow, VCol } from 'vuetify/lib';
-import { entry as DroppableElementRegistration } from "./DroppableElement.vue";
-import { EditorUISchemaElement } from "@/model";
-import { createControl } from "@/util";
+import { entry as DroppableElementRegistration } from './DroppableElement.vue';
+import { EditorUISchemaElement } from '@/model';
+import { createControl } from '@/util';
 
 const droppableRenderer = defineComponent({
-  name: 'vertical-layout-renderer',
+  name: 'dropable-vertical-layout-renderer',
   components: {
     DispatchRenderer,
     VContainer,
@@ -69,14 +69,14 @@ const droppableRenderer = defineComponent({
     },
     customRenderers(): Array<any> {
       return (
-          this.renderers && [...this.renderers, DroppableElementRegistration]
+        this.renderers && [...this.renderers, DroppableElementRegistration]
       );
     },
   },
   methods: {
     handleChange(evt: any) {
       if (evt.added) {
-       if (evt.added.element.element && evt.added.element.element.uuid) {
+        if (evt.added.element.element && evt.added.element.element.uuid) {
           const uiSchemaElement: EditorUISchemaElement = createControl(
             evt.added.element.element,
             evt.added.element.uiSchemaType
@@ -97,7 +97,7 @@ const droppableRenderer = defineComponent({
         }
       }
     },
-  }
+  },
 });
 
 export default droppableRenderer;
