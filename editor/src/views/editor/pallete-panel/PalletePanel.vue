@@ -2,7 +2,7 @@
   <div class="ps-6">
     <v-tabs>
       <v-tabs-slider></v-tabs-slider>
-      <v-tab class="primary--text">Palete </v-tab>
+      <v-tab class="primary--text">Palette </v-tab>
 
       <!-- <v-tab class="primary--text"> JSON Schema </v-tab>
       <v-tab class="primary--text"> UI Schema </v-tab> -->
@@ -34,16 +34,16 @@
           </div>
         </draggable> -->
 
-        <v-list dense>
-          <v-subheader>Layouts & Others</v-subheader>
+        <v-list v-for="(group, j) in paletteElements" :key="j" dense>
+          <v-subheader>{{ group.label }}</v-subheader>
           <!-- <v-list-item-group color="primary"> -->
           <draggable
             class="dragArea list-group"
-            :list="paletteElements"
+            :list="group.elements"
             :group="{ name: 'people', pull: 'clone', put: false }"
             :sort="false"
           >
-            <template v-for="(item, i) in paletteElements">
+            <template v-for="(item, i) in group.elements">
               <v-list-item :key="i">
                 <v-list-item-icon>
                   <v-icon v-text="item.icon"></v-icon>

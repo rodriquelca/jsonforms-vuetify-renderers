@@ -29,6 +29,7 @@ import {
   buildSchemaTree,
   cleanLinkedElements,
   SchemaElement,
+  buildSchemaProperty,
 } from '../../model/schema';
 import {
   buildEditorUiSchemaTree,
@@ -98,13 +99,27 @@ const removeUiElement = (
 
 const createSchema = (state, payload) => {
   return withCloneTree(
-    state.editor.uiSchema,
+    state.editor.schema,
     undefined,
     state.editor,
     (clonedUiSchema) => {
       return linkSchemas(
         buildSchemaTree(payload.schema),
         cleanUiSchemaLinks(clonedUiSchema)
+      );
+    }
+  );
+};
+const updateSchemaProperty = (state, payload) => {
+  return withCloneTree(
+    state.editor.schema,
+    undefined,
+    state.editor,
+    (clonedSchema) => {
+      return buildSchemaProperty(
+        clonedSchema,
+        payload.property,
+        payload.variable
       );
     }
   );
@@ -283,6 +298,10 @@ const actions = {
   },
   setSchema({ commit }, payload) {
     const clone = createSchema(state, payload);
+    commit('SET_SCHEMA', clone.schema);
+  },
+  setSchemaProperty({ commit }, payload) {
+    const clone = updateSchemaProperty(state, payload);
     commit('SET_SCHEMA', clone.schema);
   },
   setUiSchema({ commit }, payload) {

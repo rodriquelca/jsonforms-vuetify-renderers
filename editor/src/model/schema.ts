@@ -61,12 +61,13 @@ export const getChildren = (
     case OBJECT:
       children.push(...Array.from(schemaElement.properties.values()));
       break;
-    case ARRAY:
+    case ARRAY: {
       const items = Array.isArray(schemaElement.items)
         ? schemaElement.items
         : [schemaElement.items];
       children.push(...items);
       break;
+    }
   }
   if (schemaElement.other) {
     children.push(...Array.from(schemaElement.other.values()));
@@ -79,13 +80,14 @@ const containsAs = (
 ): Map<SchemaElement, string> => {
   const containments: [SchemaElement, string][] = [];
   switch (schemaElement.type) {
-    case OBJECT:
+    case OBJECT: {
       const propertyEntries: [SchemaElement, string][] = Array.from(
         schemaElement.properties.entries()
       ).map(([prop, element]) => [element, `properties/${prop}`]);
       containments.push(...propertyEntries);
       break;
-    case ARRAY:
+    }
+    case ARRAY: {
       const itemEntries: [SchemaElement, string][] = Array.isArray(
         schemaElement.items
       )
@@ -96,6 +98,7 @@ const containsAs = (
         : [[schemaElement.items, 'items']];
       containments.push(...itemEntries);
       break;
+    }
   }
   if (schemaElement.other) {
     const entries: [SchemaElement, string][] = Array.from(
@@ -203,12 +206,14 @@ const createNewElementForType = (
   type: SchemaElementType
 ): SchemaElement => {
   switch (type) {
-    case OBJECT:
+    case OBJECT: {
       const objectCopy = cloneDeep(omit(schema, ['properties']));
       return { type, schema: objectCopy, properties: new Map(), uuid: uuid() };
-    case ARRAY:
+    }
+    case ARRAY: {
       const arrayCopy = cloneDeep(omit(schema, ['items']));
       return { type, schema: arrayCopy, items: [], uuid: uuid() };
+    }
     case PRIMITIVE:
       return { type, schema: cloneDeep(schema), uuid: uuid() };
     default:
@@ -274,6 +279,48 @@ export const buildSchemaTree = (
   if (!currentElement) {
     return undefined;
   }
+
+  return currentElement;
+};
+
+export const buildSchemaProperty = (
+  currentElement: SchemaElement,
+  property: JsonSchema,
+  indexOrProp: string
+): SchemaElement | undefined => {
+  // workaround needed because of TS compiler issue
+  // https://github.com/Microsoft/TypeScript/issues/11498
+  // const currentElement: SchemaElement | undefined = getUndefined();
+  const newElement = createSingleElement(property);
+  newElement.parent = currentElement;
+  currentElement.properties?.set(`${indexOrProp}`, newElement);
+  // const path = pointer.split('/');
+  // if (
+  //   isObjectElement(currentElement) &&
+  //   path[path.length - 2] === 'properties'
+  // ) {
+  //   currentElement.properties.set(`${indexOrProp}`, newElement);
+  // } else if (
+  //   isArrayElement(currentElement) &&
+  //   path[path.length - 2] === 'items'
+  // ) {
+  //   (currentElement.items as SchemaElement[]).push(newElement);
+  // } else if (
+  //   isArrayElement(currentElement) &&
+  //   path[path.length - 1] === 'items'
+  // ) {
+  //   currentElement.items = newElement;
+  // } else if (currentElement) {
+  //   if (!currentElement.other) {
+  //     currentElement.other = new Map();
+  //   }
+  //   currentElement.other.set(`${indexOrProp}`, newElement);
+  // }
+  // currentElement = newElement;
+
+  // if (!currentElement) {
+  //   return undefined;
+  // }
 
   return currentElement;
 };
@@ -380,7 +427,7 @@ export const getArrayContainer = (
 export const generateEmptyData = (
   schema: SchemaElement,
   data: any = {}
-): object => {
+): Record<string, unknown> => {
   if (isObjectElement(schema)) {
     Array.from(schema.properties).forEach(([key, value]) => {
       if (isObjectElement(value)) {

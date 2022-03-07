@@ -4,7 +4,7 @@ import {
   createLabel,
   createLayout,
 } from '../util/generators/uiSchema';
-
+import {createControl} from '../util/generators/schema'
 export interface PaletteService {
   getPaletteElements(): PaletteElement[];
 }
@@ -48,7 +48,46 @@ const paletteElements: PaletteElement[] = [
     uiSchemaElementProvider: () => createCategorization(),
   },
 ];
+const controlElements = [
+  {
+    type: 'Control',
+    label: 'Checkbox',
+    icon: 'mdi-checkbox-outline',
+    uiSchemaElementProvider: () => createLabel(),
+  },
+  {
+    type: 'Control',
+    label: 'Date Picker',
+    icon: 'mdi-calendar-month',
+    uiSchemaElementProvider: () => createLabel(),
+  },
+  {
+    type: 'Control',
+    label: 'File Upload',
+    icon: 'mdi-file-upload',
+    uiSchemaElementProvider: () => createLabel(),
+  },
+  {
+    type: 'Control',
+    label: 'Line Input',
+    icon: 'mdi-crop-square',
+    uiSchemaElementProvider: () => {
+        const control = createControl("string");
+      return  control;
+    },
+  },
+]
+const mainPalette = {
+  containers: {
+    label: 'Layouts & Others',
+    elements: paletteElements
+  },
+  controls: {
+    label: 'Controls',
+    elements: controlElements
+  }
+}
 
 export class DefaultPaletteService implements PaletteService {
-  getPaletteElements = () => paletteElements;
+  getPaletteElements = () => mainPalette;
 }
