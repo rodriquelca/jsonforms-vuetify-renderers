@@ -64,6 +64,8 @@ const PropertiesPanel = defineComponent({
   },
   methods: {
     updateProperties: function (event: JsonFormsChangeEvent) {
+      debugger;
+      // event.data.scope = 'test';
       if (this.uiElement && event.errors.length === 0) {
         this.$store.dispatch('app/updateUISchemaElement', {
           elementUUID: this.uiElement.uuid,

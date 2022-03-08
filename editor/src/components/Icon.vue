@@ -25,7 +25,7 @@ export default {
         case 'Label':
           return 'mdi-format-text';
         default:
-          return '';
+          return 'mdi-label-outline';
       }
     },
   },

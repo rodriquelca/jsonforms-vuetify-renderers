@@ -221,7 +221,7 @@ const createNewElementForType = (
   }
 };
 
-const createSingleElement = (schema: JsonSchema) =>
+export const createSingleElement = (schema: JsonSchema) =>
   createNewElementForType(schema, determineType(schema));
 
 const getUndefined = (): SchemaElement | undefined => undefined;
@@ -279,48 +279,6 @@ export const buildSchemaTree = (
   if (!currentElement) {
     return undefined;
   }
-
-  return currentElement;
-};
-
-export const buildSchemaProperty = (
-  currentElement: SchemaElement,
-  property: JsonSchema,
-  indexOrProp: string
-): SchemaElement | undefined => {
-  // workaround needed because of TS compiler issue
-  // https://github.com/Microsoft/TypeScript/issues/11498
-  // const currentElement: SchemaElement | undefined = getUndefined();
-  const newElement = createSingleElement(property);
-  newElement.parent = currentElement;
-  currentElement.properties?.set(`${indexOrProp}`, newElement);
-  // const path = pointer.split('/');
-  // if (
-  //   isObjectElement(currentElement) &&
-  //   path[path.length - 2] === 'properties'
-  // ) {
-  //   currentElement.properties.set(`${indexOrProp}`, newElement);
-  // } else if (
-  //   isArrayElement(currentElement) &&
-  //   path[path.length - 2] === 'items'
-  // ) {
-  //   (currentElement.items as SchemaElement[]).push(newElement);
-  // } else if (
-  //   isArrayElement(currentElement) &&
-  //   path[path.length - 1] === 'items'
-  // ) {
-  //   currentElement.items = newElement;
-  // } else if (currentElement) {
-  //   if (!currentElement.other) {
-  //     currentElement.other = new Map();
-  //   }
-  //   currentElement.other.set(`${indexOrProp}`, newElement);
-  // }
-  // currentElement = newElement;
-
-  // if (!currentElement) {
-  //   return undefined;
-  // }
 
   return currentElement;
 };

@@ -24,7 +24,8 @@
 <script lang="ts">
 import draggable from 'vuedraggable';
 import { EditorUISchemaElement } from '../../../model/uischema';
-import { createControl } from '../../../util/generators/uiSchema';
+import { createControl, tryFindByUUID } from '@/util';
+import { buildSchemaElement, createSingleElement } from '../../../model/schema';
 export default {
   name: 'EmptyEditor',
   components: {
@@ -36,55 +37,37 @@ export default {
     };
   },
   methods: {
-    handleChange(e: any) {
-      console.log(e);
-      if (e.added) {
+    handleChange(evt: any) {
+      if (evt.added) {
         this.$store.dispatch('app/setSchema', {
           schema: {
             type: 'object',
             title: 'person',
-            properties: {
-              name: {
-                type: 'string',
-              },
-            },
+            properties: {},
           },
         });
-        const variable = 'textField';
+        debugger;
+        if (evt.added.element && evt.added.element.type === 'Control') {
+          //here update the schema
+          const property = evt.added.element.uiSchemaElementProvider();
+          const newElement = createSingleElement(property.control);
+          this.$store.dispatch('app/addPropertyToSchema', {
+            schemaElement: newElement,
+            elementUUID: undefined,
+            indexOrProp: property.variable,
+          });
 
-        const property = e.added.element.uiSchemaElementProvider();
-        console.log(property);
-
-        this.$store.dispatch('app/setSchemaProperty', {
-          property,
-          variable,
-        });
-        // this.schema['properties'] = [];
-        // this.schema.properties.push({
-        //   name: varName,
-        //   value: {
-        //     type: 'primitive',
-        //     schema: {
-        //       type: 'string',
-        //       minLength: 3,
-        //     },
-        //     uuid: '8d108d5a-5226-4020-adeb-85a64653726e',
-        //     parent: '63a708f4-45d0-4bfc-9188-9ba756db63bd',
-        //     linkedUISchemaElements: ['b71cb99e-1012-46b4-b8c4-65e247f483ef'],
-        //   },
-        // });
-
-        // if (e.added.element.element && e.added.element.element.uuid) {
-        //   const provider: EditorUISchemaElement = createControl(
-        //     e.added.element.element,
-        //     e.added.element.uiSchemaType
-        //   );
-        //   this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
-        // } else {
-
-        // this.$store.dispatch('app/setSchema', { schema: provider });
-        // this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
-        // }
+          //Here uischema
+          const schemaElement = tryFindByUUID(
+            this.$store.get('app/editor@schema'),
+            newElement.uuid
+          );
+          const newUIElement = createControl(schemaElement, 'Control');
+          this.$store.dispatch('app/setUiSchema', { uiSchema: newUIElement });
+        } else {
+          const provider = evt.added.element.uiSchemaElementProvider();
+          this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
+        }
       }
     },
   },

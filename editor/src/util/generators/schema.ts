@@ -15,9 +15,14 @@ import {
   EditorUISchemaElement,
 } from '../../model/uischema';
 
-export const createControl = (type: string) => {
+export const createControl = (
+  type: string,
+  options?: Record<string, unknown>
+) => {
   return {
-    type,
-    minLength: 3,
+    ...{
+      type,
+    },
+    ...options,
   };
 };

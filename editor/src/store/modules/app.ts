@@ -11,6 +11,7 @@ import {
   DefaultPaletteService,
   PaletteService,
 } from '../../api/paletteService';
+import { createControl } from '../../util/generators/uiSchema';
 const ajv = createAjv({ useDefaults: true });
 
 import { withCloneTree, withCloneTrees } from '../../util/clone';
@@ -102,28 +103,15 @@ const createSchema = (state, payload) => {
     state.editor.schema,
     undefined,
     state.editor,
-    (clonedUiSchema) => {
+    (clonedSchema) => {
       return linkSchemas(
         buildSchemaTree(payload.schema),
-        cleanUiSchemaLinks(clonedUiSchema)
+        cleanUiSchemaLinks(clonedSchema)
       );
     }
   );
 };
-const updateSchemaProperty = (state, payload) => {
-  return withCloneTree(
-    state.editor.schema,
-    undefined,
-    state.editor,
-    (clonedSchema) => {
-      return buildSchemaProperty(
-        clonedSchema,
-        payload.property,
-        payload.variable
-      );
-    }
-  );
-};
+
 const createUiSchema = (state, payload) => {
   return withCloneTree(
     state.editor.schema,
@@ -183,12 +171,27 @@ const createScopedElementToLayout = (state, payload) => {
     }
   );
 };
+
+const addPropertyToSchema = (state, payload) => {
+  return withCloneTree(
+    state.editor.schema,
+    payload.elementUUID,
+    state.editor,
+    (clonedSchema) => {
+      const newElement = payload.schemaElement;
+      newElement.parent = clonedSchema;
+      clonedSchema.properties?.set(`${payload.indexOrProp}`, newElement);
+      return clonedSchema;
+    }
+  );
+};
 const updateUISchemaElement = (state, payload) => {
   return withCloneTree(
     state.editor.uiSchema,
     payload.elementUUID,
     state.editor.uiSchema,
     (newUiSchema) => {
+      debugger;
       // options.detail is not part of the editable properties
       const optionsDetail = newUiSchema.options?.detail;
       assign(newUiSchema, payload.changedProperties);
@@ -292,16 +295,17 @@ const actions = {
     const clone = createScopedElementToLayout(state, payload);
     commit('SET_UI_SCHEMA', clone.uiSchema);
   },
+  addPropertyToSchema({ commit }, payload) {
+    const clone = addPropertyToSchema(state, payload);
+    commit('SET_SCHEMA', clone);
+  },
+
   addUnscopedElementToLayout({ commit, state }, payload) {
     const clone = createUnscopedUiSchema(state, payload);
     commit('SET_UI_SCHEMA', clone);
   },
   setSchema({ commit }, payload) {
     const clone = createSchema(state, payload);
-    commit('SET_SCHEMA', clone.schema);
-  },
-  setSchemaProperty({ commit }, payload) {
-    const clone = updateSchemaProperty(state, payload);
     commit('SET_SCHEMA', clone.schema);
   },
   setUiSchema({ commit }, payload) {

@@ -53,13 +53,25 @@ const controlElements = [
     type: 'Control',
     label: 'Checkbox',
     icon: 'mdi-checkbox-outline',
-    uiSchemaElementProvider: () => createLabel(),
+    uiSchemaElementProvider: () => {
+      const control = createControl("boolean");
+      return  {
+        control,
+        variable: "checkbox"
+      };
+    },
   },
   {
     type: 'Control',
     label: 'Date Picker',
     icon: 'mdi-calendar-month',
-    uiSchemaElementProvider: () => createLabel(),
+    uiSchemaElementProvider: () => {
+      const control = createControl("string", {format: "date"});
+      return  {
+        control,
+        variable: "DatePicker"
+      };
+    },
   },
   {
     type: 'Control',
@@ -72,8 +84,11 @@ const controlElements = [
     label: 'Line Input',
     icon: 'mdi-crop-square',
     uiSchemaElementProvider: () => {
-        const control = createControl("string");
-      return  control;
+      const control = createControl("string");
+      return  {
+        control,
+        variable: "textField"
+      };
     },
   },
 ]

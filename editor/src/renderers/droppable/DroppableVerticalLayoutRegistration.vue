@@ -46,7 +46,8 @@ import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
 import { VContainer, VRow, VCol } from 'vuetify/lib';
 import { entry as DroppableElementRegistration } from './DroppableElement.vue';
 import { EditorUISchemaElement } from '@/model';
-import { createControl } from '@/util';
+import { createControl, tryFindByUUID } from '@/util';
+import { buildSchemaElement, createSingleElement } from '../../model/schema';
 
 const droppableRenderer = defineComponent({
   name: 'dropable-vertical-layout-renderer',
@@ -76,13 +77,24 @@ const droppableRenderer = defineComponent({
   methods: {
     handleChange(evt: any) {
       if (evt.added) {
-        if (evt.added.element.element && evt.added.element.element.uuid) {
-          const uiSchemaElement: EditorUISchemaElement = createControl(
-            evt.added.element.element,
-            evt.added.element.uiSchemaType
+        if (evt.added.element && evt.added.element.type === 'Control') {
+          //here update the schema
+          const property = evt.added.element.uiSchemaElementProvider();
+          const newElement = createSingleElement(property.control);
+          this.$store.dispatch('app/addPropertyToSchema', {
+            schemaElement: newElement,
+            elementUUID: this.schema.uuid,
+            indexOrProp: property.variable,
+          });
+
+          //Here uischema
+          const schemaElement = tryFindByUUID(
+            this.$store.get('app/editor@schema'),
+            newElement.uuid
           );
+          const newUIElement = createControl(schemaElement, 'Control');
           this.$store.dispatch('app/addScopedElementToLayout', {
-            uiSchemaElement: uiSchemaElement,
+            uiSchemaElement: newUIElement,
             layoutUUID: this.uischema.uuid,
             index: 0,
             schemaUUID: evt.added.element.uuid,
