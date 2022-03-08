@@ -47,7 +47,7 @@ import { VContainer, VRow, VCol } from 'vuetify/lib';
 import { entry as DroppableElementRegistration } from './DroppableElement.vue';
 import { EditorUISchemaElement } from '@/model';
 import { createControl, tryFindByUUID } from '@/util';
-import { buildSchemaElement, createSingleElement } from '../../model/schema';
+import { createSingleElement } from '../../model/schema';
 
 const droppableRenderer = defineComponent({
   name: 'dropable-vertical-layout-renderer',

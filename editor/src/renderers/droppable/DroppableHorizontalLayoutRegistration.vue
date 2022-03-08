@@ -46,9 +46,9 @@ import {
 import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
 import { VContainer, VRow, VCol } from 'vuetify/lib';
 import { entry as DroppableElementRegistration } from './DroppableElement.vue';
-
-import { EditorUISchemaElement } from '../../model/uischema';
-import { createControl } from '../../util/generators/uiSchema';
+import { EditorUISchemaElement } from '@/model';
+import { createControl, tryFindByUUID } from '@/util';
+import { createSingleElement } from '../../model/schema';
 
 const droppableRenderer = defineComponent({
   name: 'droppable-horizontal-layout-renderer',
@@ -77,21 +77,32 @@ const droppableRenderer = defineComponent({
     },
   },
   methods: {
-    handleChange(e) {
-      if (e.added) {
-        if (e.added.element.element && e.added.element.element.uuid) {
-          const uiSchemaElement: EditorUISchemaElement = createControl(
-            e.added.element.element,
-            e.added.element.uiSchemaType
+    handleChange(evt) {
+      if (evt.added) {
+        if (evt.added.element && evt.added.element.type === 'Control') {
+          //here update the schema
+          const property = evt.added.element.uiSchemaElementProvider();
+          const newElement = createSingleElement(property.control);
+          this.$store.dispatch('app/addPropertyToSchema', {
+            schemaElement: newElement,
+            elementUUID: this.schema.uuid,
+            indexOrProp: property.variable,
+          });
+
+          //Here uischema
+          const schemaElement = tryFindByUUID(
+            this.$store.get('app/editor@schema'),
+            newElement.uuid
           );
+          const newUIElement = createControl(schemaElement, 'Control');
           this.$store.dispatch('app/addScopedElementToLayout', {
-            uiSchemaElement: uiSchemaElement,
+            uiSchemaElement: newUIElement,
             layoutUUID: this.uischema.uuid,
             index: 0,
-            schemaUUID: e.added.element.uuid,
+            schemaUUID: evt.added.element.uuid,
           });
         } else {
-          let provider = e.added.element.uiSchemaElementProvider();
+          let provider = evt.added.element.uiSchemaElementProvider();
           this.$store.dispatch('app/addUnscopedElementToLayout', {
             uiSchemaElement: provider,
             layoutUUID: this.uischema.uuid,

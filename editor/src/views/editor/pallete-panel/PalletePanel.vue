@@ -3,37 +3,7 @@
     <v-tabs>
       <v-tabs-slider></v-tabs-slider>
       <v-tab class="primary--text">Palette </v-tab>
-
-      <!-- <v-tab class="primary--text"> JSON Schema </v-tab>
-      <v-tab class="primary--text"> UI Schema </v-tab> -->
-
       <v-tab-item>
-        <!-- <draggable
-          class="dragArea list-group"
-          :list="paletteElements"
-          :group="{ name: 'people', pull: 'clone', put: false }"
-          :sort="false"
-        >
-          <div v-for="element in paletteElements" :key="element.type">
-            <v-icon v-text="element.icon" small></v-icon>
-            <span v-text="element.label"></span>
-          </div>
-        </draggable> -->
-        <!-- <h4>Controls</h4>
-        <draggable
-          class="dragArea list-group"
-          :list="getChildrenToRender(schema)"
-          :group="{ name: 'people', pull: 'clone', put: false }"
-          :sort="false"
-        >
-          <div
-            v-for="item in getChildrenToRender(schema)"
-            :key="item.element.uuid"
-          >
-            <span v-text="getLabel(item.element)"></span>
-          </div>
-        </draggable> -->
-
         <v-list v-for="(group, j) in paletteElements" :key="j" dense>
           <v-subheader>{{ group.label }}</v-subheader>
           <!-- <v-list-item-group color="primary"> -->
@@ -56,7 +26,6 @@
           </draggable>
         </v-list>
       </v-tab-item>
-      <!-- <v-tab-item> </v-tab-item> -->
     </v-tabs>
   </div>
 </template>
@@ -94,31 +63,23 @@ export default {
     editorSchema: sync('app/editor@schema'),
   },
   methods: {
-    getChildrenToRender: function (schemaElement: SchemaElement) {
-      // let items: any[] = [];
-      // if (schemaElement) {
-      //   schemaElement.properties.forEach((element: boolean, key: string) => {
-      //     let uiSchemaType = 'Control';
-      //     if (key === 'suggest') {
-      //       uiSchemaType = 'Suggest';
-      //     }
-      //     if (key === 'multiplefile') {
-      //       element.options = {};
-      //       element.options.multipleFile = true;
-      //     }
-
-      //     items.push({
-      //       uiSchemaType,
-      //       element,
-      //     });
-      //   });
-      // }
-      // return items;
-      return [];
-    },
     getLabel: function (schemaElement: SchemaElement) {
       return getLabel(schemaElement);
     },
   },
 };
 </script>
+
+<style>
+.item span {
+  cursor: grab;
+}
+.list-group .item {
+  border-width: 0 0 1px;
+  position: relative;
+  display: block;
+  padding: 0.75rem 1.25rem;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+</style>
