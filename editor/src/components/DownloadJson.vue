@@ -162,7 +162,6 @@ export default {
   },
   methods: {
     setMonacoUiSchema(schemaModel): void {
-      debugger;
       const modelUri = Uri.parse('json://core/specification/uischema.json');
       this.schemaDesigner.uiSchemaEditor = getMonacoModelForUri(
         modelUri,
@@ -170,7 +169,6 @@ export default {
       );
     },
     setMonacoSchema(schemaModel): void {
-      debugger;
       const modelUri = Uri.parse('json://core/specification/schema.json');
       this.schemaDesigner.schemaEditor = getMonacoModelForUri(
         modelUri,
