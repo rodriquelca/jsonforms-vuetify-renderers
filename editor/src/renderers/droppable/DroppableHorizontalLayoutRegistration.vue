@@ -48,7 +48,7 @@ import { VContainer, VRow, VCol } from 'vuetify/lib';
 import { entry as DroppableElementRegistration } from './DroppableElement.vue';
 import { EditorUISchemaElement } from '@/model';
 import { createControl, tryFindByUUID } from '@/util';
-import { createSingleElement } from '../../model/schema';
+import { buildSchemaTree } from '../../model/schema';
 
 const droppableRenderer = defineComponent({
   name: 'droppable-horizontal-layout-renderer',
@@ -82,7 +82,7 @@ const droppableRenderer = defineComponent({
         if (evt.added.element && evt.added.element.type === 'Control') {
           //here update the schema
           const property = evt.added.element.uiSchemaElementProvider();
-          const newElement = createSingleElement(property.control);
+          const newElement = buildSchemaTree(property.control);
           this.$store.dispatch('app/addPropertyToSchema', {
             schemaElement: newElement,
             elementUUID: this.schema.uuid,
