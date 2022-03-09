@@ -26,6 +26,7 @@
                 (appliedOptions.restrict &&
                   arraySchema !== undefined &&
                   arraySchema.maxItems !== undefined &&
+                  control.data &&
                   control.data.length >= arraySchema.maxItems)
               "
               @click="addButtonClick"
@@ -131,7 +132,8 @@
                         small
                         aria-label="Move down"
                         :disabled="
-                          index >= control.data.length - 1 || !control.enabled
+                          control.data &&
+                          (index >= control.data.length - 1 || !control.enabled)
                         "
                         :class="styles.arrayList.itemMoveDown"
                         @click.native="
@@ -193,9 +195,9 @@
 <script lang="ts">
 import {
   isObjectArrayControl,
-  isPrimitiveArrayControl,
+  optionIs,
   JsonFormsRendererRegistryEntry,
-  or,
+  and,
   rankWith,
   composePaths,
   createDefaultValue,
@@ -274,7 +276,10 @@ const controlRenderer = defineComponent({
     },
     totalPages(): number {
       return this.appliedOptions.pageSize
-        ? Math.ceil(this.control.data.length / this.appliedOptions.pageSize)
+        ? Math.ceil(
+            (this.control.data ? this.control.data.length : 1) /
+              this.appliedOptions.pageSize
+          )
         : 1;
     },
     noData(): boolean {
@@ -290,7 +295,7 @@ const controlRenderer = defineComponent({
         temp -= 1;
       }
       var index = temp * size;
-      return list.slice(index, index + size);
+      return list ? list.slice(index, index + size) : [];
     },
   },
   methods: {
@@ -342,7 +347,10 @@ const controlRenderer = defineComponent({
 export default controlRenderer;
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(5, or(isObjectArrayControl, isPrimitiveArrayControl)),
+  tester: rankWith(
+    5,
+    and(isObjectArrayControl, optionIs('extendedType', 'grid'))
+  ),
 };
 </script>
 

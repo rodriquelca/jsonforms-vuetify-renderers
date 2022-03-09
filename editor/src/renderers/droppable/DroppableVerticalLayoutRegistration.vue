@@ -33,7 +33,7 @@ import {
   uiTypeIs,
   Layout,
   rankWith,
-  JsonFormsRendererRegistryEntry
+  JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
 import { defineComponent } from '@vue/composition-api';
 import {
@@ -44,12 +44,13 @@ import {
 } from '@jsonforms/vue2';
 import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
 import { VContainer, VRow, VCol } from 'vuetify/lib';
-import { entry as DroppableElementRegistration } from "./DroppableElement.vue";
-import { EditorUISchemaElement } from "@/model";
-import { createControl } from "@/util";
+import { entry as DroppableElementRegistration } from './DroppableElement.vue';
+import { EditorUISchemaElement } from '@/model';
+import { createControl, tryFindByUUID } from '@/util';
+import { buildSchemaTree } from '../../model/schema';
 
 const droppableRenderer = defineComponent({
-  name: 'vertical-layout-renderer',
+  name: 'dropable-vertical-layout-renderer',
   components: {
     DispatchRenderer,
     VContainer,
@@ -69,20 +70,32 @@ const droppableRenderer = defineComponent({
     },
     customRenderers(): Array<any> {
       return (
-          this.renderers && [...this.renderers, DroppableElementRegistration]
+        this.renderers && [...this.renderers, DroppableElementRegistration]
       );
     },
   },
   methods: {
     handleChange(evt: any) {
       if (evt.added) {
-       if (evt.added.element.element && evt.added.element.element.uuid) {
-          const uiSchemaElement: EditorUISchemaElement = createControl(
-            evt.added.element.element,
-            evt.added.element.uiSchemaType
+        if (evt.added.element && evt.added.element.type === 'Control') {
+          //here update the schema
+          const property = evt.added.element.uiSchemaElementProvider();
+          const newElement = buildSchemaTree(property.control);
+          this.$store.dispatch('app/addPropertyToSchema', {
+            schemaElement: newElement,
+            elementUUID: this.schema.uuid,
+            indexOrProp: property.variable,
+          });
+
+          //Here uischema
+          const schemaElement = tryFindByUUID(
+            this.$store.get('app/editor@schema'),
+            newElement.uuid
           );
+          schemaElement.options = property.uiOptions;
+          const newUIElement = createControl(schemaElement, 'Control');
           this.$store.dispatch('app/addScopedElementToLayout', {
-            uiSchemaElement: uiSchemaElement,
+            uiSchemaElement: newUIElement,
             layoutUUID: this.uischema.uuid,
             index: 0,
             schemaUUID: evt.added.element.uuid,
@@ -97,7 +110,7 @@ const droppableRenderer = defineComponent({
         }
       }
     },
-  }
+  },
 });
 
 export default droppableRenderer;

@@ -1,28 +1,32 @@
 <template>
-  <div>
-    <draggable
-      :class="dragableClass"
-      :list="list1"
-      group="people"
-      @change="handleChange"
-    >
-      <v-col
-        v-for="(element, index) in uischema.elements"
-        :key="`${layout.path}-${index}`"
-        fill-height
+  <!-- <div> -->
+  <v-container class="grey lighten-5">
+    <v-row no-gutters>
+      <draggable
+        :class="draggableClass"
+        :value="[]"
+        group="people"
+        @change="handleChange"
+        :key="'draggable' + uischema.uuid"
       >
-        <dispatch-renderer
-          :key="element.uuid"
-          :schema="schema"
-          :uischema="element"
-          :path="path"
-          :enabled="enabled"
-          :renderers="customRenderers"
-          :cells="cells"
-        />
-      </v-col>
-    </draggable>
-  </div>
+        <v-col
+          v-for="(element, index) in uischema.elements"
+          :key="`${layout.path}-${index}`"
+        >
+          <dispatch-renderer
+            :key="element.uuid"
+            :schema="schema"
+            :uischema="element"
+            :path="path"
+            :enabled="enabled"
+            :renderers="customRenderers"
+            :cells="cells"
+          />
+        </v-col>
+      </draggable>
+      <!-- </div> -->
+    </v-row>
+  </v-container>
 </template>
 <script lang="ts">
 import draggable from 'vuedraggable';
@@ -42,12 +46,12 @@ import {
 import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
 import { VContainer, VRow, VCol } from 'vuetify/lib';
 import { entry as DroppableElementRegistration } from './DroppableElement.vue';
-
-import { EditorUISchemaElement } from '../../model/uischema';
-import { createControl } from '../../util/generators/uiSchema';
+import { EditorUISchemaElement } from '@/model';
+import { createControl, tryFindByUUID } from '@/util';
+import { buildSchemaTree } from '../../model/schema';
 
 const droppableRenderer = defineComponent({
-  name: 'horizontal-layout-renderer',
+  name: 'droppable-horizontal-layout-renderer',
   components: {
     DispatchRenderer,
     VContainer,
@@ -59,17 +63,12 @@ const droppableRenderer = defineComponent({
   props: {
     ...rendererProps<Layout>(),
   },
-  data() {
-    return {
-      list1: [],
-    };
-  },
   setup(props: RendererProps<Layout>) {
     return useVuetifyLayout(useJsonFormsLayout(props));
   },
   computed: {
-    dragableClass(): string {
-      return 'dragArea list-group row ' + this.styles.horizontalLayout.item;
+    draggableClass(): string {
+      return 'dragArea row ' + this.styles.horizontalLayout.item;
     },
     customRenderers(): Array<any> {
       return (
@@ -78,21 +77,33 @@ const droppableRenderer = defineComponent({
     },
   },
   methods: {
-    handleChange(e) {
-      if (e.added) {
-        if (e.added.element.element && e.added.element.element.uuid) {
-          const uiSchemaElement: EditorUISchemaElement = createControl(
-            e.added.element.element,
-            e.added.element.uiSchemaType
+    handleChange(evt) {
+      if (evt.added) {
+        if (evt.added.element && evt.added.element.type === 'Control') {
+          //here update the schema
+          const property = evt.added.element.uiSchemaElementProvider();
+          const newElement = buildSchemaTree(property.control);
+          this.$store.dispatch('app/addPropertyToSchema', {
+            schemaElement: newElement,
+            elementUUID: this.schema.uuid,
+            indexOrProp: property.variable,
+          });
+
+          //Here uischema
+          const schemaElement = tryFindByUUID(
+            this.$store.get('app/editor@schema'),
+            newElement.uuid
           );
+          schemaElement.options = property.uiOptions;
+          const newUIElement = createControl(schemaElement, 'Control');
           this.$store.dispatch('app/addScopedElementToLayout', {
-            uiSchemaElement: uiSchemaElement,
+            uiSchemaElement: newUIElement,
             layoutUUID: this.uischema.uuid,
             index: 0,
-            schemaUUID: e.added.element.uuid,
+            schemaUUID: evt.added.element.uuid,
           });
         } else {
-          let provider = e.added.element.uiSchemaElementProvider();
+          let provider = evt.added.element.uiSchemaElementProvider();
           this.$store.dispatch('app/addUnscopedElementToLayout', {
             uiSchemaElement: provider,
             layoutUUID: this.uischema.uuid,
@@ -115,5 +126,10 @@ export const entry: JsonFormsRendererRegistryEntry = {
 .test {
   background: #e5e5e5;
   height: 100%;
+}
+.dragArea {
+  border: 1px dashed #000;
+  min-height: 80px;
+  content: 'Drag Controls';
 }
 </style>

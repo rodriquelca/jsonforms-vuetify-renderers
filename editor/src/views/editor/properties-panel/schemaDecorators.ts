@@ -1,4 +1,3 @@
-
 import { ControlElement, JsonSchema, Layout } from '@jsonforms/core';
 import { assign } from 'lodash';
 
@@ -54,12 +53,36 @@ export const ruleDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const variableDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Control'].includes(uiElement?.type)) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, { scope: { type: 'string' } });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/scope')
+    );
+  }
+  return schemas;
+};
+
 export const labelDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
   if (
-    ['Group', 'Control','Suggest','MultipleFile', 'Categorization', 'Category'].includes(uiElement?.type)
+    [
+      'Group',
+      'Control',
+      'Suggest',
+      'MultipleFile',
+      'Categorization',
+      'Category',
+    ].includes(uiElement?.type)
   ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
@@ -95,9 +118,7 @@ export const urlDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (
-    ['Suggest'].includes(uiElement?.type)
-  ) {
+  if (['Control'].includes(uiElement?.type) && uiElement.options?.suggest) {
     addSchemaOptionsProperty(schemas.schema, {
       url: { type: 'string' },
     });
@@ -117,9 +138,13 @@ export const createPropertyControl = (
 });
 
 export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
+  // variableDecorator,
   labelDecorator,
   multilineStringOptionDecorator,
   labelUIElementDecorator,
-  ruleDecorator,
   urlDecorator,
+  ruleDecorator,
+];
+export const designSchemaDecorators: PropertySchemasDecorator[] = [
+  // variableDecorator,
 ];

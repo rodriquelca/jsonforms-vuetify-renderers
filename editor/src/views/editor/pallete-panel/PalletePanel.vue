@@ -2,45 +2,36 @@
   <div class="ps-6">
     <v-tabs>
       <v-tabs-slider></v-tabs-slider>
-      <v-tab class="primary--text">Palete </v-tab>
-
-      <!-- <v-tab class="primary--text"> JSON Schema </v-tab>
-      <v-tab class="primary--text"> UI Schema </v-tab> -->
+      <v-tab class="primary--text">Palette </v-tab>
 
       <v-tab-item>
-        <draggable
-          class="list-group"
-          :list="paletteElements"
-          :group="{ name: 'people', pull: 'clone', put: false }"
-          :sort="false"
-        >
-          <div
-            v-for="element in paletteElements"
-            :key="element.type"
-            class="item"
-          >
-            <v-icon v-text="element.icon"></v-icon>
-
-            <span v-text="element.label"></span>
-          </div>
-        </draggable>
-        <h4>Controls</h4>
-        <draggable
-          class="list-group"
-          :list="getChildrenToRender(schema)"
-          :group="{ name: 'people', pull: 'clone', put: false }"
-          :sort="false"
-        >
-          <div
-            v-for="item in getChildrenToRender(schema)"
-            :key="item.element.uuid"
-            class="item"
-          >
-            <span v-text="getLabel(item.element)"></span>
-          </div>
-        </draggable>
+        <v-list-group v-for="(group, j) in paletteElements" :key="j">
+          <template v-slot:activator>
+            <v-list-item-content>
+              <v-list-item-title v-text="group.label"></v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list dense>
+            <draggable
+              class="dragArea list-group"
+              :list="group.elements"
+              :group="{ name: 'people', pull: 'clone', put: false }"
+              :sort="false"
+            >
+              <template v-for="(item, i) in group.elements">
+                <v-list-item :key="i">
+                  <v-list-item-icon>
+                    <v-icon v-text="item.icon"></v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.label"></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </template>
+            </draggable>
+          </v-list>
+        </v-list-group>
       </v-tab-item>
-      <!-- <v-tab-item> </v-tab-item> -->
     </v-tabs>
   </div>
 </template>
@@ -48,14 +39,7 @@
 <script lang="ts">
 import draggable from 'vuedraggable';
 import { sync } from 'vuex-pathify';
-import {
-  getChildren,
-  getLabel,
-  getPath,
-  isArrayElement,
-  isObjectElement,
-  SchemaElement,
-} from '../../../model/schema';
+import { getLabel, SchemaElement } from '../../../model/schema';
 export default {
   name: 'PalletePanel',
   components: {
@@ -85,27 +69,6 @@ export default {
     editorSchema: sync('app/editor@schema'),
   },
   methods: {
-    getChildrenToRender: function (schemaElement: SchemaElement) {
-      let items: any[] = [];
-      if (schemaElement) {
-        schemaElement.properties.forEach((element: boolean, key: string) => {
-          let uiSchemaType = 'Control';
-          if (key === 'suggest') {
-            uiSchemaType = 'Suggest';
-          }
-          if (key === 'multiplefile') {
-            element.options = {};
-            element.options.multipleFile = true;
-          }
-
-          items.push({
-            uiSchemaType,
-            element,
-          });
-        });
-      }
-      return items;
-    },
     getLabel: function (schemaElement: SchemaElement) {
       return getLabel(schemaElement);
     },
@@ -114,15 +77,19 @@ export default {
 </script>
 
 <style>
-  .item span {
-    cursor: grab;
-  }
-  .list-group .item {
-    border-width: 0 0 1px;
-    position: relative;
-    display: block;
-    padding: 0.75rem 1.25rem;
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.125)
-  }
+.item span {
+  cursor: grab;
+}
+.list-group .item {
+  border-width: 0 0 1px;
+  position: relative;
+  display: block;
+  padding: 0.75rem 1.25rem;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+}
+.v-list {
+  height: 250px; /* or any height you want */
+  overflow-y: auto;
+}
 </style>

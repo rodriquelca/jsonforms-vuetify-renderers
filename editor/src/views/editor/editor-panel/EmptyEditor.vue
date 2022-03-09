@@ -7,9 +7,7 @@
     outlined
   >
     <div :class="`text-caption`">
-      <span>
-        Drag and drop an element from the Palette to begin.
-      </span>
+      <span> Drag and drop an element from the Palette to begin. </span>
       <draggable
         class="dragAreaItem list-group"
         :list="list1"
@@ -27,7 +25,8 @@
 <script lang="ts">
 import draggable from 'vuedraggable';
 import { EditorUISchemaElement } from '../../../model/uischema';
-import { createControl } from '../../../util/generators/uiSchema';
+import { createControl, tryFindByUUID } from '@/util';
+import { buildSchemaTree } from '../../../model/schema';
 export default {
   name: 'EmptyEditor',
   components: {
@@ -39,15 +38,38 @@ export default {
     };
   },
   methods: {
-    handleChange(e: any) {
-      if (e.added) {
-        if (e.added.element.element && e.added.element.element.uuid) {
-          const provider: EditorUISchemaElement = createControl(
-            e.added.element.element, e.added.element.uiSchemaType
+    handleChange(evt: any) {
+      if (evt.added) {
+        this.$store.dispatch('app/setSchema', {
+          schema: {
+            type: 'object',
+            title: 'person',
+            properties: {},
+          },
+        });
+        debugger;
+        if (evt.added.element && evt.added.element.type === 'Control') {
+          //here update the schema
+          const property = evt.added.element.uiSchemaElementProvider();
+          const newElement = buildSchemaTree(property.control);
+
+          this.$store.dispatch('app/addPropertyToSchema', {
+            schemaElement: newElement,
+            elementUUID: undefined,
+            indexOrProp: property.variable,
+          });
+          debugger;
+
+          //Here uischema
+          const schemaElement = tryFindByUUID(
+            this.$store.get('app/editor@schema'),
+            newElement.uuid
           );
-           this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
+          schemaElement.options = property.uiOptions;
+          const newUIElement = createControl(schemaElement, 'Control');
+          this.$store.dispatch('app/setUiSchema', { uiSchema: newUIElement });
         } else {
-          const provider:EditorUISchemaElement  = e.added.element.uiSchemaElementProvider();
+          const provider = evt.added.element.uiSchemaElementProvider();
           this.$store.dispatch('app/setUiSchema', { uiSchema: provider });
         }
       }
@@ -57,9 +79,9 @@ export default {
 </script>
 
 <style>
-  .dragArea,
-  .dragAreaItem {
-    width: 100%;
-    min-height: 50px;
-  }
+.dragArea,
+.dragAreaItem {
+  width: 100%;
+  min-height: 50px;
+}
 </style>

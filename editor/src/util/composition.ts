@@ -11,12 +11,14 @@ import {
   getSchema,
   JsonFormsSubStates,
 } from '@jsonforms/core';
+
 import { rendererProps, useControl } from '@jsonforms/vue2';
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 import { useStyles } from '@jsonforms/vue2-vuetify';
 import { CompType, computed, ComputedRef, ref, inject } from './vue';
 import { fireDependencyHandler } from './runtime';
+import { hasChildren } from '../model/uischema';
 /**
  * Constructs a props declaration for Vue components which can be used
  * for registered renderers and cells. These are typically used in combination
@@ -171,5 +173,27 @@ export const useDynaformControl = <
     persistentHint,
     computedLabel,
     fireDependency,
+  };
+};
+
+export const useEditorCommonElement = (props) => {
+  console.log(props);
+  const hover = ref(false);
+  const setSelection = inject('setSelection');
+  const onClick = (value: any) => {
+    setSelection(value.uuid);
+  };
+  const onRemove = (value: any) => {
+    if (!hasChildren(value)) {
+      this.$store.dispatch(
+        'app/removeUiSchemaElement',
+        this.wrappedElement.uuid
+      );
+    }
+  };
+  return {
+    hover,
+    onClick,
+    onRemove,
   };
 };
