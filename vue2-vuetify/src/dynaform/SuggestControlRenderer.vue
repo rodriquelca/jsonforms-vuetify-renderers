@@ -29,8 +29,10 @@
 import {
   ControlElement,
   rankWith,
-  uiTypeIs,
+  and,
+  isObjectControl,
   JsonFormsRendererRegistryEntry,
+  optionIs,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
@@ -109,6 +111,6 @@ const controlRenderer = defineComponent({
 export default controlRenderer;
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(1, uiTypeIs('Suggest')),
+  tester: rankWith(7, and(isObjectControl, optionIs('suggest', true))),
 };
 </script>

@@ -26,7 +26,7 @@
 import draggable from 'vuedraggable';
 import { EditorUISchemaElement } from '../../../model/uischema';
 import { createControl, tryFindByUUID } from '@/util';
-import { createSingleElement } from '../../../model/schema';
+import { buildSchemaTree } from '../../../model/schema';
 export default {
   name: 'EmptyEditor',
   components: {
@@ -51,18 +51,21 @@ export default {
         if (evt.added.element && evt.added.element.type === 'Control') {
           //here update the schema
           const property = evt.added.element.uiSchemaElementProvider();
-          const newElement = createSingleElement(property.control);
+          const newElement = buildSchemaTree(property.control);
+
           this.$store.dispatch('app/addPropertyToSchema', {
             schemaElement: newElement,
             elementUUID: undefined,
             indexOrProp: property.variable,
           });
+          debugger;
 
           //Here uischema
           const schemaElement = tryFindByUUID(
             this.$store.get('app/editor@schema'),
             newElement.uuid
           );
+          schemaElement.options = property.uiOptions;
           const newUIElement = createControl(schemaElement, 'Control');
           this.$store.dispatch('app/setUiSchema', { uiSchema: newUIElement });
         } else {

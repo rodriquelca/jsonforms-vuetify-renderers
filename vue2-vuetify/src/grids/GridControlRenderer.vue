@@ -274,7 +274,10 @@ const controlRenderer = defineComponent({
     },
     totalPages(): number {
       return this.appliedOptions.pageSize
-        ? Math.ceil(this.control.data.length / this.appliedOptions.pageSize)
+        ? Math.ceil(
+            (this.control.data ? this.control.data.length : 1) /
+              this.appliedOptions.pageSize
+          )
         : 1;
     },
     noData(): boolean {
@@ -290,7 +293,7 @@ const controlRenderer = defineComponent({
         temp -= 1;
       }
       var index = temp * size;
-      return list.slice(index, index + size);
+      return list ? list.slice(index, index + size) : [];
     },
   },
   methods: {

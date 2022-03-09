@@ -94,6 +94,7 @@ const droppableRenderer = defineComponent({
             this.$store.get('app/editor@schema'),
             newElement.uuid
           );
+          schemaElement.options = property.uiOptions;
           const newUIElement = createControl(schemaElement, 'Control');
           this.$store.dispatch('app/addScopedElementToLayout', {
             uiSchemaElement: newUIElement,

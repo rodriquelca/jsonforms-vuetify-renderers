@@ -118,7 +118,7 @@ export const urlDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Suggest'].includes(uiElement?.type)) {
+  if (['Control'].includes(uiElement?.type) && uiElement.options?.suggest) {
     addSchemaOptionsProperty(schemas.schema, {
       url: { type: 'string' },
     });
@@ -142,6 +142,6 @@ export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
   labelDecorator,
   multilineStringOptionDecorator,
   labelUIElementDecorator,
-  ruleDecorator,
   urlDecorator,
+  ruleDecorator,
 ];
