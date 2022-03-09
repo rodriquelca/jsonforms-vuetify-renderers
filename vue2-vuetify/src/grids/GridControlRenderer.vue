@@ -26,6 +26,7 @@
                 (appliedOptions.restrict &&
                   arraySchema !== undefined &&
                   arraySchema.maxItems !== undefined &&
+                  control.data &&
                   control.data.length >= arraySchema.maxItems)
               "
               @click="addButtonClick"
@@ -131,7 +132,8 @@
                         small
                         aria-label="Move down"
                         :disabled="
-                          index >= control.data.length - 1 || !control.enabled
+                          control.data &&
+                          (index >= control.data.length - 1 || !control.enabled)
                         "
                         :class="styles.arrayList.itemMoveDown"
                         @click.native="

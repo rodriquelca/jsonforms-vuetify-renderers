@@ -290,7 +290,7 @@ const complexElements = [
   {
     type: 'Control',
     label: 'Grid',
-    icon: 'mdi-checkbox-outline',
+    icon: 'mdi-grid',
     uiSchemaElementProvider: () => {
       const control = {
         "type": "array",
@@ -314,7 +314,7 @@ const complexElements = [
             }
           }
         },
-        "minItems": 1,
+        "minItems": 0,
         "maxItems": 15
       }
 
@@ -325,6 +325,73 @@ const complexElements = [
           "extendedType": "grid",
           "restrict": true,
           "pageSize": 5
+        }
+      };
+    },
+  },
+  {
+    type: 'Control',
+    label: 'List With Detail',
+    icon: 'mdi-format-list-text',
+    uiSchemaElementProvider: () => {
+      const control = {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "title": "Users",
+          "properties": {
+            "firstname": {
+              "type": "string"
+            },
+            "lastname": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "age": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+        }
+      };
+      return {
+        control,
+        variable: "listDetail",
+        uiOptions: {
+          "detail": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "HorizontalLayout",
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/firstname",
+                    "label": "First Name"
+                  },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/lastname",
+                    "label": "Last Name"
+                  }
+                ]
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/age",
+                "label": "Age"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/email",
+                "label": "Email"
+              }
+            ]
+          },
+          "showSortButtons": true
         }
       };
     },
