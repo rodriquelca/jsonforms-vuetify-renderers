@@ -3,7 +3,7 @@
     <json-forms
       v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
       :data="{}"
-      :schema="resolvedSchema.schema"
+      :schema="useSchema"
       :uischema="useUiSchema"
       :renderers="renderers"
       :cells="renderers"
@@ -87,6 +87,9 @@ export default {
     useUiSchema: function () {
       this.buildVariables(this.$store.get('app/editor@uiSchema'));
       return useExportUiSchema(this.$store.get('app/editor@uiSchema'));
+    },
+    useSchema: function () {
+      return useExportSchema(this.$store.get('app/editor@schema'));
     },
   },
   mounted() {

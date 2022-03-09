@@ -138,7 +138,7 @@ export const createPropertyControl = (
 });
 
 export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
-  variableDecorator,
+  // variableDecorator,
   labelDecorator,
   multilineStringOptionDecorator,
   labelUIElementDecorator,
