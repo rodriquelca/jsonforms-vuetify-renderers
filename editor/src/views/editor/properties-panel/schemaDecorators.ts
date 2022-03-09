@@ -145,3 +145,6 @@ export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
   urlDecorator,
   ruleDecorator,
 ];
+export const designSchemaDecorators: PropertySchemasDecorator[] = [
+  // variableDecorator,
+];

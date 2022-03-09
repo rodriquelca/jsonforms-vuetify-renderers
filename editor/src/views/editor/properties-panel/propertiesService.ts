@@ -1,4 +1,3 @@
-
 import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 import { maxBy } from 'lodash';
 
@@ -52,7 +51,7 @@ export class PropertiesServiceImpl implements PropertiesService {
     private schemaProviders: PropertySchemasProvider[],
     private schemaDecorators: PropertySchemasDecorator[]
   ) {}
-  getProperties = (
+  getDesignProperties = (
     uiElement: EditorUISchemaElement,
     schemaElement: SchemaElement | undefined
   ): PropertySchemas | undefined => {
@@ -72,6 +71,5 @@ export class PropertiesServiceImpl implements PropertiesService {
       elementSchemas
     );
     return decoratedSchemas;
-    
   };
 }
