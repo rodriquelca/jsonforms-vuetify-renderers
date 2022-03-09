@@ -30,6 +30,9 @@ const state: AppState = {
     dataModel: undefined,
     dataVariables: undefined,
   },
+  data: {},
+  uischemaModel: {},
+  schemaModel: {}
 };
 
 const mutations = make.mutations(state);

@@ -14,6 +14,9 @@
             <v-tab-item :key="0">
               <demo-form
                 :example="example"
+                :data="data"
+                :uischemaModel="uischemaModel"
+                :schemaModel="schemaModel"
                 :renderers="renderers"
                 :cells="cells"
                 :config="config"
@@ -204,6 +207,9 @@ import {
   getMonacoModelForUri,
 } from '@/core/jsonSchemaValidation';
 import { Example } from '@/core/types';
+import store from './../../store';
+import Vue from 'vue';
+import pmreactivex from './../../util/pmreactivex';
 
 const myStyles = mergeStyles(defaultStyles, {
   control: { root: 'my-control' },
@@ -236,6 +242,9 @@ export default {
     monacoUiSchemaModel: sync('app/monaco@uischemaModel'),
     monacoDataModel: sync('app/monaco@dataModel'),
     monacoDataVariables: sync('app/monaco@dataVariables'),
+    data: sync('app/data'),
+    uischemaModel: sync('app/uischemaModel'),
+    schemaModel: sync('app/schemaModel'),
     locale: sync('app/jsonforms@locale'),
   },
   mounted() {
@@ -257,8 +266,10 @@ export default {
           event.data ? JSON.stringify(event.data, null, 2) : ''
         )
       );
+      this.$store.set('app/data', event.data || {});
     },
     setExample(example: Example): void {
+      let store = this.$store;
       if (example) {
         this.example = {
           id: example.id,
@@ -271,6 +282,36 @@ export default {
           },
         };
         this.updateMonacoModels(this.example);
+
+        this.$store.watch(
+          (state: any) => {
+            return state.app.schemaModel;
+          },
+          (n: any, o: any) => {
+            store.set(
+              'app/monaco@schemaModel',
+              getMonacoModelForUri(
+                monaco.Uri.parse(this.toSchemaUri(example.id)),
+                JSON.stringify(n, null, 2)
+              )
+            );
+          }
+        );
+
+        this.$store.watch(
+          (state: any) => {
+            return state.app.uischemaModel;
+          },
+          (n: any, o: any) => {
+            store.set(
+              'app/monaco@uischemaModel',
+              getMonacoModelForUri(
+                monaco.Uri.parse(this.toUiSchemaUri(example.id)),
+                JSON.stringify(n, null, 2)
+              )
+            );
+          }
+        );
       }
     },
     reloadMonacoSchema() {
@@ -308,6 +349,7 @@ export default {
         if (modelValue && !hasError) {
           const newJson: Record<string, any> = JSON.parse(modelValue);
           example.input.schema = newJson;
+          this.$store.set('app/schemaModel', newJson || {});
 
           this.toast('New schema applied');
         } else if (hasError) {
@@ -352,6 +394,7 @@ export default {
         if (modelValue && !hasError) {
           const newJson: Record<string, any> = JSON.parse(modelValue);
           example.input.uischema = newJson;
+          this.$store.set('app/uischemaModel', newJson || {});
           this.toast('New UI schema applied');
         } else if (hasError) {
           this.toast('Error: UI schema is invalid');
@@ -453,6 +496,7 @@ export default {
             : ''
         )
       );
+      this.$store.set('app/schemaModel', example.input.schema || {});
       this.$store.set(
         'app/monaco@uischemaModel',
         getMonacoModelForUri(
@@ -462,6 +506,7 @@ export default {
             : ''
         )
       );
+      this.$store.set('app/uischemaModel', example.input.uischema || {});
       this.$store.set(
         'app/monaco@dataModel',
         getMonacoModelForUri(
@@ -501,6 +546,8 @@ export default {
   provide() {
     return {
       styles: myStyles,
+      store: store,
+      pmreactivex: pmreactivex,
     };
   },
 };

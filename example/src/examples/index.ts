@@ -43,6 +43,8 @@ import { input as multipleFile } from './multiple-file';
 import { input as grid } from './grid';
 import { input as variables } from './variables';
 import { input as subForm } from './sub-form';
+import { input as dependent } from './dependent';
+
 
 export const examples = [
   {
@@ -264,5 +266,10 @@ export const examples = [
     id: 'sub-form',
     title: 'Sub Form',
     input: subForm,
+  },
+  {
+    id: 'dependent',
+    title: 'Dependent Field',
+    input: dependent,
   },
 ];
