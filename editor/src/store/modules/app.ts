@@ -159,7 +159,7 @@ const createScopedElementToLayout = (state, payload) => {
         newUIElement
       );
 
-      if (!newSchema || !linkElements(newUIElement, newSchema)) {
+      if (!newSchema || !linkElements(newUIElement, payload.schemaElement)) {
         console.error('Could not add new UI element', newUIElement);
         return state;
       }
