@@ -49,7 +49,8 @@ export interface PropertySchemasProvider {
 export class PropertiesServiceImpl implements PropertiesService {
   constructor(
     private schemaProviders: PropertySchemasProvider[],
-    private schemaDecorators: PropertySchemasDecorator[]
+    private schemaDecorators: PropertySchemasDecorator[],
+    private schemaVariableDecorators: PropertySchemasDecorator[]
   ) {}
   getDesignProperties = (
     uiElement: EditorUISchemaElement,
@@ -67,6 +68,27 @@ export class PropertiesServiceImpl implements PropertiesService {
       return undefined;
     }
     const decoratedSchemas = this.schemaDecorators.reduce(
+      (schemas, decorator) => decorator(schemas, uiElement, schemaElement),
+      elementSchemas
+    );
+    return decoratedSchemas;
+  };
+  getVariableSettings = (
+    uiElement: EditorUISchemaElement,
+    schemaElement: SchemaElement | undefined
+  ): PropertySchemas | undefined => {
+    const provider = maxBy(this.schemaProviders, (p) => p.tester(uiElement));
+    if (!provider || provider.tester(uiElement) === NOT_APPLICABLE) {
+      return undefined;
+    }
+    const elementSchemas = provider.getPropertiesSchemas(
+      uiElement,
+      schemaElement
+    );
+    if (!elementSchemas) {
+      return undefined;
+    }
+    const decoratedSchemas = this.schemaVariableDecorators.reduce(
       (schemas, decorator) => decorator(schemas, uiElement, schemaElement),
       elementSchemas
     );

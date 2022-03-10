@@ -5,6 +5,24 @@
   </v-container> -->
   <v-expansion-panels accordion>
     <v-expansion-panel>
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          <div>
+            <v-icon>mdi-application-variable</v-icon>
+            <span> Variable </span>
+          </div>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <json-forms
+            v-if="variableSettings"
+            :renderers="renderers"
+            :data="variableData"
+            :uischema="variableSettings.uiSchema"
+            :schema="variableSettings.schema"
+            @change="updateVariableSettings"
+          />
+        </v-expansion-panel-content>
+      </v-expansion-panel>
       <v-expansion-panel-header>
         <div>
           <v-icon> mdi-tune-vertical</v-icon>
@@ -30,18 +48,7 @@
           <span> Settings </span>
         </div>
       </v-expansion-panel-header>
-      <v-expansion-panel-content>
-        Schema Settings
-        <!-- <json-forms
-          v-if="properties"
-          :renderers="renderers"
-          :data="data"
-          :uischema="properties.uiSchema"
-          :schema="properties.schema"
-          @change="updateProperties"
-        /> -->
-        <!-- </v-card> -->
-      </v-expansion-panel-content>
+      <v-expansion-panel-content> Schema Settings </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
 </template>
@@ -51,7 +58,10 @@ import { isEqual, omit } from 'lodash';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import { defineComponent, inject, ref } from '../../../util/vue';
 import { editorRendererProps, useJsonTest } from '../../../util/composition';
-import { EditorUISchemaElement } from '../../../model/uischema';
+import {
+  EditorUISchemaElement,
+  getVariableName,
+} from '../../../model/uischema';
 import { tryFindByUUID } from '../../../util/schemasUtil';
 import { generateDefaultUISchema } from '@jsonforms/core';
 const PropertiesPanel = defineComponent({
@@ -71,6 +81,8 @@ const PropertiesPanel = defineComponent({
       data: undefined,
       designProperties: undefined,
       uiElement: undefined,
+      variableSettings: undefined,
+      variableData: undefined,
     };
   },
   watch: {
@@ -82,8 +94,11 @@ const PropertiesPanel = defineComponent({
         'elements',
         'linkedSchemaElement',
         'options.detail',
+        'scope',
       ]);
+
       if (this.uiElement) {
+        // design properties
         const linkedSchemaUUID = this.uiElement.linkedSchemaElement;
         const elementSchema =
           linkedSchemaUUID && this.schema
@@ -93,16 +108,33 @@ const PropertiesPanel = defineComponent({
           this.uiElement,
           elementSchema
         );
+        // variable data
+        if (this.uiElement.scope) {
+          this.variableData = {
+            variable: getVariableName(this.uiElement),
+          };
+          this.variableSettings = this.propertiesService.getVariableSettings(
+            this.uiElement,
+            elementSchema
+          );
+        }
       }
     },
   },
   methods: {
     updateDesignProperties: function (event: JsonFormsChangeEvent) {
-      // debugger;
       if (this.uiElement && event.errors.length === 0) {
         this.$store.dispatch('app/updateUISchemaElement', {
           elementUUID: this.uiElement.uuid,
           changedProperties: event.data,
+        });
+      }
+    },
+    updateVariableSettings: function (event: JsonFormsChangeEvent) {
+      if (this.uiElement && event.errors.length === 0) {
+        this.$store.dispatch('app/updateSchemaVariable', {
+          elementUUID: this.uiElement.uuid,
+          newVariable: event.data.variable,
         });
       }
     },

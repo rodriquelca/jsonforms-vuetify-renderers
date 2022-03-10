@@ -30,16 +30,16 @@ import {
   buildSchemaTree,
   cleanLinkedElements,
   SchemaElement,
-  buildSchemaProperty,
+  getScope,
 } from '../../model/schema';
 import {
   buildEditorUiSchemaTree,
   cleanUiSchemaLinks,
   EditorLayout,
   EditorUISchemaElement,
+  getVariableName,
 } from '../../model/uischema';
 import { setSchema } from '@jsonforms/core';
-
 /** Removes the given UI element from its tree.
  *  If a SchemaElement is provided, the element to remove will be cleaned up from all linkedUISchemaElements fields in the schema.
  */
@@ -191,7 +191,6 @@ const updateUISchemaElement = (state, payload) => {
     payload.elementUUID,
     state.editor.uiSchema,
     (newUiSchema) => {
-      debugger;
       // options.detail is not part of the editable properties
       const optionsDetail = newUiSchema.options?.detail;
       assign(newUiSchema, payload.changedProperties);
@@ -200,6 +199,45 @@ const updateUISchemaElement = (state, payload) => {
         newUiSchema.options.detail = optionsDetail;
       }
       return getRoot(newUiSchema as EditorUISchemaElement);
+    }
+  );
+};
+
+const updateSchemaVariable = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    undefined,
+    state.editor.schema,
+    undefined,
+    state,
+    (newUiSchema, newSchema) => {
+      const uiSchemaElement: SchemaElement = findByUUID(
+        newUiSchema,
+        payload.elementUUID
+      );
+      const oldVariable = getVariableName(uiSchemaElement);
+      if (uiSchemaElement && oldVariable !== payload.newVariable) {
+        const linkedShemaElement: SchemaElement = findByUUID(
+          newSchema,
+          uiSchemaElement.linkedSchemaElement
+        );
+        if (
+          linkedShemaElement &&
+          linkedShemaElement.parent &&
+          linkedShemaElement.parent.properties
+        ) {
+          linkedShemaElement.parent.properties.delete(oldVariable);
+          linkedShemaElement.parent.properties.set(
+            `${payload.newVariable}`,
+            linkedShemaElement
+          );
+        }
+        uiSchemaElement.scope = `#${getScope(linkedShemaElement)}`;
+      }
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
     }
   );
 };
@@ -315,6 +353,11 @@ const actions = {
   updateUISchemaElement({ commit, state }, payload) {
     const clone = updateUISchemaElement(state, payload);
     commit('SET_UI_SCHEMA', clone);
+  },
+  updateSchemaVariable({ commit, state }, payload) {
+    const clone = updateSchemaVariable(state, payload);
+    commit('SET_SCHEMA', clone.schema);
+    commit('SET_UI_SCHEMA', clone.uiSchema);
   },
 };
 

@@ -12,7 +12,7 @@ import {
   isLayout,
   Layout,
   UISchemaElement,
-  JsonSchema
+  JsonSchema,
 } from '@jsonforms/core';
 import { cloneDeep } from 'lodash';
 import { v4 as uuid } from 'uuid';
@@ -160,4 +160,14 @@ export const cleanUiSchemaLinks = (
     return current;
   });
   return element;
+};
+
+export const getVariableName = (
+  element: EditorUISchemaElement | undefined
+): string => {
+  const validSegment = (pathSegment: string) =>
+    pathSegment !== '#' && pathSegment !== undefined && pathSegment !== '';
+  const validPathSegments = element?.scope.split('/').filter(validSegment);
+
+  return validPathSegments.pop();
 };
