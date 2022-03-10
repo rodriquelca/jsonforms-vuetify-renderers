@@ -99,6 +99,7 @@ const droppableRenderer = defineComponent({
             layoutUUID: this.uischema.uuid,
             index: 0,
             schemaUUID: evt.added.element.uuid,
+            schemaElement,
           });
         } else {
           let provider = evt.added.element.uiSchemaElementProvider();
