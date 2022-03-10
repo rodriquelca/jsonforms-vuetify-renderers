@@ -28,4 +28,7 @@ export interface AppState {
     dataModel: monaco.editor.ITextModel | undefined;
     dataVariables: monaco.editor.ITextModel | undefined;
   };
+  data: object,
+  uischemaModel: object,
+  schemaModel: object
 }

@@ -4,10 +4,9 @@ export let VariableBuilder = {
         _.map(json, (value, key) => {
             if (key != 'parent') {
                 if (typeof value == 'string') {
-                    console.log(json);
                     this.findVariables(jsonVariables, json, key, value);
                 } else if (typeof value == 'object') {
-                    this.build(jsonVariables,value);
+                    this.build(jsonVariables, value);
                 }
             }
         });

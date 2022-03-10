@@ -2,9 +2,9 @@
   <div>
     <json-forms
       v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
-      :data="example.input.data"
-      :schema="resolvedSchema.schema"
-      :uischema="example.input.uischema"
+      :data="data"
+      :schema="schemaModel"
+      :uischema="uischemaModel"
       :renderers="renderers"
       :cells="cells"
       :config="config"
@@ -73,6 +73,9 @@ export default {
     JsonForms,
   },
   props: {
+    data: { type: Object },
+    uischemaModel: { type: Object },
+    schemaModel: { type: Object },
     example: { type: Object as PropType<Example>, required: true },
     renderers: {
       required: true,

@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "properties": {
+    "letter": {
+      "type": "string",
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z"
+      ]
+    },
+    "categories": {
+      "type": "string",
+      "enum": [
+        "example"
+      ]
+    },
+    "entries": {
+      "type": "string",
+      "enum": [
+        "example"
+      ]
+    },
+    "custom": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 20
+    }
+  }
+}

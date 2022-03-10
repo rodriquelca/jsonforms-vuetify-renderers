@@ -101,7 +101,6 @@ export default {
     },
     buildVariables(json: JSON): void {
       let y = VariableBuilder.build(json);
-      console.log(y);
     },
     resolveSchema(schema?: JsonSchema): void {
       const resolvedSchema = this.resolvedSchema;

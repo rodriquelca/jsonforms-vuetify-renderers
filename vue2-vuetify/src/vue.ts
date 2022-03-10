@@ -11,6 +11,14 @@ export {
   ref,
   watch,
   watchEffect,
+  onMounted,
+  onBeforeUpdate,
+  onUpdated,
+  onBeforeUnmount,
+  onActivated,
+  onDeactivated,
+  onErrorCaptured
+
 } from '@vue/composition-api';
 export type { Ref, ComputedRef } from '@vue/composition-api';
 /**

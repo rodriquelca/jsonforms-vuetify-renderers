@@ -1,0 +1,77 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Group",
+      "label": "Enums",
+      "elements": [
+        {
+          "type": "Dropdown",
+          "scope": "#/properties/letter",
+          "options": {
+            "onChange": {
+              "arguments": "store,a,b",
+              "body": " store.set('app/data@custom', a)"
+            }
+          }
+        },
+        {
+          "type": "Dropdown",
+          "scope": "#/properties/categories",
+          "options": {
+            "events": {
+              "deepChange": {
+                "arguments": "_,payload",
+                "body": "return fetch('https://api.publicapis.org/categories').then((res) => res.json()).then((res) => {return _.uniq(_.filter(res.categories, (o)=> { return  o.charAt(0)== payload.letter;}))  ;});"
+              }
+            }
+          },
+          "rule": {
+            "effect": "ONCHANGE",
+            "condition": {
+              "type": "AND",
+              "conditions": [
+                {
+                  "type": "DEPENDENCY",
+                  "scope": "#/properties/letter"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Dropdown",
+          "scope": "#/properties/entries",
+          "options": {
+            "events": {
+              "deepChange": {
+                "arguments": "_,payload",
+                "body": "return fetch('https://api.publicapis.org/entries?'+ ( new URLSearchParams( {category:payload.categories} ) ).toString(),{method: 'GET'}).then((res) => res.json()).then((res) => {return _.uniq(_.map( _.slice(res.entries, 0, 50), (o)=> { return o.API;}))  ;});"
+              }
+            }
+          },
+          "rule": {
+            "effect": "ONCHANGE",
+            "condition": {
+              "type": "AND",
+              "conditions": [
+                {
+                  "type": "DEPENDENCY",
+                  "scope": "#/properties/letter"
+                },
+                {
+                  "type": "DEPENDENCY",
+                  "scope": "#/properties/categories"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/custom"
+        }
+      ]
+    }
+  ]
+}
