@@ -61,10 +61,10 @@ export const variableDecorator: PropertySchemasDecorator = (
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
-    assign(schemas.schema.properties, { scope: { type: 'string' } });
+    assign(schemas.schema.properties, { variable: { type: 'string' } });
 
     (schemas.uiSchema as Layout).elements.push(
-      createPropertyControl('#/properties/scope')
+      createPropertyControl('#/properties/variable')
     );
   }
   return schemas;
@@ -145,6 +145,7 @@ export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
   urlDecorator,
   ruleDecorator,
 ];
-export const designSchemaDecorators: PropertySchemasDecorator[] = [
-  // variableDecorator,
+
+export const schemaVariableDecorators: PropertySchemasDecorator[] = [
+  variableDecorator,
 ];
