@@ -8,19 +8,26 @@
         group="people"
         @change="handleChange"
         :key="'draggable' + uischema.uuid"
+        :sort="true"
+        :disabled="!enabledDrag"
+        ghost-class="ghost"
+        @start="dragging = true"
+        @end="dragging = false"
       >
         <v-col
           v-for="(element, index) in uischema.elements"
-          :key="`${layout.path}-${index}`"
+          :key="`${useJsonForm.layout.value.path}-${index}`"
+          no-gutters
+          :class="{ 'not-draggable': !enabled }"
         >
           <dispatch-renderer
             :key="element.uuid"
-            :schema="schema"
+            :schema="useJsonForm.layout.value.schema"
             :uischema="element"
-            :path="path"
-            :enabled="enabled"
+            :path="useJsonForm.layout.value.path"
+            :enabled="useJsonForm.layout.value.enabled"
             :renderers="customRenderers"
-            :cells="cells"
+            :cells="useJsonForm.layout.value.cells"
           />
         </v-col>
       </draggable>
@@ -29,6 +36,10 @@
   </v-container>
 </template>
 <script lang="ts">
+import { sync } from 'vuex-pathify';
+import { Uri } from 'monaco-editor/esm/vs/editor/editor.api';
+import { getMonacoModelForUri } from '@/core/jsonSchemaValidation';
+import { useExportUiSchema } from '../../util';
 import draggable from 'vuedraggable';
 import {
   uiTypeIs,
@@ -46,7 +57,6 @@ import {
 import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
 import { VContainer, VRow, VCol } from 'vuetify/lib';
 import { entry as DroppableElementRegistration } from './DroppableElement.vue';
-import { EditorUISchemaElement } from '@/model';
 import { createControl, tryFindByUUID } from '@/util';
 import { buildSchemaTree } from '../../model/schema';
 
@@ -64,17 +74,22 @@ const droppableRenderer = defineComponent({
     ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
-    return useVuetifyLayout(useJsonFormsLayout(props));
+    return {
+      useJsonForm: useVuetifyLayout(useJsonFormsLayout(props)),
+      enabledDrag: true,
+      dragging: false,
+    };
   },
   computed: {
     draggableClass(): string {
-      return 'dragArea row ' + this.styles.horizontalLayout.item;
+      return 'dragArea row ' + this.useJsonForm.styles.horizontalLayout.item;
     },
     customRenderers(): Array<any> {
       return (
         this.renderers && [...this.renderers, DroppableElementRegistration]
       );
     },
+    editorUiSchemaModel: sync('app/editor@uiSchema'),
   },
   methods: {
     handleChange(evt) {
@@ -107,18 +122,40 @@ const droppableRenderer = defineComponent({
           this.$store.dispatch('app/addScopedElementToLayout', {
             uiSchemaElement: newUIElement,
             layoutUUID: this.uischema.uuid,
-            index: 0,
+            index: evt.added.newIndex,
             schemaUUID: evt.added.element.uuid,
+            schemaElement,
           });
         } else {
           let provider = evt.added.element.uiSchemaElementProvider();
           this.$store.dispatch('app/addUnscopedElementToLayout', {
             uiSchemaElement: provider,
             layoutUUID: this.uischema.uuid,
-            index: 0,
+            index: evt.added.newIndex,
           });
         }
       }
+      if (evt.moved) {
+        this.updateItemIndex(evt.moved);
+      }
+    },
+    /**
+     * Update Index in uischema
+     */
+    updateItemIndex(item: any) {
+      const auxElement = this.uischema.elements.splice(item.oldIndex, 1);
+      this.uischema.elements.splice(item.newIndex, 0, auxElement[0]);
+      this.setEditorUiSchema(this.editorUiSchemaModel);
+    },
+    /**
+     * Update uiSchema in app/editor
+     */
+    setEditorUiSchema(schemaModel): void {
+      const modelUri = Uri.parse('json://core/specification/uischema.json');
+      getMonacoModelForUri(
+        modelUri,
+        JSON.stringify(useExportUiSchema(schemaModel), null, 2)
+      );
     },
   },
 });
