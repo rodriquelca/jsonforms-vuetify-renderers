@@ -7,14 +7,15 @@ import {
   JsonFormsSubStates,
   Resolve,
 } from '@jsonforms/core';
-import {
-  RendererProps,
-} from '@jsonforms/vue2';
+import { RendererProps } from '@jsonforms/vue2';
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 import { useStyles } from '../styles';
 import {
-  computed, ComputedRef, inject, ref,
+  computed,
+  ComputedRef,
+  inject,
+  ref,
   onBeforeMount,
   onMounted,
   onBeforeUpdate,
@@ -23,11 +24,11 @@ import {
   onUnmounted,
   onActivated,
   onDeactivated,
-  onErrorCaptured
+  onErrorCaptured,
 } from '../vue';
 import Vue from 'vue';
 import Ajv from 'ajv';
-import _ from "lodash";
+import _ from 'lodash';
 
 const useControlAppliedOptions = <I extends { control: any }>(input: I) => {
   return computed(() =>
@@ -210,7 +211,6 @@ export const useAjv = () => {
   return jsonforms.core?.ajv as Ajv;
 };
 
-
 /**
  * Adds styles, isFocused, appliedOptions and onChange
  */
@@ -254,52 +254,69 @@ export const useVuetifyControlExt = <
 
   // CREATE FUNCTION
   let fnOnchange = new Function();
-  if (props.uischema.options && props.uischema.options.onChange) {
-    fnOnchange = new Function(props.uischema.options.onChange.arguments, props.uischema.options.onChange.body);
+  if (
+    props.uischema.options &&
+    props.uischema.options.events &&
+    props.uischema.options.events.onChange
+  ) {
+    fnOnchange = new Function(
+      props.uischema.options.events.onChange.arguments,
+      props.uischema.options.events.onChange.body
+    );
   }
   // CREATE FUNCTION DEEPCHANGE
   let deepChange = new Function();
-  if (props.uischema.options && props.uischema.options.events && props.uischema.options.events.deepChange) {
-    deepChange = new Function(props.uischema.options.events.deepChange.arguments, props.uischema.options.events.deepChange.body);
+  if (
+    props.uischema.options &&
+    props.uischema.options.events &&
+    props.uischema.options.events.deepChange
+  ) {
+    deepChange = new Function(
+      props.uischema.options.events.deepChange.arguments,
+      props.uischema.options.events.deepChange.body
+    );
   }
   //Watch own value
-  const unwatch = store?.watch((state: any) => {
-    return state.app.data[indexc];
-  }, (n: string, o: string) => {
-    pmreactivex.emit(indexc, n);
-    fnOnchange(store, n, o);
-  });
+  const unwatch = store?.watch(
+    (state: any) => {
+      return state.app.data[indexc];
+    },
+    (n: string, o: string) => {
+      pmreactivex.emit(indexc, n);
+      fnOnchange(store, n, o);
+    }
+  );
 
-  const dependencies = _.map(props.uischema.rule && props.uischema.rule.condition.conditions ? props.uischema.rule.condition.conditions : [], e => pathControlSchema(e.scope));
-  pmreactivex.joinFork(dependencies, (payload: any) => {
-    deepChange(_, payload).then((res: any) => {
-      console.log("DEEP");
-      let newArray = res || [];
-      Vue.nextTick(() => {
-        store.set("app/schemaModel@properties." + indexc + ".enum", newArray);
+  const dependencies = _.map(
+    props.uischema.rule && props.uischema.rule.condition.conditions
+      ? props.uischema.rule.condition.conditions
+      : [],
+    (e) => pathControlSchema(e.scope)
+  );
+  pmreactivex.joinFork(
+    dependencies,
+    (payload: any) => {
+      deepChange(_, payload).then((res: any) => {
+        const newArray = res || [];
+        Vue.nextTick(() => {
+          store.set('app/schemaModel@properties.' + indexc + '.enum', newArray);
+        });
       });
-    });
-  }, indexc);
+    },
+    indexc
+  );
 
-  onBeforeMount(() => {
-  });
-  onMounted(() => {
-  });
-  onBeforeUpdate(() => {
-  });
-  onUpdated(() => {
-  });
-  onBeforeUnmount(() => {
-  });
+  onBeforeMount(() => {});
+  onMounted(() => {});
+  onBeforeUpdate(() => {});
+  onUpdated(() => {});
+  onBeforeUnmount(() => {});
   onUnmounted(() => {
     unwatch();
   });
-  onActivated(() => {
-  });
-  onDeactivated(() => {
-  });
-  onErrorCaptured(() => {
-  });
+  onActivated(() => {});
+  onDeactivated(() => {});
+  onErrorCaptured(() => {});
   return {
     ...input,
     styles,
@@ -312,7 +329,6 @@ export const useVuetifyControlExt = <
   };
 };
 
-
 const pathControlSchema = (input: string): string => {
-  return input.split("/").pop() || "";
+  return input.split('/').pop() || '';
 };

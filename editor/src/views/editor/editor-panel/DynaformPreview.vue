@@ -7,7 +7,6 @@
       :uischema="useUiSchema"
       :renderers="renderers"
       :cells="renderers"
-      @change="onChange"
     />
     <v-container v-else>
       <v-row
@@ -48,10 +47,10 @@ import { ResolvedSchema } from '@/core/types';
 import { JsonSchema, JsonFormsI18nState } from '@jsonforms/core';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import JsonRefs from 'json-refs';
-import { createTranslator } from '../i18n';
-import { useExportSchema, useExportUiSchema } from '../util';
+import { createTranslator } from '../../../i18n';
+import { useExportSchema, useExportUiSchema } from '../../../util';
 import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
-import { VariableBuilder } from './../util/mixutils.js';
+import { VariableBuilder } from '../../../util/mixutils.js';
 import { sync } from 'vuex-pathify';
 export default {
   name: 'dymaform-preview',
@@ -67,7 +66,7 @@ export default {
   },
   data() {
     return {
-      data: sync('app/data'),
+      data: sync('app/data') as object,
       resolvedSchema: {
         schema: undefined,
         resolved: false,
@@ -88,8 +87,8 @@ export default {
   },
   computed: {
     useUiSchema: function () {
-      console.log('PREVIEW');
-      this.buildVariables(this.$store.get('app/editor@uiSchema'));
+      console.log('PREVIEWW');
+      console.log(this.$store);
       return useExportUiSchema(this.$store.get('app/editor@uiSchema'));
     },
     useSchema: function () {
@@ -102,8 +101,6 @@ export default {
   methods: {
     onChange(event: JsonFormsChangeEvent): void {
       this.$emit('change', event);
-      console.log('DATA');
-      this.$store.set('app/data', event.data || {});
     },
     buildVariables(json: JSON): void {
       let y = VariableBuilder.build(json);

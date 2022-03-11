@@ -282,10 +282,36 @@ const controlElements = [
       };
     },
   },
-
+  {
+    type: 'Dropdown',
+    label: 'Dropdown',
+    icon: 'mdi-form-dropdown',
+    uiSchemaElementProvider: () => {
+      const control = {
+        "type": "string",
+        "enum": [
+          "One"
+        ]
+      };
+      return {
+        control,
+        variable: "dropdown",
+        uiOptions: {
+          events: {
+            deepChange: {
+              arguments: "",
+              body: ""
+            },
+            onChange: {
+              arguments: "",
+              body: ""
+            },
+          }
+        }
+      };
+    },
+  },
 ];
-
-
 const complexElements = [
   {
     type: 'Control',

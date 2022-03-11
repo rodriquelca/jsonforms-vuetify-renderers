@@ -53,6 +53,9 @@ import {
 
 import { sync } from 'vuex-pathify';
 import { useExportSchema, useExportUiSchema } from '../../util';
+import store from './../../store';
+import pmreactivex from './../../util/pmreactivex';
+
 export default {
   name: 'EditorView',
   props: {},
@@ -123,6 +126,8 @@ export default {
     return {
       setSelection: this.setSelection,
       selection: this.selection,
+      store: store,
+      pmreactivex: pmreactivex,
     };
   },
 };

@@ -123,6 +123,7 @@ const PropertiesPanel = defineComponent({
   },
   methods: {
     updateDesignProperties: function (event: JsonFormsChangeEvent) {
+      console.log('UPDATE DESIGN');
       if (this.uiElement && event.errors.length === 0) {
         this.$store.dispatch('app/updateUISchemaElement', {
           elementUUID: this.uiElement.uuid,

@@ -53,6 +53,58 @@ export const ruleDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const deepChangeDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Control', 'Dropdown'].includes(uiElement?.type)) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, {
+      options: {
+        events: {
+          deepChange: {
+            arguments: '',
+            body1: '',
+          },
+        },
+      },
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/deepchange')
+    );
+  }
+  return schemas;
+};
+
+export const OnChangeDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Control', 'Dropdown'].includes(uiElement?.type)) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, {
+      options: {
+        events: {
+          onChange: {
+            arguments: '',
+            body: '',
+          },
+        },
+      },
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/onchange')
+    );
+  }
+  return schemas;
+};
+
 export const variableDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
@@ -144,6 +196,8 @@ export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
   labelUIElementDecorator,
   urlDecorator,
   ruleDecorator,
+  deepChangeDecorator,
+  OnChangeDecorator,
 ];
 
 export const schemaVariableDecorators: PropertySchemasDecorator[] = [

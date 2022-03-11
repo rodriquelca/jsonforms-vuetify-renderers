@@ -144,6 +144,7 @@ const createUnscopedUiSchema = (state, payload) => {
   );
 };
 const createScopedElementToLayout = (state, payload) => {
+  console.log('LAYOUT');
   return withCloneTrees(
     state.editor.uiSchema,
     payload.layoutUUID,
@@ -268,6 +269,9 @@ const state: AppState = {
     dataModel: undefined,
     dataVariables: undefined,
   },
+  data: {},
+  schemaModel: {},
+  uischemaModel: {},
 };
 // make all mutations
 const mutations = {
@@ -330,6 +334,9 @@ const actions = {
     commit('REMOVE_UISCHEMA_ELEMENT', payload);
   },
   addScopedElementToLayout({ commit }, payload) {
+    console.log('COMMIT');
+    console.log(payload);
+
     const clone = createScopedElementToLayout(state, payload);
     commit('SET_UI_SCHEMA', clone.uiSchema);
   },

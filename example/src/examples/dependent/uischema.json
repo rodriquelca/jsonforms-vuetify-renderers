@@ -9,9 +9,11 @@
           "type": "Dropdown",
           "scope": "#/properties/letter",
           "options": {
-            "onChange": {
-              "arguments": "store,a,b",
-              "body": " store.set('app/data@custom', a)"
+            "events": {
+              "onChange": {
+                "arguments": "store,a,b",
+                "body": " store.set('app/data@custom', a)"
+              }
             }
           }
         },
