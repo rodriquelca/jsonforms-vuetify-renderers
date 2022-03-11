@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style>
-.item span {
+.list-group .v-list-item {
   cursor: grab;
 }
 .list-group .item {
