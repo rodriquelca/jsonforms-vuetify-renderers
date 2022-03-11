@@ -114,15 +114,16 @@ const droppableRenderer = defineComponent({
           this.$store.dispatch('app/addScopedElementToLayout', {
             uiSchemaElement: newUIElement,
             layoutUUID: this.uischema.uuid,
-            index: 0,
+            index: evt.added.newIndex,
             schemaUUID: evt.added.element.uuid,
+            schemaElement,
           });
         } else {
           let provider = evt.added.element.uiSchemaElementProvider();
           this.$store.dispatch('app/addUnscopedElementToLayout', {
             uiSchemaElement: provider,
             layoutUUID: this.uischema.uuid,
-            index: 0,
+            index: evt.added.newIndex,
           });
         }
       }
