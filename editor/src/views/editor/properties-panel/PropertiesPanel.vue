@@ -21,6 +21,14 @@
             :schema="variableSettings.schema"
             @change="updateVariableSettings"
           />
+          <json-forms
+            v-if="requiredSettings"
+            :renderers="renderers"
+            :data="requiredData"
+            :uischema="requiredSettings.uiSchema"
+            :schema="requiredSettings.schema"
+            @change="updateSchemaProperties"
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel-header>
@@ -83,6 +91,8 @@ const PropertiesPanel = defineComponent({
       uiElement: undefined,
       variableSettings: undefined,
       variableData: undefined,
+      requiredSettings: undefined,
+      requiredData: undefined,
     };
   },
   watch: {
@@ -117,6 +127,20 @@ const PropertiesPanel = defineComponent({
             this.uiElement,
             elementSchema
           );
+          this.requiredData = {
+            required:
+              this.schema.schema.required &&
+              this.schema.schema.required.includes(
+                getVariableName(this.uiElement)
+              ),
+            readOnly: elementSchema.schema.readOnly
+              ? elementSchema.schema.readOnly
+              : false,
+          };
+          this.requiredSettings = this.propertiesService.getRequiredSettings(
+            this.uiElement,
+            elementSchema
+          );
         }
       }
     },
@@ -136,6 +160,15 @@ const PropertiesPanel = defineComponent({
         this.$store.dispatch('app/updateSchemaVariable', {
           elementUUID: this.uiElement.uuid,
           newVariable: event.data.variable,
+        });
+      }
+    },
+    updateSchemaProperties: function (event: JsonFormsChangeEvent) {
+      if (this.uiElement && event.errors.length === 0) {
+        this.$store.dispatch('app/updateSchemaProperties', {
+          elementUUID: this.uiElement.uuid,
+          required: event.data.required,
+          readOnly: event.data.readOnly,
         });
       }
     },

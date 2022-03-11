@@ -121,6 +121,38 @@ export const variableDecorator: PropertySchemasDecorator = (
   }
   return schemas;
 };
+export const requiredDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Control'].includes(uiElement?.type)) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, { required: { type: 'boolean' } });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/required')
+    );
+  }
+  return schemas;
+};
+export const readOnlyDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Control'].includes(uiElement?.type)) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, { readOnly: { type: 'boolean' } });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/readOnly')
+    );
+  }
+  return schemas;
+};
 
 export const labelDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
@@ -202,4 +234,9 @@ export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
 
 export const schemaVariableDecorators: PropertySchemasDecorator[] = [
   variableDecorator,
+];
+
+export const schemaRequiredDecorators: PropertySchemasDecorator[] = [
+  requiredDecorator,
+  readOnlyDecorator,
 ];

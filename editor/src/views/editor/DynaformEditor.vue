@@ -43,6 +43,7 @@ import {
   defaultSchemaProviders,
   defaultPropertyRenderers,
   schemaVariableDecorators,
+  schemaRequiredDecorators,
 } from './properties-panel';
 import {
   PropertiesService,
@@ -92,18 +93,21 @@ export default {
     const propertiesServiceProvider = (
       schemaProviders: PropertySchemasProvider[],
       schemaDecorators: PropertySchemasDecorator[],
-      schemaVariableDecorators: PropertySchemasDecorator[]
+      schemaVariableDecorators: PropertySchemasDecorator[],
+      schemaRequiredDecorators: PropertySchemasDecorator[]
     ) =>
       new PropertiesServiceImpl(
         schemaProviders,
         schemaDecorators,
-        schemaVariableDecorators
+        schemaVariableDecorators,
+        schemaRequiredDecorators
       );
 
     this.propertiesService = propertiesServiceProvider(
       defaultSchemaProviders,
       defaultSchemaDecorators,
-      schemaVariableDecorators
+      schemaVariableDecorators,
+      schemaRequiredDecorators
     );
   },
 

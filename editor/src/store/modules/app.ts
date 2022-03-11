@@ -1,4 +1,4 @@
-import { assign } from 'lodash';
+import { assign, remove } from 'lodash';
 // Pathify
 
 import { CategorizationService } from '../../api/categorizationService';
@@ -160,7 +160,7 @@ const createScopedElementToLayout = (state, payload) => {
         newUIElement
       );
 
-      if (!newSchema || !linkElements(newUIElement, newSchema)) {
+      if (!newSchema || !linkElements(newUIElement, payload.schemaElement)) {
         console.error('Could not add new UI element', newUIElement);
         return state;
       }
@@ -235,6 +235,46 @@ const updateSchemaVariable = (state, payload) => {
         }
         uiSchemaElement.scope = `#${getScope(linkedShemaElement)}`;
       }
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
+const updateSchemaProperties = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    undefined,
+    state.editor.schema,
+    undefined,
+    state,
+    (newUiSchema, newSchema) => {
+      const uiSchemaElement: SchemaElement = findByUUID(
+        newUiSchema,
+        payload.elementUUID
+      );
+      const currentVariable = getVariableName(uiSchemaElement);
+      // require procedure
+      newSchema.schema.required = newSchema.schema.required
+        ? newSchema.schema.required
+        : [];
+      if (payload.required) {
+        if (!newSchema.schema.required.includes(currentVariable)) {
+          newSchema.schema.required.push(currentVariable);
+        }
+      } else {
+        const index = newSchema.schema.required.indexOf(currentVariable);
+        if (index !== -1) {
+          newSchema.schema.required.splice(index, 1);
+        }
+      }
+      //readOnly
+      const linkedShemaElement: SchemaElement = findByUUID(
+        newSchema,
+        uiSchemaElement.linkedSchemaElement
+      );
+      assign(linkedShemaElement.schema, { readOnly: payload.readOnly });
       return {
         schema: getRoot(newSchema),
         uiSchema: getRoot(newUiSchema),
@@ -363,6 +403,11 @@ const actions = {
   },
   updateSchemaVariable({ commit, state }, payload) {
     const clone = updateSchemaVariable(state, payload);
+    commit('SET_SCHEMA', clone.schema);
+    commit('SET_UI_SCHEMA', clone.uiSchema);
+  },
+  updateSchemaProperties({ commit, state }, payload) {
+    const clone = updateSchemaProperties(state, payload);
     commit('SET_SCHEMA', clone.schema);
     commit('SET_UI_SCHEMA', clone.uiSchema);
   },
