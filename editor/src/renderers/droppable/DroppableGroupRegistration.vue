@@ -54,9 +54,7 @@ const layoutRenderer = defineComponent({
     return useVuetifyLayout(useJsonFormsLayout(props));
   },
 });
-
 export default layoutRenderer;
-
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: layoutRenderer,
   tester: rankWith(45, and(isLayout, uiTypeIs('Group'))),

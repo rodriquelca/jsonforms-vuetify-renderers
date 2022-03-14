@@ -329,6 +329,32 @@ const controlElements = [
 const complexElements = [
   {
     type: 'Control',
+    label: 'New Grid',
+    icon: 'mdi-grid',
+    //uiSchemaElementProvider: () => createLayout('Group'),
+    uiSchemaElementProvider: () => {
+      const control = {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+          },
+        }
+      }
+      return {
+        control,
+        variable: "grid",
+        uiOptions: {
+          "extendedType": "grid",
+          "restrict": true,
+          "pageSize": 5,
+          "elements": []
+        }
+      };
+    },
+  },
+  {
+    type: 'Control',
     label: 'Grid',
     icon: 'mdi-grid',
     uiSchemaElementProvider: () => {

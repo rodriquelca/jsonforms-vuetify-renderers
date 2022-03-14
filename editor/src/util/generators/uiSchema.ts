@@ -17,7 +17,7 @@ import {
 
 export const createControl = (
   schemaElement: SchemaElement,
-  uiSchemaType: string,
+  uiSchemaType: string
 ): ControlElement & EditorUISchemaElement => {
   return createControlWithScope(
     `#${getScope(schemaElement)}`,
@@ -31,7 +31,6 @@ export const createControlWithScope = (
   options: Record<string, unknown>,
   uiSchemaType: string
 ): ControlElement & EditorUISchemaElement => {
-
   return {
     type: uiSchemaType,
     scope: scope,

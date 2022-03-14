@@ -14,9 +14,9 @@ export const defaultStyles: Styles = {
     item: 'horizontal-layout-item',
   },
   group: {
-    root: 'group',
+    root: 'horizontal-layout',
     label: 'group-label',
-    item: 'group-item',
+    item: 'horizontal-layout-item',
   },
   arrayList: {
     root: 'array-list',

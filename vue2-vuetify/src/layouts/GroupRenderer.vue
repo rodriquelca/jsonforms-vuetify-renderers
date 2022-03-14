@@ -7,13 +7,15 @@
     <v-card-title v-if="layout.uischema.label" :class="styles.group.label">{{
       layout.uischema.label
     }}</v-card-title>
-
-    <v-card-text
-      v-for="(element, index) in layout.uischema.elements"
-      :key="`${layout.path}-${index}`"
-      :class="styles.group.item"
-    >
-      <dispatch-renderer
+<v-container justify-space-around align-content-center>
+    <v-row justify="center" no-gutters>
+      <v-col
+          v-for="(element, index) in layout.uischema.elements"
+          :key="`${layout.path}-${index}`"
+          :class="styles.group.item"
+          no-gutters
+        >
+        <dispatch-renderer
         :schema="layout.schema"
         :uischema="element"
         :path="layout.path"
@@ -21,7 +23,9 @@
         :renderers="layout.renderers"
         :cells="layout.cells"
       />
-    </v-card-text>
+      </v-col>
+    </v-row>
+</v-container>
   </v-card>
 </template>
 
@@ -41,6 +45,7 @@ import {
   useJsonFormsLayout,
   RendererProps,
 } from '@jsonforms/vue2';
+import { VContainer, VRow, VCol } from 'vuetify/lib';
 import { useVuetifyLayout } from '../util';
 import { VCard, VCardTitle, VCardText } from 'vuetify/lib';
 
@@ -51,11 +56,15 @@ const layoutRenderer = defineComponent({
     VCard,
     VCardTitle,
     VCardText,
+    VContainer,
+    VRow,
+    VCol,
   },
   props: {
     ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
+    console.log(useVuetifyLayout(useJsonFormsLayout(props)));
     return useVuetifyLayout(useJsonFormsLayout(props));
   },
 });

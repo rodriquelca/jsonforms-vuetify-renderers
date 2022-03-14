@@ -74,6 +74,7 @@ const droppableRenderer = defineComponent({
     ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
+    console.log(useVuetifyLayout(useJsonFormsLayout(props)));
     return {
       useJsonForm: useVuetifyLayout(useJsonFormsLayout(props)),
       enabledDrag: true,

@@ -11,6 +11,7 @@ import { entry as groupRendererEntry } from './GroupRenderer.vue';
 import { entry as horizontalLayoutRendererEntry } from './HorizontalLayoutRenderer.vue';
 import { entry as verticalLayoutRendererEntry } from './VerticalLayoutRenderer.vue';
 import { default as VerticalLayoutRenderer } from './VerticalLayoutRenderer.vue';
+import { entry as gridRendererEntry } from './GridRenderer.vue';
 
 export { default as ArrayLayoutRenderer } from './ArrayLayoutRenderer.vue';
 export { default as CategorizationRenderer } from './CategorizationRenderer.vue';
@@ -18,6 +19,7 @@ export { default as CategorizationStepperRenderer } from './CategorizationSteppe
 export { default as GroupRenderer } from './GroupRenderer.vue';
 export { default as HorizontalLayoutRenderer } from './HorizontalLayoutRenderer.vue';
 export { default as VerticalLayoutRenderer } from './VerticalLayoutRenderer.vue';
+export { default as GridRenderer } from './GridRenderer.vue';
 
 // default layout renderer is the VerticalLayoutRenderer
 const layoutRendererEntry: JsonFormsRendererRegistryEntry = {
@@ -33,4 +35,5 @@ export const layoutRenderers = [
   groupRendererEntry,
   horizontalLayoutRendererEntry,
   verticalLayoutRendererEntry,
+  gridRendererEntry,
 ];

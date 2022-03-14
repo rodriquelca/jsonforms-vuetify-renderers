@@ -173,6 +173,34 @@ const createScopedElementToLayout = (state, payload) => {
   );
 };
 
+const createElelemtToGrid = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    payload.layoutUUID,
+    state.editor.schema,
+    payload.schemaUUID,
+    state,
+    (newUiSchema, newSchema) => {
+      const newUIElement = payload.uiSchemaElement;
+      (newUiSchema.options as EditorLayout).elements.splice(
+        payload.index,
+        0,
+        newUIElement
+      );
+
+      if (!newSchema || !linkElements(newUIElement, payload.schemaElement)) {
+        console.error('Could not add new UI element', newUIElement);
+        return state;
+      }
+
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
+
 const addPropertyToSchema = (state, payload) => {
   return withCloneTree(
     state.editor.schema,
@@ -182,6 +210,23 @@ const addPropertyToSchema = (state, payload) => {
       const newElement = payload.schemaElement;
       newElement.parent = clonedSchema;
       clonedSchema.properties?.set(`${payload.indexOrProp}`, newElement);
+      return clonedSchema;
+    }
+  );
+};
+const addPropertyToGrid = (state, payload) => {
+  return withCloneTree(
+    state.editor.schema,
+    payload.elementUUID,
+    state.editor,
+    (clonedSchema) => {
+      const newElement = payload.schemaElement;
+      newElement.parent = clonedSchema;
+      //TODO get schema Grid
+      clonedSchema.properties
+        .entries()
+        .next()
+        .value[1].items.properties?.set(`${payload.indexOrProp}`, newElement);
       return clonedSchema;
     }
   );
@@ -395,6 +440,10 @@ const actions = {
     const clone = addPropertyToSchema(state, payload);
     commit('SET_SCHEMA', clone);
   },
+  addPropertyToGrid({ commit }, payload) {
+    const clone = addPropertyToGrid(state, payload);
+    commit('SET_SCHEMA', clone);
+  },
 
   addUnscopedElementToLayout({ commit, state }, payload) {
     const clone = createUnscopedUiSchema(state, payload);
@@ -425,6 +474,10 @@ const actions = {
   updateUISchemaElementOption({ commit, state }, payload) {
     const clone = updateUISchemaElementOption(state, payload);
     commit('SET_UI_SCHEMA', clone);
+  },
+  addElementToGrid({ commit }, payload) {
+    const clone = createElelemtToGrid(state, payload);
+    commit('SET_UI_SCHEMA', clone.uiSchema);
   },
 };
 

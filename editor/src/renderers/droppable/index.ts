@@ -14,6 +14,7 @@ import { entry as droppableVerticalLayoutRenderer } from './DroppableVerticalLay
 import { entry as droppableGroupRenderer } from './DroppableGroupRegistration.vue';
 import { entry as droppableCategorizationRenderer } from './DroppableCategorizationRenderer.vue';
 import { entry as DroppableCategoryRenderer } from './DroppableCategoryRenderer.vue';
+import { entry as DroppableGridRenderer } from './DroppableGridRenderer.vue';
 
 export const droppableRenderers = [
   droppableRenderer,
@@ -22,4 +23,5 @@ export const droppableRenderers = [
   droppableGroupRenderer,
   droppableCategorizationRenderer,
   DroppableCategoryRenderer,
+  DroppableGridRenderer,
 ];
