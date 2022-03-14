@@ -2,9 +2,9 @@
   <div>
     <json-forms
       v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
-      :data="data"
-      :schema="schemaModel"
-      :uischema="uischemaModel"
+      :data="example.input.data"
+      :schema="resolvedSchema.schema"
+      :uischema="example.input.uischema"
       :renderers="renderers"
       :cells="cells"
       :config="config"

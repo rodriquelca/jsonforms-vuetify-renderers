@@ -163,6 +163,21 @@ const controlElements = [
   },
   {
     type: 'Control',
+    label: 'Rich Text',
+    icon: 'mdi-pencil-ruler',
+    uiSchemaElementProvider: () => {
+      const control = createControl("string");
+      return {
+        control,
+        variable: "richText",
+        uiOptions: {
+          "isHtmlViewer": true,
+        }
+      };
+    },
+  },
+  {
+    type: 'Control',
     label: 'Suggest',
     icon: 'mdi-text-box-search-outline',
     uiSchemaElementProvider: () => {

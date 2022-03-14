@@ -44,7 +44,7 @@ import { input as grid } from './grid';
 import { input as variables } from './variables';
 import { input as subForm } from './sub-form';
 import { input as dependent } from './dependent';
-
+import { input as htmlViewer } from './html-viewer';
 
 export const examples = [
   {
@@ -271,5 +271,10 @@ export const examples = [
     id: 'dependent',
     title: 'Dependent Field',
     input: dependent,
+  },
+  {
+    id: 'htmlViewer',
+    title: 'HTML Viewer',
+    input: htmlViewer,
   },
 ];
