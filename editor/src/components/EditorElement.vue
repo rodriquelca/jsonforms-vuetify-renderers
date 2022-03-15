@@ -71,7 +71,9 @@ export default {
     },
   },
   methods: {
-    onRemove: function () {
+    onRemove: function (e) {
+      e.preventDefault();
+      e.stopPropagation();
       if (!hasChildren(this.wrappedElement)) {
         this.$store.dispatch(
           'app/removeUiSchemaElement',
@@ -80,7 +82,10 @@ export default {
       }
     },
     onClick: function () {
-      this.setSelection(this.wrappedElement.uuid);
+      // this.setSelection(this.wrappedElement.uuid);
+      debugger;
+      this.$store.set('app/editor@settings', true);
+      this.$store.set('app/editor@selectedElement', this.wrappedElement.uuid);
     },
   },
 };

@@ -172,6 +172,7 @@ const controlElements = [
         variable: "richText",
         uiOptions: {
           "isHtmlViewer": true,
+          "content": "Rich Text"
         }
       };
     },

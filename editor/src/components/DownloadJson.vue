@@ -2,6 +2,7 @@
   <div>
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
+        <v-spacer></v-spacer>
         <v-btn
           large
           icon
@@ -23,9 +24,6 @@
     >
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
           <template>
             <v-tabs v-model="tab" align-with-title>
               <v-tabs-slider color="yellow"></v-tabs-slider>
@@ -36,6 +34,9 @@
           <v-toolbar-items>
             <v-btn dark text @click="dialog = false"> Save </v-btn>
           </v-toolbar-items>
+          <v-btn icon dark @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-toolbar>
         <v-tabs-items v-model="tab">
           <v-tab-item :key="0">

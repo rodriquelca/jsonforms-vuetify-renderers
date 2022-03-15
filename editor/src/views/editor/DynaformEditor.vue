@@ -1,13 +1,12 @@
 <template>
   <!-- <v-container fill-height fluid>
     TODOO -->
-  <div class="px-2 my-8" height="100%">
-    <v-row>
-      <v-col cols="3">
+  <v-container class="px-0 my-1">
+    <v-row no-gutters height="100%">
+      <v-col cols="2">
         <PalletePanel :schema="editorSchema" />
       </v-col>
-      <v-divider vertical></v-divider>
-      <v-col cols="6">
+      <v-col>
         <EditorPanel
           :editorTabs="editorTabs"
           :renderers="editorRenderers"
@@ -16,8 +15,8 @@
           :selection="selection"
         />
       </v-col>
-      <v-divider vertical></v-divider>
-      <v-col cols="3">
+
+      <!-- <v-col cols="3" v-if="true">
         <PropertiesPanel
           :renderers="propertyRenderers"
           :selection="selection"
@@ -25,32 +24,32 @@
           :uischema="editorUischema || false"
           :propertiesService="propertiesService"
         />
-      </v-col>
+      </v-col> -->
     </v-row>
-  </div>
+  </v-container>
 </template>
 
 <script lang="ts">
 import PalletePanel from './pallete-panel';
 import EditorPanel from './editor-panel';
-import PropertiesPanel from './properties-panel';
+// import PropertiesPanel from './properties-panel';
 import DynaformPreview from '../../components/DynaformPreview.vue';
 import { defaultEditorRenderers } from '../../renderers';
 import { ExampleSchemaService } from '../../api/exampleSchemaService';
-import { SelectedElement } from './../../selection';
-import {
-  defaultSchemaDecorators,
-  defaultSchemaProviders,
-  defaultPropertyRenderers,
-  schemaVariableDecorators,
-  schemaRequiredDecorators,
-} from './properties-panel';
-import {
-  PropertiesService,
-  PropertiesServiceImpl,
-  PropertySchemasDecorator,
-  PropertySchemasProvider,
-} from './properties-panel/propertiesService';
+// import { SelectedElement } from './../../selection';
+// import {
+//   defaultSchemaDecorators,
+//   defaultSchemaProviders,
+//   defaultPropertyRenderers,
+//   schemaVariableDecorators,
+//   schemaRequiredDecorators,
+// } from './properties-panel';
+// import {
+//   // PropertiesService,
+//   PropertiesServiceImpl,
+//   PropertySchemasDecorator,
+//   PropertySchemasProvider,
+// } from './properties-panel/propertiesService';
 
 import { sync } from 'vuex-pathify';
 import { useExportSchema, useExportUiSchema } from '../../util';
@@ -60,7 +59,7 @@ export default {
   components: {
     PalletePanel,
     EditorPanel,
-    PropertiesPanel,
+    // PropertiesPanel,
   },
   data() {
     return {
@@ -72,10 +71,10 @@ export default {
         },
       ],
       editorRenderers: defaultEditorRenderers,
-      propertyRenderers: defaultPropertyRenderers,
+      // propertyRenderers: defaultPropertyRenderers,
 
       schemaService: new ExampleSchemaService(),
-      schemaDecorators: defaultSchemaDecorators,
+      // schemaDecorators: defaultSchemaDecorators,
       propertiesService: {},
     };
   },
@@ -87,25 +86,25 @@ export default {
     this.schemaService
       .getSchema()
       .then((schema) => this.$store.dispatch('app/setSchema', { schema }));
-    const propertiesServiceProvider = (
-      schemaProviders: PropertySchemasProvider[],
-      schemaDecorators: PropertySchemasDecorator[],
-      schemaVariableDecorators: PropertySchemasDecorator[],
-      schemaRequiredDecorators: PropertySchemasDecorator[]
-    ) =>
-      new PropertiesServiceImpl(
-        schemaProviders,
-        schemaDecorators,
-        schemaVariableDecorators,
-        schemaRequiredDecorators
-      );
+    // const propertiesServiceProvider = (
+    //   schemaProviders: PropertySchemasProvider[],
+    //   schemaDecorators: PropertySchemasDecorator[],
+    //   schemaVariableDecorators: PropertySchemasDecorator[],
+    //   schemaRequiredDecorators: PropertySchemasDecorator[]
+    // ) =>
+    //   new PropertiesServiceImpl(
+    //     schemaProviders,
+    //     schemaDecorators,
+    //     schemaVariableDecorators,
+    //     schemaRequiredDecorators
+    //   );
 
-    this.propertiesService = propertiesServiceProvider(
-      defaultSchemaProviders,
-      defaultSchemaDecorators,
-      schemaVariableDecorators,
-      schemaRequiredDecorators
-    );
+    // this.propertiesService = propertiesServiceProvider(
+    //   defaultSchemaProviders,
+    //   defaultSchemaDecorators,
+    //   schemaVariableDecorators,
+    //   schemaRequiredDecorators
+    // );
   },
 
   computed: {

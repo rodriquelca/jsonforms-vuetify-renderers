@@ -5,7 +5,13 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-container>testasdffasd</v-container>
+    <v-container>
+      <editor
+        :init="editorSettings"
+        :value="appliedOptions.content"
+        v-on:onChange="this.onChangeHandler"
+      />
+    </v-container>
   </control-wrapper>
 </template>
 
@@ -28,23 +34,48 @@ import {
 import { useVuetifyControl, ControlWrapper } from '@jsonforms/vue2-vuetify';
 
 import { VContainer } from 'vuetify/lib';
+import Editor from '@tinymce/tinymce-vue';
 
 const controlRenderer = defineComponent({
   name: 'html-viewer-control-renderer',
   components: {
     ControlWrapper,
     VContainer,
+    Editor,
   },
   props: {
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(
-      useJsonFormsControl(props),
-      (value) => value || undefined
-    );
+    return {
+      ...useVuetifyControl(
+        useJsonFormsControl(props),
+        (value) => value || undefined
+      ),
+      ...{
+        editorSettings: {
+          inline: true,
+          menubar: false,
+          // plugins: ['link', 'lists'],
+          // toolbar:
+          //   'undo redo | link | styleselect | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
+          // skin: false,
+          // relative_urls: false,
+          // remove_script_host: false,
+        },
+      },
+    };
   },
-  computed: {},
+  methods: {
+    onChangeHandler(e, editor) {
+      this.$store.dispatch('app/updateUISchemaElementOption', {
+        elementUUID: this.control.uischema.uuid,
+        changedProperties: {
+          content: editor.getContent(),
+        },
+      });
+    },
+  },
 });
 
 export default controlRenderer;

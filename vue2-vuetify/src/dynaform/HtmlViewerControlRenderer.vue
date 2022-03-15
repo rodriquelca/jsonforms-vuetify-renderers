@@ -5,7 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-container v-html="control.data"></v-container>
+    <v-container v-html="appliedOptions.content"></v-container>
   </control-wrapper>
 </template>
 

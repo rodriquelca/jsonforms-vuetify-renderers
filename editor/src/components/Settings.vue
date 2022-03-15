@@ -6,7 +6,10 @@
           large
           icon
           dark
-          @click.stop="settings = !settings"
+          @click.stop="
+            settings = !settings;
+            selectedElement = undefined;
+          "
           v-on="onTooltip"
         >
           <v-icon size="30" color="primary">mdi-cog</v-icon>
@@ -33,177 +36,16 @@
       </v-toolbar>
 
       <v-divider />
+      <PropertiesPanel
+        v-if="selectedElement"
+        :renderers="propertyRenderers"
+        :schema="editorSchema || false"
+        :uischema="editorUischema || false"
+        :propertiesService="propertiesService"
+      />
+      <CommonSettings v-else />
 
-      <v-container>
-        <v-row><v-col>Theme</v-col></v-row>
-        <v-row>
-          <v-col>
-            <v-btn-toggle
-              v-model="$vuetify.theme.dark"
-              borderless
-              mandatory
-              group
-              color="primary"
-              style="display: grid; grid-template-columns: 1fr 1fr"
-            >
-              <v-btn :value="false">
-                <span class="hidden-sm-and-down">Light</span>
-
-                <v-icon right> mdi-weather-sunny </v-icon>
-              </v-btn>
-
-              <v-btn :value="true">
-                <span class="hidden-sm-and-down">Dark</span>
-
-                <v-icon right> mdi-weather-night </v-icon>
-              </v-btn>
-            </v-btn-toggle>
-          </v-col>
-        </v-row>
-      </v-container>
-
-      <v-divider />
-
-      <v-container>
-        <v-row><v-col>Direction</v-col></v-row>
-        <v-row>
-          <v-col>
-            <v-btn-toggle
-              v-model="$vuetify.rtl"
-              borderless
-              mandatory
-              group
-              color="primary"
-              style="display: grid; grid-template-columns: 1fr 1fr"
-            >
-              <v-btn :value="false">
-                <span class="hidden-sm-and-down">LTR</span>
-
-                <v-icon right> mdi-format-textdirection-l-to-r</v-icon>
-              </v-btn>
-
-              <v-btn :value="true">
-                <span class="hidden-sm-and-down">RTL</span>
-
-                <v-icon right> mdi-format-textdirection-r-to-l </v-icon>
-              </v-btn>
-            </v-btn-toggle>
-          </v-col>
-        </v-row>
-      </v-container>
-
-      <v-divider />
-
-      <v-container>
-        <v-row><v-col>Validation</v-col></v-row>
-        <v-row>
-          <v-col>
-            <v-select
-              outlined
-              persistent-hint
-              dense
-              v-model="validationMode"
-              :items="validationModes"
-            ></v-select>
-          </v-col>
-        </v-row>
-      </v-container>
-
-      <v-divider />
-
-      <v-container>
-        <v-row><v-col>Locale (Mostly in basic example)</v-col></v-row>
-        <v-row>
-          <v-col>
-            <v-select
-              outlined
-              persistent-hint
-              dense
-              v-model="locale"
-              :items="locales"
-            ></v-select>
-          </v-col>
-        </v-row>
-      </v-container>
-
-      <v-divider />
-
-      <v-container>
-        <v-row><v-col>Options</v-col></v-row>
-        <v-row>
-          <v-col>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on: onTooltip }">
-                <v-switch
-                  v-model="hideRequiredAsterisk"
-                  label="Hide Required Asterisk"
-                  v-on="onTooltip"
-                ></v-switch>
-              </template>
-              If asterisks in labels for required fields should be hidden
-            </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on: onTooltip }">
-                <v-switch
-                  v-model="showUnfocusedDescription"
-                  label="Show Unfocused Description"
-                  v-on="onTooltip"
-                ></v-switch>
-              </template>
-              If input descriptions should hide when not focused
-            </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on: onTooltip }">
-                <v-switch
-                  v-model="restrict"
-                  label="Restrict"
-                  v-on="onTooltip"
-                ></v-switch>
-              </template>
-              Whether to restrict the number of characters to maxLength, if
-              specified in the JSON schema
-            </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on: onTooltip }">
-                <v-switch
-                  v-model="readonly"
-                  label="Read-Only"
-                  v-on="onTooltip"
-                ></v-switch>
-              </template>
-              If true, sets all controls to read-only
-            </v-tooltip>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on: onTooltip }">
-                <v-switch
-                  v-model="locale"
-                  label="Switch beetwen english and german locale"
-                  v-on="onTooltip"
-                ></v-switch>
-              </template>
-              Only applies to basic example
-            </v-tooltip>
-          </v-col>
-        </v-row>
-      </v-container>
-
-      <v-divider />
+      <!-- <v-divider /> -->
     </v-navigation-drawer>
   </div>
 </template>
@@ -211,8 +53,26 @@
 <script lang="ts">
 import { sync } from 'vuex-pathify';
 
+import {
+  defaultSchemaDecorators,
+  defaultSchemaProviders,
+  defaultPropertyRenderers,
+  schemaVariableDecorators,
+  schemaRequiredDecorators,
+} from '../views/editor/properties-panel';
+import PropertiesPanel from '../views/editor/properties-panel';
+import {
+  PropertiesServiceImpl,
+  PropertySchemasDecorator,
+  PropertySchemasProvider,
+} from '../views/editor/properties-panel/propertiesService';
+import CommonSettings from './CommonSettings.vue';
 export default {
   name: 'Settings',
+  components: {
+    PropertiesPanel,
+    CommonSettings,
+  },
   computed: {
     validationMode: sync('app/jsonforms@validationMode'),
     hideRequiredAsterisk: sync('app/jsonforms@config.hideRequiredAsterisk'),
@@ -222,10 +82,14 @@ export default {
     restrict: sync('app/jsonforms@config.restrict'),
     readonly: sync('app/jsonforms@readonly'),
     locale: sync('app/jsonforms@locale'),
+    settings: sync('app/editor@settings'),
+    editorSchema: sync('app/editor@schema'),
+    editorUischema: sync('app/editor@uiSchema'),
+    selectedElement: sync('app/editor@selectedElement'),
   },
+
   data: function () {
     return {
-      settings: false,
       validationModes: [
         { text: 'Validate And Show', value: 'ValidateAndShow' },
         { text: 'Validate And Hide', value: 'ValidateAndHide' },
@@ -235,7 +99,30 @@ export default {
         { text: 'English (en)', value: 'en' },
         { text: 'German (de)', value: 'de' },
       ],
+      propertyRenderers: defaultPropertyRenderers,
+      schemaDecorators: defaultSchemaDecorators,
+      propertiesService: {},
     };
+  },
+  mounted() {
+    const propertiesServiceProvider = (
+      schemaProviders: PropertySchemasProvider[],
+      schemaDecorators: PropertySchemasDecorator[],
+      schemaVariableDecorators: PropertySchemasDecorator[],
+      schemaRequiredDecorators: PropertySchemasDecorator[]
+    ) =>
+      new PropertiesServiceImpl(
+        schemaProviders,
+        schemaDecorators,
+        schemaVariableDecorators,
+        schemaRequiredDecorators
+      );
+    this.propertiesService = propertiesServiceProvider(
+      defaultSchemaProviders,
+      defaultSchemaDecorators,
+      schemaVariableDecorators,
+      schemaRequiredDecorators
+    );
   },
 };
 </script>

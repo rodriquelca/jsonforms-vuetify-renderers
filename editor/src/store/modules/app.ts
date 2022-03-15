@@ -202,6 +202,19 @@ const updateUISchemaElement = (state, payload) => {
     }
   );
 };
+const updateUISchemaElementOption = (state, payload) => {
+  return withCloneTree(
+    state.editor.uiSchema,
+    payload.elementUUID,
+    state.editor.uiSchema,
+    (newUiSchema) => {
+      debugger;
+      newUiSchema.options = newUiSchema.options || {};
+      assign(newUiSchema.options, payload.changedProperties);
+      return getRoot(newUiSchema as EditorUISchemaElement);
+    }
+  );
+};
 
 const updateSchemaVariable = (state, payload) => {
   return withCloneTrees(
@@ -287,6 +300,8 @@ const state: AppState = {
     paletteElements: [],
     uiSchema: undefined,
     schema: undefined,
+    settings: false,
+    selectedElement: '',
   },
   jsonforms: {
     readonly: false,
@@ -403,6 +418,10 @@ const actions = {
     const clone = updateSchemaProperties(state, payload);
     commit('SET_SCHEMA', clone.schema);
     commit('SET_UI_SCHEMA', clone.uiSchema);
+  },
+  updateUISchemaElementOption({ commit, state }, payload) {
+    const clone = updateUISchemaElementOption(state, payload);
+    commit('SET_UI_SCHEMA', clone);
   },
 };
 

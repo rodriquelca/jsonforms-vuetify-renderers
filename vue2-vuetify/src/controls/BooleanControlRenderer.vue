@@ -18,6 +18,7 @@
       :error-messages="control.errors"
       :indeterminate="control.data === undefined"
       :value="control.data"
+      :input-value="control.data"
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
@@ -50,6 +51,9 @@ const controlRenderer = defineComponent({
   },
   props: {
     ...rendererProps<ControlElement>(),
+  },
+  mounted() {
+    console.log(this);
   },
   setup(props: RendererProps<ControlElement>) {
     return useVuetifyControl(
