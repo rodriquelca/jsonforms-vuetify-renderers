@@ -1,8 +1,4 @@
 <template>
-  <!-- <v-container>
-    <h4>Properties</h4>
-    
-  </v-container> -->
   <v-expansion-panels accordion no-gutters>
     <v-expansion-panel>
       <v-expansion-panel>
@@ -45,7 +41,6 @@
           :schema="designProperties.schema"
           @change="updateDesignProperties"
         />
-        <!-- </v-card> -->
       </v-expansion-panel-content>
     </v-expansion-panel>
     <v-expansion-panel>

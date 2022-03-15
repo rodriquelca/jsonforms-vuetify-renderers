@@ -1,6 +1,4 @@
 <template>
-  <!-- <v-container fill-height fluid>
-    TODOO -->
   <v-container class="px-0 my-1">
     <v-row no-gutters height="100%">
       <v-col cols="2">
@@ -15,16 +13,6 @@
           :selection="selection"
         />
       </v-col>
-
-      <!-- <v-col cols="3" v-if="true">
-        <PropertiesPanel
-          :renderers="propertyRenderers"
-          :selection="selection"
-          :schema="editorSchema || false"
-          :uischema="editorUischema || false"
-          :propertiesService="propertiesService"
-        />
-      </v-col> -->
     </v-row>
   </v-container>
 </template>
@@ -32,24 +20,9 @@
 <script lang="ts">
 import PalletePanel from './pallete-panel';
 import EditorPanel from './editor-panel';
-// import PropertiesPanel from './properties-panel';
 import DynaformPreview from '../../components/DynaformPreview.vue';
 import { defaultEditorRenderers } from '../../renderers';
 import { ExampleSchemaService } from '../../api/exampleSchemaService';
-// import { SelectedElement } from './../../selection';
-// import {
-//   defaultSchemaDecorators,
-//   defaultSchemaProviders,
-//   defaultPropertyRenderers,
-//   schemaVariableDecorators,
-//   schemaRequiredDecorators,
-// } from './properties-panel';
-// import {
-//   // PropertiesService,
-//   PropertiesServiceImpl,
-//   PropertySchemasDecorator,
-//   PropertySchemasProvider,
-// } from './properties-panel/propertiesService';
 
 import { sync } from 'vuex-pathify';
 import { useExportSchema, useExportUiSchema } from '../../util';
@@ -59,7 +32,6 @@ export default {
   components: {
     PalletePanel,
     EditorPanel,
-    // PropertiesPanel,
   },
   data() {
     return {
@@ -71,40 +43,15 @@ export default {
         },
       ],
       editorRenderers: defaultEditorRenderers,
-      // propertyRenderers: defaultPropertyRenderers,
-
       schemaService: new ExampleSchemaService(),
-      // schemaDecorators: defaultSchemaDecorators,
       propertiesService: {},
     };
-  },
-  watch: {
-    // whenever question changes, this function will run
   },
 
   mounted() {
     this.schemaService
       .getSchema()
       .then((schema) => this.$store.dispatch('app/setSchema', { schema }));
-    // const propertiesServiceProvider = (
-    //   schemaProviders: PropertySchemasProvider[],
-    //   schemaDecorators: PropertySchemasDecorator[],
-    //   schemaVariableDecorators: PropertySchemasDecorator[],
-    //   schemaRequiredDecorators: PropertySchemasDecorator[]
-    // ) =>
-    //   new PropertiesServiceImpl(
-    //     schemaProviders,
-    //     schemaDecorators,
-    //     schemaVariableDecorators,
-    //     schemaRequiredDecorators
-    //   );
-
-    // this.propertiesService = propertiesServiceProvider(
-    //   defaultSchemaProviders,
-    //   defaultSchemaDecorators,
-    //   schemaVariableDecorators,
-    //   schemaRequiredDecorators
-    // );
   },
 
   computed: {

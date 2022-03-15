@@ -1,10 +1,5 @@
 <template>
   <div class="">
-    <!-- <v-tabs> -->
-    <!-- <v-tabs-slider></v-tabs-slider>
-      <v-tab class="primary--text">Palette </v-tab> -->
-
-    <!-- <v-tab-item> -->
     <v-list-group v-for="(group, j) in paletteElements" :key="j">
       <template v-slot:activator>
         <v-list-item-content>
@@ -31,8 +26,6 @@
         </draggable>
       </v-list>
     </v-list-group>
-    <!-- </v-tab-item> -->
-    <!-- </v-tabs> -->
   </div>
 </template>
 

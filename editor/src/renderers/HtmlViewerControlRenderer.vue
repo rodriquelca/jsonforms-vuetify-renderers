@@ -30,7 +30,6 @@ import {
   useJsonFormsControl,
   RendererProps,
 } from '@jsonforms/vue2';
-// import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { useVuetifyControl, ControlWrapper } from '@jsonforms/vue2-vuetify';
 
 import { VContainer } from 'vuetify/lib';
@@ -56,12 +55,6 @@ const controlRenderer = defineComponent({
         editorSettings: {
           inline: true,
           menubar: false,
-          // plugins: ['link', 'lists'],
-          // toolbar:
-          //   'undo redo | link | styleselect | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-          // skin: false,
-          // relative_urls: false,
-          // remove_script_host: false,
         },
       },
     };
