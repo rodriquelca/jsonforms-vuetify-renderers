@@ -82,8 +82,6 @@ export default {
       }
     },
     onClick: function () {
-      // this.setSelection(this.wrappedElement.uuid);
-      debugger;
       this.$store.set('app/editor@settings', true);
       this.$store.set('app/editor@selectedElement', this.wrappedElement.uuid);
     },
