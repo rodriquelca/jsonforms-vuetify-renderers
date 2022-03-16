@@ -1,7 +1,6 @@
 <template>
   <v-card
-    class="d-flex align-center justify-center pa-4 mx-auto"
-    max-width="550"
+    class="d-flex align-center justify-center px-10 mx-auto"
     min-height="76"
     height="auto"
     outlined

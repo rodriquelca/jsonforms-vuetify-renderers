@@ -1,15 +1,11 @@
 <template>
-  <!-- <v-container>
-    <h4>Properties</h4>
-    
-  </v-container> -->
-  <v-expansion-panels accordion>
+  <v-expansion-panels accordion no-gutters>
     <v-expansion-panel>
       <v-expansion-panel>
         <v-expansion-panel-header>
           <div>
             <v-icon>mdi-application-variable</v-icon>
-            <span> Variable </span>
+            <span> Variable</span>
           </div>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -39,14 +35,12 @@
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <json-forms
-          v-if="designProperties"
           :renderers="renderers"
-          :data="data"
+          :data="dataElement"
           :uischema="designProperties.uiSchema"
           :schema="designProperties.schema"
           @change="updateDesignProperties"
         />
-        <!-- </v-card> -->
       </v-expansion-panel-content>
     </v-expansion-panel>
     <v-expansion-panel>
@@ -62,6 +56,7 @@
 </template>
 
 <script lang="ts">
+import { sync } from 'vuex-pathify';
 import { isEqual, omit } from 'lodash';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import { defineComponent, inject, ref } from '../../../util/vue';
@@ -86,7 +81,7 @@ const PropertiesPanel = defineComponent({
   },
   data() {
     return {
-      data: undefined,
+      dataElement: undefined,
       designProperties: undefined,
       uiElement: undefined,
       variableSettings: undefined,
@@ -95,10 +90,23 @@ const PropertiesPanel = defineComponent({
       requiredData: undefined,
     };
   },
+  mounted() {
+    console.log('mounted');
+    this.setSelection(this.selectedElement);
+  },
   watch: {
-    selection(newSelection) {
-      this.uiElement = tryFindByUUID(this.uischema, this.selection);
-      this.data = omit(this.uiElement, [
+    selectedElement(newSelection) {
+      this.setSelection(newSelection);
+    },
+  },
+  computed: {
+    selectedElement: sync('app/editor@selectedElement'),
+  },
+
+  methods: {
+    setSelection: function (newSelection) {
+      this.uiElement = tryFindByUUID(this.uischema, newSelection);
+      this.dataElement = omit(this.uiElement, [
         'uuid',
         'parent',
         'elements',
@@ -118,12 +126,18 @@ const PropertiesPanel = defineComponent({
           this.uiElement,
           elementSchema
         );
+
         // variable data
         if (this.uiElement.scope) {
           this.variableData = {
             variable: getVariableName(this.uiElement),
           };
           this.variableSettings = this.propertiesService.getVariableSettings(
+            this.uiElement,
+            elementSchema
+          );
+
+          this.requiredSettings = this.propertiesService.getRequiredSettings(
             this.uiElement,
             elementSchema
           );
@@ -137,15 +151,9 @@ const PropertiesPanel = defineComponent({
               ? elementSchema.schema.readOnly
               : false,
           };
-          this.requiredSettings = this.propertiesService.getRequiredSettings(
-            this.uiElement,
-            elementSchema
-          );
         }
       }
     },
-  },
-  methods: {
     updateDesignProperties: function (event: JsonFormsChangeEvent) {
       if (this.uiElement && event.errors.length === 0) {
         this.$store.dispatch('app/updateUISchemaElement', {

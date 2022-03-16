@@ -10,19 +10,17 @@ import {
   getUISchemaPath,
   hasChildren,
 } from '../../model/uischema';
-import {
-  SchemaElement,
-
-} from '../../model/schema';
+import { SchemaElement } from '../../model/schema';
 // declare your own store states
 
 export interface AppState {
-  editor :{
-    paletteElements: Array<any>,
-    uiSchema: EditorUISchemaElement | undefined,
-    schema: SchemaElement | undefined
-  }
-  
+  editor: {
+    paletteElements: Array<any>;
+    uiSchema: EditorUISchemaElement | undefined;
+    schema: SchemaElement | undefined;
+    settings: boolean | undefined;
+    selectedElement: string | undefined;
+  };
   jsonforms: {
     readonly: boolean;
     validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation';

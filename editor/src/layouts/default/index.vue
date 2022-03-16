@@ -2,10 +2,11 @@
   <v-app>
     <default-app-bar />
     <default-view />
-    <v-footer padless>
-      <v-col class="lighten-0 py-4 text-right" cols="12">
-        ProcessMaker 2022
-      </v-col>
+    <v-footer padless fixed>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon> mdi-cog-off </v-icon>
+      </v-btn>
     </v-footer>
   </v-app>
 </template>
