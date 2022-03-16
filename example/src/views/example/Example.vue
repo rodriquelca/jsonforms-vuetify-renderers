@@ -210,6 +210,7 @@ import { Example } from '@/core/types';
 import store from './../../store';
 import Vue from 'vue';
 import pmreactivex from './../../util/pmreactivex';
+import { JForm as JF } from '@jsonforms/vue2';
 
 const myStyles = mergeStyles(defaultStyles, {
   control: { root: 'my-control' },
@@ -548,6 +549,11 @@ export default {
       styles: myStyles,
       store: store,
       pmreactivex: pmreactivex,
+      JForm: new JF({
+        data: {
+          store: this.$store,
+        },
+      }),
     };
   },
 };

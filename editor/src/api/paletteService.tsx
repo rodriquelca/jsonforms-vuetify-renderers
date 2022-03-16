@@ -288,10 +288,7 @@ const controlElements = [
     icon: 'mdi-form-dropdown',
     uiSchemaElementProvider: () => {
       const control = {
-        "type": "string",
-        "enum": [
-          "One"
-        ]
+        "type": "string"
       };
       return {
         control,
@@ -299,14 +296,15 @@ const controlElements = [
         uiOptions: {
           events: {
             deepChange: {
-              arguments: "",
+              arguments: "_,payload",
               body: ""
             },
             onChange: {
-              arguments: "",
+              arguments: "JForm, nval, oval",
               body: ""
             },
-          }
+          },
+          items: []
         }
       };
     },

@@ -39,7 +39,8 @@ import {
   EditorUISchemaElement,
   getVariableName,
 } from '../../model/uischema';
-import { setSchema } from '@jsonforms/core';
+
+import { CollectionStore } from '@jsonforms/vue2';
 /** Removes the given UI element from its tree.
  *  If a SchemaElement is provided, the element to remove will be cleaned up from all linkedUISchemaElements fields in the schema.
  */
@@ -144,7 +145,6 @@ const createUnscopedUiSchema = (state, payload) => {
   );
 };
 const createScopedElementToLayout = (state, payload) => {
-  console.log('LAYOUT');
   return withCloneTrees(
     state.editor.uiSchema,
     payload.layoutUUID,
@@ -316,6 +316,7 @@ const state: AppState = {
 // make all mutations
 const mutations = {
   ...make.mutations(state),
+  ...CollectionStore.mutations,
   SET_SCHEMA: (state, value) => {
     state.editor.schema = value;
   },
@@ -358,12 +359,11 @@ const mutations = {
     state.editor.uiSchema = clone.uiSchema;
   },
 };
-
 // const actions = make.actions(state);
 const actions = {
   // automatically create only `setItems()` action
   ...make.actions(state),
-
+  ...CollectionStore.actions,
   // manually add load items action
   getPaletteElements({ commit }) {
     const paletteService = new DefaultPaletteService();
@@ -374,9 +374,6 @@ const actions = {
     commit('REMOVE_UISCHEMA_ELEMENT', payload);
   },
   addScopedElementToLayout({ commit }, payload) {
-    console.log('COMMIT');
-    console.log(payload);
-
     const clone = createScopedElementToLayout(state, payload);
     commit('SET_UI_SCHEMA', clone.uiSchema);
   },

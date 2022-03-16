@@ -1,25 +1,27 @@
 <template>
-  <div class="pm-card-property">
-    <h5>Deep Change</h5>
-    <span class="text--disabled text-caption">
-      {{ ruleDescription }}
-    </span>
-    <monaco-editor
-      ref="monacoEditorDeep"
-      :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
-      :language="language"
-      height="200"
-      :options="{ minimap: { enabled: false }, fontSize: 10 }"
-      v-model="ruleSchema"
-      :editorBeforeMount="editorBeforeMount"
-    >
-    </monaco-editor>
+  <v-card class="mx-auto" outlined>
+    <v-container>
+      <h5>Deep Change</h5>
+      <span class="text--disabled text-caption">
+        {{ ruleDescription }}
+      </span>
+      <monaco-editor
+        ref="monacoEditorDeep"
+        :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
+        :language="language"
+        height="50"
+        :options="{ minimap: { enabled: false }, fontSize: 10 }"
+        v-model="ruleSchema"
+        :editorBeforeMount="editorBeforeMount"
+      >
+      </monaco-editor>
 
-    <div class="red--text text--lighten-1" :hidden="!invalidJson">
-      {{ invalidJsonMessage }}
-    </div>
-    <v-btn x-small depressed color="primary" @click="onClick"> Apply </v-btn>
-  </div>
+      <div class="red--text text--lighten-1" :hidden="!invalidJson">
+        {{ invalidJsonMessage }}
+      </div>
+      <v-btn x-small depressed color="primary" @click="onClick"> Apply </v-btn>
+    </v-container>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -52,7 +54,10 @@ const controlRenderer = defineComponent({
     invalidJsonMessage: 'Not a valid rule JSON.',
   }),
   mounted() {
-    this.ruleSchema = monaco.editor.createModel('', this.language);
+    this.ruleSchema = monaco.editor.createModel(
+      '//arguments {payload ::: obj with dependencies data} \nreturn [];',
+      this.language
+    );
   },
   setup(props: RendererProps<ControlElement>) {
     return useVuetifyControl(
@@ -80,10 +85,3 @@ export const DeepChangeControlRenderer = {
   tester: rankWith(100, scopeEndsWith('deepchange')),
 };
 </script>
-
-<style scoped>
-.pm-card-property {
-  padding: 5px;
-  border: solid 1px rgb(231, 220, 220);
-}
-</style>

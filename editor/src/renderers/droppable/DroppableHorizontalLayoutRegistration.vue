@@ -118,7 +118,6 @@ const droppableRenderer = defineComponent({
             schemaElement,
             evt.added.element.type
           );
-          console.log('app');
           this.$store.dispatch('app/addScopedElementToLayout', {
             uiSchemaElement: newUIElement,
             layoutUUID: this.uischema.uuid,

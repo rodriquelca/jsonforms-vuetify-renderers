@@ -53,6 +53,7 @@ import { useExportSchema, useExportUiSchema } from '../util';
 import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import { VariableBuilder } from './../util/mixutils.js';
 import { sync } from 'vuex-pathify';
+import _ from 'lodash';
 export default {
   name: 'dymaform-preview',
   components: {
@@ -89,19 +90,19 @@ export default {
   computed: {
     useUiSchema: function () {
       console.log('PREVIEW');
-      this.buildVariables(this.$store.get('app/editor@uiSchema'));
-      return useExportUiSchema(this.$store.get('app/editor@uiSchema'));
+      //this.buildVariables(this.$store.get('app/editor@uiSchema'));
+      return this.$store.get('app/editor@uiSchema');
     },
     useSchema: function () {
       return useExportSchema(this.$store.get('app/editor@schema'));
     },
   },
   mounted() {
+    console.log('MOUNTED');
     this.resolveSchema(useExportSchema(this.$store.get('app/editor@schema')));
   },
   methods: {
     onChange(event: JsonFormsChangeEvent): void {
-      this.$emit('change', event);
       console.log('DATA');
       this.$store.set('app/data', event.data || {});
     },

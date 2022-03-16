@@ -250,8 +250,10 @@ export const useVuetifyControlExt = <
   // Extension for dependents fields
   const indexc = pathControlSchema(props.uischema.scope);
   const store = inject<any>('store');
+  const JForm = inject<any>('JForm');
   const pmreactivex = inject<any>('pmreactivex');
 
+  console.log('REBUILD');
   // CREATE FUNCTION
   let fnOnchange = new Function();
   if (
@@ -282,8 +284,11 @@ export const useVuetifyControlExt = <
       return state.app.data[indexc];
     },
     (n: string, o: string) => {
+      console.log('watch');
       pmreactivex.emit(indexc, n);
-      fnOnchange(store, n, o);
+      Vue.nextTick(() => {
+        fnOnchange(JForm, n, o);
+      });
     }
   );
 
@@ -299,24 +304,32 @@ export const useVuetifyControlExt = <
       deepChange(_, payload).then((res: any) => {
         const newArray = res || [];
         Vue.nextTick(() => {
-          store.set('app/schemaModel@properties.' + indexc + '.enum', newArray);
+          JForm.setItems(indexc, newArray);
         });
       });
     },
     indexc
   );
 
-  onBeforeMount(() => {});
-  onMounted(() => {});
-  onBeforeUpdate(() => {});
-  onUpdated(() => {});
-  onBeforeUnmount(() => {});
+  onBeforeMount(() => {
+    console.log('onBeforeMount');
+  });
+  onMounted(() => { });
+  onBeforeUpdate(() => { });
+  onUpdated(() => { });
+  onBeforeUnmount(() => {
+    console.log('onBeforeUnmount');
+  });
   onUnmounted(() => {
+    console.log('onUnmounted');
     unwatch();
   });
-  onActivated(() => {});
-  onDeactivated(() => {});
-  onErrorCaptured(() => {});
+  onActivated(() => { });
+  onDeactivated(() => {
+    unwatch();
+    console.log('onDeactivated');
+  });
+  onErrorCaptured(() => { });
   return {
     ...input,
     styles,

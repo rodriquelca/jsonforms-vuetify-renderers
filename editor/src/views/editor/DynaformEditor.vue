@@ -56,6 +56,7 @@ import { sync } from 'vuex-pathify';
 import { useExportSchema, useExportUiSchema } from '../../util';
 import store from './../../store';
 import pmreactivex from './../../util/pmreactivex';
+import { JForm as JF } from '@jsonforms/vue2';
 
 export default {
   name: 'EditorView',
@@ -132,6 +133,11 @@ export default {
       selection: this.selection,
       store: store,
       pmreactivex: pmreactivex,
+      JForm: new JF({
+        data: {
+          store: store,
+        },
+      }),
     };
   },
 };
