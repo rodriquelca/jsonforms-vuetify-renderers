@@ -208,7 +208,6 @@ const updateUISchemaElementOption = (state, payload) => {
     payload.elementUUID,
     state.editor.uiSchema,
     (newUiSchema) => {
-      debugger;
       newUiSchema.options = newUiSchema.options || {};
       assign(newUiSchema.options, payload.changedProperties);
       return getRoot(newUiSchema as EditorUISchemaElement);
