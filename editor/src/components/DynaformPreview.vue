@@ -125,8 +125,6 @@ export default {
   },
   computed: {
     useUiSchema: function () {
-      //this.buildVariables(this.$store.get('app/editor@uiSchema'));
-      //let y = VariableBuilder.build(json);
       return this.$store.get('app/editor@uiSchema');
     },
     useSchema: function () {
