@@ -1,25 +1,25 @@
-import _ from "lodash";
-export let VariableBuilder = {
-    build(jsonVariables, json) {
+import _ from 'lodash';
+const JVariables = {
+    build(jsonVariables: any, json: any) {
         _.map(json, (value, key) => {
             if (key != 'parent') {
                 if (typeof value == 'string') {
-                    console.log(json);
                     this.findVariables(jsonVariables, json, key, value);
                 } else if (typeof value == 'object') {
-                    this.build(jsonVariables,value);
+                    this.build(jsonVariables, value);
                 }
             }
         });
         return json;
     },
-    findVariables(json, j, key, str) {
-        let res = str.match(/{{\s*[A-Za-z0-9]+\s*}}/g);
+    findVariables(json: any, j: any, key: any, str: any) {
+        const res = str.match(/{{\s*[A-Za-z0-9]+\s*}}/g);
         if (res) {
-            res.forEach((el) => {
-                let r = el.replace('{{', '').replace('}}', '').trim();
+            res.forEach((el: any) => {
+                const r = el.replace('{{', '').replace('}}', '').trim();
                 j[key] = j[key].replace(el, json[r] || el);
             });
         }
     },
-}; 
+};
+export default JVariables;

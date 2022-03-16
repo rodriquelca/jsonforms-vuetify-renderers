@@ -1,32 +1,32 @@
 <template>
-  <v-expansion-panels accordion no-gutters>
+  <v-expansion-panels v-model="panels" multiple no-gutters>
     <v-expansion-panel>
-      <v-expansion-panel>
-        <v-expansion-panel-header>
-          <div>
-            <v-icon>mdi-application-variable</v-icon>
-            <span> Variable</span>
-          </div>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <json-forms
-            v-if="variableSettings"
-            :renderers="renderers"
-            :data="variableData"
-            :uischema="variableSettings.uiSchema"
-            :schema="variableSettings.schema"
-            @change="updateVariableSettings"
-          />
-          <json-forms
-            v-if="requiredSettings"
-            :renderers="renderers"
-            :data="requiredData"
-            :uischema="requiredSettings.uiSchema"
-            :schema="requiredSettings.schema"
-            @change="updateSchemaProperties"
-          />
-        </v-expansion-panel-content>
-      </v-expansion-panel>
+      <v-expansion-panel-header>
+        <div>
+          <v-icon>mdi-application-variable</v-icon>
+          <span> Variable</span>
+        </div>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <json-forms
+          v-if="variableSettings"
+          :renderers="renderers"
+          :data="variableData"
+          :uischema="variableSettings.uiSchema"
+          :schema="variableSettings.schema"
+          @change="updateVariableSettings"
+        />
+        <json-forms
+          v-if="requiredSettings"
+          :renderers="renderers"
+          :data="requiredData"
+          :uischema="requiredSettings.uiSchema"
+          :schema="requiredSettings.schema"
+          @change="updateSchemaProperties"
+        />
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-expansion-panel>
       <v-expansion-panel-header>
         <div>
           <v-icon> mdi-tune-vertical</v-icon>
@@ -35,6 +35,7 @@
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <json-forms
+          v-if="designProperties"
           :renderers="renderers"
           :data="dataElement"
           :uischema="designProperties.uiSchema"
@@ -88,10 +89,10 @@ const PropertiesPanel = defineComponent({
       variableData: undefined,
       requiredSettings: undefined,
       requiredData: undefined,
+      panels: [0, 1, 2],
     };
   },
   mounted() {
-    console.log('mounted');
     this.setSelection(this.selectedElement);
   },
   watch: {

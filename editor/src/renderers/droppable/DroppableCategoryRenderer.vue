@@ -37,7 +37,6 @@ const droppableRenderer = defineComponent({
   },
   computed: {
     determinedRenderer(): any {
-      debugger;
       const renderer = DroppableVerticalLayoutRenderer;
       if (renderer === undefined) {
         return UnknownRenderer;

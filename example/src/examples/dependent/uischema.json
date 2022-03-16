@@ -9,9 +9,53 @@
           "type": "Dropdown",
           "scope": "#/properties/letter",
           "options": {
-            "onChange": {
-              "arguments": "store,a,b",
-              "body": " store.set('app/data@custom', a)"
+            "items": [
+              {
+                "label": "A",
+                "value": "A"
+              },
+              {
+                "label": "B",
+                "value": "B"
+              },
+              {
+                "label": "C",
+                "value": "C"
+              },
+              {
+                "label": "D",
+                "value": "D"
+              },
+              {
+                "label": "E",
+                "value": "E"
+              },
+              {
+                "label": "F",
+                "value": "F"
+              },
+              {
+                "label": "G",
+                "value": "G"
+              },
+              {
+                "label": "H",
+                "value": "H"
+              },
+              {
+                "label": "I",
+                "value": "I"
+              },
+              {
+                "label": "H",
+                "value": "H"
+              }
+            ],
+            "events": {
+              "onChange": {
+                "arguments": "JForm,nval,oval",
+                "body": "JForm.setValue('custom', nval);"
+              }
             }
           }
         },
@@ -22,7 +66,7 @@
             "events": {
               "deepChange": {
                 "arguments": "_,payload",
-                "body": "return fetch('https://api.publicapis.org/categories').then((res) => res.json()).then((res) => {return _.uniq(_.filter(res.categories, (o)=> { return  o.charAt(0)== payload.letter;}))  ;});"
+                "body": "return fetch('https://api.publicapis.org/categories').then((res) => res.json()).then((res) => {return _.map(_.uniq(_.filter(res.categories, (o)=> { return  o.charAt(0)== payload.letter;})), (v)=>{ return { value:v, label:v}});});"
               }
             }
           },
@@ -46,7 +90,7 @@
             "events": {
               "deepChange": {
                 "arguments": "_,payload",
-                "body": "return fetch('https://api.publicapis.org/entries?'+ ( new URLSearchParams( {category:payload.categories} ) ).toString(),{method: 'GET'}).then((res) => res.json()).then((res) => {return _.uniq(_.map( _.slice(res.entries, 0, 50), (o)=> { return o.API;}))  ;});"
+                "body": "return fetch('https://api.publicapis.org/entries?'+ ( new URLSearchParams( {category:payload.categories} ) ).toString(),{method: 'GET'}).then((res) => res.json()).then((res) => {return _.map( _.uniq(_.map( _.slice(res.entries, 0, 50), (o)=> { return o.API;})),(v)=>{ return {value:v,label:v}});});"
               }
             }
           },

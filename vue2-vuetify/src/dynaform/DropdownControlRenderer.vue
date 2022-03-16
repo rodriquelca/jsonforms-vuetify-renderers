@@ -20,7 +20,7 @@
         :error-messages="control.errors"
         :clearable="hover"
         :value="control.data"
-        :items="control.options"
+        :items="appliedOptions.items"
         item-text="label"
         item-value="value"
         @change="onChange"

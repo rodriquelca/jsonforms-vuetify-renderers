@@ -12,7 +12,9 @@
 <script lang="ts">
 import Editor from './Editor.vue';
 import { defineComponent, ref } from '../../../util/vue';
-import { editorRendererProps, useJsonTest } from '../../../util/composition';
+import { editorRendererProps } from '../../../util/composition';
+import { JReactivex as JReact, JFormE as JF } from '@jsonforms/vue2';
+import store from './../../../store';
 const EditorPanel = defineComponent({
   name: 'EditorPanel',
   components: {
@@ -22,13 +24,27 @@ const EditorPanel = defineComponent({
     ...editorRendererProps(),
   },
   setup(props) {
-    return useJsonTest(props);
-    //  return useVuetifyLayout(useJsonFormsLayout(props));
+    let tabIndex = ref(-1);
+    return { tabIndex };
   },
   methods: {
     updateConfig: function (items) {
       alert('upadete config');
     },
+    updatePreview(index) {
+      this.tabIndex = index;
+    },
+  },
+  provide: function () {
+    return {
+      store: store,
+      JReactivex: JReact,
+      JForm: new JF({
+        data: {
+          store: store,
+        },
+      }),
+    };
   },
 });
 export default EditorPanel;

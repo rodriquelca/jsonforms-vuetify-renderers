@@ -97,7 +97,6 @@ const evaluateCondition = (
   path: string,
   ajv: Ajv
 ): boolean => {
-  debugger;
   if (isAndCondition(condition)) {
     return condition.conditions.reduce(
       (acc, cur) => acc && evaluateCondition(data, cur, path, ajv),
