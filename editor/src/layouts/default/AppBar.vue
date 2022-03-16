@@ -14,6 +14,7 @@
     <v-toolbar-items>
       <v-container fill-height fluid justify-end
         ><v-row dense>
+          <v-col><dynaform-preview /></v-col>
           <v-col><download-json /></v-col>
           <v-col><settings /> </v-col>
           <v-col><theme-changer /> </v-col>
@@ -25,6 +26,7 @@
 
 <script lang="ts">
 import { sync } from 'vuex-pathify';
+import DynaformPreview from '@/components/DynaformPreview.vue';
 import DownloadJson from '@/components/DownloadJson.vue';
 import Settings from '@/components/Settings.vue';
 import ThemeChanger from '@/components/ThemeChanger.vue';
@@ -36,6 +38,7 @@ export default {
     ThemeChanger,
     Settings,
     DownloadJson,
+    DynaformPreview,
   },
   computed: {
     app: sync<AppStore>('app/'),

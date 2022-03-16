@@ -3,7 +3,7 @@
     <json-forms
       v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
       :data="data"
-      :schema="schemaModel"
+      :schema="resolvedSchema.schema"
       :uischema="uischemaModel"
       :renderers="renderers"
       :cells="cells"
@@ -65,7 +65,7 @@ import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import JsonRefs from 'json-refs';
 import { createTranslator } from '../i18n';
 import _ from 'lodash';
-import { VariableBuilder } from './../util/mixutils';
+import { JVariables } from '@jsonforms/vue2';
 
 export default {
   name: 'demo-form',
@@ -138,7 +138,6 @@ export default {
       },
     },
     locale(newLocale: string): void {
-      console.log('LOCALE SWITCH', newLocale);
       this.i18n.locale = newLocale;
       this.i18n.translate = createTranslator(newLocale);
     },
@@ -160,7 +159,7 @@ export default {
         JsonRefs.resolveRefs(schema).then(
           function (res) {
             let j = _.clone(res.resolved);
-            VariableBuilder.build(schemavars, j);
+            JVariables.build(schemavars, j);
             resolvedSchema.schema = j;
             resolvedSchema.resolved = true;
           },

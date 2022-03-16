@@ -249,11 +249,10 @@ export const useVuetifyControlExt = <
 
   // Extension for dependents fields
   const indexc = pathControlSchema(props.uischema.scope);
-  const store = inject<any>('store');
   const JForm = inject<any>('JForm');
-  const pmreactivex = inject<any>('pmreactivex');
+  const store = inject<any>('store');
+  const JReactivex = inject<any>('JReactivex');
 
-  console.log('REBUILD');
   // CREATE FUNCTION
   let fnOnchange = new Function();
   if (
@@ -279,13 +278,12 @@ export const useVuetifyControlExt = <
     );
   }
   //Watch own value
-  const unwatch = store?.watch(
-    (state: any) => {
-      return state.app.data[indexc];
+  const unwatch = store.watch(
+    (_state: any, getters: any) => {
+      return getters['app/getDataModel'](indexc);
     },
     (n: string, o: string) => {
-      console.log('watch');
-      pmreactivex.emit(indexc, n);
+      JReactivex.emit(indexc, n);
       Vue.nextTick(() => {
         fnOnchange(JForm, n, o);
       });
@@ -298,7 +296,7 @@ export const useVuetifyControlExt = <
       : [],
     (e) => pathControlSchema(e.scope)
   );
-  pmreactivex.joinFork(
+  JReactivex.joinFork(
     dependencies,
     (payload: any) => {
       deepChange(_, payload).then((res: any) => {
@@ -311,23 +309,17 @@ export const useVuetifyControlExt = <
     indexc
   );
 
-  onBeforeMount(() => {
-    console.log('onBeforeMount');
-  });
+  onBeforeMount(() => { });
   onMounted(() => { });
   onBeforeUpdate(() => { });
   onUpdated(() => { });
-  onBeforeUnmount(() => {
-    console.log('onBeforeUnmount');
-  });
+  onBeforeUnmount(() => { });
   onUnmounted(() => {
-    console.log('onUnmounted');
     unwatch();
   });
   onActivated(() => { });
   onDeactivated(() => {
     unwatch();
-    console.log('onDeactivated');
   });
   onErrorCaptured(() => { });
   return {

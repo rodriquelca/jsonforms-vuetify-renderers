@@ -5,24 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-checkbox
-      :id="control.id + '-input'"
-      :class="styles.control.input"
-      :disabled="!control.enabled"
-      :autofocus="appliedOptions.focus"
-      :placeholder="appliedOptions.placeholder"
-      :label="computedLabel"
-      :hint="control.description"
-      :persistent-hint="persistentHint()"
-      :required="control.required"
-      :error-messages="control.errors"
-      :indeterminate="control.data === undefined"
-      :value="control.data"
-      :input-value="control.data"
-      @change="onChange"
-      @focus="isFocused = true"
-      @blur="isFocused = false"
-    />
+    <v-container v-html="appliedOptions.content"></v-container>
   </control-wrapper>
 </template>
 
@@ -31,7 +14,9 @@ import {
   ControlElement,
   JsonFormsRendererRegistryEntry,
   rankWith,
-  isBooleanControl,
+  isStringControl,
+  and,
+  optionIs,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
@@ -39,32 +24,36 @@ import {
   useJsonFormsControl,
   RendererProps,
 } from '@jsonforms/vue2';
-import { default as ControlWrapper } from './ControlWrapper.vue';
+import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VCheckbox } from 'vuetify/lib';
+import { DisabledIconFocus } from '../controls/directives';
+import { VContainer } from 'vuetify/lib';
 
 const controlRenderer = defineComponent({
-  name: 'boolean-control-renderer',
+  name: 'html-viewer-control-renderer',
   components: {
-    VCheckbox,
     ControlWrapper,
+    VContainer,
+  },
+  directives: {
+    DisabledIconFocus,
   },
   props: {
     ...rendererProps<ControlElement>(),
   },
-  mounted() {},
   setup(props: RendererProps<ControlElement>) {
     return useVuetifyControl(
       useJsonFormsControl(props),
-      (newValue) => newValue || false
+      (value) => value || undefined
     );
   },
+  computed: {},
 });
 
 export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(1, isBooleanControl),
+  tester: rankWith(2, and(isStringControl, optionIs('isHtmlViewer', true))),
 };
 </script>

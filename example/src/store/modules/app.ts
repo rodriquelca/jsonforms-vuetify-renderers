@@ -46,7 +46,7 @@ const actions = {
   ...CollectionStore.actions,
 };
 
-const getters = {};
+const getters = { ...CollectionStore.getters };
 
 const app: Module<AppState, RootState> = {
   namespaced: true,

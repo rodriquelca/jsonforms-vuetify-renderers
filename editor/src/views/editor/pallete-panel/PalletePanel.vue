@@ -1,38 +1,31 @@
 <template>
-  <div class="ps-6">
-    <v-tabs>
-      <v-tabs-slider></v-tabs-slider>
-      <v-tab class="primary--text">Palette </v-tab>
-
-      <v-tab-item>
-        <v-list-group v-for="(group, j) in paletteElements" :key="j">
-          <template v-slot:activator>
-            <v-list-item-content>
-              <v-list-item-title v-text="group.label"></v-list-item-title>
-            </v-list-item-content>
+  <div class="">
+    <v-list-group v-for="(group, j) in paletteElements" :key="j">
+      <template v-slot:activator>
+        <v-list-item-content>
+          <v-list-item-title v-text="group.label"></v-list-item-title>
+        </v-list-item-content>
+      </template>
+      <v-list dense>
+        <draggable
+          class="dragArea list-group"
+          :list="group.elements"
+          :group="{ name: 'people', pull: 'clone', put: false }"
+          :sort="false"
+        >
+          <template v-for="(item, i) in group.elements">
+            <v-list-item :key="i">
+              <v-list-item-icon>
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.label"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </template>
-          <v-list dense>
-            <draggable
-              class="dragArea list-group"
-              :list="group.elements"
-              :group="{ name: 'people', pull: 'clone', put: false }"
-              :sort="false"
-            >
-              <template v-for="(item, i) in group.elements">
-                <v-list-item :key="i">
-                  <v-list-item-icon>
-                    <v-icon v-text="item.icon"></v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.label"></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </template>
-            </draggable>
-          </v-list>
-        </v-list-group>
-      </v-tab-item>
-    </v-tabs>
+        </draggable>
+      </v-list>
+    </v-list-group>
   </div>
 </template>
 

@@ -1,11 +1,10 @@
 import Vue from 'vue';
 //Class JForm collection for helpers for New Dynaforms PM4
-export default Vue.component('JForm-Collection', {
+export default Vue.component('JFormE-Collection', {
   data() {
     let store: any;
     return {
       store,
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
     };
   },
   watch: {},
@@ -27,6 +26,9 @@ export default Vue.component('JForm-Collection', {
     },
     setValueE(scope: string, data: any) {
       this.store.set('app/data@' + scope, data);
+    },
+    watchDataModel() {
+      return new Function();
     },
   },
 });

@@ -18,8 +18,9 @@ export interface AppState {
     paletteElements: Array<any>;
     uiSchema: EditorUISchemaElement | undefined;
     schema: SchemaElement | undefined;
+    settings: boolean | undefined;
+    selectedElement: string | undefined;
   };
-
   jsonforms: {
     readonly: boolean;
     validationMode: 'ValidateAndShow' | 'ValidateAndHide' | 'NoValidation';

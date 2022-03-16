@@ -67,7 +67,6 @@ const controlRenderer = defineComponent({
       this.$refs['monacoEditorItems']._render();
     },
     onClick() {
-      console.log('CLICK');
       let val;
       try {
         val = JSON.parse(this.ruleSchema.getValue());

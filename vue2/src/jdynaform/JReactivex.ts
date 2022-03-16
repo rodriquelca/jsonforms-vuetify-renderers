@@ -1,6 +1,11 @@
 import Vue from 'vue';
 import _ from 'lodash';
-class PMReactivex {
+class JReactivex {
+  bus: any;
+  joinForkArray: any[];
+  events: any[];
+  channels: any;
+  topics: any[];
   constructor() {
     this.bus = new Vue();
     this.joinForkArray = [];
@@ -8,16 +13,16 @@ class PMReactivex {
     this.channels = {};
     this.topics = [];
   }
-  emit(event, payload) {
+  emit(event: any, payload: any) {
     this.bus.$emit(event, payload);
   }
-  diffEvents(newArrayEvents) {
-    let dif = _.difference(newArrayEvents, this.events);
+  diffEvents(newArrayEvents: any) {
+    const dif = _.difference(newArrayEvents, this.events);
     this.events = this.events.concat(dif);
     return dif;
   }
-  joinFork(arr, handler, id) {
-    let evs = this.diffEvents(arr);
+  joinFork(arr: any, handler: any, id: any) {
+    const evs = this.diffEvents(arr);
     if (evs.length != 0 && !_.find(this.joinForkArray, { id: id })) {
       this.joinForkArray.push({
         id: id || '',
@@ -26,7 +31,7 @@ class PMReactivex {
         handler: handler || new Function(),
       });
       _.forEach(evs, (el) => {
-        this.bus.$on(el, (d) => {
+        this.bus.$on(el, (d: any) => {
           let inter;
           console.log(this.joinForkArray);
           _.forEach(this.joinForkArray, function (o) {
@@ -46,4 +51,4 @@ class PMReactivex {
   }
 }
 
-export default new PMReactivex();
+export default new JReactivex();

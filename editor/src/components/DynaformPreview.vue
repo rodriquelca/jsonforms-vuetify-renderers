@@ -1,45 +1,78 @@
 <template>
   <div>
-    <json-forms
-      v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
-      :data="data"
-      :schema="useSchema"
-      :uischema="useUiSchema"
-      :renderers="renderers"
-      :cells="renderers"
-      @change="onChange"
-    />
-    <v-container v-else>
-      <v-row
-        v-if="!resolvedSchema.resolved"
-        class="fill-height"
-        align-content="center"
-        justify="center"
-      >
-        <v-col class="text-subtitle-1 text-center" cols="12">
-          Resolving Schema Refs
-        </v-col>
-        <v-col cols="6">
-          <v-progress-linear
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>
-        </v-col>
-      </v-row>
-      <v-row
-        v-else-if="resolvedSchema.error !== undefined"
-        class="fill-height"
-        align-content="center"
-        justify="center"
-      >
-        <v-col class="text-subtitle-1 text-center" cols="12">
-          <v-alert color="red" dark>
-            {{ resolvedSchema.error }}
-          </v-alert>
-        </v-col>
-      </v-row>
-    </v-container>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          large
+          icon
+          dark
+          v-bind="attrs"
+          v-on="on"
+          @click.stop="dialog = !dialog"
+        >
+          <v-icon size="30" color="primary" @click="onClick">mdi-eye</v-icon>
+        </v-btn>
+      </template>
+      Preview
+    </v-tooltip>
+
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-spacer></v-spacer>
+          <v-btn icon dark @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-card>
+          <json-forms
+            :key="key"
+            :data="data"
+            :schema="useSchema"
+            :uischema="useUiSchema"
+            :renderers="renderers"
+            :cells="renderers"
+            @change="onChange"
+          />
+          <v-container>
+            <v-row
+              v-if="!resolvedSchema.resolved"
+              class="fill-height"
+              align-content="center"
+              justify="center"
+            >
+              <v-col class="text-subtitle-1 text-center" cols="12">
+                Resolving Schema Refs
+              </v-col>
+              <v-col cols="6">
+                <v-progress-linear
+                  indeterminate
+                  rounded
+                  height="6"
+                ></v-progress-linear>
+              </v-col>
+            </v-row>
+            <v-row
+              v-else-if="resolvedSchema.error !== undefined"
+              class="fill-height"
+              align-content="center"
+              justify="center"
+            >
+              <v-col class="text-subtitle-1 text-center" cols="12">
+                <v-alert color="red" dark>
+                  {{ resolvedSchema.error }}
+                </v-alert>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -49,11 +82,12 @@ import { JsonSchema, JsonFormsI18nState } from '@jsonforms/core';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import JsonRefs from 'json-refs';
 import { createTranslator } from '../i18n';
-import { useExportSchema, useExportUiSchema } from '../util';
+import { useExportSchema } from '../util';
 import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
-import { VariableBuilder } from './../util/mixutils.js';
-import { sync } from 'vuex-pathify';
 import _ from 'lodash';
+import store from '../store';
+import { JReactivex as JReact, JForm as JF } from '@jsonforms/vue2';
+import { sync } from 'vuex-pathify';
 export default {
   name: 'dymaform-preview',
   components: {
@@ -68,7 +102,9 @@ export default {
   },
   data() {
     return {
-      data: sync('app/data'),
+      key: 1,
+      dialog: false,
+      data: store.get('app/data'),
       resolvedSchema: {
         schema: undefined,
         resolved: false,
@@ -89,25 +125,34 @@ export default {
   },
   computed: {
     useUiSchema: function () {
-      console.log('PREVIEW');
       //this.buildVariables(this.$store.get('app/editor@uiSchema'));
+      //let y = VariableBuilder.build(json);
       return this.$store.get('app/editor@uiSchema');
     },
     useSchema: function () {
       return useExportSchema(this.$store.get('app/editor@schema'));
     },
   },
+  provide: () => {
+    return {
+      store: store,
+      JReactivex: JReact,
+      JForm: new JF({
+        data: {
+          store: store,
+        },
+      }),
+    };
+  },
   mounted() {
-    console.log('MOUNTED');
     this.resolveSchema(useExportSchema(this.$store.get('app/editor@schema')));
   },
   methods: {
-    onChange(event: JsonFormsChangeEvent): void {
-      console.log('DATA');
-      this.$store.set('app/data', event.data || {});
+    onClick() {
+      this.key++;
     },
-    buildVariables(json: JSON): void {
-      let y = VariableBuilder.build(json);
+    onChange(event: JsonFormsChangeEvent): void {
+      this.$store.set('app/data', event.data || {});
     },
     resolveSchema(schema?: JsonSchema): void {
       const resolvedSchema = this.resolvedSchema;
