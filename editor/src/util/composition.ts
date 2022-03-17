@@ -177,7 +177,6 @@ export const useDynaformControl = <
 };
 
 export const useEditorCommonElement = (props) => {
-  console.log(props);
   const hover = ref(false);
   const setSelection = inject('setSelection');
   const onClick = (value: any) => {

@@ -26,6 +26,7 @@ import { ExampleSchemaService } from '../../api/exampleSchemaService';
 
 import { sync } from 'vuex-pathify';
 import { useExportSchema, useExportUiSchema } from '../../util';
+
 export default {
   name: 'EditorView',
   props: {},

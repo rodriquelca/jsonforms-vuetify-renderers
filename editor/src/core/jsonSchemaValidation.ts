@@ -99,7 +99,6 @@ export const getMonacoModelForUri = (
   modelUri: monaco.Uri,
   initialValue: string | undefined
 ): editorApi.editor.ITextModel => {
-  
   const value = initialValue ?? '';
   let model = monaco.editor.getModel(modelUri);
   if (model) {
@@ -107,5 +106,20 @@ export const getMonacoModelForUri = (
   } else {
     model = monaco.editor.createModel(value, 'json', modelUri);
   }
-  return model; 
+  return model;
+};
+
+export const getModelForUri = (
+  modelUri: monaco.Uri,
+  lang: string,
+  initialValue: string | undefined
+): editorApi.editor.ITextModel => {
+  const value = initialValue ?? '';
+  let model = monaco.editor.getModel(modelUri);
+  if (model) {
+    model.setValue(value);
+  } else {
+    model = monaco.editor.createModel(value, lang, modelUri);
+  }
+  return model;
 };

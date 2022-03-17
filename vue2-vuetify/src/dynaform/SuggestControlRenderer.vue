@@ -81,10 +81,7 @@ const controlRenderer = defineComponent({
     },
   },
   methods: {
-    changeHandler(value: Array<any>): any {
-      console.log('changeHandler');
-      console.log(value);
-    },
+    changeHandler(_value: Array<any>): any {},
   },
   watch: {
     search() {

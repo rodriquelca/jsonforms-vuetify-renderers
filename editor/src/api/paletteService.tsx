@@ -298,10 +298,34 @@ const controlElements = [
       };
     },
   },
-
+  {
+    type: 'Dropdown',
+    label: 'Dropdown',
+    icon: 'mdi-form-dropdown',
+    uiSchemaElementProvider: () => {
+      const control = {
+        "type": "string"
+      };
+      return {
+        control,
+        variable: "dropdown",
+        uiOptions: {
+          events: {
+            deepChange: {
+              arguments: "_,payload",
+              body: ""
+            },
+            onChange: {
+              arguments: "JForm, nval, oval",
+              body: ""
+            },
+          },
+          items: []
+        }
+      };
+    },
+  },
 ];
-
-
 const complexElements = [
   {
     type: 'Control',

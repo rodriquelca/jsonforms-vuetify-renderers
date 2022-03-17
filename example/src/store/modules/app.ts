@@ -4,6 +4,7 @@ import { AppState } from './types';
 import { RootState } from '../types';
 import { Module } from 'vuex';
 import { createAjv, extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
+import { CollectionStore } from '@jsonforms/vue2';
 
 const ajv = createAjv({ useDefaults: true });
 
@@ -32,14 +33,20 @@ const state: AppState = {
   },
   data: {},
   uischemaModel: {},
-  schemaModel: {}
+  schemaModel: {},
 };
 
-const mutations = make.mutations(state);
+const mutations = {
+  ...make.mutations(state),
+  ...CollectionStore.mutations,
+};
 
-const actions = make.actions(state);
+const actions = {
+  ...make.actions(state),
+  ...CollectionStore.actions,
+};
 
-const getters = {};
+const getters = { ...CollectionStore.getters };
 
 const app: Module<AppState, RootState> = {
   namespaced: true,
