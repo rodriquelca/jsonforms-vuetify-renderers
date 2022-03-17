@@ -388,8 +388,36 @@ export const generateEmptyData = (
 ): Record<string, unknown> => {
   if (isObjectElement(schema)) {
     Array.from(schema.properties).forEach(([key, value]) => {
-      if (isObjectElement(value)) {
-        data[key] = generateEmptyData(value, {});
+      // if (isObjectElement(value)) {
+      //   data[key] = generateEmptyData(value, {});
+      // } else {
+      //   data[key] = '';
+      // }
+      if (value.schema.type) {
+        switch (value.schema.type) {
+          case 'object':
+            data[key] = generateEmptyData(value, {});
+            break;
+          case 'array':
+            data[key] = [];
+            break;
+          case 'number':
+          case 'integer':
+            data[key] = 0;
+            break;
+          case 'string':
+            data[key] = '';
+            break;
+          case 'boolean':
+            data[key] = false;
+            break;
+          case 'const':
+            data[key] = '';
+            break;
+          default:
+            data[key] = undefined;
+            break;
+        }
       }
     });
   }

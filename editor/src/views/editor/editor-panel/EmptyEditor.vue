@@ -39,14 +39,6 @@ export default {
   methods: {
     handleChange(evt: any) {
       if (evt.added) {
-        this.$store.dispatch('app/setSchema', {
-          schema: {
-            type: 'object',
-            title: 'person',
-            properties: {},
-          },
-        });
-        debugger;
         if (evt.added.element && evt.added.element.type === 'Control') {
           //here update the schema
           const property = evt.added.element.uiSchemaElementProvider();
@@ -57,7 +49,6 @@ export default {
             elementUUID: undefined,
             indexOrProp: property.variable,
           });
-          debugger;
 
           //Here uischema
           const schemaElement = tryFindByUUID(

@@ -169,11 +169,11 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
     effect: {
       type: 'string',
       default: 'Show',
-      enum: ['Show', 'Hide', 'Enable', 'Disable'],
+      enum: ['SHOW', 'HIDE', 'ENABLE', 'DISABLE'],
     },
-    allany: {
+    allOrAny: {
       type: 'string',
-      enum: ['all', 'any'],
+      enum: ['allOf', 'anyOf'],
     },
     rules: {
       type: 'array',
@@ -182,17 +182,14 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
         properties: {
           field: {
             type: 'string',
-            maxLength: 5,
             enum: ['foo', 'bar'],
           },
           condition: {
             type: 'string',
-            maxLength: 5,
             enum: ['is'],
           },
           value: {
             type: 'string',
-            enum: ['foo', 'bar'],
           },
         },
       },
@@ -216,7 +213,7 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
     elements: [
       {
         type: 'Control',
-        scope: '#/properties/allany',
+        scope: '#/properties/allOrAny',
       },
       {
         type: 'Label',

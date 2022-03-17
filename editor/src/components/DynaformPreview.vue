@@ -32,7 +32,7 @@
         <v-card>
           <json-forms
             v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
-            :data="{}"
+            :data="previewData"
             :schema="useSchema"
             :uischema="useUiSchema"
             :renderers="renderers"
@@ -82,6 +82,7 @@ import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import JsonRefs from 'json-refs';
 import { createTranslator } from '../i18n';
 import { useExportSchema, useExportUiSchema } from '../util';
+import { generateEmptyData } from '../model';
 import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import { VariableBuilder } from './../util/mixutils.js';
 export default {
@@ -124,6 +125,9 @@ export default {
     },
     useSchema: function () {
       return useExportSchema(this.$store.get('app/editor@schema'));
+    },
+    previewData: function () {
+      return generateEmptyData(this.$store.get('app/editor@schema'), {});
     },
   },
   mounted() {

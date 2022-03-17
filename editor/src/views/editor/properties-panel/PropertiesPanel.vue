@@ -8,12 +8,7 @@
         </div>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        <v-btn
-          block
-          color="primary"
-          v-if="!hasRule"
-          @click="hasRule = !hasRule"
-        >
+        <v-btn block color="primary" v-if="!hasRule" @click="addRuleHandler">
           <v-icon>mdi-plus</v-icon>Add Rule
         </v-btn>
         <json-forms
@@ -148,7 +143,6 @@ const PropertiesPanel = defineComponent({
   methods: {
     setSelection: function (newSelection) {
       this.uiElement = tryFindByUUID(this.uischema, newSelection);
-      debugger;
       this.generalData = omit(this.uiElement, [
         'uuid',
         'parent',
@@ -242,7 +236,60 @@ const PropertiesPanel = defineComponent({
       }
     },
     updateRulesEditorSetting: function (event: JsonFormsChangeEvent) {
-      console.log(event);
+      // console.log(event);
+      let rule = {
+        effect: event.data.effect,
+        condition: {
+          scope: '#',
+          schema: {},
+        },
+      };
+      let rules = [];
+      event.data.rules.forEach(function (value) {
+        let properties = {};
+        properties[value.field] = { const: value.value };
+        rules.push({
+          type: 'object',
+          properties,
+        });
+      });
+
+      rule.condition.schema[event.data.allOrAny] = rules;
+      if (this.isValidRule(rule)) {
+        // this.setInvalidJson(false);
+        // this.handleChange('rule', rule);
+        this.$store.dispatch('app/updateUISchemaElement', {
+          elementUUID: this.uiElement.uuid,
+          changedProperties: { rule: rule },
+        });
+        this.generalData['rule'] = rule;
+      } else {
+        // this.setInvalidJson(true);
+        console.error('invalud rule');
+      }
+      // console.log(rule);
+    },
+    isValidRule: (rule: any) => {
+      return !rule || (rule.effect && rule.condition);
+    },
+    addRuleHandler: function (event: JsonFormsChangeEvent) {
+      this.hasRule = !this.hasRule;
+      let keys = Array.from(this.schema.properties.keys());
+      this.schemasCollection.get(
+        'rulesEditor'
+      ).schema.properties.rules.items.properties.field.enum = keys;
+
+      this.generalData['rules'] = [
+        {
+          condition: 'is',
+          field: keys[0],
+          value: '',
+        },
+      ];
+
+      this.generalData['allOrAny'] = 'allOf';
+      this.generalData['effect'] = 'HIDE';
+      console.log(this.generalData);
     },
   },
 });
