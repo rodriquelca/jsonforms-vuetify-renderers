@@ -54,11 +54,9 @@
 import { sync } from 'vuex-pathify';
 
 import {
-  defaultSchemaDecorators,
+  defaultSchemaDecoratorsCollection,
   defaultSchemaProviders,
   defaultPropertyRenderers,
-  schemaVariableDecorators,
-  schemaRequiredDecorators,
 } from '../views/editor/properties-panel';
 import PropertiesPanel from '../views/editor/properties-panel';
 import {
@@ -100,28 +98,18 @@ export default {
         { text: 'German (de)', value: 'de' },
       ],
       propertyRenderers: defaultPropertyRenderers,
-      schemaDecorators: defaultSchemaDecorators,
+      schemaDecoratorsCollection: defaultSchemaDecoratorsCollection,
       propertiesService: {},
     };
   },
   mounted() {
     const propertiesServiceProvider = (
       schemaProviders: PropertySchemasProvider[],
-      schemaDecorators: PropertySchemasDecorator[],
-      schemaVariableDecorators: PropertySchemasDecorator[],
-      schemaRequiredDecorators: PropertySchemasDecorator[]
-    ) =>
-      new PropertiesServiceImpl(
-        schemaProviders,
-        schemaDecorators,
-        schemaVariableDecorators,
-        schemaRequiredDecorators
-      );
+      schemaDecorators: PropertySchemasDecorator[]
+    ) => new PropertiesServiceImpl(schemaProviders, schemaDecorators);
     this.propertiesService = propertiesServiceProvider(
       defaultSchemaProviders,
-      defaultSchemaDecorators,
-      schemaVariableDecorators,
-      schemaRequiredDecorators
+      defaultSchemaDecoratorsCollection
     );
   },
 };

@@ -253,7 +253,7 @@ const updateSchemaVariable = (state, payload) => {
     }
   );
 };
-const updateSchemaProperties = (state, payload) => {
+const updateSchemaRequired = (state, payload) => {
   return withCloneTrees(
     state.editor.uiSchema,
     undefined,
@@ -280,6 +280,25 @@ const updateSchemaProperties = (state, payload) => {
           newSchema.schema.required.splice(index, 1);
         }
       }
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
+const updateSchemaReadOnly = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    undefined,
+    state.editor.schema,
+    undefined,
+    state,
+    (newUiSchema, newSchema) => {
+      const uiSchemaElement: SchemaElement = findByUUID(
+        newUiSchema,
+        payload.elementUUID
+      );
       //readOnly
       const linkedShemaElement: SchemaElement = findByUUID(
         newSchema,
@@ -413,10 +432,15 @@ const actions = {
     commit('SET_SCHEMA', clone.schema);
     commit('SET_UI_SCHEMA', clone.uiSchema);
   },
-  updateSchemaProperties({ commit, state }, payload) {
-    const clone = updateSchemaProperties(state, payload);
+  updateSchemaRequired({ commit, state }, payload) {
+    const clone = updateSchemaRequired(state, payload);
     commit('SET_SCHEMA', clone.schema);
-    commit('SET_UI_SCHEMA', clone.uiSchema);
+    // commit('SET_UI_SCHEMA', clone.uiSchema);
+  },
+  updateSchemaReadOnly({ commit, state }, payload) {
+    const clone = updateSchemaReadOnly(state, payload);
+    commit('SET_SCHEMA', clone.schema);
+    // commit('SET_UI_SCHEMA', clone.uiSchema);
   },
   updateUISchemaElementOption({ commit, state }, payload) {
     const clone = updateUISchemaElementOption(state, payload);

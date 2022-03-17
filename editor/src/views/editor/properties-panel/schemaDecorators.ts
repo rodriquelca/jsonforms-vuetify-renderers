@@ -162,6 +162,80 @@ export const urlDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const ruleEditorDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas
+) => {
+  assign(schemas.schema.properties, {
+    effect: {
+      type: 'string',
+      default: 'Show',
+      enum: ['Show', 'Hide', 'Enable', 'Disable'],
+    },
+    allany: {
+      type: 'string',
+      enum: ['all', 'any'],
+    },
+    rules: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          field: {
+            type: 'string',
+            maxLength: 5,
+            enum: ['foo', 'bar'],
+          },
+          condition: {
+            type: 'string',
+            maxLength: 5,
+            enum: ['is'],
+          },
+          value: {
+            type: 'string',
+            enum: ['foo', 'bar'],
+          },
+        },
+      },
+    },
+  });
+  (schemas.uiSchema as Layout).elements.push({
+    type: 'HorizontalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/effect',
+      },
+      {
+        type: 'Label',
+        text: 'this field when',
+      },
+    ],
+  });
+  (schemas.uiSchema as Layout).elements.push({
+    type: 'HorizontalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/allany',
+      },
+      {
+        type: 'Label',
+        text: 'of the following rules match',
+      },
+    ],
+  });
+  (schemas.uiSchema as Layout).elements.push({
+    type: 'Control',
+    scope: '#/properties/rules',
+    label: {
+      text: 'Example Array',
+      show: false,
+    },
+  });
+
+  return schemas;
+};
+
 export const createPropertyControl = (
   controlScope: string
 ): ControlElement => ({
@@ -169,8 +243,7 @@ export const createPropertyControl = (
   scope: controlScope,
 });
 
-export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
-  // variableDecorator,
+const defaultDecoreators: PropertySchemasDecorator[] = [
   labelDecorator,
   multilineStringOptionDecorator,
   labelUIElementDecorator,
@@ -178,11 +251,23 @@ export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
   ruleDecorator,
 ];
 
-export const schemaVariableDecorators: PropertySchemasDecorator[] = [
-  variableDecorator,
-];
+// export const defaultSchemaDecoratorsCollection =new Map<string, PropertySchemasDecorator>(
+//   "general", [
+//     variableDecorator,
+//     labelDecorator,
+//     requiredDecorator,
+//     readOnlyDecorator,
+//   ]),
+// };
 
-export const schemaRequiredDecorators: PropertySchemasDecorator[] = [
-  requiredDecorator,
-  readOnlyDecorator,
-];
+export const defaultSchemaDecoratorsCollection = new Map<
+  string,
+  PropertySchemasDecorator[]
+>([
+  [
+    'general',
+    [variableDecorator, labelDecorator, requiredDecorator, readOnlyDecorator],
+  ],
+  ['rules', [ruleDecorator]],
+  ['rulesEditor', [ruleEditorDecorator]],
+]);

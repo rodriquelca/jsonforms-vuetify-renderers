@@ -1,28 +1,72 @@
 <template>
-  <v-expansion-panels v-model="panel" multiple>
+  <v-expansion-panels v-model="panel" multiple no-gutters>
     <v-expansion-panel>
       <v-expansion-panel-header>
         <div>
-          <v-icon>mdi-application-variable</v-icon>
-          <span> Variable</span>
+          <v-icon>mdi-share-variant-outline</v-icon>
+          <span> Rules Editor</span>
+        </div>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-btn
+          block
+          color="primary"
+          v-if="!hasRule"
+          @click="hasRule = !hasRule"
+        >
+          <v-icon>mdi-plus</v-icon>Add Rule
+        </v-btn>
+        <json-forms
+          v-else-if="schemasCollection"
+          :renderers="renderers"
+          :data="generalData"
+          :uischema="schemasCollection.get('rulesEditor').uiSchema"
+          :schema="schemasCollection.get('rulesEditor').schema"
+          @change="updateRulesEditorSetting"
+        />
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-expansion-panel>
+      <v-expansion-panel-header>
+        <div>
+          <v-icon>mdi-share-variant-outline</v-icon>
+          <span> Rules</span>
+        </div>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-btn
+          block
+          color="primary"
+          v-if="!hasRule"
+          @click="hasRule = !hasRule"
+        >
+          <v-icon>mdi-plus</v-icon>Add Rule
+        </v-btn>
+        <json-forms
+          v-else-if="schemasCollection"
+          :renderers="renderers"
+          :data="generalData"
+          :uischema="schemasCollection.get('rules').uiSchema"
+          :schema="schemasCollection.get('rules').schema"
+          @change="updateRulesSetting"
+        />
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-expansion-panel>
+      <v-expansion-panel-header>
+        <div>
+          <v-icon>mdi-variable</v-icon>
+          <span> General</span>
         </div>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <json-forms
-          v-if="variableSettings"
+          v-if="schemasCollection"
           :renderers="renderers"
-          :data="variableData"
-          :uischema="variableSettings.uiSchema"
-          :schema="variableSettings.schema"
-          @change="updateVariableSettings"
-        />
-        <json-forms
-          v-if="requiredSettings"
-          :renderers="renderers"
-          :data="requiredData"
-          :uischema="requiredSettings.uiSchema"
-          :schema="requiredSettings.schema"
-          @change="updateSchemaProperties"
+          :data="generalData"
+          :uischema="schemasCollection.get('general').uiSchema"
+          :schema="schemasCollection.get('general').schema"
+          @change="updateGeneralSettings"
         />
       </v-expansion-panel-content>
     </v-expansion-panel>
@@ -30,20 +74,21 @@
       <v-expansion-panel-header>
         <div>
           <v-icon> mdi-tune-vertical</v-icon>
-          <span> Design </span>
+          <span> Advanced </span>
         </div>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        <json-forms
+        <!-- <json-forms
+          v-if="designProperties"
           :renderers="renderers"
           :data="dataElement"
           :uischema="designProperties.uiSchema"
           :schema="designProperties.schema"
           @change="updateDesignProperties"
-        />
+        /> -->
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <v-expansion-panel>
+    <!-- <v-expansion-panel>
       <v-expansion-panel-header>
         <div>
           <v-icon> mdi-cog</v-icon>
@@ -51,7 +96,7 @@
         </div>
       </v-expansion-panel-header>
       <v-expansion-panel-content> Schema Settings </v-expansion-panel-content>
-    </v-expansion-panel>
+    </v-expansion-panel> -->
   </v-expansion-panels>
 </template>
 
@@ -81,14 +126,10 @@ const PropertiesPanel = defineComponent({
   },
   data() {
     return {
-      panel: [0, 1, 2],
-      dataElement: undefined,
-      designProperties: undefined,
-      uiElement: undefined,
-      variableSettings: undefined,
-      variableData: undefined,
-      requiredSettings: undefined,
-      requiredData: undefined,
+      panel: [1, 2],
+      generalData: undefined,
+      schemasCollection: undefined,
+      hasRule: false,
     };
   },
   mounted() {
@@ -107,13 +148,15 @@ const PropertiesPanel = defineComponent({
   methods: {
     setSelection: function (newSelection) {
       this.uiElement = tryFindByUUID(this.uischema, newSelection);
-      this.dataElement = omit(this.uiElement, [
+      debugger;
+      this.generalData = omit(this.uiElement, [
         'uuid',
         'parent',
         'elements',
         'linkedSchemaElement',
         'options.detail',
         'scope',
+        'type',
       ]);
 
       if (this.uiElement) {
@@ -123,62 +166,83 @@ const PropertiesPanel = defineComponent({
           linkedSchemaUUID && this.schema
             ? tryFindByUUID(this.schema, linkedSchemaUUID)
             : undefined;
-        this.designProperties = this.propertiesService.getDesignProperties(
-          this.uiElement,
-          elementSchema
-        );
 
-        // variable data
-        if (this.uiElement.scope) {
-          this.variableData = {
-            variable: getVariableName(this.uiElement),
-          };
-          this.variableSettings = this.propertiesService.getVariableSettings(
+        this.generalData['variable'] = getVariableName(this.uiElement);
+        this.generalData['required'] =
+          this.schema.schema.required &&
+          this.schema.schema.required.includes(getVariableName(this.uiElement));
+        (this.generalData['readOnly'] = elementSchema.schema.readOnly
+          ? elementSchema.schema.readOnly
+          : false),
+          (this.schemasCollection = this.propertiesService.getProperties(
             this.uiElement,
             elementSchema
-          );
+          ));
+      }
+    },
+    updateGeneralSettings: function (event: JsonFormsChangeEvent) {
+      // variable
+      if (this.uiElement && event.errors.length === 0) {
+        if (
+          event.data.variable &&
+          this.generalData['variable'] !== event.data.variable
+        ) {
+          this.$store.dispatch('app/updateSchemaVariable', {
+            elementUUID: this.uiElement.uuid,
+            newVariable: event.data.variable,
+          });
+          this.generalData['variable'] = event.data.variable;
+        }
+        // required
+        if (
+          event.data.required &&
+          this.generalData['required'] !== event.data.required
+        ) {
+          this.$store.dispatch('app/updateSchemaRequired', {
+            elementUUID: this.uiElement.uuid,
+            required: event.data.required,
+          });
 
-          this.requiredSettings = this.propertiesService.getRequiredSettings(
-            this.uiElement,
-            elementSchema
-          );
-          this.requiredData = {
-            required:
-              this.schema.schema.required &&
-              this.schema.schema.required.includes(
-                getVariableName(this.uiElement)
-              ),
-            readOnly: elementSchema.schema.readOnly
-              ? elementSchema.schema.readOnly
-              : false,
-          };
+          this.generalData['required'] = event.data.required;
+        }
+        // readOnly
+        if (
+          event.data.readOnly &&
+          this.generalData['readOnly'] !== event.data.readOnly
+        ) {
+          this.$store.dispatch('app/updateSchemaReadOnly', {
+            elementUUID: this.uiElement.uuid,
+            readOnly: event.data.readOnly,
+          });
+
+          this.generalData['readOnly'] = event.data.readOnly;
+        }
+        // label
+        if (
+          event.data.label &&
+          this.generalData['label'] !== event.data.label
+        ) {
+          this.$store.dispatch('app/updateUISchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { label: event.data.label },
+          });
+          this.generalData['label'] = event.data.label;
         }
       }
     },
-    updateDesignProperties: function (event: JsonFormsChangeEvent) {
+    updateRulesSetting: function (event: JsonFormsChangeEvent) {
       if (this.uiElement && event.errors.length === 0) {
-        this.$store.dispatch('app/updateUISchemaElement', {
-          elementUUID: this.uiElement.uuid,
-          changedProperties: event.data,
-        });
+        if (event.data.rule && this.generalData['rule'] !== event.data.rule) {
+          this.$store.dispatch('app/updateUISchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: event.data,
+          });
+          this.generalData['rule'] = event.data.rule;
+        }
       }
     },
-    updateVariableSettings: function (event: JsonFormsChangeEvent) {
-      if (this.uiElement && event.errors.length === 0) {
-        this.$store.dispatch('app/updateSchemaVariable', {
-          elementUUID: this.uiElement.uuid,
-          newVariable: event.data.variable,
-        });
-      }
-    },
-    updateSchemaProperties: function (event: JsonFormsChangeEvent) {
-      if (this.uiElement && event.errors.length === 0) {
-        this.$store.dispatch('app/updateSchemaProperties', {
-          elementUUID: this.uiElement.uuid,
-          required: event.data.required,
-          readOnly: event.data.readOnly,
-        });
-      }
+    updateRulesEditorSetting: function (event: JsonFormsChangeEvent) {
+      console.log(event);
     },
   },
 });
