@@ -23,7 +23,7 @@
       @blur="isFocused = false"
     >
       <v-radio
-        v-for="o in control.options"
+        v-for="o in controlBuilder.items"
         :key="o.value"
         :label="o.label"
         :value="o.value"
@@ -37,9 +37,7 @@ import {
   ControlElement,
   JsonFormsRendererRegistryEntry,
   rankWith,
-  isEnumControl,
-  optionIs,
-  and,
+  uiTypeIs,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
@@ -47,8 +45,8 @@ import {
   useJsonFormsEnumControl,
   RendererProps,
 } from '@jsonforms/vue2';
-import { default as ControlWrapper } from './ControlWrapper.vue';
-import { useVuetifyControl } from '../util';
+import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
+import { useVuetifyControlExt } from '../composition';
 import { VRadioGroup, VRadio, VLabel } from 'vuetify/lib';
 
 const controlRenderer = defineComponent({
@@ -63,7 +61,11 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsEnumControl(props));
+    return useVuetifyControlExt(
+      props,
+      useJsonFormsEnumControl(props),
+      (value) => value || undefined
+    );
   },
 });
 
@@ -71,6 +73,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(20, and(isEnumControl, optionIs('format', 'radio'))),
+  tester: rankWith(2, uiTypeIs('RadioGroup')),
 };
 </script>

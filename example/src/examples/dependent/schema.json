@@ -2,13 +2,36 @@
   "type": "object",
   "properties": {
     "letter": {
-      "type": "string"
+      "type": "object"
     },
     "categories": {
-      "type": "string"
+      "type": "object",
+      "properties": {
+        "API": {
+          "type": "string"
+        },
+        "Auth": {
+          "type": "string"
+        },
+        "Category": {
+          "type": "string"
+        },
+        "Cors": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "HTTPS": {
+          "type": "boolean"
+        },
+        "Link": {
+          "type": "string"
+        }
+      }
     },
     "entries": {
-      "type": "string"
+      "type": "object"
     },
     "custom": {
       "type": "string",

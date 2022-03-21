@@ -39,51 +39,11 @@ export const labelUIElementDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
-export const ruleDecorator: PropertySchemasDecorator = (
-  schemas: PropertySchemas
-) => {
-  assign(schemas.schema.properties, {
-    rule: {
-      type: 'object',
-    },
-  });
-  (schemas.uiSchema as Layout).elements.push(
-    createPropertyControl('#/properties/rule')
-  );
-  return schemas;
-};
-
-export const deepChangeDecorator: PropertySchemasDecorator = (
-  schemas: PropertySchemas,
-  uiElement: EditorUISchemaElement
-) => {
-  if (['Control', 'Dropdown'].includes(uiElement?.type)) {
-    if (!schemas.schema.properties) {
-      schemas.schema.properties = {};
-    }
-    assign(schemas.schema.properties, {
-      options: {
-        events: {
-          deepChange: {
-            arguments: '',
-            body1: '',
-          },
-        },
-      },
-    });
-
-    (schemas.uiSchema as Layout).elements.push(
-      createPropertyControl('#/properties/deepchange')
-    );
-  }
-  return schemas;
-};
-
 export const ItemsDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control', 'Dropdown'].includes(uiElement?.type)) {
+  if (['Control', 'Dropdown', "RadioGroup", "CheckboxGroup", "Suggest"].includes(uiElement?.type)) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -102,7 +62,7 @@ export const OnChangeDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control', 'Dropdown'].includes(uiElement?.type)) {
+  if (['Control', 'Dropdown', "RadioGroup", "CheckboxGroup", "Suggest"].includes(uiElement?.type)) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -250,8 +210,6 @@ export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
   multilineStringOptionDecorator,
   labelUIElementDecorator,
   urlDecorator,
-  ruleDecorator,
-  deepChangeDecorator,
   OnChangeDecorator,
   ItemsDecorator,
 ];

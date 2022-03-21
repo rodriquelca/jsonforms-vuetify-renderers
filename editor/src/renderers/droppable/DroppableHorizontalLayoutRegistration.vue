@@ -97,6 +97,9 @@ const droppableRenderer = defineComponent({
         if (
           evt.added.element &&
           (evt.added.element.type === 'Control' ||
+            evt.added.element.type === 'RadioGroup' ||
+            evt.added.element.type === 'Suggest' ||
+            evt.added.element.type === 'CheckboxGroup' ||
             evt.added.element.type === 'Dropdown')
         ) {
           //here update the schema

@@ -11,7 +11,7 @@ export { default as NumberControlRenderer } from './NumberControlRenderer.vue';
 export { default as OneOfEnumControlRenderer } from './OneOfEnumControlRenderer.vue';
 export { default as OneOfRadioGroupControlRenderer } from './OneOfRadioGroupControlRenderer.vue';
 export { default as PasswordControlRenderer } from './PasswordControlRenderer.vue';
-export { default as RadioGroupControlRenderer } from './RadioGroupControlRenderer.vue';
+export { default as RadioGroupDefaultControlRenderer } from './RadioGroupDefaultControlRenderer.vue';
 export { default as SliderControlRenderer } from './SliderControlRenderer.vue';
 export { default as StringControlRenderer } from './StringControlRenderer.vue';
 export { default as TimeControlRenderer } from './TimeControlRenderer.vue';
@@ -28,7 +28,7 @@ import { entry as numberControlRendererEntry } from './NumberControlRenderer.vue
 import { entry as oneOfEnumControlRendererEntry } from './OneOfEnumControlRenderer.vue';
 import { entry as oneOfRadioGroupControlRendererEntry } from './OneOfRadioGroupControlRenderer.vue';
 import { entry as passwordControlRendererEntry } from './PasswordControlRenderer.vue';
-import { entry as radioGroupControlRendererEntry } from './RadioGroupControlRenderer.vue';
+import { entry as radioGroupDefaultControlRendererEntry } from './RadioGroupDefaultControlRenderer.vue';
 import { entry as sliderControlRendererEntry } from './SliderControlRenderer.vue';
 import { entry as stringControlRendererEntry } from './StringControlRenderer.vue';
 import { entry as timeControlRendererEntry } from './TimeControlRenderer.vue';
@@ -46,7 +46,7 @@ export const controlRenderers = [
   oneOfEnumControlRendererEntry,
   oneOfRadioGroupControlRendererEntry,
   passwordControlRendererEntry,
-  radioGroupControlRendererEntry,
+  radioGroupDefaultControlRendererEntry,
   sliderControlRendererEntry,
   stringControlRendererEntry,
   timeControlRendererEntry,

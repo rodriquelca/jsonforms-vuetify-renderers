@@ -8,18 +8,18 @@
     <v-hover v-slot="{ hover }">
       <v-autocomplete
         :value="control.data"
-        :items="items"
+        :items="controlBuilder.items"
         :loading="isLoading"
-        :search-input.sync="search"
         hide-no-data
-        item-text="Description"
-        item-value="API"
+        :search-input.sync="search"
+        item-text="label"
+        item-value="value"
         :label="computedLabel"
         :placeholder="appliedOptions.placeholder"
         prepend-icon="mdi-database-search"
         return-object
         :clearable="hover"
-        @change="changeHandler"
+        @input="onChange"
       ></v-autocomplete>
     </v-hover>
   </control-wrapper>
@@ -29,10 +29,8 @@
 import {
   ControlElement,
   rankWith,
-  and,
-  isObjectControl,
   JsonFormsRendererRegistryEntry,
-  optionIs,
+  uiTypeIs,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
@@ -42,8 +40,10 @@ import {
 } from '@jsonforms/vue2';
 
 import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
-import { useVuetifyControl } from '../util';
+import { useVuetifyControlExt } from '../composition';
 import { VHover, VAutocomplete } from 'vuetify/lib';
+import { isFunction } from 'lodash';
+import _ from 'lodash';
 
 const controlRenderer = defineComponent({
   name: 'suggest-control-renderer',
@@ -64,50 +64,42 @@ const controlRenderer = defineComponent({
     VHover,
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(
+    return useVuetifyControlExt(
+      props,
       useJsonFormsControl(props),
       (value) => value || undefined
     );
   },
-  computed: {
-    items(): any {
-      return this.entries.map((entry: any) => {
-        const Description =
-          entry.Description.length > this.descriptionLimit
-            ? entry.Description.slice(0, this.descriptionLimit) + '...'
-            : entry.Description;
-        return Object.assign({}, entry, { Description });
-      });
-    },
-  },
-  methods: {
-    changeHandler(_value: Array<any>): any {},
-  },
+  computed: {},
+  methods: {},
   watch: {
     search() {
-      // Items have already been loaded
-      // if (this.items.length > 0) return;
-      // Items have already been requested
       if (this.isLoading) return;
-      this.isLoading = true;
-      // Lazily load input items
-      // fetch('https://api.publicapis.org/entries')
-      fetch(this.appliedOptions.url)
-        .then((res) => res.json())
-        .then((res: any) => {
-          const { entries } = res;
-          this.entries = entries;
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => (this.isLoading = false));
+      let prom;
+      //Verify if the controlBuilder.itemsbuilder is a function
+      if (isFunction(this.controlBuilder.itemsBuilder)) {
+        this.isLoading = true;
+        prom = this.controlBuilder.itemsBuilder(_, this.controlBuilder.payload);
+        if (Boolean(prom && typeof prom.then === 'function')) {
+          prom
+            .then((res: any) => {
+              this.controlBuilder.items = res;
+            })
+            .catch((err: any) => {
+              console.log(err);
+            })
+            .finally(() => (this.isLoading = false));
+        } else {
+          this.controlBuilder.items = prom;
+          this.isLoading = false;
+        }
+      }
     },
   },
 });
 export default controlRenderer;
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(7, and(isObjectControl, optionIs('suggest', true))),
+  tester: rankWith(9, uiTypeIs('Suggest')),
 };
 </script>

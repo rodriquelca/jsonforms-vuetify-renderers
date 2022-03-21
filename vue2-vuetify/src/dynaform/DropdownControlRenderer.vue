@@ -14,16 +14,17 @@
         :autofocus="appliedOptions.focus"
         :placeholder="appliedOptions.placeholder"
         :label="computedLabel"
+        :return-object="true"
         :hint="control.description"
         :persistent-hint="persistentHint()"
         :required="control.required"
         :error-messages="control.errors"
         :clearable="hover"
         :value="control.data"
-        :items="appliedOptions.items"
+        :items="controlBuilder.items"
         item-text="label"
         item-value="value"
-        @change="onChange"
+        @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />
@@ -45,9 +46,9 @@ import {
   RendererProps,
 } from '@jsonforms/vue2';
 import { default as ControlWrapper } from './../controls/ControlWrapper.vue';
-import { useVuetifyControlExt } from '../util';
 import { VSelect, VHover } from 'vuetify/lib';
 import { DisabledIconFocus } from './../controls/directives';
+import { useVuetifyControlExt } from '../composition';
 
 const controlRenderer = defineComponent({
   name: 'dropdown-control-renderer',

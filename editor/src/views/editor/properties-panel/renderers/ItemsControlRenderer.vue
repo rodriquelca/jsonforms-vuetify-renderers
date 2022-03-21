@@ -9,7 +9,7 @@
         ref="monacoEditorItems"
         :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
         :language="language"
-        height="50"
+        height="100"
         :options="{ minimap: { enabled: false }, fontSize: 10 }"
         v-model="ruleSchema"
         :editorBeforeMount="editorBeforeMount"
