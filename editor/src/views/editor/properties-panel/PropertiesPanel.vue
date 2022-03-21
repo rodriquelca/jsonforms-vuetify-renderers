@@ -21,6 +21,25 @@
         />
       </v-expansion-panel-content>
     </v-expansion-panel>
+
+    <v-expansion-panel>
+      <v-expansion-panel-header>
+        <div>
+          <v-icon>mdi-variable</v-icon>
+          <span> General</span>
+        </div>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <json-forms
+          v-if="schemasCollection"
+          :renderers="renderers"
+          :data="generalData"
+          :uischema="schemasCollection.get('general').uiSchema"
+          :schema="schemasCollection.get('general').schema"
+          @change="updateGeneralSettings"
+        />
+      </v-expansion-panel-content>
+    </v-expansion-panel>
     <v-expansion-panel>
       <v-expansion-panel-header>
         <div>
@@ -44,24 +63,6 @@
           :uischema="schemasCollection.get('rules').uiSchema"
           :schema="schemasCollection.get('rules').schema"
           @change="updateRulesSetting"
-        />
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-    <v-expansion-panel>
-      <v-expansion-panel-header>
-        <div>
-          <v-icon>mdi-variable</v-icon>
-          <span> General</span>
-        </div>
-      </v-expansion-panel-header>
-      <v-expansion-panel-content>
-        <json-forms
-          v-if="schemasCollection"
-          :renderers="renderers"
-          :data="generalData"
-          :uischema="schemasCollection.get('general').uiSchema"
-          :schema="schemasCollection.get('general').schema"
-          @change="updateGeneralSettings"
         />
       </v-expansion-panel-content>
     </v-expansion-panel>
@@ -128,7 +129,6 @@ const PropertiesPanel = defineComponent({
     };
   },
   mounted() {
-    console.log('mounted');
     this.setSelection(this.selectedElement);
   },
   watch: {
@@ -172,6 +172,7 @@ const PropertiesPanel = defineComponent({
             this.uiElement,
             elementSchema
           ));
+        this.initRulesPanel();
       }
     },
     updateGeneralSettings: function (event: JsonFormsChangeEvent) {
@@ -260,9 +261,10 @@ const PropertiesPanel = defineComponent({
         // this.handleChange('rule', rule);
         this.$store.dispatch('app/updateUISchemaElement', {
           elementUUID: this.uiElement.uuid,
-          changedProperties: { rule: rule },
+          changedProperties: { rule: rules.length > 0 ? rule : undefined },
         });
         this.generalData['rule'] = rule;
+        this.hasRule = rules.length > 0 ? true : false;
       } else {
         // this.setInvalidJson(true);
         console.error('invalud rule');
@@ -274,12 +276,12 @@ const PropertiesPanel = defineComponent({
     },
     addRuleHandler: function (event: JsonFormsChangeEvent) {
       this.hasRule = !this.hasRule;
-      let keys = Array.from(this.schema.properties.keys());
-      this.schemasCollection.get(
-        'rulesEditor'
-      ).schema.properties.rules.items.properties.field.enum = keys;
+      this.initRulesPanel();
+    },
 
-      this.generalData['rules'] = [
+    initRulesPanel: function () {
+      const keys = Array.from(this.schema.properties.keys());
+      const defaultRules = [
         {
           condition: 'is',
           field: keys[0],
@@ -287,6 +289,13 @@ const PropertiesPanel = defineComponent({
         },
       ];
 
+      this.schemasCollection.get(
+        'rulesEditor'
+      ).schema.properties.rules.items.properties.field.enum = keys;
+
+      this.generalData['rules'] = this.generalData['rules']
+        ? this.generalData['rules']
+        : defaultRules;
       this.generalData['allOrAny'] = 'allOf';
       this.generalData['effect'] = 'HIDE';
       console.log(this.generalData);
