@@ -33,7 +33,6 @@ class JReactivex {
       _.forEach(evs, (el) => {
         this.bus.$on(el, (d: any) => {
           let inter;
-          console.log(this.joinForkArray);
           _.forEach(this.joinForkArray, function (o) {
             if (!(_.indexOf(o.events, el) == -1)) {
               o.payload[el] = d;
