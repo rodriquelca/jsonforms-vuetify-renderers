@@ -163,11 +163,14 @@ export const cleanUiSchemaLinks = (
 };
 
 export const getVariableName = (
-  element: EditorUISchemaElement | undefined
-): string => {
+  element: EditorControl | undefined
+): string | undefined => {
   const validSegment = (pathSegment: string) =>
     pathSegment !== '#' && pathSegment !== undefined && pathSegment !== '';
-  const validPathSegments = element?.scope.split('/').filter(validSegment);
+  if (!element || !element.scope) {
+    return '';
+  }
+  const validPathSegments = element.scope.split('/').filter(validSegment);
 
   return validPathSegments.pop();
 };

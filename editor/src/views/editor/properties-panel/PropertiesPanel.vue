@@ -14,7 +14,7 @@
         <json-forms
           v-else-if="schemasCollection"
           :renderers="renderers"
-          :data="generalData"
+          :data="rulesData"
           :uischema="schemasCollection.get('rulesEditor').uiSchema"
           :schema="schemasCollection.get('rulesEditor').schema"
           @change="updateRulesEditorSetting"
@@ -124,6 +124,7 @@ const PropertiesPanel = defineComponent({
     return {
       panel: [1, 2],
       generalData: undefined,
+      rulesData: undefined,
       schemasCollection: undefined,
       hasRule: false,
     };
@@ -138,6 +139,9 @@ const PropertiesPanel = defineComponent({
   },
   computed: {
     selectedElement: sync('app/editor@selectedElement'),
+
+    // `this` apunta a la instancia vm
+    // return this.message
   },
 
   methods: {
@@ -162,17 +166,31 @@ const PropertiesPanel = defineComponent({
             : undefined;
 
         this.generalData['variable'] = getVariableName(this.uiElement);
-        this.generalData['required'] =
-          this.schema.schema.required &&
-          this.schema.schema.required.includes(getVariableName(this.uiElement));
-        (this.generalData['readOnly'] = elementSchema.schema.readOnly
-          ? elementSchema.schema.readOnly
-          : false),
-          (this.schemasCollection = this.propertiesService.getProperties(
-            this.uiElement,
-            elementSchema
-          ));
-        this.initRulesPanel();
+        if (elementSchema) {
+          this.generalData['required'] =
+            this.schema.schema.required &&
+            this.schema.schema.required.includes(
+              getVariableName(this.uiElement)
+            );
+          (this.generalData['readOnly'] = elementSchema.schema.readOnly
+            ? elementSchema.schema.readOnly
+            : false),
+            (this.schemasCollection = this.propertiesService.getProperties(
+              this.uiElement,
+              elementSchema
+            ));
+        }
+
+        // rule property
+        debugger;
+        if (this.generalData['rule']) {
+          this.populateFieldEnum();
+          this.setRulesData();
+          this.hasRule = true;
+        } else {
+          this.rulesData = undefined;
+          this.hasRule = false;
+        }
       }
     },
     updateGeneralSettings: function (event: JsonFormsChangeEvent) {
@@ -237,68 +255,100 @@ const PropertiesPanel = defineComponent({
       }
     },
     updateRulesEditorSetting: function (event: JsonFormsChangeEvent) {
-      // console.log(event);
-      let rule = {
-        effect: event.data.effect,
-        condition: {
-          scope: '#',
-          schema: {},
-        },
-      };
-      let rules = [];
-      event.data.rules.forEach(function (value) {
-        let properties = {};
-        properties[value.field] = { const: value.value };
-        rules.push({
-          type: 'object',
-          properties,
+      if (
+        event.data &&
+        event.data.rules &&
+        event.data.effect &&
+        event.data.allOrAny
+      ) {
+        let rule = {
+          effect: event.data.effect,
+          condition: {
+            scope: '#',
+            schema: {},
+          },
+        };
+        let rules = [];
+        event.data.rules.forEach(function (value) {
+          let properties = {};
+          properties[value.field] = { const: value.value };
+          rules.push({
+            type: 'object',
+            properties,
+          });
         });
-      });
 
-      rule.condition.schema[event.data.allOrAny] = rules;
-      if (this.isValidRule(rule)) {
-        // this.setInvalidJson(false);
-        // this.handleChange('rule', rule);
-        this.$store.dispatch('app/updateUISchemaElement', {
-          elementUUID: this.uiElement.uuid,
-          changedProperties: { rule: rules.length > 0 ? rule : undefined },
-        });
-        this.generalData['rule'] = rule;
-        this.hasRule = rules.length > 0 ? true : false;
-      } else {
-        // this.setInvalidJson(true);
-        console.error('invalud rule');
+        rule.condition.schema[event.data.allOrAny] = rules;
+
+        if (this.isValidRule(rule)) {
+          this.$store.dispatch('app/updateUISchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { rule: rules.length > 0 ? rule : undefined },
+          });
+
+          this.generalData['rule'] = rule;
+          this.hasRule = rules.length > 0 ? true : false;
+        } else {
+          this.hasRule = false;
+        }
       }
-      // console.log(rule);
     },
     isValidRule: (rule: any) => {
       return !rule || (rule.effect && rule.condition);
     },
     addRuleHandler: function (event: JsonFormsChangeEvent) {
       this.hasRule = !this.hasRule;
-      this.initRulesPanel();
+
+      this.populateFieldEnum();
+      this.createDefaultRule();
+    },
+    /**
+     * Populate field control with enum options
+     *
+     */
+    populateFieldEnum: function () {
+      const keys = Array.from(this.schema.properties.keys());
+      this.schemasCollection.get(
+        'rulesEditor'
+      ).schema.properties.rules.items.properties.field.enum = keys;
     },
 
-    initRulesPanel: function () {
+    createDefaultRule: function () {
       const keys = Array.from(this.schema.properties.keys());
-      const defaultRules = [
+      const rules = [
         {
           condition: 'is',
           field: keys[0],
           value: '',
         },
       ];
-
-      this.schemasCollection.get(
-        'rulesEditor'
-      ).schema.properties.rules.items.properties.field.enum = keys;
-
-      this.generalData['rules'] = this.generalData['rules']
-        ? this.generalData['rules']
-        : defaultRules;
-      this.generalData['allOrAny'] = 'allOf';
-      this.generalData['effect'] = 'HIDE';
-      console.log(this.generalData);
+      this.rulesData = {
+        rules,
+        allOrAny: 'allOf',
+        effect: 'HIDE',
+      };
+    },
+    setRulesData: function () {
+      let rules = [];
+      if (!this.generalData['rule']) {
+        return false;
+      }
+      const schema = this.generalData['rule'].condition.schema;
+      const allOrAny = Object.keys(schema)[0];
+      const elements = schema[allOrAny];
+      elements.forEach(function (value) {
+        const field = value.properties;
+        rules.push({
+          condition: 'is',
+          field: Object.keys(field)[0],
+          value: field[Object.keys(field)[0]].const,
+        });
+      });
+      this.rulesData = {
+        effect: this.generalData['rule'].effect,
+        allOrAny,
+        rules,
+      };
     },
   },
 });
