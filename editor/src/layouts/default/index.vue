@@ -4,9 +4,10 @@
     <default-view />
     <v-footer padless fixed>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon> mdi-cog-off </v-icon>
-      </v-btn>
+      <div color="success">
+        <v-icon color="success"> mdi-check-circle </v-icon>
+        <span>Changes saved</span>
+      </div>
     </v-footer>
   </v-app>
 </template>

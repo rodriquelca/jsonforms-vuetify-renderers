@@ -1,57 +1,80 @@
 <template>
-  <v-expansion-panels v-model="panels" multiple no-gutters>
+  <v-expansion-panels v-model="panel" multiple no-gutters>
     <v-expansion-panel>
       <v-expansion-panel-header>
         <div>
-          <v-icon>mdi-application-variable</v-icon>
-          <span> Variable</span>
+          <v-icon>mdi-share-variant-outline</v-icon>
+          <span> Rules Editor</span>
+        </div>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-btn block color="primary" v-if="!hasRule" @click="addRuleHandler">
+          <v-icon>mdi-plus</v-icon>Add Rule
+        </v-btn>
+        <json-forms
+          v-else-if="schemasCollection"
+          :renderers="renderers"
+          :data="rulesData"
+          :uischema="schemasCollection.get('rulesEditor').uiSchema"
+          :schema="schemasCollection.get('rulesEditor').schema"
+          @change="updateRulesEditorSetting"
+        />
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+
+    <v-expansion-panel>
+      <v-expansion-panel-header>
+        <div>
+          <v-icon>mdi-variable</v-icon>
+          <span> General</span>
         </div>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <json-forms
-          v-if="variableSettings"
+          v-if="schemasCollection"
           :renderers="renderers"
-          :data="variableData"
-          :uischema="variableSettings.uiSchema"
-          :schema="variableSettings.schema"
-          @change="updateVariableSettings"
+          :data="generalData"
+          :uischema="schemasCollection.get('general').uiSchema"
+          :schema="schemasCollection.get('general').schema"
+          @change="updateGeneralSettings"
         />
-        <json-forms
-          v-if="requiredSettings"
-          :renderers="renderers"
-          :data="requiredData"
-          :uischema="requiredSettings.uiSchema"
-          :schema="requiredSettings.schema"
-          @change="updateSchemaProperties"
-        />
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-expansion-panel>
+      <v-expansion-panel-header>
+        <div>
+          <v-icon>mdi-share-variant-outline</v-icon>
+          <span> Rules</span>
+        </div>
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-btn
+          block
+          color="primary"
+          v-if="!hasRule"
+          @click="hasRule = !hasRule"
+        >
+          <v-icon>mdi-plus</v-icon>Add Rule
+        </v-btn>
       </v-expansion-panel-content>
     </v-expansion-panel>
     <v-expansion-panel>
       <v-expansion-panel-header>
         <div>
           <v-icon> mdi-tune-vertical</v-icon>
-          <span> Design </span>
+          <span> Advanced </span>
         </div>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
         <json-forms
-          v-if="designProperties"
+          v-if="schemasCollection"
           :renderers="renderers"
-          :data="dataElement"
-          :uischema="designProperties.uiSchema"
-          :schema="designProperties.schema"
-          @change="updateDesignProperties"
+          :data="generalData"
+          :uischema="schemasCollection.get('advanced').uiSchema"
+          :schema="schemasCollection.get('advanced').schema"
+          @change="updateAdvancedSetting"
         />
       </v-expansion-panel-content>
-    </v-expansion-panel>
-    <v-expansion-panel>
-      <v-expansion-panel-header>
-        <div>
-          <v-icon> mdi-cog</v-icon>
-          <span> Settings </span>
-        </div>
-      </v-expansion-panel-header>
-      <v-expansion-panel-content> Schema Settings </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
 </template>
@@ -82,14 +105,11 @@ const PropertiesPanel = defineComponent({
   },
   data() {
     return {
-      dataElement: undefined,
-      designProperties: undefined,
-      uiElement: undefined,
-      variableSettings: undefined,
-      variableData: undefined,
-      requiredSettings: undefined,
-      requiredData: undefined,
-      panels: [0, 1, 2],
+      panel: [1, 2, 3, 4],
+      generalData: undefined,
+      rulesData: undefined,
+      schemasCollection: undefined,
+      hasRule: false,
     };
   },
   mounted() {
@@ -107,13 +127,14 @@ const PropertiesPanel = defineComponent({
   methods: {
     setSelection: function (newSelection) {
       this.uiElement = tryFindByUUID(this.uischema, newSelection);
-      this.dataElement = omit(this.uiElement, [
+      this.generalData = omit(this.uiElement, [
         'uuid',
         'parent',
         'elements',
         'linkedSchemaElement',
         'options.detail',
         'scope',
+        'type',
       ]);
 
       if (this.uiElement) {
@@ -123,62 +144,204 @@ const PropertiesPanel = defineComponent({
           linkedSchemaUUID && this.schema
             ? tryFindByUUID(this.schema, linkedSchemaUUID)
             : undefined;
-        this.designProperties = this.propertiesService.getDesignProperties(
-          this.uiElement,
-          elementSchema
-        );
 
-        // variable data
-        if (this.uiElement.scope) {
-          this.variableData = {
-            variable: getVariableName(this.uiElement),
-          };
-          this.variableSettings = this.propertiesService.getVariableSettings(
-            this.uiElement,
-            elementSchema
-          );
+        this.generalData['variable'] = getVariableName(this.uiElement);
+        if (elementSchema) {
+          this.generalData['required'] =
+            this.schema.schema.required &&
+            this.schema.schema.required.includes(
+              getVariableName(this.uiElement)
+            );
+          (this.generalData['readOnly'] = elementSchema.schema.readOnly
+            ? elementSchema.schema.readOnly
+            : false),
+            (this.schemasCollection = this.propertiesService.getProperties(
+              this.uiElement,
+              elementSchema
+            ));
+        }
 
-          this.requiredSettings = this.propertiesService.getRequiredSettings(
-            this.uiElement,
-            elementSchema
-          );
-          this.requiredData = {
-            required:
-              this.schema.schema.required &&
-              this.schema.schema.required.includes(
-                getVariableName(this.uiElement)
-              ),
-            readOnly: elementSchema.schema.readOnly
-              ? elementSchema.schema.readOnly
-              : false,
-          };
+        // rule property
+        if (this.generalData['rule']) {
+          this.populateFieldEnum();
+          this.setRulesData();
+          this.hasRule = true;
+        } else {
+          this.rulesData = undefined;
+          this.hasRule = false;
         }
       }
     },
-    updateDesignProperties: function (event: JsonFormsChangeEvent) {
+    updateGeneralSettings: function (event: JsonFormsChangeEvent) {
+      // variable
       if (this.uiElement && event.errors.length === 0) {
-        this.$store.dispatch('app/updateUISchemaElement', {
-          elementUUID: this.uiElement.uuid,
-          changedProperties: event.data,
-        });
+        if (
+          event.data.variable &&
+          this.generalData['variable'] !== event.data.variable
+        ) {
+          this.$store.dispatch('app/updateSchemaVariable', {
+            elementUUID: this.uiElement.uuid,
+            newVariable: event.data.variable,
+          });
+          this.generalData['variable'] = event.data.variable;
+        }
+        // required
+        if (
+          event.data.required &&
+          this.generalData['required'] !== event.data.required
+        ) {
+          this.$store.dispatch('app/updateSchemaRequired', {
+            elementUUID: this.uiElement.uuid,
+            required: event.data.required,
+          });
+
+          this.generalData['required'] = event.data.required;
+        }
+        // readOnly
+        if (
+          event.data.readOnly &&
+          this.generalData['readOnly'] !== event.data.readOnly
+        ) {
+          this.$store.dispatch('app/updateSchemaReadOnly', {
+            elementUUID: this.uiElement.uuid,
+            readOnly: event.data.readOnly,
+          });
+
+          this.generalData['readOnly'] = event.data.readOnly;
+        }
+        // label
+        if (
+          event.data.label &&
+          this.generalData['label'] !== event.data.label
+        ) {
+          this.$store.dispatch('app/updateUISchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { label: event.data.label },
+          });
+          this.generalData['label'] = event.data.label;
+        }
       }
     },
-    updateVariableSettings: function (event: JsonFormsChangeEvent) {
+    updateRulesSetting: function (event: JsonFormsChangeEvent) {
       if (this.uiElement && event.errors.length === 0) {
-        this.$store.dispatch('app/updateSchemaVariable', {
-          elementUUID: this.uiElement.uuid,
-          newVariable: event.data.variable,
-        });
+        if (event.data.rule && this.generalData['rule'] !== event.data.rule) {
+          this.$store.dispatch('app/updateUISchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: event.data,
+          });
+          this.generalData['rule'] = event.data.rule;
+        }
       }
     },
-    updateSchemaProperties: function (event: JsonFormsChangeEvent) {
+    updateAdvancedSetting: function (event: JsonFormsChangeEvent) {
       if (this.uiElement && event.errors.length === 0) {
-        this.$store.dispatch('app/updateSchemaProperties', {
-          elementUUID: this.uiElement.uuid,
-          required: event.data.required,
-          readOnly: event.data.readOnly,
-        });
+        if (
+          event.data.options &&
+          this.generalData['options'] !== event.data.options
+        ) {
+          this.$store.dispatch('app/updateUISchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { options: event.data.options },
+          });
+          this.generalData['options'] = event.data.options;
+        }
       }
+    },
+    updateRulesEditorSetting: function (event: JsonFormsChangeEvent) {
+      if (
+        event.data &&
+        event.data.rules &&
+        event.data.effect &&
+        event.data.allOrAny
+      ) {
+        let rule = {
+          effect: event.data.effect,
+          condition: {
+            scope: '#',
+            schema: {},
+          },
+        };
+        let rules = [];
+        event.data.rules.forEach(function (value) {
+          let properties = {};
+          properties[value.field] = { const: value.value };
+          rules.push({
+            type: 'object',
+            properties,
+          });
+        });
+
+        rule.condition.schema[event.data.allOrAny] = rules;
+
+        if (this.isValidRule(rule)) {
+          this.$store.dispatch('app/updateUISchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { rule: rules.length > 0 ? rule : undefined },
+          });
+
+          this.generalData['rule'] = rule;
+          this.hasRule = rules.length > 0 ? true : false;
+        } else {
+          this.hasRule = false;
+        }
+      }
+    },
+    isValidRule: (rule: any) => {
+      return !rule || (rule.effect && rule.condition);
+    },
+    addRuleHandler: function (event: JsonFormsChangeEvent) {
+      this.hasRule = !this.hasRule;
+
+      this.populateFieldEnum();
+      this.createDefaultRule();
+    },
+    /**
+     * Populate field control with enum options
+     *
+     */
+    populateFieldEnum: function () {
+      const keys = Array.from(this.schema.properties.keys());
+      this.schemasCollection.get(
+        'rulesEditor'
+      ).schema.properties.rules.items.properties.field.enum = keys;
+    },
+
+    createDefaultRule: function () {
+      const keys = Array.from(this.schema.properties.keys());
+      const rules = [
+        {
+          condition: 'is',
+          field: keys[0],
+          value: '',
+        },
+      ];
+      this.rulesData = {
+        rules,
+        allOrAny: 'allOf',
+        effect: 'HIDE',
+      };
+    },
+    setRulesData: function () {
+      let rules = [];
+      if (!this.generalData['rule']) {
+        return false;
+      }
+      const schema = this.generalData['rule'].condition.schema;
+      const allOrAny = Object.keys(schema)[0];
+      const elements = schema[allOrAny];
+      elements.forEach(function (value) {
+        const field = value.properties;
+        rules.push({
+          condition: 'is',
+          field: Object.keys(field)[0],
+          value: field[Object.keys(field)[0]].const,
+        });
+      });
+      this.rulesData = {
+        effect: this.generalData['rule'].effect,
+        allOrAny,
+        rules,
+      };
     },
   },
 });

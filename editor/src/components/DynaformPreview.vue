@@ -31,8 +31,9 @@
         </v-toolbar>
         <v-card>
           <json-forms
+            v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
+            :data="previewData"
             :key="key"
-            :data="data"
             :schema="useSchema"
             :uischema="useUiSchema"
             :renderers="renderers"
@@ -82,7 +83,8 @@ import { JsonSchema, JsonFormsI18nState } from '@jsonforms/core';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import JsonRefs from 'json-refs';
 import { createTranslator } from '../i18n';
-import { useExportSchema } from '../util';
+import { useExportSchema, useExportUiSchema } from '../util';
+import { generateEmptyData } from '../model';
 import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import _ from 'lodash';
 import store from '../store';
@@ -129,6 +131,9 @@ export default {
     },
     useSchema: function () {
       return useExportSchema(this.$store.get('app/editor@schema'));
+    },
+    previewData: function () {
+      return generateEmptyData(this.$store.get('app/editor@schema'), {});
     },
   },
   provide: () => {
