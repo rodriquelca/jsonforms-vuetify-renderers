@@ -92,9 +92,9 @@ const containsAs = (
         schemaElement.items
       )
         ? schemaElement.items.map((element, index) => [
-            element,
-            `items/${index}`,
-          ])
+          element,
+          `items/${index}`,
+        ])
         : [[schemaElement.items, 'items']];
       containments.push(...itemEntries);
       break;
@@ -168,8 +168,8 @@ export const toPrintableObject = (debugSchema: SchemaElement): any => {
 
 const isElementOfType =
   <T extends SchemaElement>(type: string) =>
-  (schemaElement: SchemaElement | undefined): schemaElement is T =>
-    schemaElement?.type === type;
+    (schemaElement: SchemaElement | undefined): schemaElement is T =>
+      schemaElement?.type === type;
 export const isObjectElement = isElementOfType<ObjectElement>(OBJECT);
 export const isArrayElement = isElementOfType<ArrayElement>(ARRAY);
 export const isPrimitiveElement = isElementOfType<PrimitiveElement>(PRIMITIVE);
@@ -388,11 +388,6 @@ export const generateEmptyData = (
 ): Record<string, unknown> => {
   if (isObjectElement(schema)) {
     Array.from(schema.properties).forEach(([key, value]) => {
-      // if (isObjectElement(value)) {
-      //   data[key] = generateEmptyData(value, {});
-      // } else {
-      //   data[key] = '';
-      // }
       if (value.schema.type) {
         switch (value.schema.type) {
           case 'object':

@@ -439,12 +439,10 @@ const actions = {
   updateSchemaRequired({ commit, state }, payload) {
     const clone = updateSchemaRequired(state, payload);
     commit('SET_SCHEMA', clone.schema);
-    // commit('SET_UI_SCHEMA', clone.uiSchema);
   },
   updateSchemaReadOnly({ commit, state }, payload) {
     const clone = updateSchemaReadOnly(state, payload);
     commit('SET_SCHEMA', clone.schema);
-    // commit('SET_UI_SCHEMA', clone.uiSchema);
   },
   updateUISchemaElementOption({ commit, state }, payload) {
     const clone = updateUISchemaElementOption(state, payload);

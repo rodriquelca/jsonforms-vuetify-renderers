@@ -56,14 +56,6 @@
         >
           <v-icon>mdi-plus</v-icon>Add Rule
         </v-btn>
-        <!-- <json-forms
-          v-else-if="schemasCollection"
-          :renderers="renderers"
-          :data="generalData"
-          :uischema="schemasCollection.get('rules').uiSchema"
-          :schema="schemasCollection.get('rules').schema"
-          @change="updateRulesSetting"
-        /> -->
       </v-expansion-panel-content>
     </v-expansion-panel>
     <v-expansion-panel>
@@ -84,15 +76,6 @@
         />
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <!-- <v-expansion-panel>
-      <v-expansion-panel-header>
-        <div>
-          <v-icon> mdi-cog</v-icon>
-          <span> Settings </span>
-        </div>
-      </v-expansion-panel-header>
-      <v-expansion-panel-content> Schema Settings </v-expansion-panel-content>
-    </v-expansion-panel> -->
   </v-expansion-panels>
 </template>
 

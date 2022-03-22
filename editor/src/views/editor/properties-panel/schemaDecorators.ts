@@ -292,15 +292,6 @@ const defaultDecoreators: PropertySchemasDecorator[] = [
   ItemsDecorator,
 ];
 
-// export const defaultSchemaDecoratorsCollection =new Map<string, PropertySchemasDecorator>(
-//   "general", [
-//     variableDecorator,
-//     labelDecorator,
-//     requiredDecorator,
-//     readOnlyDecorator,
-//   ]),
-// };
-
 export const defaultSchemaDecoratorsCollection = new Map<
   string,
   PropertySchemasDecorator[]
