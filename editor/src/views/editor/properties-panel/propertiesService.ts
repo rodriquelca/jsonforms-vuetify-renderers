@@ -51,8 +51,9 @@ export class PropertiesServiceImpl implements PropertiesService {
     private schemaProviders: PropertySchemasProvider[],
     private schemaDecorators: PropertySchemasDecorator[],
     private schemaVariableDecorators: PropertySchemasDecorator[],
-    private schemaRequiredDecorators: PropertySchemasDecorator[]
-  ) {}
+    private schemaRequiredDecorators: PropertySchemasDecorator[],
+    private schemaDatePropertiesDecorators: PropertySchemasDecorator[]
+  ) { }
   getDesignProperties = (
     uiElement: EditorUISchemaElement,
     schemaElement: SchemaElement | undefined
@@ -111,6 +112,27 @@ export class PropertiesServiceImpl implements PropertiesService {
       return undefined;
     }
     const decoratedSchemas = this.schemaRequiredDecorators.reduce(
+      (schemas, decorator) => decorator(schemas, uiElement, schemaElement),
+      elementSchemas
+    );
+    return decoratedSchemas;
+  };
+  getDatePropertiesSettings = (
+    uiElement: EditorUISchemaElement,
+    schemaElement: SchemaElement | undefined
+  ): PropertySchemas | undefined => {
+    const provider = maxBy(this.schemaProviders, (p) => p.tester(uiElement));
+    if (!provider || provider.tester(uiElement) === NOT_APPLICABLE) {
+      return undefined;
+    }
+    const elementSchemas = provider.getPropertiesSchemas(
+      uiElement,
+      schemaElement
+    );
+    if (!elementSchemas) {
+      return undefined;
+    }
+    const decoratedSchemas = this.schemaDatePropertiesDecorators.reduce(
       (schemas, decorator) => decorator(schemas, uiElement, schemaElement),
       elementSchemas
     );

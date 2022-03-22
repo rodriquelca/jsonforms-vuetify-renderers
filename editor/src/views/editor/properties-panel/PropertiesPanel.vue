@@ -24,6 +24,14 @@
           :schema="requiredSettings.schema"
           @change="updateSchemaProperties"
         />
+        <json-forms
+          v-if="dateProperties"
+          :renderers="renderers"
+          :data="requiredData"
+          :uischema="dateProperties.uiSchema"
+          :schema="dateProperties.schema"
+          @change="updateDateProperties"
+        />
       </v-expansion-panel-content>
     </v-expansion-panel>
     <v-expansion-panel>
@@ -88,6 +96,7 @@ const PropertiesPanel = defineComponent({
       variableSettings: undefined,
       variableData: undefined,
       requiredSettings: undefined,
+      dateProperties: undefined,
       requiredData: undefined,
       panels: [0, 1, 2],
     };
@@ -152,6 +161,11 @@ const PropertiesPanel = defineComponent({
               ? elementSchema.schema.readOnly
               : false,
           };
+          this.dateProperties =
+            this.propertiesService.getDatePropertiesSettings(
+              this.uiElement,
+              elementSchema
+            );
         }
       }
     },
@@ -179,6 +193,9 @@ const PropertiesPanel = defineComponent({
           readOnly: event.data.readOnly,
         });
       }
+    },
+    updateDateProperties: function (event: JsonFormsChangeEvent) {
+      console.log(event);
     },
   },
 });

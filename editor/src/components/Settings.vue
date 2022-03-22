@@ -59,6 +59,7 @@ import {
   defaultPropertyRenderers,
   schemaVariableDecorators,
   schemaRequiredDecorators,
+  schemaDatePropertiesDecorators,
 } from '../views/editor/properties-panel';
 import PropertiesPanel from '../views/editor/properties-panel';
 import {
@@ -109,19 +110,22 @@ export default {
       schemaProviders: PropertySchemasProvider[],
       schemaDecorators: PropertySchemasDecorator[],
       schemaVariableDecorators: PropertySchemasDecorator[],
-      schemaRequiredDecorators: PropertySchemasDecorator[]
+      schemaRequiredDecorators: PropertySchemasDecorator[],
+      schemaDatePropertiesDecorators: PropertySchemasDecorator[]
     ) =>
       new PropertiesServiceImpl(
         schemaProviders,
         schemaDecorators,
         schemaVariableDecorators,
-        schemaRequiredDecorators
+        schemaRequiredDecorators,
+        schemaDatePropertiesDecorators
       );
     this.propertiesService = propertiesServiceProvider(
       defaultSchemaProviders,
       defaultSchemaDecorators,
       schemaVariableDecorators,
-      schemaRequiredDecorators
+      schemaRequiredDecorators,
+      schemaDatePropertiesDecorators
     );
   },
 };

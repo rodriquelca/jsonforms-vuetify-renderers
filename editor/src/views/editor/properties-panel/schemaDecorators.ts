@@ -43,7 +43,11 @@ export const ItemsDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control', 'Dropdown', "RadioGroup", "CheckboxGroup", "Suggest"].includes(uiElement?.type)) {
+  if (
+    ['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest'].includes(
+      uiElement?.type
+    )
+  ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -62,7 +66,11 @@ export const OnChangeDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control', 'Dropdown', "RadioGroup", "CheckboxGroup", "Suggest"].includes(uiElement?.type)) {
+  if (
+    ['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest'].includes(
+      uiElement?.type
+    )
+  ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -197,6 +205,61 @@ export const urlDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const minDateDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Control'].includes(uiElement?.type)) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, {
+      minDate: { type: 'string', format: 'date' },
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/minDate')
+    );
+  }
+  return schemas;
+};
+export const maxDateDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Control'].includes(uiElement?.type)) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, {
+      maxDate: { type: 'string', format: 'date' },
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/maxDate')
+    );
+  }
+  return schemas;
+};
+export const defaultDateDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Control'].includes(uiElement?.type)) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, {
+      defaultDate: { type: 'string', format: 'date' },
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/defaultDate')
+    );
+  }
+  return schemas;
+};
+
 export const createPropertyControl = (
   controlScope: string
 ): ControlElement => ({
@@ -221,4 +284,10 @@ export const schemaVariableDecorators: PropertySchemasDecorator[] = [
 export const schemaRequiredDecorators: PropertySchemasDecorator[] = [
   requiredDecorator,
   readOnlyDecorator,
+];
+
+export const schemaDatePropertiesDecorators: PropertySchemasDecorator[] = [
+  minDateDecorator,
+  maxDateDecorator,
+  defaultDateDecorator,
 ];
