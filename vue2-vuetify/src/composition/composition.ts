@@ -8,8 +8,6 @@ import {
   Resolve,
 } from '@jsonforms/core';
 import { RendererProps } from '@jsonforms/vue2';
-import cloneDeep from 'lodash/cloneDeep';
-import merge from 'lodash/merge';
 import { useStyles } from '../styles';
 import {
   computed,
@@ -26,19 +24,11 @@ import {
   onDeactivated,
   onErrorCaptured,
 } from '../vue';
-import Vue from 'vue';
 import Ajv from 'ajv';
 import _ from 'lodash';
-
-const useControlAppliedOptions = <I extends { control: any }>(input: I) => {
-  return computed(() =>
-    merge(
-      {},
-      cloneDeep(input.control.value.config),
-      cloneDeep(input.control.value.uischema.options)
-    )
-  );
-};
+import { useControlAppliedOptions } from './appliedoptions';
+import * as Controlbuilder from './controlbuilder';
+import { reactive } from '@vue/composition-api';
 
 const useComputedLabel = <I extends { control: any }>(
   input: I,
@@ -123,23 +113,7 @@ export const useTranslator = () => {
   return translate;
 };
 
-/**
- * Adds styles and appliedOptions
- */
-export const useVuetifyLayout = <I extends { layout: any }>(input: I) => {
-  const appliedOptions = computed(() =>
-    merge(
-      {},
-      cloneDeep(input.layout.value.config),
-      cloneDeep(input.layout.value.uischema.options)
-    )
-  );
-  return {
-    ...input,
-    styles: useStyles(input.layout.value.uischema),
-    appliedOptions,
-  };
-};
+
 
 /**
  * Adds styles, appliedOptions and childUiSchema
@@ -223,6 +197,13 @@ export const useVuetifyControlExt = <
 ) => {
   const appliedOptions = useControlAppliedOptions(input);
 
+
+  const controlBuilder = reactive({
+    items: Controlbuilder.items(input.control.value.uischema),
+    itemsBuilder: Controlbuilder.itemsBuilder(input.control.value.uischema),
+    payload: {}
+  });
+
   const isFocused = ref(false);
   const onChange = (value: any) => {
     input.handleChange(input.control.value.path, adaptValue(value));
@@ -248,65 +229,29 @@ export const useVuetifyControlExt = <
   const styles = useStyles(input.control.value.uischema);
 
   // Extension for dependents fields
-  const indexc = pathControlSchema(props.uischema.scope);
   const JForm = inject<any>('JForm');
   const store = inject<any>('store');
   const JReactivex = inject<any>('JReactivex');
 
-  // CREATE FUNCTION
-  let fnOnchange = new Function();
-  if (
-    props.uischema.options &&
-    props.uischema.options.events &&
-    props.uischema.options.events.onChange
-  ) {
-    fnOnchange = new Function(
-      props.uischema.options.events.onChange.arguments,
-      props.uischema.options.events.onChange.body
-    );
-  }
-  // CREATE FUNCTION DEEPCHANGE
-  let deepChange = new Function();
-  if (
-    props.uischema.options &&
-    props.uischema.options.events &&
-    props.uischema.options.events.deepChange
-  ) {
-    deepChange = new Function(
-      props.uischema.options.events.deepChange.arguments,
-      props.uischema.options.events.deepChange.body
-    );
-  }
-  //Watch own value
-  const unwatch = store.watch(
-    (_state: any, getters: any) => {
-      return getters['app/getDataModel'](indexc);
-    },
-    (n: string, o: string) => {
-      JReactivex.emit(indexc, n);
-      Vue.nextTick(() => {
-        fnOnchange(JForm, n, o);
-      });
-    }
-  );
+  //Watch for execute onchange
+  const unwatch = Controlbuilder.watchScope(store, props.uischema, {
+    JForm,
+    JReactivex
+  });
 
-  const dependencies = _.map(
-    props.uischema.rule && props.uischema.rule.condition.conditions
-      ? props.uischema.rule.condition.conditions
-      : [],
-    (e) => pathControlSchema(e.scope)
-  );
-  JReactivex.joinFork(
-    dependencies,
-    (payload: any) => {
-      deepChange(_, payload).then((res: any) => {
-        const newArray = res || [];
-        Vue.nextTick(() => {
-          JForm.setItems(indexc, newArray);
-        });
-      });
+  Controlbuilder.scopesHandler(props.uischema, {
+    JReactivex,
+    JForm
+  },
+    // Save new items 
+    (narray: any) => {
+      controlBuilder.items = narray;
     },
-    indexc
+    //Save payload fom dependencies
+    (payload: any) => {
+      controlBuilder.payload = payload;
+    }
+
   );
 
   onBeforeMount(() => { });
@@ -331,9 +276,6 @@ export const useVuetifyControlExt = <
     onChange,
     persistentHint,
     computedLabel,
+    controlBuilder
   };
-};
-
-const pathControlSchema = (input: string): string => {
-  return input.split('/').pop() || '';
 };

@@ -5,24 +5,30 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    <v-checkbox
+    <v-label :for="control.id + '-input'">{{ computedLabel }}</v-label>
+    <v-radio-group
       :id="control.id + '-input'"
       :class="styles.control.input"
       :disabled="!control.enabled"
       :autofocus="appliedOptions.focus"
       :placeholder="appliedOptions.placeholder"
-      :label="computedLabel"
       :hint="control.description"
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      :indeterminate="control.data === undefined"
+      row
       :value="control.data"
-      :input-value="control.data"
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
-    />
+    >
+      <v-radio
+        v-for="o in control.options"
+        :key="o.value"
+        :label="o.label"
+        :value="o.value"
+      ></v-radio>
+    </v-radio-group>
   </control-wrapper>
 </template>
 
@@ -31,33 +37,33 @@ import {
   ControlElement,
   JsonFormsRendererRegistryEntry,
   rankWith,
-  isBooleanControl,
+  isEnumControl,
+  optionIs,
+  and,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
   rendererProps,
-  useJsonFormsControl,
+  useJsonFormsEnumControl,
   RendererProps,
 } from '@jsonforms/vue2';
 import { default as ControlWrapper } from './ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VCheckbox } from 'vuetify/lib';
+import { VRadioGroup, VRadio, VLabel } from 'vuetify/lib';
 
 const controlRenderer = defineComponent({
-  name: 'boolean-control-renderer',
+  name: 'radio-group-default-control-renderer',
   components: {
-    VCheckbox,
     ControlWrapper,
+    VRadioGroup,
+    VRadio,
+    VLabel,
   },
   props: {
     ...rendererProps<ControlElement>(),
   },
-  mounted() {},
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(
-      useJsonFormsControl(props),
-      (newValue) => newValue || false
-    );
+    return useVuetifyControl(useJsonFormsEnumControl(props));
   },
 });
 
@@ -65,6 +71,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(1, isBooleanControl),
+  tester: rankWith(20, and(isEnumControl, optionIs('format', 'radio'))),
 };
 </script>

@@ -2,47 +2,36 @@
   "type": "object",
   "properties": {
     "letter": {
-      "type": "string",
-      "enum": [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z"
-      ]
+      "type": "object"
     },
     "categories": {
-      "type": "string",
-      "enum": [
-        "example"
-      ]
+      "type": "object",
+      "properties": {
+        "API": {
+          "type": "string"
+        },
+        "Auth": {
+          "type": "string"
+        },
+        "Category": {
+          "type": "string"
+        },
+        "Cors": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        },
+        "HTTPS": {
+          "type": "boolean"
+        },
+        "Link": {
+          "type": "string"
+        }
+      }
     },
     "entries": {
-      "type": "string",
-      "enum": [
-        "example"
-      ]
+      "type": "object"
     },
     "custom": {
       "type": "string",

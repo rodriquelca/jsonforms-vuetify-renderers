@@ -39,7 +39,8 @@ import {
   EditorUISchemaElement,
   getVariableName,
 } from '../../model/uischema';
-import { setSchema } from '@jsonforms/core';
+
+import { CollectionStore } from '@jsonforms/vue2';
 /** Removes the given UI element from its tree.
  *  If a SchemaElement is provided, the element to remove will be cleaned up from all linkedUISchemaElements fields in the schema.
  */
@@ -341,10 +342,14 @@ const state: AppState = {
     dataModel: undefined,
     dataVariables: undefined,
   },
+  data: {},
+  schemaModel: {},
+  uischemaModel: {},
 };
 // make all mutations
 const mutations = {
   ...make.mutations(state),
+  ...CollectionStore.mutations,
   SET_SCHEMA: (state, value) => {
     state.editor.schema = value;
   },
@@ -387,12 +392,11 @@ const mutations = {
     state.editor.uiSchema = clone.uiSchema;
   },
 };
-
 // const actions = make.actions(state);
 const actions = {
   // automatically create only `setItems()` action
   ...make.actions(state),
-
+  ...CollectionStore.actions,
   // manually add load items action
   getPaletteElements({ commit }) {
     const paletteService = new DefaultPaletteService();
@@ -448,7 +452,9 @@ const actions = {
   },
 };
 
-const getters = {};
+const getters = {
+  ...CollectionStore.getters,
+};
 
 const app: Module<AppState, RootState> = {
   namespaced: true,

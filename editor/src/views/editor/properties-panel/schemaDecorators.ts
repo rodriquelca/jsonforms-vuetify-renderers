@@ -39,17 +39,56 @@ export const labelUIElementDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
-export const ruleDecorator: PropertySchemasDecorator = (
-  schemas: PropertySchemas
+export const ItemsDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
 ) => {
-  assign(schemas.schema.properties, {
-    rule: {
-      type: 'object',
-    },
-  });
-  (schemas.uiSchema as Layout).elements.push(
-    createPropertyControl('#/properties/rule')
-  );
+  if (
+    ['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest'].includes(
+      uiElement?.type
+    )
+  ) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, {
+      options: {},
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/items')
+    );
+  }
+  return schemas;
+};
+
+export const OnChangeDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (
+    ['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest'].includes(
+      uiElement?.type
+    )
+  ) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, {
+      options: {
+        events: {
+          onChange: {
+            arguments: '',
+            body: '',
+          },
+        },
+      },
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/onchange')
+    );
+  }
   return schemas;
 };
 
@@ -57,7 +96,7 @@ export const variableDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control'].includes(uiElement?.type)) {
+  if (['Control', 'Dropdown'].includes(uiElement?.type)) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -73,7 +112,7 @@ export const requiredDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control'].includes(uiElement?.type)) {
+  if (['Control', 'Dropdown'].includes(uiElement?.type)) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -89,7 +128,7 @@ export const readOnlyDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control'].includes(uiElement?.type)) {
+  if (['Control', 'Dropdown'].includes(uiElement?.type)) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -109,6 +148,7 @@ export const labelDecorator: PropertySchemasDecorator = (
   if (
     [
       'Group',
+      'Dropdown',
       'Control',
       'Suggest',
       'MultipleFile',
@@ -150,7 +190,10 @@ export const urlDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control'].includes(uiElement?.type) && uiElement.options?.suggest) {
+  if (
+    ['Control', 'Dropdown'].includes(uiElement?.type) &&
+    uiElement.options?.suggest
+  ) {
     addSchemaOptionsProperty(schemas.schema, {
       url: { type: 'string' },
     });
@@ -245,7 +288,8 @@ const defaultDecoreators: PropertySchemasDecorator[] = [
   multilineStringOptionDecorator,
   labelUIElementDecorator,
   urlDecorator,
-  ruleDecorator,
+  OnChangeDecorator,
+  ItemsDecorator,
 ];
 
 // export const defaultSchemaDecoratorsCollection =new Map<string, PropertySchemasDecorator>(
@@ -265,6 +309,6 @@ export const defaultSchemaDecoratorsCollection = new Map<
     'general',
     [variableDecorator, labelDecorator, requiredDecorator, readOnlyDecorator],
   ],
-  ['rules', [ruleDecorator]],
   ['rulesEditor', [ruleEditorDecorator]],
+  ['advanced', [OnChangeDecorator, ItemsDecorator]],
 ]);

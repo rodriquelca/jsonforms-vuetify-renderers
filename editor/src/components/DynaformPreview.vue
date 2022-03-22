@@ -10,7 +10,7 @@
           v-on="on"
           @click.stop="dialog = !dialog"
         >
-          <v-icon size="30" color="primary">mdi-eye</v-icon>
+          <v-icon size="30" color="primary" @click="onClick">mdi-eye</v-icon>
         </v-btn>
       </template>
       Preview
@@ -33,12 +33,14 @@
           <json-forms
             v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
             :data="previewData"
+            :key="key"
             :schema="useSchema"
             :uischema="useUiSchema"
             :renderers="renderers"
             :cells="renderers"
+            @change="onChange"
           />
-          <v-container v-else>
+          <v-container>
             <v-row
               v-if="!resolvedSchema.resolved"
               class="fill-height"
@@ -84,7 +86,10 @@ import { createTranslator } from '../i18n';
 import { useExportSchema, useExportUiSchema } from '../util';
 import { generateEmptyData } from '../model';
 import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
-import { VariableBuilder } from './../util/mixutils.js';
+import _ from 'lodash';
+import store from '../store';
+import { JReactivex as JReact, JForm as JF } from '@jsonforms/vue2';
+import { sync } from 'vuex-pathify';
 export default {
   name: 'dymaform-preview',
   components: {
@@ -99,7 +104,9 @@ export default {
   },
   data() {
     return {
+      key: 1,
       dialog: false,
+      data: store.get('app/data'),
       resolvedSchema: {
         schema: undefined,
         resolved: false,
@@ -120,8 +127,7 @@ export default {
   },
   computed: {
     useUiSchema: function () {
-      this.buildVariables(this.$store.get('app/editor@uiSchema'));
-      return useExportUiSchema(this.$store.get('app/editor@uiSchema'));
+      return this.$store.get('app/editor@uiSchema');
     },
     useSchema: function () {
       return useExportSchema(this.$store.get('app/editor@schema'));
@@ -130,15 +136,26 @@ export default {
       return generateEmptyData(this.$store.get('app/editor@schema'), {});
     },
   },
+  provide: () => {
+    return {
+      store: store,
+      JReactivex: JReact,
+      JForm: new JF({
+        data: {
+          store: store,
+        },
+      }),
+    };
+  },
   mounted() {
     this.resolveSchema(useExportSchema(this.$store.get('app/editor@schema')));
   },
   methods: {
-    onChange(event: JsonFormsChangeEvent): void {
-      this.$emit('change', event);
+    onClick() {
+      this.key++;
     },
-    buildVariables(json: JSON): void {
-      let y = VariableBuilder.build(json);
+    onChange(event: JsonFormsChangeEvent): void {
+      this.$store.set('app/data', event.data || {});
     },
     resolveSchema(schema?: JsonSchema): void {
       const resolvedSchema = this.resolvedSchema;

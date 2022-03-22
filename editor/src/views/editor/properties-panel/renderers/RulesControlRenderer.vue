@@ -1,16 +1,16 @@
 <template>
   <!-- <container> -->
-  <v-card class="mx-auto" max-width="344" outlined>
+  <v-card class="mx-auto" outlined>
     <v-container>
-      <h4>Rules</h4>
-      <p class="text--disabled" x-small>
+      <h5>Rules</h5>
+      <span class="text--disabled text-caption" x-small>
         {{ ruleDescription }}
-      </p>
+      </span>
       <monaco-editor
         :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
         :language="`json`"
-        height="200"
-        :options="{ minimap: { enabled: false } }"
+        height="50"
+        :options="{ minimap: { enabled: false }, fontSize: 10 }"
         v-model="ruleSchema"
         :editorBeforeMount="registerValidations"
       >
@@ -18,7 +18,7 @@
       <div class="red--text text--lighten-1" :hidden="!invalidJson">
         {{ invalidJsonMessage }}
       </div>
-      <v-btn depressed color="primary" @click="onClick"> Apply </v-btn>
+      <v-btn depressed color="primary" @click="onClick" x-small> Apply </v-btn>
     </v-container>
   </v-card>
 </template>
@@ -61,8 +61,7 @@ const controlRenderer = defineComponent({
     MonacoEditor,
   },
   data: () => ({
-    ruleDescription:
-      'Define conditions and effects that can dynamically control features of the UI based on data.',
+    ruleDescription: 'Define conditions and effects',
     ruleSchema: undefined as monaco.editor.ITextModel,
     monacoHeight: '200',
     monacoWidth: '200',

@@ -56,14 +56,14 @@
         >
           <v-icon>mdi-plus</v-icon>Add Rule
         </v-btn>
-        <json-forms
+        <!-- <json-forms
           v-else-if="schemasCollection"
           :renderers="renderers"
           :data="generalData"
           :uischema="schemasCollection.get('rules').uiSchema"
           :schema="schemasCollection.get('rules').schema"
           @change="updateRulesSetting"
-        />
+        /> -->
       </v-expansion-panel-content>
     </v-expansion-panel>
     <v-expansion-panel>
@@ -74,14 +74,14 @@
         </div>
       </v-expansion-panel-header>
       <v-expansion-panel-content>
-        <!-- <json-forms
-          v-if="designProperties"
+        <json-forms
+          v-if="schemasCollection"
           :renderers="renderers"
-          :data="dataElement"
-          :uischema="designProperties.uiSchema"
-          :schema="designProperties.schema"
-          @change="updateDesignProperties"
-        /> -->
+          :data="generalData"
+          :uischema="schemasCollection.get('advanced').uiSchema"
+          :schema="schemasCollection.get('advanced').schema"
+          @change="updateAdvancedSetting"
+        />
       </v-expansion-panel-content>
     </v-expansion-panel>
     <!-- <v-expansion-panel>
@@ -122,7 +122,7 @@ const PropertiesPanel = defineComponent({
   },
   data() {
     return {
-      panel: [1, 2],
+      panel: [1, 2, 3, 4],
       generalData: undefined,
       rulesData: undefined,
       schemasCollection: undefined,
@@ -139,9 +139,6 @@ const PropertiesPanel = defineComponent({
   },
   computed: {
     selectedElement: sync('app/editor@selectedElement'),
-
-    // `this` apunta a la instancia vm
-    // return this.message
   },
 
   methods: {
@@ -251,6 +248,20 @@ const PropertiesPanel = defineComponent({
             changedProperties: event.data,
           });
           this.generalData['rule'] = event.data.rule;
+        }
+      }
+    },
+    updateAdvancedSetting: function (event: JsonFormsChangeEvent) {
+      if (this.uiElement && event.errors.length === 0) {
+        if (
+          event.data.options &&
+          this.generalData['options'] !== event.data.options
+        ) {
+          this.$store.dispatch('app/updateUISchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { options: event.data.options },
+          });
+          this.generalData['options'] = event.data.options;
         }
       }
     },

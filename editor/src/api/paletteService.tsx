@@ -178,44 +178,24 @@ const controlElements = [
     },
   },
   {
-    type: 'Control',
+    type: 'Suggest',
     label: 'Suggest',
     icon: 'mdi-text-box-search-outline',
     uiSchemaElementProvider: () => {
       const control = {
-        type: "object",
-        properties: {
-          API: {
-            type: "string"
-          },
-          Auth: {
-            type: "string"
-          },
-          Category: {
-            type: "string"
-          },
-          Cors: {
-            type: "string"
-          },
-          Description: {
-            type: "string"
-          },
-          HTTPS: {
-            type: "boolean"
-          },
-          Link: {
-            type: "string"
-          }
-        }
+        type: "object"
       }
       return {
         control,
         variable: "suggest",
         uiOptions: {
-          "suggest": true,
-          "url": "https://api.publicapis.org/entries",
-          "query": "test",
-          "placeholder": "Start typing to Search"
+          events: {
+            onChange: {
+              arguments: "JForm, nval, oval",
+              body: ""
+            },
+          },
+          items: []
         }
       };
     },
@@ -277,31 +257,75 @@ const controlElements = [
     },
   },
   {
-    type: 'Control',
+    type: 'RadioGroup',
     label: 'Radio Group',
     icon: 'mdi-radiobox-marked',
     uiSchemaElementProvider: () => {
       const control = {
-        "type": "string",
-        "enum": [
-          "One",
-          "Two",
-          "Three"
-        ]
+        "type": "string"
       };
       return {
         control,
-        variable: "radioGroup",
+        variable: "radiogroup",
         uiOptions: {
-          "format": "radio"
+          events: {
+            onChange: {
+              arguments: "JForm, nval, oval",
+              body: ""
+            },
+          },
+          items: []
         }
       };
     },
   },
-
+  {
+    type: 'Dropdown',
+    label: 'Dropdown',
+    icon: 'mdi-form-dropdown',
+    uiSchemaElementProvider: () => {
+      const control = {
+        "type": "string"
+      };
+      return {
+        control,
+        variable: "dropdown",
+        uiOptions: {
+          events: {
+            onChange: {
+              arguments: "JForm, nval, oval",
+              body: ""
+            },
+          },
+          items: []
+        }
+      };
+    },
+  },
+  {
+    type: 'CheckboxGroup',
+    label: 'Checkbox Group',
+    icon: 'mdi-checkbox-outline',
+    uiSchemaElementProvider: () => {
+      const control = {
+        "type": "string"
+      };
+      return {
+        control,
+        variable: "checkboxgroup",
+        uiOptions: {
+          events: {
+            onChange: {
+              arguments: "JForm, nval, oval",
+              body: ""
+            },
+          },
+          items: []
+        }
+      };
+    },
+  },
 ];
-
-
 const complexElements = [
   {
     type: 'Control',

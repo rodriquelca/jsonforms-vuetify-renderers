@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <draggable
       :class="draggableClass"
       :list="[]"
@@ -92,7 +91,14 @@ const droppableRenderer = defineComponent({
   methods: {
     handleChange(evt: any) {
       if (evt.added) {
-        if (evt.added.element && evt.added.element.type === 'Control') {
+        if (
+          evt.added.element &&
+          (evt.added.element.type === 'Control' ||
+            evt.added.element.type === 'RadioGroup' ||
+            evt.added.element.type === 'Suggest' ||
+            evt.added.element.type === 'CheckboxGroup' ||
+            evt.added.element.type === 'Dropdown')
+        ) {
           //here update the schema
           const property = evt.added.element.uiSchemaElementProvider();
           const newElement = buildSchemaTree(property.control);
@@ -108,7 +114,10 @@ const droppableRenderer = defineComponent({
             newElement.uuid
           );
           schemaElement.options = property.uiOptions;
-          const newUIElement = createControl(schemaElement, 'Control');
+          const newUIElement = createControl(
+            schemaElement,
+            evt.added.element.type
+          );
           this.$store.dispatch('app/addScopedElementToLayout', {
             uiSchemaElement: newUIElement,
             layoutUUID: this.uischema.uuid,
