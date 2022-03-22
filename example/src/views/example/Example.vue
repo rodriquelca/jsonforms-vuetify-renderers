@@ -14,9 +14,6 @@
             <v-tab-item :key="0">
               <demo-form
                 :example="example"
-                :data="data"
-                :uischemaModel="uischemaModel"
-                :schemaModel="schemaModel"
                 :renderers="renderers"
                 :cells="cells"
                 :config="config"
@@ -270,14 +267,16 @@ export default {
     },
     setExample(example: Example): void {
       let store = this.$store;
+      debugger;
       if (example) {
+        this.updateJsonModels(example);
         this.example = {
           id: example.id,
           title: example.title,
           input: {
-            schema: example.input.schema,
-            uischema: example.input.uischema,
-            data: example.input.data,
+            schema: this.schemaModel,
+            uischema: this.uischemaModel,
+            data: this.data,
             vars: example.input.vars || undefined,
           },
         };
@@ -330,6 +329,7 @@ export default {
               : ''
           )
         );
+        this.example.input.schema = example.input.schema;
         this.toast('Original example schema loaded. Apply it to take effect.');
       }
     },
@@ -349,7 +349,6 @@ export default {
         if (modelValue && !hasError) {
           const newJson: Record<string, any> = JSON.parse(modelValue);
           example.input.schema = newJson;
-          this.$store.set('app/schemaModel', newJson || {});
 
           this.toast('New schema applied');
         } else if (hasError) {
@@ -373,6 +372,7 @@ export default {
               : ''
           )
         );
+        this.example.input.uischema = example.input.uischema;
         this.toast(
           'Original example UI schema loaded. Apply it to take effect.'
         );
@@ -394,7 +394,6 @@ export default {
         if (modelValue && !hasError) {
           const newJson: Record<string, any> = JSON.parse(modelValue);
           example.input.uischema = newJson;
-          this.$store.set('app/uischemaModel', newJson || {});
           this.toast('New UI schema applied');
         } else if (hasError) {
           this.toast('Error: UI schema is invalid');
@@ -417,6 +416,7 @@ export default {
               : ''
           )
         );
+        this.example.input.data = example.input.data;
         this.toast('Original example data loaded. Apply it to take effect.');
       }
     },
@@ -486,6 +486,11 @@ export default {
         }
       }
     },
+    updateJsonModels(example: any) {
+      this.$store.set('app/schemaModel', example.input.schema || undefined);
+      this.$store.set('app/uischemaModel', example.input.uischema || undefined);
+      this.$store.set('app/data', example.input.data || undefined);
+    },
     updateMonacoModels(example: any) {
       this.$store.set(
         'app/monaco@schemaModel',
@@ -496,7 +501,7 @@ export default {
             : ''
         )
       );
-      this.$store.set('app/schemaModel', example.input.schema || {});
+
       this.$store.set(
         'app/monaco@uischemaModel',
         getMonacoModelForUri(
@@ -506,7 +511,7 @@ export default {
             : ''
         )
       );
-      this.$store.set('app/uischemaModel', example.input.uischema || {});
+
       this.$store.set(
         'app/monaco@dataModel',
         getMonacoModelForUri(
