@@ -26,7 +26,7 @@ import { ExampleSchemaService } from '../../api/exampleSchemaService';
 
 import { sync } from 'vuex-pathify';
 import { useExportSchema, useExportUiSchema } from '../../util';
-
+import { createLayout } from '../../util/generators/uiSchema';
 export default {
   name: 'EditorView',
   props: {},
@@ -50,9 +50,16 @@ export default {
   },
 
   mounted() {
-    this.schemaService
-      .getSchema()
-      .then((schema) => this.$store.dispatch('app/setSchema', { schema }));
+    this.$store.dispatch('app/setSchema', {
+      schema: {
+        type: 'object',
+        title: 'Dynaform',
+        properties: {},
+      },
+    });
+    this.$store.dispatch('app/setUiSchema', {
+      uiSchema: createLayout('VerticalLayout'),
+    });
   },
 
   computed: {

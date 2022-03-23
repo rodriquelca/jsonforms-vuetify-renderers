@@ -3,7 +3,7 @@
   "elements": [
     {
       "type": "Group",
-      "label": "Enums",
+      "label": "Public Apis service",
       "elements": [
         {
           "type": "Dropdown",

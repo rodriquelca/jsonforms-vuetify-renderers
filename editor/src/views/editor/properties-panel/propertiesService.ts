@@ -8,7 +8,7 @@ export interface PropertiesService {
   getProperties(
     uiElement: any,
     schemaElement: any
-  ): PropertySchemas | undefined;
+  ): Map<string, PropertySchemas> | undefined;
 }
 
 /**
@@ -49,71 +49,35 @@ export interface PropertySchemasProvider {
 export class PropertiesServiceImpl implements PropertiesService {
   constructor(
     private schemaProviders: PropertySchemasProvider[],
-    private schemaDecorators: PropertySchemasDecorator[],
-    private schemaVariableDecorators: PropertySchemasDecorator[],
-    private schemaRequiredDecorators: PropertySchemasDecorator[]
+    private schemaDecoratorsCollection: Map<string, PropertySchemasDecorator[]>
   ) {}
-  getDesignProperties = (
+  getProperties = (
     uiElement: EditorUISchemaElement,
     schemaElement: SchemaElement | undefined
-  ): PropertySchemas | undefined => {
+  ): Map<string, PropertySchemas> | undefined => {
     const provider = maxBy(this.schemaProviders, (p) => p.tester(uiElement));
     if (!provider || provider.tester(uiElement) === NOT_APPLICABLE) {
       return undefined;
     }
-    const elementSchemas = provider.getPropertiesSchemas(
-      uiElement,
-      schemaElement
-    );
-    if (!elementSchemas) {
-      return undefined;
+    const schemaDecoratorsMapping = new Map<string, PropertySchemas>();
+    for (const [key, value] of this.schemaDecoratorsCollection) {
+      const elementSchemas = provider.getPropertiesSchemas(
+        uiElement,
+        schemaElement
+      );
+      if (!elementSchemas) {
+        return undefined;
+      }
+      // console.log(`Map key is:${key} and value is:${value}`);
+      schemaDecoratorsMapping.set(
+        key,
+        value.reduce(
+          (schemas, decorator) => decorator(schemas, uiElement, schemaElement),
+          elementSchemas
+        )
+      );
     }
-    const decoratedSchemas = this.schemaDecorators.reduce(
-      (schemas, decorator) => decorator(schemas, uiElement, schemaElement),
-      elementSchemas
-    );
-    return decoratedSchemas;
-  };
-  getVariableSettings = (
-    uiElement: EditorUISchemaElement,
-    schemaElement: SchemaElement | undefined
-  ): PropertySchemas | undefined => {
-    const provider = maxBy(this.schemaProviders, (p) => p.tester(uiElement));
-    if (!provider || provider.tester(uiElement) === NOT_APPLICABLE) {
-      return undefined;
-    }
-    const elementSchemas = provider.getPropertiesSchemas(
-      uiElement,
-      schemaElement
-    );
-    if (!elementSchemas) {
-      return undefined;
-    }
-    const decoratedSchemas = this.schemaVariableDecorators.reduce(
-      (schemas, decorator) => decorator(schemas, uiElement, schemaElement),
-      elementSchemas
-    );
-    return decoratedSchemas;
-  };
-  getRequiredSettings = (
-    uiElement: EditorUISchemaElement,
-    schemaElement: SchemaElement | undefined
-  ): PropertySchemas | undefined => {
-    const provider = maxBy(this.schemaProviders, (p) => p.tester(uiElement));
-    if (!provider || provider.tester(uiElement) === NOT_APPLICABLE) {
-      return undefined;
-    }
-    const elementSchemas = provider.getPropertiesSchemas(
-      uiElement,
-      schemaElement
-    );
-    if (!elementSchemas) {
-      return undefined;
-    }
-    const decoratedSchemas = this.schemaRequiredDecorators.reduce(
-      (schemas, decorator) => decorator(schemas, uiElement, schemaElement),
-      elementSchemas
-    );
-    return decoratedSchemas;
+
+    return schemaDecoratorsMapping;
   };
 }

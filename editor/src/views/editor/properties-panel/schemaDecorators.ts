@@ -43,7 +43,11 @@ export const ItemsDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control', 'Dropdown', "RadioGroup", "CheckboxGroup", "Suggest"].includes(uiElement?.type)) {
+  if (
+    ['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest'].includes(
+      uiElement?.type
+    )
+  ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -62,7 +66,11 @@ export const OnChangeDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control', 'Dropdown', "RadioGroup", "CheckboxGroup", "Suggest"].includes(uiElement?.type)) {
+  if (
+    ['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest'].includes(
+      uiElement?.type
+    )
+  ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -197,6 +205,77 @@ export const urlDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const ruleEditorDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas
+) => {
+  assign(schemas.schema.properties, {
+    effect: {
+      type: 'string',
+      default: 'Show',
+      enum: ['SHOW', 'HIDE', 'ENABLE', 'DISABLE'],
+    },
+    allOrAny: {
+      type: 'string',
+      enum: ['allOf', 'anyOf'],
+    },
+    rules: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          field: {
+            type: 'string',
+            enum: ['foo', 'bar'],
+          },
+          condition: {
+            type: 'string',
+            enum: ['is'],
+          },
+          value: {
+            type: 'string',
+          },
+        },
+      },
+    },
+  });
+  (schemas.uiSchema as Layout).elements.push({
+    type: 'HorizontalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/effect',
+      },
+      {
+        type: 'Label',
+        text: 'this field when',
+      },
+    ],
+  });
+  (schemas.uiSchema as Layout).elements.push({
+    type: 'HorizontalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/allOrAny',
+      },
+      {
+        type: 'Label',
+        text: 'of the following rules match',
+      },
+    ],
+  });
+  (schemas.uiSchema as Layout).elements.push({
+    type: 'Control',
+    scope: '#/properties/rules',
+    label: {
+      text: 'Example Array',
+      show: false,
+    },
+  });
+
+  return schemas;
+};
+
 export const createPropertyControl = (
   controlScope: string
 ): ControlElement => ({
@@ -204,8 +283,7 @@ export const createPropertyControl = (
   scope: controlScope,
 });
 
-export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
-  // variableDecorator,
+const defaultDecoreators: PropertySchemasDecorator[] = [
   labelDecorator,
   multilineStringOptionDecorator,
   labelUIElementDecorator,
@@ -214,11 +292,14 @@ export const defaultSchemaDecorators: PropertySchemasDecorator[] = [
   ItemsDecorator,
 ];
 
-export const schemaVariableDecorators: PropertySchemasDecorator[] = [
-  variableDecorator,
-];
-
-export const schemaRequiredDecorators: PropertySchemasDecorator[] = [
-  requiredDecorator,
-  readOnlyDecorator,
-];
+export const defaultSchemaDecoratorsCollection = new Map<
+  string,
+  PropertySchemasDecorator[]
+>([
+  [
+    'general',
+    [variableDecorator, labelDecorator, requiredDecorator, readOnlyDecorator],
+  ],
+  ['rulesEditor', [ruleEditorDecorator]],
+  ['advanced', [OnChangeDecorator, ItemsDecorator]],
+]);
