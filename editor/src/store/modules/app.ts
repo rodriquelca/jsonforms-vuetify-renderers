@@ -313,6 +313,81 @@ const updateSchemaReadOnly = (state, payload) => {
     }
   );
 };
+const updateSchemaMinDate = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    undefined,
+    state.editor.schema,
+    undefined,
+    state,
+    (newUiSchema, newSchema) => {
+      const uiSchemaElement: SchemaElement = findByUUID(
+        newUiSchema,
+        payload.elementUUID
+      );
+      const linkedShemaElement: SchemaElement = findByUUID(
+        newSchema,
+        uiSchemaElement.linkedSchemaElement
+      );
+      debugger;
+      assign(linkedShemaElement.schema, { minDate: payload.minDate });
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
+const updateSchemaMaxDate = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    undefined,
+    state.editor.schema,
+    undefined,
+    state,
+    (newUiSchema, newSchema) => {
+      const uiSchemaElement: SchemaElement = findByUUID(
+        newUiSchema,
+        payload.elementUUID
+      );
+      const linkedShemaElement: SchemaElement = findByUUID(
+        newSchema,
+        uiSchemaElement.linkedSchemaElement
+      );
+      debugger;
+      assign(linkedShemaElement.schema, { maxDate: payload.maxDate });
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
+const updateSchemaDefaultDate = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    undefined,
+    state.editor.schema,
+    undefined,
+    state,
+    (newUiSchema, newSchema) => {
+      const uiSchemaElement: SchemaElement = findByUUID(
+        newUiSchema,
+        payload.elementUUID
+      );
+      const linkedShemaElement: SchemaElement = findByUUID(
+        newSchema,
+        uiSchemaElement.linkedSchemaElement
+      );
+      debugger;
+      assign(linkedShemaElement.schema, { defaultDate: payload.defaultDate });
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
 
 const state: AppState = {
   editor: {
@@ -442,6 +517,18 @@ const actions = {
   },
   updateSchemaReadOnly({ commit, state }, payload) {
     const clone = updateSchemaReadOnly(state, payload);
+    commit('SET_SCHEMA', clone.schema);
+  },
+  updateSchemaMinDate({ commit, state }, payload) {
+    const clone = updateSchemaMinDate(state, payload);
+    commit('SET_SCHEMA', clone.schema);
+  },
+  updateSchemaMaxDate({ commit, state }, payload) {
+    const clone = updateSchemaMaxDate(state, payload);
+    commit('SET_SCHEMA', clone.schema);
+  },
+  updateSchemaDefaultDate({ commit, state }, payload) {
+    const clone = updateSchemaDefaultDate(state, payload);
     commit('SET_SCHEMA', clone.schema);
   },
   updateUISchemaElementOption({ commit, state }, payload) {

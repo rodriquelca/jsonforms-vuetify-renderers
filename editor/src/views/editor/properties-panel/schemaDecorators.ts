@@ -140,6 +140,64 @@ export const readOnlyDecorator: PropertySchemasDecorator = (
   }
   return schemas;
 };
+export const minDateDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  debugger;
+  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, {
+      minDate: { type: 'string', format: schemaElement.schema.format },
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/minDate')
+    );
+  }
+  return schemas;
+};
+export const maxDateDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, {
+      maxDate: { type: 'string', format: schemaElement.schema.format },
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/maxDate')
+    );
+  }
+  return schemas;
+};
+export const defaultDateDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format) {
+    if (!schemas.schema.properties) {
+      schemas.schema.properties = {};
+    }
+    assign(schemas.schema.properties, {
+      defaultDate: { type: 'string', format: schemaElement.schema.format },
+    });
+
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/defaultDate')
+    );
+  }
+  return schemas;
+};
 
 export const labelDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
@@ -298,7 +356,15 @@ export const defaultSchemaDecoratorsCollection = new Map<
 >([
   [
     'general',
-    [variableDecorator, labelDecorator, requiredDecorator, readOnlyDecorator],
+    [
+      variableDecorator,
+      labelDecorator,
+      requiredDecorator,
+      readOnlyDecorator,
+      minDateDecorator,
+      maxDateDecorator,
+      defaultDateDecorator,
+    ],
   ],
   ['rulesEditor', [ruleEditorDecorator]],
   ['advanced', [OnChangeDecorator, ItemsDecorator]],
