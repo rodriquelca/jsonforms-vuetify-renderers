@@ -23,7 +23,7 @@
       app
       hide-overlay
       temporary
-      width="40%"
+      width="30%"
     >
       <v-toolbar flat>
         <v-toolbar-title>Settings</v-toolbar-title>
