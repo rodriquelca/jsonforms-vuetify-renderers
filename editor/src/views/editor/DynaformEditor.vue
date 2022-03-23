@@ -1,5 +1,5 @@
 <template>
-  <v-container class="px-0 my-1">
+  <v-container class="px-0 my-1" :fluid="true">
     <v-row no-gutters height="100%">
       <v-col cols="2">
         <PalletePanel :schema="editorSchema" />

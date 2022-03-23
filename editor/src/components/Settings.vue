@@ -23,14 +23,14 @@
       app
       hide-overlay
       temporary
-      width="300"
+      width="30%"
     >
       <v-toolbar flat>
         <v-toolbar-title>Settings</v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
           <v-btn icon @click="settings = false">
-            <v-icon>$close</v-icon>
+            <v-icon> mdi-cog</v-icon>
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
