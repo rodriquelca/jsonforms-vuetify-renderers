@@ -267,7 +267,6 @@ export default {
     },
     setExample(example: Example): void {
       let store = this.$store;
-      debugger;
       if (example) {
         this.updateJsonModels(example);
         this.example = {
