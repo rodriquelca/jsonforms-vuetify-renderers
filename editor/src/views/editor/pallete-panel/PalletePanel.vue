@@ -3,7 +3,10 @@
     <v-list-group v-for="(group, j) in paletteElements" :key="j">
       <template v-slot:activator>
         <v-list-item-content>
-          <v-list-item-title v-text="group.label"></v-list-item-title>
+          <v-list-item-title
+            v-text="group.label"
+            class="overline"
+          ></v-list-item-title>
         </v-list-item-content>
       </template>
       <v-list dense>
@@ -16,10 +19,11 @@
           <template v-for="(item, i) in group.elements">
             <v-list-item :key="i">
               <v-list-item-icon>
-                <v-icon v-text="item.icon"></v-icon>
+                <v-icon v-text="item.icon" class="body-1"></v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-text="item.label"></v-list-item-title>
+                <v-list-item-title v-text="item.label" class="caption">
+                </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </template>

@@ -15,11 +15,11 @@
         :editorBeforeMount="editorBeforeMount"
       >
       </monaco-editor>
+      <list-options @onSave="onSaveJson"> </list-options>
 
       <div class="red--text text--lighten-1" :hidden="!invalidJson">
         {{ invalidJsonMessage }}
       </div>
-      <v-btn x-small depressed color="primary" @click="onClick"> Apply </v-btn>
     </v-container>
   </v-card>
 </template>
@@ -35,6 +35,7 @@ import {
   RendererProps,
 } from '@jsonforms/vue2';
 import { useVuetifyControl } from '@jsonforms/vue2-vuetify';
+import ListOptions from '../../../../components/Settings/ListOptions.vue';
 
 const controlRenderer = defineComponent({
   name: 'items-control-renderer',
@@ -43,6 +44,7 @@ const controlRenderer = defineComponent({
   },
   components: {
     MonacoEditor,
+    ListOptions,
   },
   data: () => ({
     language: 'javascript',
@@ -74,6 +76,9 @@ const controlRenderer = defineComponent({
         val = this.ruleSchema.getValue();
       }
       this.handleChange('options.items', val);
+    },
+    onSaveJson(items: any) {
+      this.handleChange('options.items', items);
     },
   },
 });
