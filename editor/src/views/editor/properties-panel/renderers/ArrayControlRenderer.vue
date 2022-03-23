@@ -2,13 +2,7 @@
   <v-card v-if="control.visible" class="pa-0 ma-0">
     <v-card-title class="pa-0 ma-0">
       <v-toolbar flat :class="styles.arrayList.toolbar">
-        <v-toolbar-title :class="styles.arrayList.label">{{
-          computedLabel
-        }}</v-toolbar-title>
-        <!-- <validation-icon
-          v-if="control.childErrors.length > 0"
-          :errors="control.childErrors"
-        /> -->
+        <v-toolbar-title class="overline">{{ computedLabel }}</v-toolbar-title>
         <v-spacer></v-spacer>
 
         <v-tooltip bottom>
@@ -39,35 +33,16 @@
     </v-card-title>
     <v-card-text class="pa-0 ma-0">
       <v-container class="pa-0 ma-0">
-        <!-- <v-row justify="center" no-gutters> -->
-        <!-- <v-expansion-panels accordion focusable>
-          <v-expansion-panel
-            v-for="(element, index) in control.data"
-            :key="`${control.path}-${index}`"
-            :class="styles.arrayList.item"
-          > -->
         <v-card :class="styles.arrayList.item">
-          <!-- <v-list-item
-            two-line
-            v-for="(element, index) in control.data"
-            :key="`${control.path}-${index}`"
-            > -->
           <v-list-item
-            three-line
+            two-line
             v-for="(element, index) in control.data"
             :key="`${control.path}-${index}`"
           >
             <v-list-item-content>
-              <!-- <div class="text-overline mb-4">OVERLINE</div> -->
               <v-list-item-title class="text-h5 mb-1">
                 <v-container py-0>
                   <v-row>
-                    <!-- <v-col
-                      align-self="center"
-                      :class="`text-truncate ${styles.arrayList.itemLabel}`"
-                      >{{ childLabelForIndex(index) }}</v-col
-                    > -->
-
                     <v-spacer></v-spacer>
                     <v-col cols="3">
                       <v-tooltip bottom>
@@ -162,7 +137,6 @@ import {
   VTemplate,
   Vdivider,
 } from 'vuetify/lib';
-// import { ValidationIcon, ValidationBadge } from '../controls/components/index';
 import { ErrorObject } from 'ajv';
 
 const controlRenderer = defineComponent({
@@ -188,8 +162,6 @@ const controlRenderer = defineComponent({
     VContainer,
     VTemplate,
     Vdivider,
-    // ValidationIcon,
-    // ValidationBadge,
   },
   props: {
     ...rendererProps<ControlElement>(),
@@ -262,5 +234,8 @@ export const entry: JsonFormsRendererRegistryEntry = {
 <style scoped>
 .notranslate {
   transform: none !important;
+}
+.v-label {
+  font-size: 9px !important;
 }
 </style>

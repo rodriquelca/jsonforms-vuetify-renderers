@@ -205,6 +205,20 @@ export const urlDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const ruleDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas
+) => {
+  assign(schemas.schema.properties, {
+    rule: {
+      type: 'object',
+    },
+  });
+  (schemas.uiSchema as Layout).elements.push(
+    createPropertyControl('#/properties/rule')
+  );
+  return schemas;
+};
+
 export const ruleEditorDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas
 ) => {
@@ -270,27 +284,11 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
     type: 'Control',
     scope: '#/properties/rules',
     label: 'Rules',
-    // elements: [
-    //   {
-    //     type: 'Control',
-    //     scope: '#/properties/rules/properties/field',
-    //     label: '',
-    //   },
-    //   {
-    //     type: 'Control',
-    //     scope: '#/properties/rules/properties/condition',
-    //     label: '',
-    //   },
-    //   {
-    //     type: 'Control',
-    //     scope: '#/properties/rules/properties/value',
-    //     label: '',
-    //   },
-    // ],
   });
 
   return schemas;
 };
+
 
 export const createPropertyControl = (
   controlScope: string
@@ -314,8 +312,9 @@ export const defaultSchemaDecoratorsCollection = new Map<
 >([
   [
     'general',
-    [variableDecorator, labelDecorator, requiredDecorator, readOnlyDecorator],
+    [variableDecorator, labelDecorator, requiredDecorator, readOnlyDecorator, multilineStringOptionDecorator],
   ],
   ['rulesEditor', [ruleEditorDecorator]],
+  ['rulesAdvanced', [ruleDecorator]],
   ['advanced', [OnChangeDecorator, ItemsDecorator]],
 ]);
