@@ -229,7 +229,7 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
           },
           condition: {
             type: 'string',
-            enum: ['is'],
+            enum: ['is', 'is not', 'less than', 'greather than'],
           },
           value: {
             type: 'string',
@@ -244,6 +244,7 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
       {
         type: 'Control',
         scope: '#/properties/effect',
+        label: '',
       },
       {
         type: 'Label',
@@ -257,6 +258,7 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
       {
         type: 'Control',
         scope: '#/properties/allOrAny',
+        label: '',
       },
       {
         type: 'Label',
@@ -267,10 +269,24 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
   (schemas.uiSchema as Layout).elements.push({
     type: 'Control',
     scope: '#/properties/rules',
-    label: {
-      text: 'Example Array',
-      show: false,
-    },
+    label: 'Rules',
+    // elements: [
+    //   {
+    //     type: 'Control',
+    //     scope: '#/properties/rules/properties/field',
+    //     label: '',
+    //   },
+    //   {
+    //     type: 'Control',
+    //     scope: '#/properties/rules/properties/condition',
+    //     label: '',
+    //   },
+    //   {
+    //     type: 'Control',
+    //     scope: '#/properties/rules/properties/value',
+    //     label: '',
+    //   },
+    // ],
   });
 
   return schemas;
