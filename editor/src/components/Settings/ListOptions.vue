@@ -69,7 +69,12 @@ export default {
       this.items = clone;
     },
     removeItem(item: any, index: any) {
-      console.log(item);
+      let clone = _.clone(this.items);
+      clone = _.concat(
+        _.slice(clone, 0, index),
+        _.slice(clone, index + 1, clone.length)
+      );
+      this.items = clone;
     },
     onSave() {
       this.$emit('onSave', _.clone(this.items));
