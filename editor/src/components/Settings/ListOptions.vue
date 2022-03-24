@@ -1,12 +1,16 @@
 <template>
   <div>
-    <v-data-table :headers="headers" :items="items">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :hide-default-footer="hideFooter"
+    >
       <template v-slot:item.value="{ item }">
         <v-text-field
           dense
           single-line
           class="vpm-item-list caption"
-          label="Value"
+          :label="valueTitle"
           v-model="item.value"
           >{{ item.value }}</v-text-field
         >
@@ -26,13 +30,12 @@
           dense
           single-line
           class="vpm-item-list caption"
-          label="Label"
+          :label="labelTitle"
           v-model="item.label"
           >{{ item.value }}</v-text-field
         >
       </template>
     </v-data-table>
-    <v-btn x-small depressed color="primary" @click="onSave"> Apply </v-btn>
   </div>
 </template>
 
@@ -42,12 +45,34 @@ export default {
   name: 'ListOptions',
   components: {},
   computed: {},
+  props: {
+    value: {
+      type: String,
+      required: false,
+    },
+    label: {
+      type: String,
+      required: false,
+    },
+    valueTitle: {
+      type: String,
+      required: false,
+    },
+    labelTitle: {
+      type: String,
+      required: false,
+    },
+    hideFooter: {
+      type: Boolean,
+      required: false,
+    },
+  },
   data() {
     return {
       slots: ['value', 'label'],
       headers: [
-        { text: 'Value', value: 'value', sortable: false },
-        { text: 'Label', value: 'label', sortable: false },
+        { text: this.valueTitle, value: 'value', sortable: false },
+        { text: this.labelTitle, value: 'label', sortable: false },
         { text: '', value: 'actions', sortable: false },
       ],
       items: [
@@ -76,8 +101,14 @@ export default {
       );
       this.items = clone;
     },
-    onSave() {
-      this.$emit('onSave', _.clone(this.items));
+    getData() {
+      _.clone(this.items);
+      return _.map(_.clone(this.items), (i) => {
+        return {
+          [this.value]: i.value,
+          [this.label]: i.label,
+        };
+      });
     },
   },
 };
