@@ -69,7 +69,8 @@ const controlElements = [
       const control = createControl("string", { format: "date" });
       return {
         control,
-        variable: "DatePicker"
+        variable: "DatePicker",
+        format: "date"
       };
     },
   },
