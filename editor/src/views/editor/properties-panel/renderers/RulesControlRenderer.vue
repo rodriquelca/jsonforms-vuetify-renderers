@@ -6,10 +6,11 @@
       <span class="text--disabled text-caption" x-small>
         {{ ruleDescription }}
       </span>
+
       <monaco-editor
         :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
         :language="`json`"
-        height="50"
+        height="200"
         :options="{ minimap: { enabled: false }, fontSize: 10 }"
         v-model="ruleSchema"
         :editorBeforeMount="registerValidations"
@@ -80,10 +81,18 @@ const controlRenderer = defineComponent({
       (value) => value || undefined
     );
   },
+  watch: {
+    control: function (val) {
+      this.setMonacoSchema(val.data);
+    },
+  },
   methods: {
     setMonacoSchema(ruleJson) {
       const modelUri = Uri.parse('json://core/specification/rules.json');
-      this.ruleSchema = getMonacoModelForUri(modelUri, '');
+      this.ruleSchema = getMonacoModelForUri(
+        modelUri,
+        JSON.stringify(ruleJson, null, 2)
+      );
     },
     registerValidations(editor: EditorApi) {
       configureJsonSchemaValidation(editor, ['*.schema.json']);
@@ -92,6 +101,7 @@ const controlRenderer = defineComponent({
     setInvalidJson(value) {
       this.invalidJson = value;
     },
+
     onClick() {
       try {
         // this.handleChange('rule', JSON.parse(this.ruleSchema.getValue()));

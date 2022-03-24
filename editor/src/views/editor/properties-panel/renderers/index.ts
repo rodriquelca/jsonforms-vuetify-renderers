@@ -4,6 +4,7 @@ import { RulesControlRenderer } from './RulesControlRenderer.vue';
 import { DeepChangeControlRenderer } from './DeepChangeControlRenderer.vue';
 import { OnChangeControlRenderer } from './OnChangeControlRenderer.vue';
 import { ItemsControlRenderer } from './ItemsControlRenderer.vue';
+import { entry as arraControlRendererEntry } from './ArrayControlRenderer.vue';
 export const extendedEditorPropertiesRenderers: JsonFormsRendererRegistryEntry[] =
   [
     ...extendedVuetifyRenderers,
@@ -11,4 +12,5 @@ export const extendedEditorPropertiesRenderers: JsonFormsRendererRegistryEntry[]
     DeepChangeControlRenderer,
     OnChangeControlRenderer,
     ItemsControlRenderer,
+    arraControlRendererEntry,
   ];

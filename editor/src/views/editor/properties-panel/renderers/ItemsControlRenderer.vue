@@ -208,8 +208,7 @@ const controlRenderer = defineComponent({
           return (_.map(res${
             data.output.path == '' ? '' : '.' + data.output.path
           },(i)=>{
-            debugger;
-            return {
+             return {
               value:i${data.output.value == '' ? '' : '.' + data.output.value},
               label:i${data.output.label == '' ? '' : '.' + data.output.label}
             };
