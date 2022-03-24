@@ -159,7 +159,6 @@ const PropertiesPanel = defineComponent({
               elementSchema
             ));
         }
-        debugger;
 
         // rule property
         if (this.generalData['rule']) {
@@ -279,7 +278,7 @@ const PropertiesPanel = defineComponent({
             elementUUID: this.uiElement.uuid,
             changedProperties: { rule: rules.length > 0 ? rule : undefined },
           });
-          debugger;
+
           this.generalData['rule'] = rule;
           this.hasRule = rules.length > 0 ? true : false;
         } else {
