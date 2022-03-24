@@ -263,6 +263,20 @@ export const urlDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const ruleDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas
+) => {
+  assign(schemas.schema.properties, {
+    rule: {
+      type: 'object',
+    },
+  });
+  (schemas.uiSchema as Layout).elements.push(
+    createPropertyControl('#/properties/rule')
+  );
+  return schemas;
+};
+
 export const ruleEditorDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas
 ) => {
@@ -287,7 +301,7 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
           },
           condition: {
             type: 'string',
-            enum: ['is'],
+            enum: ['is', 'is not', 'less than', 'greather than'],
           },
           value: {
             type: 'string',
@@ -302,6 +316,7 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
       {
         type: 'Control',
         scope: '#/properties/effect',
+        label: '',
       },
       {
         type: 'Label',
@@ -315,6 +330,7 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
       {
         type: 'Control',
         scope: '#/properties/allOrAny',
+        label: '',
       },
       {
         type: 'Label',
@@ -325,14 +341,12 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
   (schemas.uiSchema as Layout).elements.push({
     type: 'Control',
     scope: '#/properties/rules',
-    label: {
-      text: 'Example Array',
-      show: false,
-    },
+    label: 'Rules',
   });
 
   return schemas;
 };
+
 
 export const createPropertyControl = (
   controlScope: string
@@ -361,11 +375,13 @@ export const defaultSchemaDecoratorsCollection = new Map<
       labelDecorator,
       requiredDecorator,
       readOnlyDecorator,
+      multilineStringOptionDecorator
       minDateDecorator,
       maxDateDecorator,
       defaultDateDecorator,
     ],
   ],
   ['rulesEditor', [ruleEditorDecorator]],
+  ['rulesAdvanced', [ruleDecorator]],
   ['advanced', [OnChangeDecorator, ItemsDecorator]],
 ]);

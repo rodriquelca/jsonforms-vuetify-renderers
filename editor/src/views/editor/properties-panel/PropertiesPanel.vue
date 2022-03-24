@@ -11,14 +11,29 @@
         <v-btn block color="primary" v-if="!hasRule" @click="addRuleHandler">
           <v-icon>mdi-plus</v-icon>Add Rule
         </v-btn>
-        <json-forms
-          v-else-if="schemasCollection"
-          :renderers="renderers"
-          :data="rulesData"
-          :uischema="schemasCollection.get('rulesEditor').uiSchema"
-          :schema="schemasCollection.get('rulesEditor').schema"
-          @change="updateRulesEditorSetting"
-        />
+        <div v-else-if="schemasCollection">
+          <v-switch
+            v-model="showAdvancedRule"
+            :label="`Advanced: ${showAdvancedRule.toString()}`"
+          ></v-switch>
+          <json-forms
+            v-if="!showAdvancedRule"
+            :renderers="renderers"
+            :data="rulesData"
+            :uischema="schemasCollection.get('rulesEditor').uiSchema"
+            :schema="schemasCollection.get('rulesEditor').schema"
+            @change="updateRulesEditorSetting"
+          />
+
+          <json-forms
+            v-if="showAdvancedRule"
+            :renderers="renderers"
+            :data="generalData"
+            :uischema="schemasCollection.get('rulesAdvanced').uiSchema"
+            :schema="schemasCollection.get('rulesAdvanced').schema"
+            @change="updateRulesSetting"
+          />
+        </div>
       </v-expansion-panel-content>
     </v-expansion-panel>
 
@@ -40,24 +55,7 @@
         />
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <v-expansion-panel>
-      <v-expansion-panel-header>
-        <div>
-          <v-icon>mdi-share-variant-outline</v-icon>
-          <span> Rules</span>
-        </div>
-      </v-expansion-panel-header>
-      <v-expansion-panel-content>
-        <v-btn
-          block
-          color="primary"
-          v-if="!hasRule"
-          @click="hasRule = !hasRule"
-        >
-          <v-icon>mdi-plus</v-icon>Add Rule
-        </v-btn>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
+
     <v-expansion-panel>
       <v-expansion-panel-header>
         <div>
@@ -105,6 +103,7 @@ const PropertiesPanel = defineComponent({
   },
   data() {
     return {
+      showAdvancedRule: false,
       panel: [1, 2, 3, 4],
       generalData: undefined,
       rulesData: undefined,
@@ -251,6 +250,7 @@ const PropertiesPanel = defineComponent({
             changedProperties: event.data,
           });
           this.generalData['rule'] = event.data.rule;
+          this.setRulesData();
         }
       }
     },

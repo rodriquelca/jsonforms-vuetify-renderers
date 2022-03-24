@@ -2,7 +2,7 @@
   "type": "VerticalLayout",
   "elements": [
     {
-      "type": "Control",
+      "type": "Suggest",
       "scope": "#/properties/suggest",
       "options": {
         "suggest": true,

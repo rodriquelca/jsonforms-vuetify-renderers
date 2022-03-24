@@ -12,7 +12,7 @@ export const itemsBuilder = (uiSchema: any) => {
     try {
         if (uiSchema && uiSchema.options && uiSchema.options.items && isString(uiSchema.options.items)) {
             nitemsBuilder = new Function(
-                "JForm, payload",
+                "_, payload",
                 uiSchema.options.items
             );
         }
