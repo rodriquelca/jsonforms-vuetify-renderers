@@ -24,54 +24,82 @@
     >
       <v-card>
         <v-toolbar dark color="primary">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon dark v-bind="attrs" v-on="on" @click="modeView = 4">
+                <v-icon>mdi-cellphone</v-icon>
+              </v-btn>
+            </template>
+            <span>Smartphone</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon dark v-bind="attrs" v-on="on" @click="modeView = 6">
+                <v-icon>mdi-tablet-android</v-icon>
+              </v-btn>
+            </template>
+            <span>Tablet</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon dark v-bind="attrs" v-on="on" @click="modeView = 12">
+                <v-icon>mdi-monitor</v-icon>
+              </v-btn>
+            </template>
+            <span>Desktop</span>
+          </v-tooltip>
           <v-spacer></v-spacer>
           <v-btn icon dark @click="dialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
-        <v-card>
-          <json-forms
-            v-if="resolvedSchema.resolved && resolvedSchema.error === undefined"
-            :data="previewData"
-            :key="key"
-            :schema="useSchema"
-            :uischema="useUiSchema"
-            :renderers="renderers"
-            :cells="renderers"
-            @change="onChange"
-          />
-          <v-container>
-            <v-row
-              v-if="!resolvedSchema.resolved"
-              class="fill-height"
-              align-content="center"
-              justify="center"
-            >
-              <v-col class="text-subtitle-1 text-center" cols="12">
-                Resolving Schema Refs
-              </v-col>
-              <v-col cols="6">
-                <v-progress-linear
-                  indeterminate
-                  rounded
-                  height="6"
-                ></v-progress-linear>
-              </v-col>
-            </v-row>
-            <v-row
-              v-else-if="resolvedSchema.error !== undefined"
-              class="fill-height"
-              align-content="center"
-              justify="center"
-            >
-              <v-col class="text-subtitle-1 text-center" cols="12">
-                <v-alert color="red" dark>
-                  {{ resolvedSchema.error }}
-                </v-alert>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
+        <v-col :cols="modeView">
+          <v-card>
+            <json-forms
+              v-if="
+                resolvedSchema.resolved && resolvedSchema.error === undefined
+              "
+              :data="previewData"
+              :key="key"
+              :schema="useSchema"
+              :uischema="useUiSchema"
+              :renderers="renderers"
+              :cells="renderers"
+              @change="onChange"
+            />
+            <v-container>
+              <v-row
+                v-if="!resolvedSchema.resolved"
+                class="fill-height"
+                align-content="center"
+                justify="center"
+              >
+                <v-col class="text-subtitle-1 text-center" cols="12">
+                  Resolving Schema Refs
+                </v-col>
+                <v-col cols="6">
+                  <v-progress-linear
+                    indeterminate
+                    rounded
+                    height="6"
+                  ></v-progress-linear>
+                </v-col>
+              </v-row>
+              <v-row
+                v-else-if="resolvedSchema.error !== undefined"
+                class="fill-height"
+                align-content="center"
+                justify="center"
+              >
+                <v-col class="text-subtitle-1 text-center" cols="12">
+                  <v-alert color="red" dark>
+                    {{ resolvedSchema.error }}
+                  </v-alert>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card>
+        </v-col>
       </v-card>
     </v-dialog>
   </div>
@@ -117,6 +145,7 @@ export default {
         translate: createTranslator(this.locale),
       } as JsonFormsI18nState,
       renderers: extendedVuetifyRenderers,
+      modeView: 12,
     };
   },
   watch: {
