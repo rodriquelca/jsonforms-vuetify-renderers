@@ -145,7 +145,6 @@ export const minDateDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement,
   schemaElement?: SchemaElement
 ) => {
-  debugger;
   if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
@@ -375,7 +374,7 @@ export const defaultSchemaDecoratorsCollection = new Map<
       labelDecorator,
       requiredDecorator,
       readOnlyDecorator,
-      multilineStringOptionDecorator
+      multilineStringOptionDecorator,
       minDateDecorator,
       maxDateDecorator,
       defaultDateDecorator,
