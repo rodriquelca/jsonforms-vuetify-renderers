@@ -1,0 +1,51 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Group",
+      "label": "Shape Type",
+      "elements": [
+        {
+          "type": "Control",
+          "label": "Shape Type",
+          "scope": "#/properties/shapeType"
+        }
+      ]
+    },
+    {
+      "type": "Group",
+      "label": "Shape Properties",
+      "elements": [
+        {
+          "type": "Control",
+          "label": "Radius",
+          "example": "Ex: 5467234786",
+          "scope": "#/properties/shapeProperties/properties/radius"
+        },
+        {
+          "type": "Control",
+          "label": "Height",
+          "scope": "#/properties/shapeProperties/properties/height"
+        },
+        {
+          "type": "Control",
+          "label": "Width",
+          "scope": "#/properties/shapeProperties/properties/width"
+        }
+      ],
+      "rule": {
+        "effect": "SHOW",
+        "condition": {
+          "scope": "#/properties/shapeType",
+          "schema": {
+            "enum": [
+              "square",
+              "circle",
+              "rectangle"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -24,6 +24,10 @@
         {
           "type": "Control",
           "scope": "#/properties/dateOfBirth"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/rating"
         }
       ]
     },

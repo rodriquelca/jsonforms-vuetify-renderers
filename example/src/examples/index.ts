@@ -45,6 +45,7 @@ import { input as variables } from './variables';
 import { input as subForm } from './sub-form';
 import { input as dependent } from './dependent';
 import { input as htmlViewer } from './html-viewer';
+import { input as ifThenElseCombinedWithRules } from './if-then-else-combined-with-rules';
 
 export const examples = [
   {
@@ -276,5 +277,10 @@ export const examples = [
     id: 'htmlViewer',
     title: 'HTML Viewer',
     input: htmlViewer,
+  },
+  {
+    id: 'ifThenElseConbinedWithRules',
+    title: 'If Then Else Combined With Rules',
+    input: ifThenElseCombinedWithRules,
   },
 ];
