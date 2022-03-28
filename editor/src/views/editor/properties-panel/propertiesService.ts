@@ -50,7 +50,7 @@ export class PropertiesServiceImpl implements PropertiesService {
   constructor(
     private schemaProviders: PropertySchemasProvider[],
     private schemaDecoratorsCollection: Map<string, PropertySchemasDecorator[]>
-  ) {}
+  ) { }
   getProperties = (
     uiElement: EditorUISchemaElement,
     schemaElement: SchemaElement | undefined

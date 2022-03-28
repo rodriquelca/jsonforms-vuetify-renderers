@@ -160,7 +160,6 @@ const PropertiesPanel = defineComponent({
               elementSchema
             ));
         }
-
         // rule property
         if (this.generalData['rule']) {
           this.populateFieldEnum();
@@ -210,6 +209,28 @@ const PropertiesPanel = defineComponent({
           });
 
           this.generalData['readOnly'] = event.data.readOnly;
+        }
+        //Properties for datePicker
+        if (event.data.minDate) {
+          this.$store.dispatch('app/updateSchemaMinDate', {
+            elementUUID: this.uiElement.uuid,
+            minDate: event.data.minDate,
+          });
+          this.generalData['minDate'] = event.data.minDate;
+        }
+        if (event.data.maxDate) {
+          this.$store.dispatch('app/updateSchemaMaxDate', {
+            elementUUID: this.uiElement.uuid,
+            maxDate: event.data.maxDate,
+          });
+          this.generalData['maxDate'] = event.data.maxDate;
+        }
+        if (event.data.defaultDate) {
+          this.$store.dispatch('app/updateSchemaDefaultDate', {
+            elementUUID: this.uiElement.uuid,
+            defaultDate: event.data.defaultDate,
+          });
+          this.generalData['defaultDate'] = event.data.defaultDate;
         }
         // label
         if (
