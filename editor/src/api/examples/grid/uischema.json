@@ -1,0 +1,14 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/comments",
+      "options": {
+        "extendedType": "grid",
+        "restrict": true,
+        "pageSize": 1
+      }
+    }
+  ]
+}

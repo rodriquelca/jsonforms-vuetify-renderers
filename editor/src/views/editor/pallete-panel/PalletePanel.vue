@@ -1,5 +1,6 @@
 <template>
   <div class="">
+    <Templates @onClick="onClickTemplate" />
     <v-list-group v-for="(group, j) in paletteElements" :key="j">
       <template v-slot:activator>
         <v-list-item-content>
@@ -34,6 +35,7 @@
 </template>
 
 <script lang="ts">
+import Templates from '../../../components/Templates.vue';
 import draggable from 'vuedraggable';
 import { sync } from 'vuex-pathify';
 import { getLabel, SchemaElement } from '../../../model/schema';
@@ -41,6 +43,7 @@ export default {
   name: 'PalletePanel',
   components: {
     draggable,
+    Templates,
   },
   props: {
     schema: {
@@ -68,6 +71,9 @@ export default {
   methods: {
     getLabel: function (schemaElement: SchemaElement) {
       return getLabel(schemaElement);
+    },
+    onClickTemplate: function (e) {
+      console.log(e);
     },
   },
 };
