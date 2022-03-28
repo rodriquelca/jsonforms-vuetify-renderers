@@ -192,7 +192,7 @@ import { find } from 'lodash';
 import { sync } from 'vuex-pathify';
 
 import { mergeStyles, defaultStyles } from '@jsonforms/vue2-vuetify';
-import { JsonFormsChangeEvent } from '@jsonforms/vue2';
+import { JsonFormsChangeEvent, JVariables } from '@jsonforms/vue2';
 import MonacoEditor from '@/components/MonacoEditor.vue';
 import DemoForm from '@/components/DemoForm.vue';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
@@ -205,6 +205,7 @@ import {
 } from '@/core/jsonSchemaValidation';
 import { Example } from '@/core/types';
 import store from './../../store';
+import _ from 'lodash';
 import Vue from 'vue';
 import { JForm as JF, JReactivex as JReact } from '@jsonforms/vue2';
 
@@ -267,8 +268,10 @@ export default {
     },
     setExample(example: Example): void {
       let store = this.$store;
+      let uiSchemaWithVariables = _.cloneDeep(this.uischemaModel);
       if (example) {
         this.updateJsonModels(example);
+        JVariables.build(example.input.data, uiSchemaWithVariables);
         this.example = {
           id: example.id,
           title: example.title,
@@ -312,6 +315,7 @@ export default {
         );
       }
     },
+
     reloadMonacoSchema() {
       const example = find(
         this.examples,

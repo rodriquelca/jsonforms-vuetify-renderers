@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" outlined>
+  <v-card class="mx-auto" outlined :key="key">
     <v-container>
       <h4 class="pb-2">Items</h4>
       <v-row dense>
@@ -10,6 +10,7 @@
         </v-col>
         <v-col cols="4">
           <v-combobox
+            :key="key"
             v-model="mainOption"
             class="vpm-item-list caption"
             label="Fill the items field with"
@@ -22,6 +23,8 @@
 
       <v-container v-if="mainOption.value == 'static'">
         <list-options
+          :key="keys.static"
+          :options="items"
           ref="static"
           value="value"
           label="label"
@@ -44,7 +47,8 @@
         </v-row>
       </v-container>
       <v-container v-if="mainOption.value == 'dynamic'">
-        <dynamic-items ref="dynamic"> </dynamic-items>
+        <dynamic-items :key="keys.dynamic" ref="dynamic" :data="request">
+        </dynamic-items>
         <v-row>
           <v-col>
             <v-btn
@@ -63,6 +67,7 @@
       <v-container v-if="mainOption.value == 'advanced'">
         <span class="caption">{{ messages.advanced }}</span>
         <monaco-editor
+          :key="key"
           class="pt-2"
           ref="monacoEditorItems"
           :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
@@ -120,6 +125,11 @@ const controlRenderer = defineComponent({
     ListOptions,
   },
   data: () => ({
+    keys: {
+      static: 1,
+      dynamic: 1,
+    },
+    key: 1,
     mainOption: {
       text: 'Static items',
       value: 'static',
@@ -139,6 +149,9 @@ const controlRenderer = defineComponent({
       },
     ],
 
+    items: null,
+    request: null,
+
     language: 'javascript',
     type: 'static',
     ruleDescription: 'Load static or dynamic options',
@@ -152,16 +165,81 @@ const controlRenderer = defineComponent({
         'The field accepts a JSON, normal function JS or promise function JS ',
     },
   }),
+
   mounted() {
     this.ruleSchema = monaco.editor.createModel('[]', this.language);
   },
+  watch: {
+    control: function (val) {
+      this.setData(val.data);
+    },
+  },
   setup(props: RendererProps<ControlElement>) {
+    debugger;
     return useVuetifyControl(
       useJsonFormsControl(props),
       (value) => value || undefined
     );
   },
   methods: {
+    setData(data: any) {
+      //Reset form
+      if (!data || !data.source) {
+        this.mainOption = this.mainOptions[0];
+        this.resetStaticItems();
+        this.resetDynamicItems();
+        return;
+      }
+
+      //Set the options without reset
+      this.setMainOption(data.source);
+      this.setStaticItems(data.items);
+      this.setDynamicItems(data.request);
+    },
+    resetDynamicItems() {
+      this.keys.dynamic = this.keys.dynamic + 1;
+      this.request = {
+        url: '',
+        method: 'GET',
+        params: null,
+        headers: null,
+        body: null,
+        output: {
+          path: '',
+          value: '',
+          label: '',
+        },
+      };
+    },
+    resetStaticItems() {
+      this.keys.static = this.keys.static + 1;
+      this.items = null;
+    },
+    /**
+     * Set the main option::: Static options, Dynamic Options, Advanced use
+     */
+    setMainOption(opt: string) {
+      switch (opt) {
+        case 'static':
+          this.mainOption = this.mainOptions[0];
+          break;
+        case 'advanced':
+          this.mainOption = this.mainOptions[2];
+          break;
+        case 'dynamic':
+          this.mainOption = this.mainOptions[1];
+          break;
+      }
+    },
+    setStaticItems(items: any) {
+      if (_.isArray(items)) {
+        this.keys.static = this.keys.static + 1;
+        this.items = items;
+      }
+    },
+    setDynamicItems(request: any) {
+      this.request = request;
+    },
     editorBeforeMount() {
       this.$refs['monacoEditorItems']._render();
     },
@@ -173,12 +251,17 @@ const controlRenderer = defineComponent({
         val = this.ruleSchema.getValue();
       }
       this.handleChange('options.items', val);
+      this.handleChange('items.items', val);
+
       this.handleChange('options.source', 'advanced');
+      this.handleChange('items.source', 'advanced');
     },
     onSaveJson() {
       let data = this.$refs['static'].getData();
       this.handleChange('options.source', 'static');
+      this.handleChange('items.source', 'static');
       this.handleChange('options.items', data);
+      this.handleChange('items.items', data);
     },
     onSaveDynamic(items: any) {
       let data = this.$refs['dynamic'].getData();
@@ -188,7 +271,10 @@ const controlRenderer = defineComponent({
       );
       let params = Object.assign(
         {},
-        ...data.params.map((p) => ({ [p.key]: p.value }))
+        ...data.params.map((p) => {
+          if (p.key != '') return { [p.key]: p.value };
+          return null;
+        })
       );
       let body = Object.assign(
         {},
@@ -199,9 +285,9 @@ const controlRenderer = defineComponent({
       if (data.method == 'GET') {
         functionItems = `return fetch('${
           data.url
-        }?'+ (new URLSearchParams(${JSON.stringify(params)})).toString(), {
+        }?'+ (new URLSearchParams(${JSON.stringify(params)}).toString()), {
           method: '${data.method}',
-          headers:${JSON.stringify(headers)},
+          headers:${JSON.stringify(headers)},     
       })
         .then((res) => res.json())
         .then((res) => {
@@ -218,7 +304,7 @@ const controlRenderer = defineComponent({
       } else {
         functionItems = `return fetch('${
           data.url
-        }?'+ (new URLSearchParams(${JSON.stringify(params)})).toString(), {
+        }?'+ (new URLSearchParams(${JSON.stringify(params)}).toString()), {
           method: '${data.method}',
           body: '${JSON.stringify(body)}',
           headers:${JSON.stringify(headers)},
@@ -238,8 +324,11 @@ const controlRenderer = defineComponent({
       }
 
       this.handleChange('options.request', data);
+      this.handleChange('items.request', data);
       this.handleChange('options.source', 'dynamic');
+      this.handleChange('items.source', 'dynamic');
       this.handleChange('options.items', functionItems);
+      this.handleChange('items.items', functionItems);
     },
   },
 });

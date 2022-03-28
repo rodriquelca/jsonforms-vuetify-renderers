@@ -44,7 +44,7 @@ import _ from 'lodash';
 export default {
   name: 'ListOptions',
   components: {},
-  computed: {},
+
   props: {
     value: {
       type: String,
@@ -66,6 +66,10 @@ export default {
       type: Boolean,
       required: false,
     },
+    options: {
+      type: Array,
+      required: false,
+    },
   },
   data() {
     return {
@@ -82,6 +86,20 @@ export default {
         },
       ],
     };
+  },
+  mounted() {
+    let its = _.map(this.options, (i) => {
+      return { value: i[this.value], label: i[this.label] };
+    });
+    this.items =
+      its.length == 0
+        ? [
+            {
+              value: '',
+              label: '',
+            },
+          ]
+        : its;
   },
   methods: {
     addItem(item: any, index: any) {

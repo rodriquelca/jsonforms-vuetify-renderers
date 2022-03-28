@@ -105,7 +105,7 @@ const PropertiesPanel = defineComponent({
     return {
       showAdvancedRule: false,
       panel: [1, 2, 3, 4],
-      generalData: undefined,
+      generalData: {},
       rulesData: undefined,
       schemasCollection: undefined,
       hasRule: false,
@@ -125,6 +125,7 @@ const PropertiesPanel = defineComponent({
 
   methods: {
     setSelection: function (newSelection) {
+      debugger;
       this.uiElement = tryFindByUUID(this.uischema, newSelection);
       this.generalData = omit(this.uiElement, [
         'uuid',
@@ -169,6 +170,8 @@ const PropertiesPanel = defineComponent({
           this.rulesData = undefined;
           this.hasRule = false;
         }
+
+        this.generalData['items'] = this.generalData['options'];
       }
     },
     updateGeneralSettings: function (event: JsonFormsChangeEvent) {

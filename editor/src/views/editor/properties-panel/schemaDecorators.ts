@@ -52,7 +52,12 @@ export const ItemsDecorator: PropertySchemasDecorator = (
       schemas.schema.properties = {};
     }
     assign(schemas.schema.properties, {
-      options: {},
+      options: {
+        type: 'object',
+      },
+      items: {
+        type: 'object',
+      }
     });
 
     (schemas.uiSchema as Layout).elements.push(

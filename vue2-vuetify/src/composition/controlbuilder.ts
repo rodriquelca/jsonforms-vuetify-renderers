@@ -17,7 +17,7 @@ export const itemsBuilder = (uiSchema: any) => {
             );
         }
     } catch (e: any) {
-        console.log("JFORM::: Error in js " + scope + ":::" + e);
+        console.error("JFORM::: Error in js " + scope + ":::" + e);
     }
     return nitemsBuilder;
 };
@@ -113,7 +113,7 @@ export const scopesHandler = (uiSchema: any, provider: any, fn: any, fnPayload: 
                 fn(fnPromise);
             }
         } catch (e: any) {
-            console.log("JFORM::: Error in js " + scope + ":::");
+            console.error("JFORM::: Error in js " + scope + ":::");
         }
     };
 
