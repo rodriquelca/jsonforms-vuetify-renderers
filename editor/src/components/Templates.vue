@@ -12,36 +12,41 @@
       </v-card-title>
 
       <v-card-text>
-        <v-row>
-          <v-col class="shrink pa-0">
-            <v-treeview
-              v-model="tree"
-              :open="initiallyOpen"
-              :items="items"
-              :value="treeValue"
-              activatable
-              item-key="name"
-              open-on-click
-            >
-              <template v-slot:prepend="{ item, open }">
-                <v-icon v-if="!item.file">
-                  {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-                </v-icon>
-                <v-icon v-else>
-                  {{ files[item.file] }}
-                </v-icon>
-              </template>
-            </v-treeview>
+        <v-row no-gutters>
+          <v-col cols="3">
+            <v-navigation-drawer permanent>
+              <v-list>
+                <v-list-group
+                  v-for="item in items"
+                  :key="item.title"
+                  v-model="item.active"
+                  :prepend-icon="item.action"
+                >
+                  <template v-slot:activator>
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-text="item.title"
+                      ></v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+
+                  <v-list-item
+                    v-for="child in item.items"
+                    :key="child.title"
+                    link
+                    @click="onClickListItem(child)"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-text="child.title"
+                      ></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-group>
+              </v-list>
+            </v-navigation-drawer>
           </v-col>
-          <v-col>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
-          </v-col>
+          <v-col> hola </v-col>
         </v-row>
       </v-card-text>
 
@@ -67,10 +72,7 @@ export default {
   },
   data() {
     return {
-      tabs: [],
       dialog: false,
-      treeValue: [],
-      initiallyOpen: ['public'],
       files: {
         html: 'mdi-language-html5',
         js: 'mdi-nodejs',
@@ -81,25 +83,27 @@ export default {
         txt: 'mdi-file-document-outline',
         xls: 'mdi-file-excel',
       },
-      tree: [],
       items: [
         {
-          name: 'public',
-          children: [
-            {
-              name: 'favicon.ico',
-              file: 'png',
-            },
-            {
-              name: 'index.html',
-              file: 'html',
-            },
+          action: 'mdi-silverware-fork-knife',
+          active: true,
+          items: [
+            { title: 'Breakfast & brunch' },
+            { title: 'New American' },
+            { title: 'Sushi' },
           ],
+          title: 'Dining',
         },
       ],
     };
   },
   methods: {
+    onClickListItem(e) {
+      console.log(e);
+    },
+    getActiveValue(value) {
+      console.log(value);
+    },
     onClick: function (e) {
       this.dialog = false;
       debugger;
