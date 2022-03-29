@@ -1,9 +1,4 @@
 <template>
-  <!-- <template v-slot:activator="{ on, attrs }">
-      <v-btn color="teal darken-2" dark v-bind="attrs" v-on="on" block>
-        Templates
-      </v-btn>
-    </template> -->
   <div>
     <v-tooltip bottom>
       <template v-slot:activator="{ on: onTooltip }">
@@ -109,7 +104,6 @@ export default {
     new TemplateSchemaService()
       .getTemplates()
       .then((res: any) => {
-        console.log(res);
         this.templates = res;
       })
       .catch((err: any) => {

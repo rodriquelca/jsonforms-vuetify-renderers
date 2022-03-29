@@ -39,7 +39,6 @@
 </template>
 
 <script lang="ts">
-import Templates from '../../../components/Templates.vue';
 import draggable from 'vuedraggable';
 import { sync } from 'vuex-pathify';
 import { getLabel, SchemaElement } from '../../../model/schema';
@@ -47,7 +46,6 @@ export default {
   name: 'PalletePanel',
   components: {
     draggable,
-    // Templates,
   },
   props: {
     schema: {
