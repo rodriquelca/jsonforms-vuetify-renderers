@@ -1,9 +1,9 @@
 <template>
   <v-container class="px-0 my-1" :fluid="true">
     <v-row no-gutters height="100%">
-      <v-col cols="2">
+      <!-- <v-col cols="2">
         <PalletePanel :schema="editorSchema" />
-      </v-col>
+      </v-col> -->
       <v-col>
         <EditorPanel
           :editorTabs="editorTabs"
@@ -31,7 +31,7 @@ export default {
   name: 'EditorView',
   props: {},
   components: {
-    PalletePanel,
+    // PalletePanel,
     EditorPanel,
   },
   data() {

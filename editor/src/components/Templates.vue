@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" width="900">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn color="red lighten-2" dark v-bind="attrs" v-on="on">
+      <v-btn color="teal darken-2" dark v-bind="attrs" v-on="on" block>
         Templates
       </v-btn>
     </template>
@@ -14,39 +14,42 @@
       <v-card-text>
         <v-row no-gutters>
           <v-col cols="3">
-            <v-navigation-drawer permanent>
-              <v-list>
-                <v-list-group
-                  v-for="item in items"
-                  :key="item.title"
-                  v-model="item.active"
-                  :prepend-icon="item.action"
-                >
-                  <template v-slot:activator>
-                    <v-list-item-content>
-                      <v-list-item-title
-                        v-text="item.title"
-                      ></v-list-item-title>
-                    </v-list-item-content>
-                  </template>
+            <!-- <v-navigation-drawer v-model="drawer"> -->
+            <v-list v-if="templates">
+              <v-list-group
+                v-for="item in templates"
+                :key="item.title"
+                v-model="item.active"
+                :prepend-icon="item.action"
+              >
+                <template v-slot:activator>
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.title"></v-list-item-title>
+                  </v-list-item-content>
+                </template>
 
-                  <v-list-item
-                    v-for="child in item.items"
-                    :key="child.title"
-                    link
-                    @click="onClickListItem(child)"
-                  >
-                    <v-list-item-content>
-                      <v-list-item-title
-                        v-text="child.title"
-                      ></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list-group>
-              </v-list>
-            </v-navigation-drawer>
+                <v-list-item
+                  v-for="child in item.items"
+                  :key="child.title"
+                  link
+                  @click="onClickListItem(child)"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title v-text="child.title"></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-group>
+            </v-list>
+            <!-- </v-navigation-drawer> -->
           </v-col>
-          <v-col> hola </v-col>
+          <v-col>
+            <v-img
+              v-if="picture"
+              :src="require('@/api/examples/' + picture)"
+              max-height="600"
+              max-width="550"
+            />
+          </v-col>
         </v-row>
       </v-card-text>
 
@@ -62,9 +65,10 @@
 
 <script lang="ts">
 import { sync } from 'vuex-pathify';
-
+import { TemplateSchemaService } from '../api/schemaService';
 export default {
-  name: 'Templates',
+  name: 'Template',
+
   props: {
     schema: {
       type: [Object, Boolean],
@@ -72,6 +76,8 @@ export default {
   },
   data() {
     return {
+      picture: undefined,
+      drawer: true,
       dialog: false,
       files: {
         html: 'mdi-language-html5',
@@ -83,31 +89,39 @@ export default {
         txt: 'mdi-file-document-outline',
         xls: 'mdi-file-excel',
       },
-      items: [
-        {
-          action: 'mdi-silverware-fork-knife',
-          active: true,
-          items: [
-            { title: 'Breakfast & brunch' },
-            { title: 'New American' },
-            { title: 'Sushi' },
-          ],
-          title: 'Dining',
-        },
-      ],
+
+      templates: undefined,
+      selected: undefined,
     };
   },
+  mounted() {
+    new TemplateSchemaService()
+      .getTemplates()
+      .then((res: any) => {
+        console.log(res);
+        this.templates = res;
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  },
+
   methods: {
     onClickListItem(e) {
-      console.log(e);
+      this.selected = e.input;
+      this.picture = e.input.picture;
     },
-    getActiveValue(value) {
-      console.log(value);
-    },
+
     onClick: function (e) {
       this.dialog = false;
-      debugger;
-      // this.$emit('onClick', 'hola mundo');
+
+      this.$store.dispatch('app/setSchema', {
+        schema: this.selected.schema,
+      });
+      this.$store.dispatch('app/setUiSchema', {
+        uiSchema: this.selected.uischema,
+      });
+      //Todo data
     },
   },
 };

@@ -90,6 +90,7 @@ const droppableRenderer = defineComponent({
   },
   methods: {
     handleChange(evt: any) {
+      debugger;
       if (evt.added) {
         if (
           evt.added.element &&

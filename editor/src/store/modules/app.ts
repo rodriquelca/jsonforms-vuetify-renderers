@@ -411,12 +411,12 @@ const state: AppState = {
     ajv,
     locale: 'en',
   },
-  monaco: {
-    schemaModel: undefined,
-    uischemaModel: undefined,
-    dataModel: undefined,
-    dataVariables: undefined,
-  },
+  // monaco: {
+  //   schemaModel: undefined,
+  //   uischemaModel: undefined,
+  //   dataModel: undefined,
+  //   dataVariables: undefined,
+  // },
   data: {},
   schemaModel: {},
   uischemaModel: {},
