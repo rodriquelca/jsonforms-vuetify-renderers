@@ -1,4 +1,4 @@
-import { isArray, isString, map, indexOf, isFunction } from "lodash";
+import { isArray, isString, indexOf, isFunction } from "lodash";
 import _ from "lodash";
 import Vue from "vue";
 /**
@@ -17,7 +17,7 @@ export const itemsBuilder = (uiSchema: any) => {
             );
         }
     } catch (e: any) {
-        console.log("JFORM::: Error in js " + scope + ":::" + e);
+        console.error("JFORM::: Error in js " + scope + ":::" + e);
     }
     return nitemsBuilder;
 };
@@ -113,7 +113,7 @@ export const scopesHandler = (uiSchema: any, provider: any, fn: any, fnPayload: 
                 fn(fnPromise);
             }
         } catch (e: any) {
-            console.log("JFORM::: Error in js " + scope + ":::");
+            console.error("JFORM::: Error in js " + scope + ":::");
         }
     };
 
@@ -128,15 +128,10 @@ export const scopesHandler = (uiSchema: any, provider: any, fn: any, fnPayload: 
     }
 }
 
-
-
 export const dependencies = (uiSchema: any) => {
-    return map(
-        uiSchema.rule && uiSchema.rule.condition.conditions
-            ? uiSchema.rule.condition.conditions
-            : [],
-        (e) => pathControlSchema(e.scope)
-    )
+    return uiSchema.options && uiSchema.options.dependencies
+        ? uiSchema.options.dependencies
+        : [];
 }
 
 const pathControlSchema = (input: string): string => {

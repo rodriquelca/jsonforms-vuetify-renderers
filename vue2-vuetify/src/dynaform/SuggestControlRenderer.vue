@@ -86,7 +86,7 @@ const controlRenderer = defineComponent({
               this.controlBuilder.items = res;
             })
             .catch((err: any) => {
-              console.log(err);
+              console.error(err);
             })
             .finally(() => (this.isLoading = false));
         } else {

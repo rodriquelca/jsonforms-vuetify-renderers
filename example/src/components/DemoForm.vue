@@ -143,7 +143,7 @@ export default {
     },
   },
   mounted() {
-    this.resolveSchema(this.example.input.schema, this.example.input.vars);
+    this.resolveSchema(this.example.input.schema, this.example.input.data);
   },
   methods: {
     onChange(event: JsonFormsChangeEvent): void {

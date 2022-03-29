@@ -65,6 +65,7 @@ import {
   PropertySchemasProvider,
 } from '../views/editor/properties-panel/propertiesService';
 import CommonSettings from './CommonSettings.vue';
+import store from '../store';
 export default {
   name: 'Settings',
   components: {
@@ -88,6 +89,7 @@ export default {
 
   data: function () {
     return {
+      editorSchemaReact: sync('app/editor@schema'),
       validationModes: [
         { text: 'Validate And Show', value: 'ValidateAndShow' },
         { text: 'Validate And Hide', value: 'ValidateAndHide' },
@@ -111,6 +113,11 @@ export default {
       defaultSchemaProviders,
       defaultSchemaDecoratorsCollection
     );
+  },
+  provide: () => {
+    return {
+      store: store,
+    };
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" outlined>
+  <v-card class="mx-auto" outlined :key="key">
     <v-container>
       <h4 class="pb-2">Items</h4>
       <v-row dense>
@@ -10,6 +10,7 @@
         </v-col>
         <v-col cols="4">
           <v-combobox
+            :key="key"
             v-model="mainOption"
             class="vpm-item-list caption"
             label="Fill the items field with"
@@ -19,9 +20,36 @@
           ></v-combobox>
         </v-col>
       </v-row>
+      <div
+        v-if="mainOption.value == 'advanced' || mainOption.value == 'dynamic'"
+      >
+        <v-combobox
+          v-model="dependencies"
+          :items="editorScopes"
+          :search-input.sync="dependenciesSearch"
+          hide-selected
+          label="This field depends of:"
+          multiple
+          persistent-hint
+          small-chips
+          class="vpm-item-list caption"
+        >
+          <template v-slot:no-data>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  No results matching "<strong>{{ dependenciesSearch }}</strong>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-combobox>
+      </div>
 
       <v-container v-if="mainOption.value == 'static'">
         <list-options
+          :key="keys.static"
+          :options="items"
           ref="static"
           value="value"
           label="label"
@@ -44,7 +72,8 @@
         </v-row>
       </v-container>
       <v-container v-if="mainOption.value == 'dynamic'">
-        <dynamic-items ref="dynamic"> </dynamic-items>
+        <dynamic-items :key="keys.dynamic" ref="dynamic" :data="request">
+        </dynamic-items>
         <v-row>
           <v-col>
             <v-btn
@@ -63,6 +92,7 @@
       <v-container v-if="mainOption.value == 'advanced'">
         <span class="caption">{{ messages.advanced }}</span>
         <monaco-editor
+          :key="key"
           class="pt-2"
           ref="monacoEditorItems"
           :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
@@ -73,6 +103,7 @@
           :editorBeforeMount="editorBeforeMount"
         >
         </monaco-editor>
+
         <v-row>
           <v-col>
             <v-btn
@@ -87,6 +118,7 @@
           </v-col>
         </v-row>
       </v-container>
+
       <div class="red--text text--lighten-1" :hidden="!invalidJson">
         {{ invalidJsonMessage }}
       </div>
@@ -98,11 +130,13 @@
 import { ControlElement, rankWith, scopeEndsWith } from '@jsonforms/core';
 import MonacoEditor from '@/components/MonacoEditor.vue';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, inject, computed, ref } from '../../../../util/vue';
+
 import {
   rendererProps,
   useJsonFormsControl,
   RendererProps,
+  JVariables,
 } from '@jsonforms/vue2';
 import { useVuetifyControl } from '@jsonforms/vue2-vuetify';
 import ListOptions from '../../../../components/Settings/ListOptions.vue';
@@ -120,6 +154,11 @@ const controlRenderer = defineComponent({
     ListOptions,
   },
   data: () => ({
+    keys: {
+      static: 1,
+      dynamic: 1,
+    },
+    key: 1,
     mainOption: {
       text: 'Static items',
       value: 'static',
@@ -139,6 +178,12 @@ const controlRenderer = defineComponent({
       },
     ],
 
+    items: null,
+    request: null,
+    // ComboBox dependencies
+    dependencies: [],
+    dependenciesSearch: null,
+
     language: 'javascript',
     type: 'static',
     ruleDescription: 'Load static or dynamic options',
@@ -152,16 +197,89 @@ const controlRenderer = defineComponent({
         'The field accepts a JSON, normal function JS or promise function JS ',
     },
   }),
+
   mounted() {
     this.ruleSchema = monaco.editor.createModel('[]', this.language);
   },
+  watch: {
+    control: function (val) {
+      this.setData(val.data);
+    },
+  },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(
-      useJsonFormsControl(props),
-      (value) => value || undefined
-    );
+    let editorScopes = computed(() => {
+      let store: any = inject('store');
+      if (!store) return [];
+      return store.getters['app/getScopesEditor'];
+    });
+
+    return {
+      ...useVuetifyControl(
+        useJsonFormsControl(props),
+        (value) => value || undefined
+      ),
+      editorScopes,
+    };
   },
   methods: {
+    setData(data: any) {
+      //Reset form
+      if (!data || !data.source) {
+        this.mainOption = this.mainOptions[0];
+        this.resetStaticItems();
+        this.resetDynamicItems();
+        return;
+      }
+
+      //Set the options without reset
+      this.setMainOption(data.source);
+      this.setStaticItems(data.items);
+      this.setDynamicItems(data.request);
+    },
+    resetDynamicItems() {
+      this.keys.dynamic = this.keys.dynamic + 1;
+      this.request = {
+        url: '',
+        method: 'GET',
+        params: null,
+        headers: null,
+        body: null,
+        output: {
+          path: '',
+          value: '',
+          label: '',
+        },
+      };
+    },
+    resetStaticItems() {
+      this.keys.static = this.keys.static + 1;
+      this.items = null;
+    },
+    /**
+     * Set the main option::: Static options, Dynamic Options, Advanced use
+     */
+    setMainOption(opt: string) {
+      switch (opt) {
+        case 'static':
+          this.mainOption = this.mainOptions[0];
+          break;
+        case 'advanced':
+          this.mainOption = this.mainOptions[2];
+          break;
+        case 'dynamic':
+          this.mainOption = this.mainOptions[1];
+          break;
+      }
+    },
+    setStaticItems(items: any) {
+      if (_.isArray(items)) {
+        this.keys.static = this.keys.static + 1;
+        this.items = items;
+      }
+    },
+    setDynamicItems(request: any) {
+      this.request = request;
+    },
     editorBeforeMount() {
       this.$refs['monacoEditorItems']._render();
     },
@@ -173,35 +291,54 @@ const controlRenderer = defineComponent({
         val = this.ruleSchema.getValue();
       }
       this.handleChange('options.items', val);
+      this.handleChange('items.items', val);
+
       this.handleChange('options.source', 'advanced');
+      this.handleChange('options.dependencies', this.dependencies);
+
+      this.handleChange('items.source', 'advanced');
+      this.handleChange('items.dependencies', this.dependencies);
     },
     onSaveJson() {
       let data = this.$refs['static'].getData();
       this.handleChange('options.source', 'static');
+      this.handleChange('items.source', 'static');
       this.handleChange('options.items', data);
+      this.handleChange('items.items', data);
+    },
+    processParams(data) {
+      let values,
+        url,
+        params = this.convertArrayToObject(data.params);
+      values = JVariables.removeBraces(params);
+      url = new URLSearchParams(params).toString();
+      _.forEach(values, (v) => {
+        url = url.replaceAll(v, '${' + v + '}');
+      });
+      return url == '=' ? '' : '+`' + url + '`';
+    },
+    /**
+     * Convert Array[{key, value}] to object{key1:value1}...
+     * @param data
+     */
+    convertArrayToObject(data) {
+      return Object.assign({}, ...data.map((p) => ({ [p.key]: p.value })));
     },
     onSaveDynamic(items: any) {
-      let data = this.$refs['dynamic'].getData();
-      let headers = Object.assign(
-        {},
-        ...data.headers.map((p) => ({ [p.key]: p.value }))
-      );
-      let params = Object.assign(
-        {},
-        ...data.params.map((p) => ({ [p.key]: p.value }))
-      );
-      let body = Object.assign(
-        {},
-        ...data.body.map((p) => ({ [p.key]: p.value }))
-      );
+      let url,
+        functionItems,
+        data = this.$refs['dynamic'].getData(),
+        headers = this.convertArrayToObject(data.headers),
+        body = this.convertArrayToObject(data.body);
 
-      let functionItems;
+      JVariables.replaceBraces(headers, '`${', '}');
+      JVariables.replaceBraces(body, '`${', '}');
+      url = this.processParams(data);
+
       if (data.method == 'GET') {
-        functionItems = `return fetch('${
-          data.url
-        }?'+ (new URLSearchParams(${JSON.stringify(params)})).toString(), {
+        functionItems = `return fetch('${data.url}?'${url}, {
           method: '${data.method}',
-          headers:${JSON.stringify(headers)},
+          headers:${JSON.stringify(headers)},     
       })
         .then((res) => res.json())
         .then((res) => {
@@ -216,9 +353,7 @@ const controlRenderer = defineComponent({
           ));
         });`;
       } else {
-        functionItems = `return fetch('${
-          data.url
-        }?'+ (new URLSearchParams(${JSON.stringify(params)})).toString(), {
+        functionItems = `return fetch('${data.url}?' ${url}, {
           method: '${data.method}',
           body: '${JSON.stringify(body)}',
           headers:${JSON.stringify(headers)},
@@ -238,14 +373,18 @@ const controlRenderer = defineComponent({
       }
 
       this.handleChange('options.request', data);
+      this.handleChange('items.request', data);
       this.handleChange('options.source', 'dynamic');
+      this.handleChange('items.source', 'dynamic');
       this.handleChange('options.items', functionItems);
+      this.handleChange('items.items', functionItems);
+      this.handleChange('options.dependencies', this.dependencies);
+      this.handleChange('items.dependencies', this.dependencies);
     },
   },
 });
 
 export default controlRenderer;
-
 export const ItemsControlRenderer = {
   renderer: controlRenderer,
   tester: rankWith(100, scopeEndsWith('items')),
