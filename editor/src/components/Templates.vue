@@ -14,7 +14,6 @@
       <v-card-text>
         <v-row no-gutters>
           <v-col cols="3">
-            <!-- <v-navigation-drawer v-model="drawer"> -->
             <v-list v-if="templates">
               <v-list-group
                 v-for="item in templates"
@@ -40,7 +39,6 @@
                 </v-list-item>
               </v-list-group>
             </v-list>
-            <!-- </v-navigation-drawer> -->
           </v-col>
           <v-col>
             <v-img
