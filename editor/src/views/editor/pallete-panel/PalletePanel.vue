@@ -1,16 +1,14 @@
 <template>
   <div class="">
-    <Templates @onClick="onClickTemplate" />
+    <Templates />
     <v-expansion-panels focusable multiple>
       <v-expansion-panel v-for="(group, i) in paletteElements" :key="i">
         <v-expansion-panel-header>{{ group.label }}</v-expansion-panel-header>
         <v-expansion-panel-content>
-          <!-- <v-card flat tile class="d-flex mb-6"> -->
           <draggable
             v-model="group.elements"
             :group="{ name: 'people', pull: 'clone', put: false }"
             :sort="false"
-            tag="v-card"
             class="d-flex align-content-start flex-wrap"
           >
             <v-card
@@ -18,7 +16,7 @@
               :key="n"
               outlined
               tile
-              class="pa-4"
+              class="pa-2"
             >
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
@@ -33,10 +31,8 @@
                 </template>
                 <span>{{ item.label }}</span>
               </v-tooltip>
-              <!-- <v-icon v-text="item.icon"></v-icon> -->
             </v-card>
           </draggable>
-          <!-- </v-card> -->
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -80,9 +76,6 @@ export default {
   methods: {
     getLabel: function (schemaElement: SchemaElement) {
       return getLabel(schemaElement);
-    },
-    onClickTemplate: function (e) {
-      console.log(e);
     },
   },
 };
