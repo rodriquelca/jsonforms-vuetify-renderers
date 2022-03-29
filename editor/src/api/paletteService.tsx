@@ -198,7 +198,8 @@ const controlElements = [
           },
           source: null,
           items: null,
-          request: null
+          request: null,
+          dependencies: []
         }
       };
     },
@@ -280,6 +281,7 @@ const controlElements = [
           items: null,
           request: null,
           source: null,
+          dependencies: []
         }
       };
     },
@@ -305,6 +307,7 @@ const controlElements = [
           items: null,
           request: null,
           source: null,
+          dependencies: []
         }
       };
     },
@@ -330,6 +333,7 @@ const controlElements = [
           items: null,
           request: null,
           source: null,
+          dependencies: []
         }
       };
     },

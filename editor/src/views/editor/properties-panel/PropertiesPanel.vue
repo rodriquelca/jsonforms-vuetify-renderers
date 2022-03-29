@@ -121,11 +121,10 @@ const PropertiesPanel = defineComponent({
   },
   computed: {
     selectedElement: sync('app/editor@selectedElement'),
+    schemaPropertiesLive: sync('app/editor@selectedElement'),
   },
-
   methods: {
     setSelection: function (newSelection) {
-      debugger;
       this.uiElement = tryFindByUUID(this.uischema, newSelection);
       this.generalData = omit(this.uiElement, [
         'uuid',

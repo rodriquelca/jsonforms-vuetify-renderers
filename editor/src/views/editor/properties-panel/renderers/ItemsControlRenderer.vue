@@ -20,6 +20,31 @@
           ></v-combobox>
         </v-col>
       </v-row>
+      <div
+        v-if="mainOption.value == 'advanced' || mainOption.value == 'dynamic'"
+      >
+        <v-combobox
+          v-model="dependencies"
+          :items="editorScopes"
+          :search-input.sync="dependenciesSearch"
+          hide-selected
+          label="This field depends of:"
+          multiple
+          persistent-hint
+          small-chips
+          class="vpm-item-list caption"
+        >
+          <template v-slot:no-data>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  No results matching "<strong>{{ dependenciesSearch }}</strong>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-combobox>
+      </div>
 
       <v-container v-if="mainOption.value == 'static'">
         <list-options
@@ -78,6 +103,7 @@
           :editorBeforeMount="editorBeforeMount"
         >
         </monaco-editor>
+
         <v-row>
           <v-col>
             <v-btn
@@ -92,6 +118,7 @@
           </v-col>
         </v-row>
       </v-container>
+
       <div class="red--text text--lighten-1" :hidden="!invalidJson">
         {{ invalidJsonMessage }}
       </div>
@@ -103,11 +130,13 @@
 import { ControlElement, rankWith, scopeEndsWith } from '@jsonforms/core';
 import MonacoEditor from '@/components/MonacoEditor.vue';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, inject, computed, ref } from '../../../../util/vue';
+
 import {
   rendererProps,
   useJsonFormsControl,
   RendererProps,
+  JVariables,
 } from '@jsonforms/vue2';
 import { useVuetifyControl } from '@jsonforms/vue2-vuetify';
 import ListOptions from '../../../../components/Settings/ListOptions.vue';
@@ -151,6 +180,9 @@ const controlRenderer = defineComponent({
 
     items: null,
     request: null,
+    // ComboBox dependencies
+    dependencies: [],
+    dependenciesSearch: null,
 
     language: 'javascript',
     type: 'static',
@@ -175,11 +207,19 @@ const controlRenderer = defineComponent({
     },
   },
   setup(props: RendererProps<ControlElement>) {
-    debugger;
-    return useVuetifyControl(
-      useJsonFormsControl(props),
-      (value) => value || undefined
-    );
+    let editorScopes = computed(() => {
+      let store: any = inject('store');
+      if (!store) return [];
+      return store.getters['app/getScopesEditor'];
+    });
+
+    return {
+      ...useVuetifyControl(
+        useJsonFormsControl(props),
+        (value) => value || undefined
+      ),
+      editorScopes,
+    };
   },
   methods: {
     setData(data: any) {
@@ -254,7 +294,10 @@ const controlRenderer = defineComponent({
       this.handleChange('items.items', val);
 
       this.handleChange('options.source', 'advanced');
+      this.handleChange('options.dependencies', this.dependencies);
+
       this.handleChange('items.source', 'advanced');
+      this.handleChange('items.dependencies', this.dependencies);
     },
     onSaveJson() {
       let data = this.$refs['static'].getData();
@@ -263,29 +306,37 @@ const controlRenderer = defineComponent({
       this.handleChange('options.items', data);
       this.handleChange('items.items', data);
     },
+    processParams(data) {
+      let values,
+        url,
+        params = this.convertArrayToObject(data.params);
+      values = JVariables.removeBraces(params);
+      url = new URLSearchParams(params).toString();
+      _.forEach(values, (v) => {
+        url = url.replaceAll(v, '${' + v + '}');
+      });
+      return url == '=' ? '' : '+`' + url + '`';
+    },
+    /**
+     * Convert Array[{key, value}] to object{key1:value1}...
+     * @param data
+     */
+    convertArrayToObject(data) {
+      return Object.assign({}, ...data.map((p) => ({ [p.key]: p.value })));
+    },
     onSaveDynamic(items: any) {
-      let data = this.$refs['dynamic'].getData();
-      let headers = Object.assign(
-        {},
-        ...data.headers.map((p) => ({ [p.key]: p.value }))
-      );
-      let params = Object.assign(
-        {},
-        ...data.params.map((p) => {
-          if (p.key != '') return { [p.key]: p.value };
-          return null;
-        })
-      );
-      let body = Object.assign(
-        {},
-        ...data.body.map((p) => ({ [p.key]: p.value }))
-      );
+      let url,
+        functionItems,
+        data = this.$refs['dynamic'].getData(),
+        headers = this.convertArrayToObject(data.headers),
+        body = this.convertArrayToObject(data.body);
 
-      let functionItems;
+      JVariables.replaceBraces(headers, '`${', '}');
+      JVariables.replaceBraces(body, '`${', '}');
+      url = this.processParams(data);
+
       if (data.method == 'GET') {
-        functionItems = `return fetch('${
-          data.url
-        }?'+ (new URLSearchParams(${JSON.stringify(params)}).toString()), {
+        functionItems = `return fetch('${data.url}?'${url}, {
           method: '${data.method}',
           headers:${JSON.stringify(headers)},     
       })
@@ -302,9 +353,7 @@ const controlRenderer = defineComponent({
           ));
         });`;
       } else {
-        functionItems = `return fetch('${
-          data.url
-        }?'+ (new URLSearchParams(${JSON.stringify(params)}).toString()), {
+        functionItems = `return fetch('${data.url}?' ${url}, {
           method: '${data.method}',
           body: '${JSON.stringify(body)}',
           headers:${JSON.stringify(headers)},
@@ -329,12 +378,13 @@ const controlRenderer = defineComponent({
       this.handleChange('items.source', 'dynamic');
       this.handleChange('options.items', functionItems);
       this.handleChange('items.items', functionItems);
+      this.handleChange('options.dependencies', this.dependencies);
+      this.handleChange('items.dependencies', this.dependencies);
     },
   },
 });
 
 export default controlRenderer;
-
 export const ItemsControlRenderer = {
   renderer: controlRenderer,
   tester: rankWith(100, scopeEndsWith('items')),

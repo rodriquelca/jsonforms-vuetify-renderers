@@ -329,7 +329,6 @@ const updateSchemaMinDate = (state, payload) => {
         newSchema,
         uiSchemaElement.linkedSchemaElement
       );
-      debugger;
       assign(linkedShemaElement.schema, { minDate: payload.minDate });
       return {
         schema: getRoot(newSchema),
@@ -354,7 +353,6 @@ const updateSchemaMaxDate = (state, payload) => {
         newSchema,
         uiSchemaElement.linkedSchemaElement
       );
-      debugger;
       assign(linkedShemaElement.schema, { maxDate: payload.maxDate });
       return {
         schema: getRoot(newSchema),
@@ -379,7 +377,6 @@ const updateSchemaDefaultDate = (state, payload) => {
         newSchema,
         uiSchemaElement.linkedSchemaElement
       );
-      debugger;
       assign(linkedShemaElement.schema, { defaultDate: payload.defaultDate });
       return {
         schema: getRoot(newSchema),

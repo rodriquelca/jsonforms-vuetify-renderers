@@ -11,6 +11,7 @@
       :class="styles.control.input"
       :disabled="!control.enabled"
       :autofocus="appliedOptions.focus"
+      :return-object="true"
       :placeholder="appliedOptions.placeholder"
       :hint="control.description"
       :persistent-hint="persistentHint()"

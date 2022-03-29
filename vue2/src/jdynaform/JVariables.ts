@@ -21,5 +21,50 @@ const JVariables = {
             });
         }
     },
+    /**
+     * Return the values into braces
+     * @param json 
+     * @param str 
+     */
+    removeBraces(json: any) {
+        let valuesInBraces: any = [];
+        _.map(json, (value, key) => {
+            if (typeof value == 'string') {
+                let res = value.match(/{{\s*[A-Z\.a-z0-9]+\s*}}/g);
+                if (res) {
+                    res.forEach((el: any) => {
+                        const r = el.replace('{{', '').replace('}}', '').trim();
+                        valuesInBraces.push(r);
+                        json[key] = json[key].replace(el, r || el);
+                    });
+                }
+
+            }
+        });
+        return valuesInBraces;
+    },
+    /**
+    * Return the values into braces
+    * @param json 
+    * @param bracesStart
+    * @param bracesEnd 
+    */
+    replaceBraces(json: any, bracesStart: string, bracesEnd: string) {
+        let valuesInBraces: any = [];
+        _.map(json, (value, key) => {
+            if (typeof value == 'string') {
+                let res = value.match(/{{\s*[A-Z\.a-z0-9]+\s*}}/g);
+                if (res) {
+                    res.forEach((el: any) => {
+                        const r = el.replace('{{', '').replace('}}', '').trim();
+                        valuesInBraces.push(r);
+                        json[key] = json[key].replace(el, bracesStart + r + bracesEnd || el);
+                    });
+                }
+
+            }
+        });
+        return valuesInBraces;
+    }
 };
 export default JVariables;
