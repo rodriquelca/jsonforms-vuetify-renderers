@@ -194,9 +194,12 @@ const controlElements = [
             onChange: {
               arguments: "JForm, nval, oval",
               body: ""
-            },
+            }
           },
-          items: []
+          source: null,
+          items: null,
+          request: null,
+          dependencies: []
         }
       };
     },
@@ -273,9 +276,12 @@ const controlElements = [
             onChange: {
               arguments: "JForm, nval, oval",
               body: ""
-            },
+            }
           },
-          items: []
+          items: null,
+          request: null,
+          source: null,
+          dependencies: []
         }
       };
     },
@@ -296,9 +302,12 @@ const controlElements = [
             onChange: {
               arguments: "JForm, nval, oval",
               body: ""
-            },
+            }
           },
-          items: []
+          items: null,
+          request: null,
+          source: null,
+          dependencies: []
         }
       };
     },
@@ -319,9 +328,12 @@ const controlElements = [
             onChange: {
               arguments: "JForm, nval, oval",
               body: ""
-            },
+            }
           },
-          items: []
+          items: null,
+          request: null,
+          source: null,
+          dependencies: []
         }
       };
     },
