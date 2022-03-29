@@ -1,6 +1,5 @@
 <template>
   <div class="">
-    <Templates />
     <v-expansion-panels focusable multiple>
       <v-expansion-panel v-for="(group, i) in paletteElements" :key="i">
         <v-expansion-panel-header>{{ group.label }}</v-expansion-panel-header>
@@ -48,7 +47,7 @@ export default {
   name: 'PalletePanel',
   components: {
     draggable,
-    Templates,
+    // Templates,
   },
   props: {
     schema: {
