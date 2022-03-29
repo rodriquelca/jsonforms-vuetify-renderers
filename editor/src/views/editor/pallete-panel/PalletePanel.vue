@@ -1,35 +1,40 @@
 <template>
   <div class="">
-    <v-list-group v-for="(group, j) in paletteElements" :key="j">
-      <template v-slot:activator>
-        <v-list-item-content>
-          <v-list-item-title
-            v-text="group.label"
-            class="overline"
-          ></v-list-item-title>
-        </v-list-item-content>
-      </template>
-      <v-list dense>
-        <draggable
-          class="dragArea list-group"
-          :list="group.elements"
-          :group="{ name: 'people', pull: 'clone', put: false }"
-          :sort="false"
-        >
-          <template v-for="(item, i) in group.elements">
-            <v-list-item :key="i">
-              <v-list-item-icon>
-                <v-icon v-text="item.icon" class="body-1"></v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title v-text="item.label" class="caption">
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </draggable>
-      </v-list>
-    </v-list-group>
+    <v-expansion-panels focusable multiple>
+      <v-expansion-panel v-for="(group, i) in paletteElements" :key="i">
+        <v-expansion-panel-header>{{ group.label }}</v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <draggable
+            v-model="group.elements"
+            :group="{ name: 'people', pull: 'clone', put: false }"
+            :sort="false"
+            class="d-flex align-content-start flex-wrap"
+          >
+            <v-card
+              v-for="(item, n) in group.elements"
+              :key="n"
+              outlined
+              tile
+              class="pa-2"
+            >
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    color="blue-grey darken-2"
+                    dark
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    {{ item.icon }}
+                  </v-icon>
+                </template>
+                <span>{{ item.label }}</span>
+              </v-tooltip>
+            </v-card>
+          </draggable>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </div>
 </template>
 

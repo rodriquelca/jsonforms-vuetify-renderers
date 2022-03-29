@@ -6,6 +6,8 @@
  * ---------------------------------------------------------------------
  */
 
+import { examples } from './examples';
+
 export interface SchemaService {
   getSchema(): Promise<any>;
   getUiSchema(): Promise<any>;
@@ -14,4 +16,8 @@ export interface SchemaService {
 export class EmptySchemaService implements SchemaService {
   getSchema = async () => undefined;
   getUiSchema = async () => undefined;
+}
+
+export class TemplateSchemaService {
+  getTemplates = async () => examples;
 }

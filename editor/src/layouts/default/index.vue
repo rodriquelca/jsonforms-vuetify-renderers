@@ -1,7 +1,11 @@
 <template>
   <v-app>
     <default-app-bar />
+
+    <default-drawer />
+
     <default-view />
+
     <v-footer padless fixed>
       <v-spacer></v-spacer>
       <div color="success">
@@ -19,6 +23,7 @@ export default {
   components: {
     DefaultAppBar: () => import('./AppBar'),
     DefaultView: () => import('./View'),
+    DefaultDrawer: () => import('./Drawer'),
   },
 };
 </script>

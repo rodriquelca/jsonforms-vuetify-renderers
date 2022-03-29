@@ -65,7 +65,6 @@
               :uischema="useUiSchema"
               :renderers="renderers"
               :cells="renderers"
-              @change="onChange"
             />
             <v-container>
               <v-row

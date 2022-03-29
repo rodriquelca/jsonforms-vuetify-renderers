@@ -1,9 +1,6 @@
 <template>
   <v-container class="px-0 my-1" :fluid="true">
     <v-row no-gutters height="100%">
-      <v-col cols="2">
-        <PalletePanel :schema="editorSchema" />
-      </v-col>
       <v-col>
         <EditorPanel
           :editorTabs="editorTabs"
@@ -18,7 +15,6 @@
 </template>
 
 <script lang="ts">
-import PalletePanel from './pallete-panel';
 import EditorPanel from './editor-panel';
 import DynaformPreview from '../../components/DynaformPreview.vue';
 import { defaultEditorRenderers } from '../../renderers';
@@ -31,7 +27,6 @@ export default {
   name: 'EditorView',
   props: {},
   components: {
-    PalletePanel,
     EditorPanel,
   },
   data() {
