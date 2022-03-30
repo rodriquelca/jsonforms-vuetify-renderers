@@ -1,0 +1,183 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "VerticalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/title",
+          "options": {
+            "isHtmlViewer": true,
+            "content": "<div class=\"fsSectionText\" style=\"color: #595d64; font-family: Lato, 'Helvetica Neue', Arial, 'Lucida Grande', Tahoma, Verdana, sans-serif; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">&nbsp;</div>\n<h2 class=\"fsSectionHeading\" style=\"margin: 0px 0px 10px; padding: 0px; border: 0px; vertical-align: baseline; text-align: center; font-size: 28px; font-weight: 400; font-style: normal; line-height: 28px; color: #595d64; font-family: Lato, 'Helvetica Neue', Arial, 'Lucida Grande', Tahoma, Verdana, sans-serif; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\">Job Application</h2>"
+          }
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/contentTitle",
+          "options": {
+            "isHtmlViewer": true,
+            "content": "<p><span style=\"color: #000000; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px;\">Please fill out all the required fields and attach your resume below.</span></p>"
+          }
+        }
+      ]
+    },
+    {
+      "type": "VerticalLayout",
+      "elements": [
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/firstName",
+              "label": "First Name"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/lastName",
+              "label": "Last Name"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "VerticalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/address",
+          "label": "Address"
+        },
+        {
+          "type": "HorizontalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/city",
+              "label": "City"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/state",
+              "label": "State"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/zipCode",
+              "label": "Zip Code"
+            }
+          ]
+        },
+        {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/homePhone",
+              "label": "Home Phone"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/email",
+              "label": "Email"
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/position",
+              "label": "Position Applying For"
+            },
+            {
+              "type": "RadioGroup",
+              "scope": "#/properties/employment",
+              "options": {
+                "events": {
+                  "onChange": {
+                    "arguments": "JForm, nval, oval",
+                    "body": ""
+                  }
+                },
+                "items": [
+                  {
+                    "value": "0",
+                    "label": "Full-time"
+                  },
+                  {
+                    "value": "1",
+                    "label": "Part-time"
+                  },
+                  {
+                    "value": "2",
+                    "label": "Either"
+                  }
+                ],
+                "request": null,
+                "source": "static",
+                "dependencies": []
+              },
+              "label": "Employment Desired"
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "RadioGroup",
+                  "scope": "#/properties/workNight",
+                  "options": {
+                    "events": {
+                      "onChange": {
+                        "arguments": "JForm, nval, oval",
+                        "body": ""
+                      }
+                    },
+                    "items": [
+                      {
+                        "value": "0",
+                        "label": "Yes"
+                      },
+                      {
+                        "value": "1",
+                        "label": "No"
+                      }
+                    ],
+                    "request": null,
+                    "source": "static",
+                    "dependencies": []
+                  },
+                  "label": "Can you work nights?"
+                },
+                {
+                  "type": "RadioGroup",
+                  "scope": "#/properties/older",
+                  "options": {
+                    "events": {
+                      "onChange": {
+                        "arguments": "JForm, nval, oval",
+                        "body": ""
+                      }
+                    },
+                    "items": [
+                      {
+                        "value": "0",
+                        "label": "Yes"
+                      },
+                      {
+                        "value": "1",
+                        "label": "No"
+                      }
+                    ],
+                    "request": null,
+                    "source": "static",
+                    "dependencies": []
+                  },
+                  "label": "Are you 18 or older?"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
