@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "title": "Dynaform",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "richText": {
+      "type": "string"
+    },
+    "employeeName": {
+      "type": "string"
+    },
+    "employeeEmail": {
+      "type": "string"
+    },
+    "leaveStart": {
+      "type": "string",
+      "format": "date"
+    },
+    "leaveEnd": {
+      "type": "string",
+      "format": "date"
+    },
+    "leaveType": {
+      "type": "string"
+    },
+    "moreInfo": {
+      "type": "string"
+    }
+  }
+}
