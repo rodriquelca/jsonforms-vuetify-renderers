@@ -449,6 +449,32 @@ const complexElements = [
       };
     },
   },
+  // {
+  //   type: 'Control',
+  //   label: 'Line Input',
+  //   icon: 'mdi-crop-square',
+  //   uiSchemaElementProvider: () => {
+  //     const control = createControl("string");
+  //     return {
+  //       control,
+  //       variable: "textField"
+  //     };
+  //   },
+  // },
+  {
+    type: 'Image',
+    label: 'Image',
+    icon: 'mdi-image',
+    uiSchemaElementProvider: () => {
+      const control = {
+        type: "object"
+      }
+      return {
+        control,
+        variable: "image"
+      };
+    },
+  },
 ]
 const mainPalette = {
   containers: {
