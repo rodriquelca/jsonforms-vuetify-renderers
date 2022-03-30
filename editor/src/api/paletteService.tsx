@@ -471,7 +471,12 @@ const complexElements = [
       }
       return {
         control,
-        variable: "image"
+        variable: "image",
+        uiOptions: {
+          image: "https://picsum.photos/id/11/500/300",
+          height: 600,
+          width: 600,
+        }
       };
     },
   },

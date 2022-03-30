@@ -6,10 +6,9 @@
     :appliedOptions="appliedOptions"
   >
     <v-img
-      lazy-src="https://picsum.photos/id/11/10/6"
-      max-height="150"
-      max-width="250"
-      src="https://picsum.photos/id/11/500/300"
+      :max-height="appliedOptions.height || 150"
+      :max-width="appliedOptions.width || 150"
+      :src="appliedOptions.image"
     ></v-img>
   </control-wrapper>
 </template>
