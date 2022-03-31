@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined>
+  <v-card outlined :class="selectedStyle">
     <v-row
       @mouseover="hover = true"
       @mouseleave="hover = false"
@@ -48,6 +48,7 @@ import {
   hasChildren,
 } from '../model/uischema';
 import Icon from './Icon.vue';
+import { sync } from 'vuex-pathify';
 export default {
   name: 'EditorElement',
   props: {
@@ -69,7 +70,14 @@ export default {
     ruleEffect() {
       return this.wrappedElement.rule?.effect.toLocaleUpperCase();
     },
+    selectedElement: sync('app/editor@selectedElement'),
+    selectedStyle() {
+      return this.selectedElement === this.wrappedElement.uuid
+        ? 'selected'
+        : '';
+    },
   },
+
   methods: {
     onRemove: function (e) {
       e.preventDefault();
@@ -81,10 +89,18 @@ export default {
         );
       }
     },
+
     onClick: function () {
+      this.selected = true;
       this.$store.set('app/editor@settings', true);
       this.$store.set('app/editor@selectedElement', this.wrappedElement.uuid);
     },
   },
 };
 </script>
+<style scoped>
+.selected {
+  border: 2px dashed rgba(1, 91, 7, 0.982);
+  min-height: 80px;
+}
+</style>

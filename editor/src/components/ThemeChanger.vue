@@ -26,7 +26,7 @@
     </v-toolbar>
 
     <v-divider />
-    <v-card>
+    <v-card class="overflow-y-auto" style="max-height: 600px">
       <v-card-text>
         <v-card
           class="my-2"

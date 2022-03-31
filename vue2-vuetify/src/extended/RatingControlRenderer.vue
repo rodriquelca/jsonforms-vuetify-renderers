@@ -5,8 +5,7 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    hola
-    <v-text-field
+    <!-- <v-text-field
       type="number"
       :step="step"
       :id="control.id + '-input'"
@@ -23,7 +22,27 @@
       @change="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
-    />
+    /> -->
+    <v-rating
+      hover
+      length="5"
+      size="40"
+      :step="step"
+      :id="control.id + '-input'"
+      :class="styles.control.input"
+      :disabled="!control.enabled"
+      :autofocus="appliedOptions.focus"
+      :placeholder="appliedOptions.placeholder"
+      :label="computedLabel"
+      :hint="control.description"
+      :persistent-hint="persistentHint()"
+      :required="control.required"
+      :error-messages="control.errors"
+      :value="control.data"
+      @change="onChange"
+      @focus="isFocused = true"
+      @blur="isFocused = false"
+    ></v-rating>
   </control-wrapper>
 </template>
 
@@ -33,6 +52,8 @@ import {
   JsonFormsRendererRegistryEntry,
   rankWith,
   isIntegerControl,
+  and,
+  optionIs,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
@@ -40,15 +61,16 @@ import {
   useJsonFormsControl,
   RendererProps,
 } from '@jsonforms/vue2';
-import { default as ControlWrapper } from './ControlWrapper.vue';
+import { default as ControlWrapper } from '../controls/ControlWrapper.vue';
 import { useVuetifyControl } from '../util';
-import { VTextField } from 'vuetify/lib';
+import { VRating } from 'vuetify/lib';
 
 const controlRenderer = defineComponent({
-  name: 'integer-control-renderer',
+  name: 'rating-control-renderer',
   components: {
     ControlWrapper,
-    VTextField,
+
+    VRating,
   },
   props: {
     ...rendererProps<ControlElement>(),
@@ -71,6 +93,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(1, isIntegerControl),
+  tester: rankWith(1, and(isIntegerControl, optionIs('rating', true))),
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
-  <!-- <div> -->
-  <v-container class="grey lighten-5">
+  <div>
+    <!-- <v-container class="grey lighten-5"> -->
     <v-row no-gutters>
       <draggable
         :class="draggableClass"
@@ -31,9 +31,9 @@
           />
         </v-col>
       </draggable>
-      <!-- </div> -->
     </v-row>
-  </v-container>
+  </div>
+  <!-- </v-container> -->
 </template>
 <script lang="ts">
 import { sync } from 'vuex-pathify';
@@ -175,13 +175,7 @@ export const entry: JsonFormsRendererRegistryEntry = {
 };
 </script>
 <style scoped>
-.test {
-  background: #e5e5e5;
-  height: 100%;
-}
 .dragArea {
-  border: 1px dashed #000;
   min-height: 80px;
-  content: 'Drag Controls';
 }
 </style>
