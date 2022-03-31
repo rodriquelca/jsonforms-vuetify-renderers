@@ -242,6 +242,17 @@ const PropertiesPanel = defineComponent({
           });
           this.generalData['label'] = event.data.label;
         }
+        // options
+        if (
+          event.data.options &&
+          this.generalData['options'] !== event.data.options
+        ) {
+          this.$store.dispatch('app/updateUISchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { options: event.data.options },
+          });
+          this.generalData['options'] = event.data.options;
+        }
       }
     },
     updateRulesSetting: function (event: JsonFormsChangeEvent) {

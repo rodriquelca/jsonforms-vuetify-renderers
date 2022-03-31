@@ -107,9 +107,28 @@ const controlElements = [
   },
 
   {
-    type: 'Control',
+    type: 'File',
     label: 'File Upload',
-    icon: 'mdi-file-upload',
+    icon: 'mdi-file-upload-outline',
+    uiSchemaElementProvider: () => {
+      const control = {
+        type: "string"
+      }
+      return {
+        control,
+        variable: "fileUpload",
+        uiOptions: {
+          "placeholder": "Select your files",
+          "accept": "*",
+          "maxFileSize": 70000
+        }
+      };
+    }
+  },
+  {
+    type: 'Control',
+    label: 'Multiple File Upload',
+    icon: 'mdi-cloud-upload-outline',
     uiSchemaElementProvider: () => {
       const control = createControl("array", {
         items: {
@@ -338,6 +357,25 @@ const controlElements = [
       };
     },
   },
+  {
+    type: 'Image',
+    label: 'Image',
+    icon: 'mdi-image-outline',
+    uiSchemaElementProvider: () => {
+      const control = {
+        type: "object"
+      }
+      return {
+        control,
+        variable: "image",
+        uiOptions: {
+          image: "https://picsum.photos/id/11/500/300",
+          height: 600,
+          width: 600,
+        }
+      };
+    },
+  },
 ];
 const complexElements = [
   {
@@ -445,37 +483,6 @@ const complexElements = [
             ]
           },
           "showSortButtons": true
-        }
-      };
-    },
-  },
-  // {
-  //   type: 'Control',
-  //   label: 'Line Input',
-  //   icon: 'mdi-crop-square',
-  //   uiSchemaElementProvider: () => {
-  //     const control = createControl("string");
-  //     return {
-  //       control,
-  //       variable: "textField"
-  //     };
-  //   },
-  // },
-  {
-    type: 'Image',
-    label: 'Image',
-    icon: 'mdi-image',
-    uiSchemaElementProvider: () => {
-      const control = {
-        type: "object"
-      }
-      return {
-        control,
-        variable: "image",
-        uiOptions: {
-          image: "https://picsum.photos/id/11/500/300",
-          height: 600,
-          width: 600,
         }
       };
     },

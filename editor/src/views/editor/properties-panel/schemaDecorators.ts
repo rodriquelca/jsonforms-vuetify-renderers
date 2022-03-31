@@ -57,7 +57,7 @@ export const ItemsDecorator: PropertySchemasDecorator = (
       },
       items: {
         type: 'object',
-      }
+      },
     });
 
     (schemas.uiSchema as Layout).elements.push(
@@ -351,6 +351,77 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const uploadImageDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Image'].includes(uiElement?.type)) {
+    addSchemaOptionsProperty(schemas.schema, {
+      image: { type: 'string' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'File',
+      scope: '#/properties/options/properties/image',
+      label: 'Upload Image',
+    });
+  }
+  return schemas;
+};
+export const widthDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Image'].includes(uiElement?.type)) {
+    addSchemaOptionsProperty(schemas.schema, {
+      width: { type: 'number' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/width',
+      label: 'Width',
+    });
+  }
+  return schemas;
+};
+export const heightDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Image'].includes(uiElement?.type)) {
+    addSchemaOptionsProperty(schemas.schema, {
+      height: { type: 'number' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/height',
+      label: 'Height',
+    });
+  }
+  return schemas;
+};
+export const toggleDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.type === 'boolean'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      toggle: { type: 'boolean' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/toggle',
+      label: 'Toggle View',
+      options: {
+        toggle: true,
+      },
+    });
+  }
+  return schemas;
+};
 
 export const createPropertyControl = (
   controlScope: string
@@ -383,6 +454,10 @@ export const defaultSchemaDecoratorsCollection = new Map<
       minDateDecorator,
       maxDateDecorator,
       defaultDateDecorator,
+      uploadImageDecorator,
+      widthDecorator,
+      heightDecorator,
+      toggleDecorator,
     ],
   ],
   ['rulesEditor', [ruleEditorDecorator]],
