@@ -16,7 +16,6 @@
       :persistent-hint="persistentHint()"
       :required="control.required"
       :error-messages="control.errors"
-      row
       :value="control.data"
       @change="onChange"
       @focus="isFocused = true"

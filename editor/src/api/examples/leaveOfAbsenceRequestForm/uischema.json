@@ -1,0 +1,110 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/title",
+      "options": {
+        "isHtmlViewer": true,
+        "content": "<h2 style=\"text-align: center;\">Leave of Absence Request Form</h2>"
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/richText",
+      "options": {
+        "isHtmlViewer": true,
+        "content": "<h3>Employee Information</h3>"
+      }
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/employeeName"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/employeeEmail"
+        }
+      ]
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/richText",
+      "options": {
+        "isHtmlViewer": true,
+        "content": "<h3>Leave Information</h3>"
+      }
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/leaveStart"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/leaveEnd"
+        }
+      ]
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "RadioGroup",
+          "scope": "#/properties/leaveType",
+          "options": {
+            "events": {
+              "onChange": {
+                "arguments": "JForm, nval, oval",
+                "body": ""
+              }
+            },
+            "items": [
+              {
+                "value": "medical",
+                "label": "Medical Leave"
+              },
+              {
+                "value": "dead",
+                "label": "Dead or Illness in Family"
+              },
+              {
+                "value": "marriage",
+                "label": "Marriage"
+              },
+              {
+                "value": "matternity",
+                "label": "Matternity/Paternity"
+              },
+              {
+                "value": "skill",
+                "label": "Skill or Work Training"
+              },
+              {
+                "value": "other",
+                "label": "Other"
+              }
+            ],
+            "request": null,
+            "source": "static",
+            "dependencies": []
+          },
+          "label": "Reason For Leave"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/moreInfo",
+          "options": {
+            "multi": true
+          },
+          "label": "More Information"
+        }
+      ]
+    }
+  ]
+}

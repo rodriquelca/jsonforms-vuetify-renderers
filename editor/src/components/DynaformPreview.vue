@@ -66,6 +66,7 @@
               :renderers="renderers"
               @change="onChange"
               :cells="renderers"
+              @change="onChange"
             />
             <v-container>
               <v-row

@@ -57,7 +57,7 @@ export const ItemsDecorator: PropertySchemasDecorator = (
       },
       items: {
         type: 'object',
-      }
+      },
     });
 
     (schemas.uiSchema as Layout).elements.push(
@@ -101,7 +101,7 @@ export const variableDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control', 'Dropdown'].includes(uiElement?.type)) {
+  if (['Control', 'Dropdown', 'RadioGroup'].includes(uiElement?.type)) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -216,6 +216,7 @@ export const labelDecorator: PropertySchemasDecorator = (
       'MultipleFile',
       'Categorization',
       'Category',
+      'RadioGroup',
     ].includes(uiElement?.type)
   ) {
     if (!schemas.schema.properties) {
@@ -333,7 +334,7 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
     elements: [
       {
         type: 'Control',
-        scope: '#/properties/allOrAny',
+        scope: '#/descriptionDecorator/allOrAny',
         label: '',
       },
       {
@@ -351,6 +352,157 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const uploadImageDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Image'].includes(uiElement?.type)) {
+    addSchemaOptionsProperty(schemas.schema, {
+      image: { type: 'string' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'File',
+      scope: '#/properties/options/properties/image',
+      label: 'Upload Image',
+    });
+  }
+  return schemas;
+};
+export const widthDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Image'].includes(uiElement?.type)) {
+    addSchemaOptionsProperty(schemas.schema, {
+      width: { type: 'number' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/width',
+      label: 'Width',
+    });
+  }
+  return schemas;
+};
+export const heightDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Image'].includes(uiElement?.type)) {
+    addSchemaOptionsProperty(schemas.schema, {
+      height: { type: 'number' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/height',
+      label: 'Height',
+    });
+  }
+  return schemas;
+};
+export const toggleDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.type === 'boolean'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      toggle: { type: 'boolean' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/toggle',
+      label: 'Toggle View',
+      options: {
+        toggle: true,
+      },
+    });
+  }
+  return schemas;
+};
+export const descriptionDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Control'].includes(uiElement?.type)) {
+    assign(schemas.schema.properties, { description: { type: 'string' } });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/description',
+      label: 'Description',
+      options: {
+        multi: true,
+      },
+    });
+  }
+  return schemas;
+};
+
+export const maxLengthDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (schemaElement?.schema.type === 'string') {
+    assign(schemas.schema.properties, { maxLength: { type: 'integer' } });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/maxLength',
+      label: 'Max Length',
+    });
+  }
+  return schemas;
+};
+
+export const trimDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.type === 'string'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      trim: { type: 'boolean' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/trim',
+      label: 'Trim Text',
+      options: {
+        toggle: true,
+      },
+    });
+  }
+  return schemas;
+};
+export const restrictDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.type === 'string'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      restrict: { type: 'boolean' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/restrict',
+      label: 'Restrict to Max Length',
+      options: {
+        toggle: true,
+      },
+    });
+  }
+  return schemas;
+};
 
 export const createPropertyControl = (
   controlScope: string
@@ -377,12 +529,20 @@ export const defaultSchemaDecoratorsCollection = new Map<
     [
       variableDecorator,
       labelDecorator,
+      descriptionDecorator,
       requiredDecorator,
       readOnlyDecorator,
       multilineStringOptionDecorator,
       minDateDecorator,
       maxDateDecorator,
       defaultDateDecorator,
+      uploadImageDecorator,
+      widthDecorator,
+      heightDecorator,
+      toggleDecorator,
+      maxLengthDecorator,
+      trimDecorator,
+      restrictDecorator,
     ],
   ],
   ['rulesEditor', [ruleEditorDecorator]],
