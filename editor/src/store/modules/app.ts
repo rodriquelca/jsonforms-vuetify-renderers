@@ -181,7 +181,16 @@ const addPropertyToSchema = (state, payload) => {
     (clonedSchema) => {
       const newElement = payload.schemaElement;
       newElement.parent = clonedSchema;
-      clonedSchema.properties?.set(`${payload.indexOrProp}`, newElement);
+      let counter = 0;
+      for (const key of clonedSchema.properties.keys()) {
+        if (key.includes(payload.indexOrProp)) {
+          counter += 1;
+        }
+      }
+      clonedSchema.properties?.set(
+        `${payload.indexOrProp}_${counter}`,
+        newElement
+      );
       return clonedSchema;
     }
   );
