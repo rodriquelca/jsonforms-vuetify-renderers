@@ -468,6 +468,27 @@ const complexElements = [
     },
   },
 ]
+const extendedElements = [
+  {
+    type: 'Control',
+    label: 'Rating',
+    icon: 'mdi-star-outline',
+    uiSchemaElementProvider: () => {
+      const control = {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 5
+      };
+      return {
+        control,
+        variable: "rating",
+        uiOptions: {
+          rating: true,
+        }
+      };
+    },
+  },
+]
 const mainPalette = {
   containers: {
     label: 'Layouts & Others',
@@ -480,6 +501,10 @@ const mainPalette = {
   complex: {
     label: 'Complex',
     elements: complexElements
+  },
+  extended: {
+    label: 'Extended',
+    elements: extendedElements
   }
 }
 
