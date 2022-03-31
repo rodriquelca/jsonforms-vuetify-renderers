@@ -216,7 +216,7 @@ export const labelDecorator: PropertySchemasDecorator = (
       'MultipleFile',
       'Categorization',
       'Category',
-      'RadioGroup'
+      'RadioGroup',
     ].includes(uiElement?.type)
   ) {
     if (!schemas.schema.properties) {
@@ -334,7 +334,7 @@ export const ruleEditorDecorator: PropertySchemasDecorator = (
     elements: [
       {
         type: 'Control',
-        scope: '#/properties/allOrAny',
+        scope: '#/descriptionDecorator/allOrAny',
         label: '',
       },
       {
@@ -423,6 +423,86 @@ export const toggleDecorator: PropertySchemasDecorator = (
   }
   return schemas;
 };
+export const descriptionDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement
+) => {
+  if (['Control'].includes(uiElement?.type)) {
+    assign(schemas.schema.properties, { description: { type: 'string' } });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/description',
+      label: 'Description',
+      options: {
+        multi: true,
+      },
+    });
+  }
+  return schemas;
+};
+
+export const maxLengthDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (schemaElement?.schema.type === 'string') {
+    assign(schemas.schema.properties, { maxLength: { type: 'integer' } });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/maxLength',
+      label: 'Max Length',
+    });
+  }
+  return schemas;
+};
+
+export const trimDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.type === 'string'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      trim: { type: 'boolean' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/trim',
+      label: 'Trim Text',
+      options: {
+        toggle: true,
+      },
+    });
+  }
+  return schemas;
+};
+export const restrictDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.type === 'string'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      restrict: { type: 'boolean' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/restrict',
+      label: 'Restrict to Max Length',
+      options: {
+        toggle: true,
+      },
+    });
+  }
+  return schemas;
+};
 
 export const createPropertyControl = (
   controlScope: string
@@ -449,6 +529,7 @@ export const defaultSchemaDecoratorsCollection = new Map<
     [
       variableDecorator,
       labelDecorator,
+      descriptionDecorator,
       requiredDecorator,
       readOnlyDecorator,
       multilineStringOptionDecorator,
@@ -459,6 +540,9 @@ export const defaultSchemaDecoratorsCollection = new Map<
       widthDecorator,
       heightDecorator,
       toggleDecorator,
+      maxLengthDecorator,
+      trimDecorator,
+      restrictDecorator,
     ],
   ],
   ['rulesEditor', [ruleEditorDecorator]],
