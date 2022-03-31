@@ -86,10 +86,6 @@
                 "label": "Skill or Work Training"
               },
               {
-                "value": "skill",
-                "label": "Skill or Work Training"
-              },
-              {
                 "value": "other",
                 "label": "Other"
               }

@@ -151,6 +151,16 @@ const PropertiesPanel = defineComponent({
             this.schema.schema.required.includes(
               getVariableName(this.uiElement)
             );
+          if (elementSchema.schema.description) {
+            this.generalData['description'] = elementSchema.schema.description
+              ? elementSchema.schema.description
+              : '';
+          }
+          if (elementSchema.schema.maxLength) {
+            this.generalData['maxLength'] = elementSchema.schema.maxLength
+              ? elementSchema.schema.maxLength
+              : '';
+          }
           (this.generalData['readOnly'] = elementSchema.schema.readOnly
             ? elementSchema.schema.readOnly
             : false),
@@ -159,6 +169,7 @@ const PropertiesPanel = defineComponent({
               elementSchema
             ));
         }
+        debugger;
         // rule property
         if (this.generalData['rule']) {
           this.populateFieldEnum();
@@ -241,6 +252,39 @@ const PropertiesPanel = defineComponent({
             changedProperties: { label: event.data.label },
           });
           this.generalData['label'] = event.data.label;
+        }
+        // options
+        if (
+          event.data.options &&
+          this.generalData['options'] !== event.data.options
+        ) {
+          this.$store.dispatch('app/updateUISchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { options: event.data.options },
+          });
+          this.generalData['options'] = event.data.options;
+        }
+        // description
+        if (
+          event.data.description &&
+          this.generalData['description'] !== event.data.description
+        ) {
+          this.$store.dispatch('app/updateSchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { description: event.data.description },
+          });
+          this.generalData['description'] = event.data.description;
+        }
+        // maxLength
+        if (
+          event.data.maxLength &&
+          this.generalData['maxLength'] !== event.data.maxLength
+        ) {
+          this.$store.dispatch('app/updateSchemaElement', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { maxLength: event.data.maxLength },
+          });
+          this.generalData['maxLength'] = event.data.maxLength;
         }
       }
     },

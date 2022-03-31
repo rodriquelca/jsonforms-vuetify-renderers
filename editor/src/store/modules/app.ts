@@ -385,6 +385,30 @@ const updateSchemaDefaultDate = (state, payload) => {
     }
   );
 };
+const updateSchemaElement = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    undefined,
+    state.editor.schema,
+    undefined,
+    state,
+    (newUiSchema, newSchema) => {
+      const uiSchemaElement: SchemaElement = findByUUID(
+        newUiSchema,
+        payload.elementUUID
+      );
+      const linkedShemaElement: SchemaElement = findByUUID(
+        newSchema,
+        uiSchemaElement.linkedSchemaElement
+      );
+      assign(linkedShemaElement.schema, payload.changedProperties);
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
 
 const state: AppState = {
   editor: {
@@ -523,6 +547,10 @@ const actions = {
   updateUISchemaElementOption({ commit, state }, payload) {
     const clone = updateUISchemaElementOption(state, payload);
     commit('SET_UI_SCHEMA', clone);
+  },
+  updateSchemaElement({ commit, state }, payload) {
+    const clone = updateSchemaElement(state, payload);
+    commit('SET_SCHEMA', clone.schema);
   },
 };
 

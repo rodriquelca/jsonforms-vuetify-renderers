@@ -105,11 +105,10 @@ const controlElements = [
       };
     },
   },
-
   {
     type: 'Control',
-    label: 'File Upload',
-    icon: 'mdi-file-upload',
+    label: 'Multiple File Upload',
+    icon: 'mdi-cloud-upload-outline',
     uiSchemaElementProvider: () => {
       const control = createControl("array", {
         items: {
@@ -334,6 +333,25 @@ const controlElements = [
           request: null,
           source: null,
           dependencies: []
+        }
+      };
+    },
+  },
+  {
+    type: 'Image',
+    label: 'Image',
+    icon: 'mdi-image-outline',
+    uiSchemaElementProvider: () => {
+      const control = {
+        type: "object"
+      }
+      return {
+        control,
+        variable: "image",
+        uiOptions: {
+          image: "https://picsum.photos/id/11/500/300",
+          height: 600,
+          width: 600,
         }
       };
     },

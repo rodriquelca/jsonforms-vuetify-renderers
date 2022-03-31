@@ -1,5 +1,5 @@
 export { default as MultipleFileControlRenderer } from './MultipleFileControlRenderer.vue';
 
-import { entry as multipleFileControlRendererEtry } from './MultipleFileControlRenderer.vue';
+import { entry as multipleFileControlRendererEntry } from './MultipleFileControlRenderer.vue';
 
-export const filesRenderers = [multipleFileControlRendererEtry];
+export const filesRenderers = [multipleFileControlRendererEntry];

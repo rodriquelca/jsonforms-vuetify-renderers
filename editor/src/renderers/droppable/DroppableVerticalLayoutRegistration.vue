@@ -90,7 +90,6 @@ const droppableRenderer = defineComponent({
   },
   methods: {
     handleChange(evt: any) {
-      debugger;
       if (evt.added) {
         if (
           evt.added.element &&
@@ -98,7 +97,9 @@ const droppableRenderer = defineComponent({
             evt.added.element.type === 'RadioGroup' ||
             evt.added.element.type === 'Suggest' ||
             evt.added.element.type === 'CheckboxGroup' ||
-            evt.added.element.type === 'Dropdown')
+            evt.added.element.type === 'Dropdown' ||
+            evt.added.element.type === 'Image' ||
+            evt.added.element.type === 'File')
         ) {
           //here update the schema
           const property = evt.added.element.uiSchemaElementProvider();
