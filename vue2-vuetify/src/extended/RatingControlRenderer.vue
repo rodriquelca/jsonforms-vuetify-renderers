@@ -93,6 +93,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(99, and(isIntegerControl, optionIs('rating', true))),
+  tester: rankWith(1, and(isIntegerControl, optionIs('rating', true))),
 };
 </script>
