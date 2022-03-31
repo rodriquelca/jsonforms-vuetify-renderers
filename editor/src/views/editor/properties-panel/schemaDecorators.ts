@@ -150,7 +150,10 @@ export const minDateDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement,
   schemaElement?: SchemaElement
 ) => {
-  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format === 'date') {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.format === 'date'
+  ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -169,7 +172,10 @@ export const maxDateDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement,
   schemaElement?: SchemaElement
 ) => {
-  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format === 'date') {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.format === 'date'
+  ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -188,7 +194,10 @@ export const defaultDateDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement,
   schemaElement?: SchemaElement
 ) => {
-  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format === 'date') {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.format === 'date'
+  ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -416,9 +425,6 @@ export const toggleDecorator: PropertySchemasDecorator = (
       type: 'Control',
       scope: '#/properties/options/properties/toggle',
       label: 'Toggle View',
-      options: {
-        toggle: true,
-      },
     });
   }
   return schemas;
@@ -473,9 +479,6 @@ export const trimDecorator: PropertySchemasDecorator = (
       type: 'Control',
       scope: '#/properties/options/properties/trim',
       label: 'Trim Text',
-      options: {
-        toggle: true,
-      },
     });
   }
   return schemas;
@@ -496,9 +499,6 @@ export const restrictDecorator: PropertySchemasDecorator = (
       type: 'Control',
       scope: '#/properties/options/properties/restrict',
       label: 'Restrict to Max Length',
-      options: {
-        toggle: true,
-      },
     });
   }
   return schemas;

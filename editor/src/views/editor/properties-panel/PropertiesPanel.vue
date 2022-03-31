@@ -203,8 +203,9 @@ const PropertiesPanel = defineComponent({
           this.generalData['variable'] = event.data.variable;
         }
         // required
+        debugger;
         if (
-          event.data.required &&
+          typeof event.data.required !== 'undefined' &&
           this.generalData['required'] !== event.data.required
         ) {
           this.$store.dispatch('app/updateSchemaRequired', {
@@ -216,7 +217,7 @@ const PropertiesPanel = defineComponent({
         }
         // readOnly
         if (
-          event.data.readOnly &&
+          typeof event.data.readOnly !== 'undefined' &&
           this.generalData['readOnly'] !== event.data.readOnly
         ) {
           this.$store.dispatch('app/updateSchemaReadOnly', {
