@@ -105,26 +105,6 @@ const controlElements = [
       };
     },
   },
-
-  {
-    type: 'File',
-    label: 'File Upload',
-    icon: 'mdi-file-upload-outline',
-    uiSchemaElementProvider: () => {
-      const control = {
-        type: "string"
-      }
-      return {
-        control,
-        variable: "fileUpload",
-        uiOptions: {
-          "placeholder": "Select your files",
-          "accept": "*",
-          "maxFileSize": 70000
-        }
-      };
-    }
-  },
   {
     type: 'Control',
     label: 'Multiple File Upload',
