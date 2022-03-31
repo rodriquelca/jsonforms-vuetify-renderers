@@ -8,11 +8,6 @@ import { input as itRequest } from './iTRequest';
 
 const items = [
   {
-    id: 'intro',
-    title: 'Intro',
-    input: intro,
-  },
-  {
     id: 'leaveOfAbsenceRequestForm',
     title: 'Leave Of Absence Request Form',
     input: leaveOfAbsenceRequestForm,
@@ -32,6 +27,14 @@ const items = [
     title: 'IT Request',
     input: itRequest,
   },
+];
+
+const demo = [
+  {
+    id: 'intro',
+    title: 'Intro',
+    input: intro,
+  },
   {
     id: 'main',
     title: 'Main',
@@ -50,5 +53,11 @@ export const examples = [
     active: true,
     items,
     title: 'Main',
+  },
+  {
+    action: 'mdi-code-json',
+    active: true,
+    items: demo,
+    title: 'Demo',
   },
 ];
