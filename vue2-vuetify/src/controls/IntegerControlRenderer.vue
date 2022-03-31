@@ -5,7 +5,6 @@
     :isFocused="isFocused"
     :appliedOptions="appliedOptions"
   >
-    hola
     <v-text-field
       type="number"
       :step="step"
