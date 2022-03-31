@@ -243,6 +243,7 @@ const updateSchemaVariable = (state, payload) => {
           newSchema,
           uiSchemaElement.linkedSchemaElement
         );
+        linkedShemaElement.schema["i18n"] = payload.newVariable;
         if (
           linkedShemaElement &&
           linkedShemaElement.parent &&

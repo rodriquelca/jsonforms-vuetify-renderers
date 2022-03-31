@@ -97,7 +97,7 @@ const controlElements = [
     uiSchemaElementProvider: () => {
       const control = {
         "type": "string",
-        "format": "time"
+        "format": "time",
       };
       return {
         control,
@@ -141,7 +141,11 @@ const controlElements = [
     label: 'Line Input',
     icon: 'mdi-crop-square',
     uiSchemaElementProvider: () => {
-      const control = createControl("string");
+      const control = {
+        type: "string",
+        "description": "",
+        "i18n": "textField",
+      }
       return {
         control,
         variable: "textField"
@@ -153,7 +157,11 @@ const controlElements = [
     label: 'Text Area',
     icon: 'mdi-format-pilcrow',
     uiSchemaElementProvider: () => {
-      const control = createControl("string");
+      const control = {
+        type: "string",
+        "description": "",
+        "i18n": "textArea",
+      }
       return {
         control,
         variable: "textArea",
@@ -183,7 +191,9 @@ const controlElements = [
     icon: 'mdi-text-box-search-outline',
     uiSchemaElementProvider: () => {
       const control = {
-        type: "object"
+        type: "object",
+        "description": "",
+        "i18n": "suggest",
       }
       return {
         control,
@@ -210,6 +220,8 @@ const controlElements = [
     uiSchemaElementProvider: () => {
       const control = {
         "type": "string",
+        "description": "",
+        "i18n": "dropdown",
         "oneOf": [
           {
             "const": "foo",
@@ -237,7 +249,9 @@ const controlElements = [
     icon: 'mdi-numeric',
     uiSchemaElementProvider: () => {
       const control = {
-        "type": "number"
+        "type": "number",
+        "description": "",
+        "i18n": "number"
       };
       return {
         control,
@@ -251,7 +265,9 @@ const controlElements = [
     icon: 'mdi-counter',
     uiSchemaElementProvider: () => {
       const control = {
-        "type": "integer"
+        "type": "integer",
+        "description": "",
+        "i18n": "integer"
       };
       return {
         control,
@@ -265,7 +281,9 @@ const controlElements = [
     icon: 'mdi-radiobox-marked',
     uiSchemaElementProvider: () => {
       const control = {
-        "type": "string"
+        "type": "string",
+        "description": "",
+        "i18n": "radiogroup"
       };
       return {
         control,
@@ -291,7 +309,9 @@ const controlElements = [
     icon: 'mdi-form-dropdown',
     uiSchemaElementProvider: () => {
       const control = {
-        "type": "string"
+        "type": "string",
+        "description": "",
+        "i18n": "dropdown"
       };
       return {
         control,
@@ -317,7 +337,9 @@ const controlElements = [
     icon: 'mdi-checkbox-outline',
     uiSchemaElementProvider: () => {
       const control = {
-        "type": "string"
+        "type": "string",
+        "description": "",
+        "i18n": "checkboxgroup"
       };
       return {
         control,

@@ -17,6 +17,7 @@
           <v-col><dynaform-preview /></v-col>
           <v-col><download-json /></v-col>
           <v-col><Templates /></v-col>
+          <v-col><Settingsi18n /></v-col>
           <v-col><settings /> </v-col>
           <v-col><theme-changer /> </v-col>
         </v-row>
@@ -33,6 +34,8 @@ import Settings from '@/components/Settings.vue';
 import ThemeChanger from '@/components/ThemeChanger.vue';
 import { AppStore } from '../store/modules/types';
 import Templates from '@/components/Templates.vue';
+import Settingsi18n from '@/components/Settingsi18n.vue';
+
 export default {
   name: 'DefaultAppBar',
   components: {
@@ -41,6 +44,7 @@ export default {
     DownloadJson,
     DynaformPreview,
     Templates,
+    Settingsi18n,
   },
   computed: {
     app: sync<AppStore>('app/'),

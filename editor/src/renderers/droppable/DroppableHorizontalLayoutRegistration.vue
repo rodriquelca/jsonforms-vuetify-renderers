@@ -112,6 +112,9 @@ const droppableRenderer = defineComponent({
             elementUUID: this.schema.uuid,
             indexOrProp: property.variable,
           });
+          this.$store.dispatch('locales/addProperty', {
+            property: property.variable,
+          });
 
           //Here uischema
           const schemaElement = tryFindByUUID(

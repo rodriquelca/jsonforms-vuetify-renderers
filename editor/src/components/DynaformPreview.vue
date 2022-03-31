@@ -2,14 +2,7 @@
   <div>
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          large
-          icon
-          dark
-          v-bind="attrs"
-          v-on="on"
-          @click.stop="dialog = !dialog"
-        >
+        <v-btn large icon dark v-bind="attrs" v-on="on">
           <v-icon size="30" color="primary" @click="onClick">mdi-eye</v-icon>
         </v-btn>
       </template>
@@ -59,13 +52,14 @@
               v-if="
                 resolvedSchema.resolved && resolvedSchema.error === undefined
               "
-              :data="previewData"
+              :data="data"
               :key="key"
               :schema="useSchema"
               :uischema="useUiSchema"
               :renderers="renderers"
-              :cells="renderers"
               @change="onChange"
+              :i18n="i18n"
+              :cells="renderers"
             />
             <v-container>
               <v-row
@@ -123,36 +117,25 @@ export default {
   components: {
     JsonForms,
   },
-  props: {
-    locale: {
-      required: false,
-      type: String,
-      default: 'en',
-    },
-  },
+  props: {},
   data() {
     return {
       key: 1,
       dialog: false,
-      data: store.get('app/data'),
+      data: this.$store.get('app/data'),
       resolvedSchema: {
         schema: undefined,
         resolved: false,
         error: undefined,
       } as ResolvedSchema,
+      locale: sync('app/jsonforms@locale'),
       i18n: {
-        locale: this.locale,
-        translate: createTranslator(this.locale),
+        locale: this.locale || 'en',
+        translate: this.createTranslator(this.locale || 'en'),
       } as JsonFormsI18nState,
       renderers: extendedVuetifyRenderers,
       modeView: 12,
     };
-  },
-  watch: {
-    locale(newLocale: string): void {
-      this.i18n.locale = newLocale;
-      this.i18n.translate = createTranslator(newLocale);
-    },
   },
   computed: {
     useUiSchema: function () {
@@ -163,6 +146,12 @@ export default {
     },
     previewData: function () {
       return generateEmptyData(this.$store.get('app/editor@schema'), {});
+    },
+  },
+  watch: {
+    locale(nValue) {
+      this.i18n.locale = nValue;
+      this.i18n.translate = this.createTranslator(nValue || 'en');
     },
   },
   provide: () => {
@@ -181,7 +170,25 @@ export default {
   },
   methods: {
     onClick() {
+      this.createTranslator(this.$store.get('app/jsonforms@locale'));
+      this.dialog = !this.dialog;
       this.key++;
+    },
+    createTranslator() {
+      let i18n = this.$store.get('locales');
+      const store = this.$store;
+      return (
+        key: string,
+        defaultMessage: string | undefined
+      ): string | undefined => {
+        let locale = store.get('app/jsonforms@locale');
+        return (
+          _.get(
+            locale === 'en' ? i18n['en']['content'] : i18n[locale]['content'],
+            key
+          ) ?? defaultMessage
+        );
+      };
     },
     onChange(event: JsonFormsChangeEvent): void {
       this.$store.set('app/data', event.data || {});
