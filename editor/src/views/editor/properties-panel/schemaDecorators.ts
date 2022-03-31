@@ -101,7 +101,7 @@ export const variableDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control', 'Dropdown'].includes(uiElement?.type)) {
+  if (['Control', 'Dropdown', 'RadioGroup'].includes(uiElement?.type)) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -216,6 +216,7 @@ export const labelDecorator: PropertySchemasDecorator = (
       'MultipleFile',
       'Categorization',
       'Category',
+      'RadioGroup'
     ].includes(uiElement?.type)
   ) {
     if (!schemas.schema.properties) {

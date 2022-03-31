@@ -409,8 +409,6 @@ const state: AppState = {
     locale: 'en',
   },
   data: {},
-  schemaModel: {},
-  uischemaModel: {},
 };
 // make all mutations
 const mutations = {
