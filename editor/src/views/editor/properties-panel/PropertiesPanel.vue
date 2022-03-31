@@ -89,6 +89,7 @@ import {
 } from '../../../model/uischema';
 import { tryFindByUUID } from '../../../util/schemasUtil';
 import { generateDefaultUISchema } from '@jsonforms/core';
+import _ from 'lodash';
 const PropertiesPanel = defineComponent({
   name: 'PropertiesPanel',
   props: {
@@ -109,6 +110,7 @@ const PropertiesPanel = defineComponent({
       rulesData: undefined,
       schemasCollection: undefined,
       hasRule: false,
+      uiElement: null,
     };
   },
   mounted() {
@@ -173,6 +175,7 @@ const PropertiesPanel = defineComponent({
       }
     },
     updateGeneralSettings: function (event: JsonFormsChangeEvent) {
+      const elementSchema = this.findElementSchema();
       // variable
       if (this.uiElement && event.errors.length === 0) {
         if (
@@ -182,6 +185,10 @@ const PropertiesPanel = defineComponent({
           this.$store.dispatch('app/updateSchemaVariable', {
             elementUUID: this.uiElement.uuid,
             newVariable: event.data.variable,
+          });
+          this.$store.dispatch('locales/updateProperty', {
+            oldProperty: elementSchema ? elementSchema.key : '',
+            newProperty: event.data.variable,
           });
           this.generalData['variable'] = event.data.variable;
         }
@@ -365,6 +372,23 @@ const PropertiesPanel = defineComponent({
         allOrAny,
         rules,
       };
+    },
+    findElementSchema() {
+      const linkedSchemaUUID = this.uiElement.linkedSchemaElement;
+      const elementSchema =
+        linkedSchemaUUID && this.schema
+          ? tryFindByUUID(this.schema, linkedSchemaUUID)
+          : undefined;
+      let ele;
+      for (const [key, value] of this.schema.properties) {
+        if (_.isEqual(value, elementSchema)) {
+          ele = {
+            key: key,
+            value: value,
+          };
+        }
+      }
+      return ele;
     },
   },
 });

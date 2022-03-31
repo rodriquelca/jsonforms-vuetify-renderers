@@ -90,7 +90,6 @@ const droppableRenderer = defineComponent({
   },
   methods: {
     handleChange(evt: any) {
-      debugger;
       if (evt.added) {
         if (
           evt.added.element &&
@@ -107,6 +106,10 @@ const droppableRenderer = defineComponent({
             schemaElement: newElement,
             elementUUID: this.schema.uuid,
             indexOrProp: property.variable,
+          });
+
+          this.$store.dispatch('locales/addProperty', {
+            property: property.variable,
           });
 
           //Here uischema

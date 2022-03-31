@@ -59,11 +59,12 @@
               v-if="
                 resolvedSchema.resolved && resolvedSchema.error === undefined
               "
-              :data="previewData"
+              :data="data"
               :key="key"
               :schema="useSchema"
               :uischema="useUiSchema"
               :renderers="renderers"
+              @change="onChange"
               :cells="renderers"
             />
             <v-container>
@@ -133,7 +134,7 @@ export default {
     return {
       key: 1,
       dialog: false,
-      data: store.get('app/data'),
+      data: this.$store.get('app/data'),
       resolvedSchema: {
         schema: undefined,
         resolved: false,
