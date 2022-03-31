@@ -78,10 +78,11 @@
     <v-divider />
 
     <v-container>
-      <v-row><v-col>Locale (Mostly in basic example)</v-col></v-row>
+      <v-row><v-col>Locale</v-col></v-row>
       <v-row>
         <v-col>
           <v-select
+            :key="keyLocale"
             outlined
             persistent-hint
             dense
@@ -186,18 +187,18 @@ export default {
     restrict: sync('app/jsonforms@config.restrict'),
     readonly: sync('app/jsonforms@readonly'),
     locale: sync('app/jsonforms@locale'),
+    locales() {
+      return this.$store.getters['locales/getSummaryLocales']();
+    },
   },
 
   data: function () {
     return {
+      keyLocale: 1,
       validationModes: [
         { text: 'Validate And Show', value: 'ValidateAndShow' },
         { text: 'Validate And Hide', value: 'ValidateAndHide' },
         { text: 'No Validation', value: 'NoValidation' },
-      ],
-      locales: [
-        { text: 'English (en)', value: 'en' },
-        { text: 'German (de)', value: 'de' },
       ],
     };
   },

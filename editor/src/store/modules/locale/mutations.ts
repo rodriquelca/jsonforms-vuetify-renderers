@@ -4,8 +4,8 @@ const mutations = {
     ADD_PROPERTY: (state: any, payload: any) => {
         _.map(state, (value, key) => {
             value["content"][payload.property] = {
-                label: "",
-                description: ""
+                label: null,
+                description: null
             }
         });
     },

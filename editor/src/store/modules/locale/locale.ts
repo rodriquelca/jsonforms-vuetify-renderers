@@ -2,6 +2,8 @@ import { RootState } from "@/store/types";
 import { Module } from "vuex";
 import actions from "./actions";
 import mutations from "./mutations";
+import getters from "./getters";
+
 
 export interface LocalesState {
     en: any
@@ -19,7 +21,8 @@ const locales: Module<LocalesState, RootState> = {
     namespaced: true,
     state,
     mutations,
-    actions
+    actions,
+    getters
 };
 
 export default locales;

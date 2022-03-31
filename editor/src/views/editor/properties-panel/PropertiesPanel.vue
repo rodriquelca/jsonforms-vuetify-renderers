@@ -171,7 +171,6 @@ const PropertiesPanel = defineComponent({
               elementSchema
             ));
         }
-        debugger;
         // rule property
         if (this.generalData['rule']) {
           this.populateFieldEnum();

@@ -8,6 +8,7 @@
           dark
           @click.stop="
             settings = !settings;
+            key++;
             selectedElement = undefined;
           "
           v-on="onTooltip"
@@ -43,7 +44,7 @@
         :uischema="editorUischema || false"
         :propertiesService="propertiesService"
       />
-      <CommonSettings v-else />
+      <CommonSettings :key="key" v-else />
 
       <!-- <v-divider /> -->
     </v-navigation-drawer>
@@ -89,6 +90,7 @@ export default {
 
   data: function () {
     return {
+      key: 1,
       editorSchemaReact: sync('app/editor@schema'),
       validationModes: [
         { text: 'Validate And Show', value: 'ValidateAndShow' },
