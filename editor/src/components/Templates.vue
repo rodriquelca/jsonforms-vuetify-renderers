@@ -8,7 +8,7 @@
       </template>
       Templates
     </v-tooltip>
-    <v-dialog v-model="dialog" width="900">
+    <v-dialog v-model="dialog" width="900" @click:outside="closeModal">
       <v-card>
         <v-card-title class="text-h5 grey lighten-2">
           Select a Template
@@ -40,6 +40,7 @@
                   >
                     <v-list-item-content>
                       <v-list-item-title
+                        class="listTitleTemplate"
                         v-text="child.title"
                       ></v-list-item-title>
                     </v-list-item-content>
@@ -128,8 +129,15 @@ export default {
       });
       //Todo data
     },
+    closeModal: function (e) {
+      this.picture = undefined;
+    },
   },
 };
 </script>
 
-<style></style>
+<style>
+.listTitleTemplate {
+  white-space: pre-wrap;
+}
+</style>

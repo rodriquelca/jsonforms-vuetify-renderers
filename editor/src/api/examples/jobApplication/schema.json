@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "title": "Dynaform",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "contentTitle": {
+      "type": "string"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zipCode": {
+      "type": "number"
+    },
+    "homePhone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "position": {
+      "type": "string"
+    },
+    "employment": {
+      "type": "string"
+    },
+    "workNight": {
+      "type": "string"
+    },
+    "older": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/tittle",
+      "options": {
+        "isHtmlViewer": true,
+        "content": "<h1>Employee Information</h1>"
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/label",
+      "options": {
+        "isHtmlViewer": true,
+        "content": "<h5 style=\"text-align: left;\">Fill your personal information below:</h5>"
+      },
+      "label": "Fill your personal information below:"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/employeeID",
+      "label": "Employee ID"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/employeeFirstName",
+      "label": "Employee First Name"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/employeeLastName",
+      "label": "Employee Last Name"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/employeeBirthDate",
+      "label": "Employee Birth Date"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/employeeHomeAddress",
+      "options": {
+        "multi": true
+      },
+      "label": "Employee Home Address"
+    }
+  ]
+}

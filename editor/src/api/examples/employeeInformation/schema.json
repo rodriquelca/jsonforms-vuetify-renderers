@@ -1,0 +1,28 @@
+{
+	"type": "object",
+	"title": "Dynaform",
+	"properties": {
+		"employeeID": {
+			"type": "string"
+		},
+		"employeeLastName": {
+			"type": "string"
+		},
+		"employeeFirstName": {
+			"type": "string"
+		},
+		"employeeBirthDate": {
+			"type": "string",
+			"format": "date"
+		},
+		"employeeHomeAddress": {
+			"type": "string"
+		},
+		"label": {
+			"type": "string"
+		},
+		"tittle": {
+			"type": "string"
+		}
+	}
+}

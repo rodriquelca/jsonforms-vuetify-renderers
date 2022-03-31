@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "title": "Dynaform",
+  "properties": {
+    "richText_0": {
+      "type": "string"
+    },
+    "dateRequest": {
+      "type": "string",
+      "format": "date"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "textField_0": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "textField_1": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "integer"
+    },
+    "officeLocation": {
+      "type": "string"
+    },
+    "briefIssue": {
+      "type": "string"
+    },
+    "priority": {
+      "type": "string"
+    },
+    "typeIssue": {
+      "type": "string"
+    },
+    "photoIssue": {
+      "type": "array",
+      "items": {
+        "name": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        },
+        "mimetype": {
+          "type": "string"
+        }
+      }
+    },
+    "comments": {
+      "type": "string"
+    }
+  }
+}

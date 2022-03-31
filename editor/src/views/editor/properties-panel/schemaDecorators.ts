@@ -150,7 +150,7 @@ export const minDateDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement,
   schemaElement?: SchemaElement
 ) => {
-  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format) {
+  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format === 'date') {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -169,7 +169,7 @@ export const maxDateDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement,
   schemaElement?: SchemaElement
 ) => {
-  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format) {
+  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format === 'date') {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -188,7 +188,7 @@ export const defaultDateDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement,
   schemaElement?: SchemaElement
 ) => {
-  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format) {
+  if (['Control'].includes(uiElement?.type) && schemaElement?.schema.format === 'date') {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
