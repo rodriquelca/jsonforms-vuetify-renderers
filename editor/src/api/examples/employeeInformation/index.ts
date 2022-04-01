@@ -3,7 +3,7 @@ import uischema from './uischema.json';
 import data from './data.json';
 
 import { UISchemaElement, JsonSchema } from '@jsonforms/core';
-const picture = 'leaveOfAbsenceRequestForm/picture.png';
+const picture = 'employeeInformation/picture.png';
 export const input: {
   schema: JsonSchema;
   uischema: UISchemaElement;

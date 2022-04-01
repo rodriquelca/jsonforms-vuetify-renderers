@@ -175,4 +175,7 @@ export default {
 .vpm-settingsi18n-list {
   height: auto !important;
 }
+.text-h5 {
+  color: white;
+}
 </style>

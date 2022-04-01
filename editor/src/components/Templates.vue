@@ -147,4 +147,7 @@ export default {
 .listTitleTemplate {
   white-space: pre-wrap;
 }
+.text-h5 {
+  color: white;
+}
 </style>
