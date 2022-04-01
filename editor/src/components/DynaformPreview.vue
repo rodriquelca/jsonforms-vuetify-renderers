@@ -138,9 +138,10 @@ export default {
     };
   },
   computed: {
-    useUiSchema: function () {
-      return this.$store.get('app/editor@uiSchema');
-    },
+    // useUiSchema: function () {
+    //   return this.$store.get('app/editor@uiSchema');
+    // },
+    useUiSchema: sync('app/editor@uiSchema'),
     useSchema: function () {
       return useExportSchema(this.$store.get('app/editor@schema'));
     },

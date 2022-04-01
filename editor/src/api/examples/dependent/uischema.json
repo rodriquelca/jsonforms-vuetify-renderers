@@ -1,0 +1,64 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Dropdown",
+      "scope": "#/properties/dropdown_0",
+      "options": {
+        "events": {
+          "onChange": {
+            "arguments": "JForm, nval, oval",
+            "body": ""
+          }
+        },
+        "items": [
+          {
+            "value": "Animals",
+            "label": "Animals"
+          },
+          {
+            "value": "Anime",
+            "label": "Anime"
+          }
+        ],
+        "request": null,
+        "source": "static",
+        "dependencies": []
+      }
+    },
+    {
+      "type": "RadioGroup",
+      "scope": "#/properties/radiogroup_0",
+      "options": {
+        "events": {
+          "onChange": {
+            "arguments": "JForm, nval, oval",
+            "body": ""
+          }
+        },
+        "items": "return fetch('https://api.publicapis.org/random?'+`category=${payload.dropdown_0.value}`, {\n          method: 'GET',\n          headers:{},     \n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res.entries,(i)=>{\n             return {\n              value:i.API,\n              label:i.API\n            };\n          } \n          ));\n        });",
+        "request": {
+          "params": [
+            {
+              "key": "category",
+              "value": "{{payload.dropdown_0.value}}"
+            }
+          ],
+          "headers": [],
+          "body": [],
+          "output": {
+            "path": "entries",
+            "value": "API",
+            "label": "API"
+          },
+          "method": "GET",
+          "url": "https://api.publicapis.org/entries"
+        },
+        "source": "dynamic",
+        "dependencies": [
+          "dropdown_0"
+        ]
+      }
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import { input as intro } from './intro';
 import { input as control } from './control';
 import { input as main } from './main';
+import { input as dependent } from './dependent';
 import { input as rule } from './rule';
 import { input as ifelse } from './if-else';
 import { input as leaveOfAbsenceRequestForm } from './leaveOfAbsenceRequestForm';
@@ -46,6 +47,11 @@ const demo = [
     id: 'control',
     title: 'Control',
     input: control,
+  },
+  {
+    id: 'dependent',
+    title: 'Dependent',
+    input: dependent,
   },
   {
     id: 'rule',

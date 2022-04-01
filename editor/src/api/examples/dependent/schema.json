@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "title": "Dynaform",
+  "properties": {
+    "dropdown_0": {
+      "type": "string",
+      "description": "",
+      "i18n": "dropdown_0"
+    },
+    "dropdown_1": {
+      "type": "string",
+      "description": "",
+      "i18n": "dropdown_1"
+    }
+  }
+}
