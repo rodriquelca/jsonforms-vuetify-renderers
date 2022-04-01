@@ -30,7 +30,7 @@ const JVariables = {
         let valuesInBraces: any = [];
         _.map(json, (value, key) => {
             if (typeof value == 'string') {
-                let res = value.match(/{{\s*[A-Z\.a-z0-9]+\s*}}/g);
+                let res = value.match(/{{\s*[A-Z\.\_a-z0-9]+\s*}}/g);
                 if (res) {
                     res.forEach((el: any) => {
                         const r = el.replace('{{', '').replace('}}', '').trim();
