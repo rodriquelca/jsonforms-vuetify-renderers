@@ -11,5 +11,8 @@ const actions = {
     updateProperty: ({ commit }: any, data: any) => {
         commit('UPDATE_PROPERTY', data);
     },
+    setSchema: ({ commit }: any, data: any) => {
+        commit('SET_SCHEMA', data);
+    },
 };
 export default actions;

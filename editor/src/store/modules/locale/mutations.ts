@@ -21,6 +21,19 @@ const mutations = {
                 }
             });
         });
+    },
+    SET_SCHEMA: (state: any, payload: any) => {
+        _.map(state, (value, key) => {
+            value["content"] = {};
+        });
+        _.forEach(payload.properties, (prop) => {
+            _.map(state, (value, key) => {
+                value["content"][prop] = {
+                    label: null,
+                    description: null
+                };
+            });
+        });
     }
 };
 export default mutations;

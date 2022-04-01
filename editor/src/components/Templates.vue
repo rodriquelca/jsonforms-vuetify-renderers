@@ -72,6 +72,7 @@
 
 <script lang="ts">
 import { sync } from 'vuex-pathify';
+import _ from 'lodash';
 import { TemplateSchemaService } from '../api/schemaService';
 export default {
   name: 'Template',
@@ -119,6 +120,7 @@ export default {
     },
 
     onClick: function (e) {
+      let schema = this.$store.get('app/editor@schema');
       this.dialog = false;
 
       this.$store.dispatch('app/setSchema', {
@@ -127,6 +129,11 @@ export default {
       this.$store.dispatch('app/setUiSchema', {
         uiSchema: this.selected.uischema,
       });
+
+      this.$store.dispatch('locales/setSchema', {
+        properties: _.keys(this.selected.schema.properties),
+      });
+
       //Todo data
     },
     closeModal: function (e) {
