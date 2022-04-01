@@ -3,22 +3,27 @@
   "properties": {
     "firstName": {
       "type": "string",
-      "description": "Please enter your first name"
+      "description": "Please enter your first name",
+      "i18n": "firstName"
     },
     "secondName": {
       "type": "string",
-      "description": "Please enter your second name"
+      "description": "Please enter your second name",
+      "i18n": "secondName"
     },
     "vegetarian": {
-      "type": "boolean"
+      "type": "boolean",
+      "i18n": "vegetarian"
     },
     "birthDate": {
       "type": "string",
       "format": "date",
-      "description": "Please enter your birth date."
+      "description": "Please enter your birth date.",
+      "i18n": "birthDate"
     },
     "nationality": {
       "type": "string",
+      "i18n": "nationality",
       "enum": [
         "DE",
         "IT",
@@ -29,10 +34,12 @@
       ]
     },
     "provideAddress": {
-      "type": "boolean"
+      "type": "boolean",
+      "i18n": "provideAddress"
     },
     "address": {
       "type": "object",
+      "i18n": "address",
       "properties": {
         "street": {
           "type": "string"
@@ -51,6 +58,7 @@
     },
     "vegetarianOptions": {
       "type": "object",
+      "i18n": "vegetarianOptions",
       "properties": {
         "vegan": {
           "type": "boolean"
@@ -72,38 +80,49 @@
       }
     },
     "richText1": {
-      "type": "string"
+      "type": "string",
+      "i18n": "richText1"
     },
     "richText2": {
-      "type": "string"
+      "type": "string",
+      "i18n": "richText2"
     },
     "richText3": {
-      "type": "string"
+      "type": "string",
+      "i18n": "richText3"
     },
     "image": {
-      "type": "object"
+      "type": "object",
+      "i18n": "image"
     },
     "textField": {
-      "type": "string"
+      "type": "string",
+      "i18n": "textField"
     },
     "DatePicker": {
       "type": "string",
-      "format": "date"
+      "format": "date",
+      "i18n": "DatePicker"
     },
     "richText4": {
-      "type": "string"
+      "type": "string",
+      "i18n": "richText4"
     },
     "richText5": {
-      "type": "string"
+      "type": "string",
+      "i18n": "richText5"
     },
     "richText6": {
-      "type": "string"
+      "type": "string",
+      "i18n": "richText6"
     },
     "richText7": {
-      "type": "string"
+      "type": "string",
+      "i18n": "richText7"
     },
     "richText8": {
-      "type": "string"
+      "type": "string",
+      "i18n": "richText8"
     }
   }
 }

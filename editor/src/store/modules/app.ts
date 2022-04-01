@@ -187,6 +187,7 @@ const addPropertyToSchema = (state, payload) => {
           counter += 1;
         }
       }
+      newElement.schema.i18n = `${payload.indexOrProp}_${counter}`;
       clonedSchema.properties?.set(
         `${payload.indexOrProp}_${counter}`,
         newElement
