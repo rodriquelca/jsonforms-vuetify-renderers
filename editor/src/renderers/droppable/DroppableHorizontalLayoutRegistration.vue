@@ -59,6 +59,7 @@ import { VContainer, VRow, VCol } from 'vuetify/lib';
 import { entry as DroppableElementRegistration } from './DroppableElement.vue';
 import { createControl, tryFindByUUID } from '@/util';
 import { buildSchemaTree } from '../../model/schema';
+import _ from 'lodash';
 
 const droppableRenderer = defineComponent({
   name: 'droppable-horizontal-layout-renderer',
@@ -112,15 +113,20 @@ const droppableRenderer = defineComponent({
             elementUUID: this.schema.uuid,
             indexOrProp: property.variable,
           });
-          this.$store.dispatch('locales/addProperty', {
-            property: property.variable,
-          });
 
           //Here uischema
           const schemaElement = tryFindByUUID(
             this.$store.get('app/editor@schema'),
             newElement.uuid
           );
+          const element = this.findElementSchema(
+            this.$store.get('app/editor@schema'),
+            schemaElement
+          );
+          this.$store.dispatch('locales/addProperty', {
+            property: element.key,
+          });
+
           schemaElement.options = property.uiOptions;
           const newUIElement = createControl(
             schemaElement,
@@ -163,6 +169,18 @@ const droppableRenderer = defineComponent({
         modelUri,
         JSON.stringify(useExportUiSchema(schemaModel), null, 2)
       );
+    },
+    findElementSchema(schemaGlobal, schemaLocal) {
+      let ele;
+      for (const [key, value] of schemaGlobal.properties) {
+        if (_.isEqual(value, schemaLocal)) {
+          ele = {
+            key: key,
+            value: value,
+          };
+        }
+      }
+      return ele;
     },
   },
 });
