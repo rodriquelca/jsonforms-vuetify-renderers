@@ -8,13 +8,13 @@
           >
         </v-btn>
       </template>
-      I18N
+      Translation
     </v-tooltip>
 
     <v-dialog v-model="dialog" width="900" height="500">
       <v-card dense>
-        <v-card-title class="grey lighten-2">
-          <h6>I18N</h6>
+        <v-card-title class="text-h5 primary lighten-1">
+          Translation
         </v-card-title>
 
         <v-row no-gutters class="pt-4">

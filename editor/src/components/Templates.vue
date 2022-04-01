@@ -10,7 +10,7 @@
     </v-tooltip>
     <v-dialog v-model="dialog" width="900" @click:outside="closeModal">
       <v-card>
-        <v-card-title class="text-h5 grey lighten-2">
+        <v-card-title class="text-h5 primary lighten-1">
           Select a Template
         </v-card-title>
 
