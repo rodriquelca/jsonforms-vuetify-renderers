@@ -105,7 +105,7 @@ const PropertiesPanel = defineComponent({
   data() {
     return {
       showAdvancedRule: false,
-      panel: [1, 2, 3, 4],
+      panel: [0, 1, 2, 3, 4],
       generalData: {},
       rulesData: undefined,
       schemasCollection: undefined,
@@ -402,19 +402,29 @@ const PropertiesPanel = defineComponent({
       const schema = this.generalData['rule'].condition.schema;
       const allOrAny = Object.keys(schema)[0];
       const elements = schema[allOrAny];
-      elements.forEach(function (value) {
-        const field = value.properties;
-        rules.push({
-          condition: 'is',
-          field: Object.keys(field)[0],
-          value: field[Object.keys(field)[0]].const,
+      if (elements.length) {
+        elements.forEach(function (value) {
+          if (value.properties) {
+            const field = value.properties;
+            rules.push({
+              condition: 'is',
+              field: Object.keys(field)[0],
+              value: field[Object.keys(field)[0]].const,
+            });
+          }
         });
-      });
-      this.rulesData = {
-        effect: this.generalData['rule'].effect,
-        allOrAny,
-        rules,
-      };
+        if (rules.length > 0) {
+          this.rulesData = {
+            effect: this.generalData['rule'].effect,
+            allOrAny,
+            rules,
+          };
+        } else {
+          this.showAdvancedRule = true;
+        }
+      } else {
+        this.showAdvancedRule = true;
+      }
     },
     findElementSchema() {
       const linkedSchemaUUID = this.uiElement.linkedSchemaElement;
