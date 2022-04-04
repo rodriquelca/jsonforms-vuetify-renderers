@@ -17,7 +17,7 @@
 <script lang="ts">
 import { JsonForms } from '@jsonforms/vue2';
 import { defaultEditorRenderers } from '../../renderers';
-import { useExportSchema, useExportUiSchema } from '../../util';
+import { useExportSchema } from '../../util';
 import { createLayout } from '../../util/generators/uiSchema';
 import { JReactivex as JReact, JFormE as JF } from '@jsonforms/vue2';
 
@@ -48,21 +48,15 @@ export default {
     });
   },
   methods: {
-    setSelection(data) {
-      console.log('Set selection');
-      this.selection = data;
-    },
     useExportSchema() {
       return useExportSchema(this.$store.get('app/editor@schema'));
     },
     useExportUiSchema() {
-      return useExportUiSchema(this.$store.get('app/editor@uiSchema'));
+      return this.$store.get('app/editor@uiSchema');
     },
   },
   provide() {
     return {
-      setSelection: this.setSelection,
-      selection: this.selection,
       store: this.$store,
       JReactivex: JReact,
       JForm: new JF({

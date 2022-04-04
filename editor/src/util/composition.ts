@@ -184,25 +184,3 @@ export const useDynaformControl = <
     fireDependency,
   };
 };
-
-export const useEditorCommonElement = (props) => {
-  const hover = ref(false);
-  const setSelection = inject('setSelection');
-  const onClick = (value: any) => {
-    console.log("click");
-    setSelection(value.uuid);
-  };
-  const onRemove = (value: any) => {
-    if (!hasChildren(value)) {
-      this.$store.dispatch(
-        'app/removeUiSchemaElement',
-        this.wrappedElement.uuid
-      );
-    }
-  };
-  return {
-    hover,
-    onClick,
-    onRemove,
-  };
-};
