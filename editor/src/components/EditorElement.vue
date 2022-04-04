@@ -91,6 +91,7 @@ export default {
     },
 
     onClick: function () {
+      console.log('AQUI');
       this.selected = true;
       this.$store.set('app/editor@settings', true);
       this.$store.set('app/editor@selectedElement', this.wrappedElement.uuid);

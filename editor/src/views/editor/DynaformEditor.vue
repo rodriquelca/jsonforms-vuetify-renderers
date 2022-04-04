@@ -49,6 +49,7 @@ export default {
   },
   methods: {
     setSelection(data) {
+      console.log('Set selection');
       this.selection = data;
     },
     useExportSchema() {

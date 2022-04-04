@@ -189,6 +189,7 @@ export const useEditorCommonElement = (props) => {
   const hover = ref(false);
   const setSelection = inject('setSelection');
   const onClick = (value: any) => {
+    console.log("click");
     setSelection(value.uuid);
   };
   const onRemove = (value: any) => {
