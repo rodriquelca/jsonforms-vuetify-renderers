@@ -67,6 +67,15 @@ export const editorRendererProps = <U = UISchemaElement>() => ({
   },
 });
 
+export const editorRendererOnlyProps = <U = UISchemaElement>() => ({
+  renderers: {
+    required: false,
+    type: Array as CompType<JsonFormsRendererRegistryEntry[], ArrayConstructor>,
+    default: undefined,
+  }
+});
+
+
 export interface RendererProps<U = UISchemaElement> {
   schema: JsonSchema;
   uischema: U;

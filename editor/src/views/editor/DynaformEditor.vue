@@ -2,12 +2,12 @@
   <v-container class="px-0 my-1" :fluid="true">
     <v-row no-gutters height="100%">
       <v-col>
-        <EditorPanel
-          :editorTabs="editorTabs"
-          :renderers="editorRenderers"
+        <json-forms
+          :renderers="renderers"
+          :data="data"
+          :uischema="useExportUiSchema() || {}"
           :schema="useExportSchema() || false"
-          :uischema="useExportUiSchema() || false"
-          :selection="selection"
+          height="500"
         />
       </v-col>
     </v-row>
@@ -15,36 +15,27 @@
 </template>
 
 <script lang="ts">
-import EditorPanel from './editor-panel';
-import DynaformPreview from '../../components/DynaformPreview.vue';
+import { JsonForms } from '@jsonforms/vue2';
 import { defaultEditorRenderers } from '../../renderers';
-import { ExampleSchemaService } from '../../api/exampleSchemaService';
-
-import { sync } from 'vuex-pathify';
 import { useExportSchema, useExportUiSchema } from '../../util';
 import { createLayout } from '../../util/generators/uiSchema';
+import { JReactivex as JReact, JFormE as JF } from '@jsonforms/vue2';
+
 export default {
-  name: 'EditorView',
+  name: 'DynaformEditor',
   props: {},
   components: {
-    EditorPanel,
+    JsonForms,
   },
   data() {
     return {
       selection: '' as string,
-      editorTabs: [
-        {
-          name: 'Preview',
-          component: DynaformPreview,
-        },
-      ],
-      editorRenderers: defaultEditorRenderers,
-      schemaService: new ExampleSchemaService(),
-      propertiesService: {},
+      renderers: [],
+      data: {},
     };
   },
-
   mounted() {
+    this.renderers = defaultEditorRenderers;
     this.$store.dispatch('app/setSchema', {
       schema: {
         type: 'object',
@@ -56,26 +47,28 @@ export default {
       uiSchema: createLayout('VerticalLayout'),
     });
   },
-
-  computed: {
-    editorSchema: sync('app/editor@schema'),
-    editorUischema: sync('app/editor@uiSchema'),
-  },
   methods: {
+    setSelection(data) {
+      this.selection = data;
+    },
     useExportSchema() {
       return useExportSchema(this.$store.get('app/editor@schema'));
     },
     useExportUiSchema() {
-      return this.$store.get('app/editor@uiSchema');
-    },
-    setSelection(data) {
-      this.selection = data;
+      return useExportUiSchema(this.$store.get('app/editor@uiSchema'));
     },
   },
-  provide: function () {
+  provide() {
     return {
       setSelection: this.setSelection,
       selection: this.selection,
+      store: this.$store,
+      JReactivex: JReact,
+      JForm: new JF({
+        data: {
+          store: this.$store,
+        },
+      }),
     };
   },
 };
