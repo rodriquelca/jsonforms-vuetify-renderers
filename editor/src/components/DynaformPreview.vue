@@ -49,9 +49,6 @@
         <v-col :cols="modeView">
           <v-card>
             <json-forms
-              v-if="
-                resolvedSchema.resolved && resolvedSchema.error === undefined
-              "
               :data="data"
               :key="key"
               :schema="useSchema"
@@ -101,11 +98,9 @@
 
 <script lang="ts">
 import { ResolvedSchema } from '@/core/types';
-import { JsonSchema, JsonFormsI18nState } from '@jsonforms/core';
+import { JsonFormsI18nState } from '@jsonforms/core';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
-import JsonRefs from 'json-refs';
-import { createTranslator } from '../i18n';
-import { useExportSchema, useExportUiSchema } from '../util';
+import { useExportSchema } from '../util';
 import { generateEmptyData } from '../model';
 import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import _ from 'lodash';
@@ -122,13 +117,13 @@ export default {
     return {
       key: 1,
       dialog: false,
-      data: this.$store.get('app/data'),
+      data: this.$store.get('preview/data'),
       resolvedSchema: {
-        schema: undefined,
-        resolved: false,
+        schema: {},
+        resolved: true,
         error: undefined,
       } as ResolvedSchema,
-      locale: sync('app/jsonforms@locale'),
+      locale: sync('preview/locale'),
       i18n: {
         locale: this.locale || 'en',
         translate: this.createTranslator(this.locale || 'en'),
@@ -138,15 +133,12 @@ export default {
     };
   },
   computed: {
-    // useUiSchema: function () {
-    //   return this.$store.get('app/editor@uiSchema');
-    // },
-    useUiSchema: sync('app/editor@uiSchema'),
+    useUiSchema: sync('preview/uiSchema'),
     useSchema: function () {
-      return useExportSchema(this.$store.get('app/editor@schema'));
+      return useExportSchema(this.$store.get('preview/schema'));
     },
     previewData: function () {
-      return generateEmptyData(this.$store.get('app/editor@schema'), {});
+      return generateEmptyData(this.$store.get('preview@schema'), {});
     },
   },
   watch: {
@@ -155,6 +147,9 @@ export default {
       this.i18n.translate = this.createTranslator(nValue || 'en');
     },
   },
+  /**
+   * Provide services for JSONFORM
+   */
   provide: () => {
     return {
       store: store,
@@ -166,15 +161,37 @@ export default {
       }),
     };
   },
-  mounted() {
-    this.resolveSchema(useExportSchema(this.$store.get('app/editor@schema')));
-  },
   methods: {
+    /**
+     * On click in icon preview
+     * Load the schemas and refresh the view
+     */
     onClick() {
+      this.copySchemasFromEditorToPreview();
       this.createTranslator(this.$store.get('app/jsonforms@locale'));
       this.dialog = !this.dialog;
       this.key++;
     },
+    /**
+     * Copy schemasfrom editor to preview
+     */
+    copySchemasFromEditorToPreview() {
+      this.$store.dispatch(
+        'preview/setSchema',
+        this.$store.get('app/editor@schema')
+      );
+      this.$store.dispatch(
+        'preview/setUiSchema',
+        this.$store.get('app/editor@uiSchema')
+      );
+      this.$store.dispatch(
+        'preview/setLocale',
+        this.$store.get('app/jsonforms@locale')
+      );
+    },
+    /**
+     * Create translator for JSON FORMS based in store locale
+     */
     createTranslator() {
       let i18n = this.$store.get('locales');
       const store = this.$store;
@@ -182,7 +199,7 @@ export default {
         key: string,
         defaultMessage: string | undefined
       ): string | undefined => {
-        let locale = store.get('app/jsonforms@locale');
+        let locale = store.get('preview/locale');
         return (
           _.get(
             locale === 'en' ? i18n['en']['content'] : i18n[locale]['content'],
@@ -191,30 +208,11 @@ export default {
         );
       };
     },
+    /**
+     * On change JSON FORM save the data in store
+     */
     onChange(event: JsonFormsChangeEvent): void {
-      this.$store.set('app/data', event.data || {});
-    },
-    resolveSchema(schema?: JsonSchema): void {
-      const resolvedSchema = this.resolvedSchema;
-      resolvedSchema.schema = undefined;
-      resolvedSchema.resolved = false;
-      resolvedSchema.error = undefined;
-
-      if (schema) {
-        JsonRefs.resolveRefs(schema).then(
-          function (res) {
-            resolvedSchema.schema = res.resolved;
-            resolvedSchema.resolved = true;
-          },
-          function (err: Error) {
-            resolvedSchema.resolved = true;
-            resolvedSchema.error = err.message;
-          }
-        );
-      } else {
-        // nothing to resolve
-        resolvedSchema.resolved = true;
-      }
+      this.$store.set('preview/data', event.data || {});
     },
   },
 };
