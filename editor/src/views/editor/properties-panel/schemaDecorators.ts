@@ -25,6 +25,26 @@ export const multilineStringOptionDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const inputMask: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    schemaElement?.schema.type === 'string' &&
+    !schemaElement?.schema.format &&
+    uiElement.type === 'Control'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      mask: { type: 'string' },
+    });
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/options/properties/mask')
+    );
+  }
+  return schemas;
+};
+
 export const labelUIElementDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
@@ -101,7 +121,11 @@ export const variableDecorator: PropertySchemasDecorator = (
   schemas: PropertySchemas,
   uiElement: EditorUISchemaElement
 ) => {
-  if (['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest'].includes(uiElement?.type)) {
+  if (
+    ['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest'].includes(
+      uiElement?.type
+    )
+  ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
     }
@@ -515,6 +539,7 @@ export const createPropertyControl = (
 const defaultDecoreators: PropertySchemasDecorator[] = [
   labelDecorator,
   multilineStringOptionDecorator,
+  inputMask,
   labelUIElementDecorator,
   urlDecorator,
   OnChangeDecorator,
@@ -534,6 +559,7 @@ export const defaultSchemaDecoratorsCollection = new Map<
       requiredDecorator,
       readOnlyDecorator,
       multilineStringOptionDecorator,
+      inputMask,
       minDateDecorator,
       maxDateDecorator,
       defaultDateDecorator,

@@ -248,6 +248,9 @@
     },
     "defaultDate": {
       "type": "string"
+    },
+    "mask": {
+      "type": "string"
     }
   },
   "default": true

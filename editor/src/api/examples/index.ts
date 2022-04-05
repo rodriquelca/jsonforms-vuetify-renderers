@@ -8,6 +8,7 @@ import { input as leaveOfAbsenceRequestForm } from './leaveOfAbsenceRequestForm'
 import { input as employeeInformation } from './employeeInformation';
 import { input as jobApplication } from './jobApplication';
 import { input as itRequest } from './iTRequest';
+import { input as inputMask } from './inputMask';
 
 const items = [
   {
@@ -62,6 +63,11 @@ const demo = [
     id: 'ifelse',
     title: 'If - Else ',
     input: ifelse,
+  },
+  {
+    id: 'inputMask',
+    title: 'Input Mask',
+    input: inputMask,
   },
 ];
 
