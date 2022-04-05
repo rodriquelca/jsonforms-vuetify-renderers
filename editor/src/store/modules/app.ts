@@ -467,7 +467,7 @@ const mutations = {
       (elementToRemove, newSchema) => {
         if (!elementToRemove || (elementToRemove && !elementToRemove.parent)) {
           console.error('Could not remove ui element ', elementToRemove);
-          return state;
+          return state.editor;
         }
         const removeResult = removeUiElement(
           elementToRemove,
