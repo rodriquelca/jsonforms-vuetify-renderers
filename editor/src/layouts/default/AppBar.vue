@@ -1,12 +1,17 @@
 <template>
-  <v-app-bar app>
+  <v-app-bar app elevation="0">
     <v-toolbar-title>
       <v-container fill-height fluid
         ><v-row align="center" justify="center">
-          <!-- <v-col>
-            <v-icon size="64" color="blue darken-2">mdi-code-json</v-icon>
-          </v-col> -->
-          <v-col>First Form</v-col>
+          <v-col>
+            <v-icon size="40" color="blue darken-2">mdi-code-json</v-icon>
+          </v-col>
+          <v-col>
+            <v-list-item-title class="text-h6"> Dynaform </v-list-item-title>
+            <v-list-item-subtitle class="text-caption">
+              Editor
+            </v-list-item-subtitle>
+          </v-col>
         </v-row></v-container
       ></v-toolbar-title
     >

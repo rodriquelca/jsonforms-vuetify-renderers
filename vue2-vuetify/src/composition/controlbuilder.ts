@@ -55,17 +55,17 @@ export const watchScope = (store: any, uiSchema: any, provider: any) => {
     const fnOnchange = onChange(uiSchema);
     return store.watch(
         (_state: any, getters: any) => {
-            return getters['app/getDataModel'](scope);
+            return getters['preview/getDataModel'](scope);
         },
         (n: string, o: string) => {
-            if (!_.isEqual(n, o)) {
-                Vue.nextTick(() => {
-                    provider.JReactivex.emit(scope, n);
-                });
-                Vue.nextTick(() => {
-                    fnOnchange(provider.JForm, n, o);
-                });
-            }
+
+            Vue.nextTick(() => {
+                provider.JReactivex.emit(scope, n);
+            });
+            Vue.nextTick(() => {
+                fnOnchange(provider.JForm, n, o);
+            });
+
 
         }
     );

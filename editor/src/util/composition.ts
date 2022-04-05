@@ -67,6 +67,15 @@ export const editorRendererProps = <U = UISchemaElement>() => ({
   },
 });
 
+export const editorRendererOnlyProps = <U = UISchemaElement>() => ({
+  renderers: {
+    required: false,
+    type: Array as CompType<JsonFormsRendererRegistryEntry[], ArrayConstructor>,
+    default: undefined,
+  }
+});
+
+
 export interface RendererProps<U = UISchemaElement> {
   schema: JsonSchema;
   uischema: U;
@@ -173,26 +182,5 @@ export const useDynaformControl = <
     persistentHint,
     computedLabel,
     fireDependency,
-  };
-};
-
-export const useEditorCommonElement = (props) => {
-  const hover = ref(false);
-  const setSelection = inject('setSelection');
-  const onClick = (value: any) => {
-    setSelection(value.uuid);
-  };
-  const onRemove = (value: any) => {
-    if (!hasChildren(value)) {
-      this.$store.dispatch(
-        'app/removeUiSchemaElement',
-        this.wrappedElement.uuid
-      );
-    }
-  };
-  return {
-    hover,
-    onClick,
-    onRemove,
   };
 };

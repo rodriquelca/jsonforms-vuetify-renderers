@@ -1,41 +1,45 @@
 <template>
-  <div class="">
-    <v-expansion-panels focusable multiple>
-      <v-expansion-panel v-for="(group, i) in paletteElements" :key="i">
-        <v-expansion-panel-header>{{ group.label }}</v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <draggable
-            v-model="group.elements"
-            :group="{ name: 'people', pull: 'clone', put: false }"
-            :sort="false"
-            class="d-flex align-content-start flex-wrap"
+  <v-expansion-panels accordion multiple color="grey lighten-5">
+    <v-expansion-panel
+      class="grey lighten-5"
+      v-for="(group, i) in paletteElements"
+      :key="i"
+    >
+      <v-expansion-panel-header>{{ group.label }}</v-expansion-panel-header>
+      <v-expansion-panel-content elevation="0">
+        <draggable
+          v-model="group.elements"
+          :group="{ name: 'people', pull: 'clone', put: false }"
+          :sort="false"
+          class="d-flex align-content-center flex-wrap"
+          elevation="0"
+        >
+          <v-card
+            v-for="(item, n) in group.elements"
+            :key="n"
+            outlined
+            tile
+            class="pa-2"
+            elevation="0"
           >
-            <v-card
-              v-for="(item, n) in group.elements"
-              :key="n"
-              outlined
-              tile
-              class="pa-2"
-            >
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-icon
-                    color="blue-grey darken-2"
-                    dark
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    {{ item.icon }}
-                  </v-icon>
-                </template>
-                <span>{{ item.label }}</span>
-              </v-tooltip>
-            </v-card>
-          </draggable>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
-  </div>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  color="blue-grey darken-2"
+                  dark
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  {{ item.icon }}
+                </v-icon>
+              </template>
+              <span>{{ item.label }}</span>
+            </v-tooltip>
+          </v-card>
+        </draggable>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 
 <script lang="ts">

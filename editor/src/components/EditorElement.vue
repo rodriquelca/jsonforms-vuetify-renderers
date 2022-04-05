@@ -60,7 +60,6 @@ export default {
   components: {
     Icon,
   },
-  inject: ['setSelection'],
   data() {
     return {
       hover: false,
@@ -89,7 +88,6 @@ export default {
         );
       }
     },
-
     onClick: function () {
       this.selected = true;
       this.$store.set('app/editor@settings', true);

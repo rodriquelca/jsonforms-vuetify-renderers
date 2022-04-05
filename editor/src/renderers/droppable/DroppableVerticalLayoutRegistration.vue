@@ -20,6 +20,7 @@
         <v-col cols="12" :class="useJsonForm.styles.verticalLayout.item">
           <dispatch-renderer
             :key="element.uuid"
+            updateItemIndex
             :schema="useJsonForm.layout.value.schema"
             :uischema="element"
             :path="useJsonForm.layout.value.path"
