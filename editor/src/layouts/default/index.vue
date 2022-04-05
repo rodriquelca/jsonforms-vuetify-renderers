@@ -2,10 +2,11 @@
   <v-app>
     <default-app-bar />
 
-    <default-drawer />
+    <div class="vpm-container-main">
+      <default-drawer />
 
-    <default-view />
-
+      <default-view />
+    </div>
     <v-footer padless fixed>
       <v-spacer></v-spacer>
       <div color="success">
@@ -27,3 +28,8 @@ export default {
   },
 };
 </script>
+<style>
+.vpm-container-main {
+  display: flex;
+}
+</style>

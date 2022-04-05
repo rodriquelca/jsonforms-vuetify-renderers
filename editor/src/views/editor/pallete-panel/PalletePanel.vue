@@ -1,14 +1,19 @@
 <template>
-  <div class="">
-    <v-expansion-panels focusable multiple>
-      <v-expansion-panel v-for="(group, i) in paletteElements" :key="i">
+  <div class="grey lighten-5">
+    <v-expansion-panels accordion multiple color="grey lighten-5">
+      <v-expansion-panel
+        class="grey lighten-5"
+        v-for="(group, i) in paletteElements"
+        :key="i"
+      >
         <v-expansion-panel-header>{{ group.label }}</v-expansion-panel-header>
-        <v-expansion-panel-content>
+        <v-expansion-panel-content elevation="0">
           <draggable
             v-model="group.elements"
             :group="{ name: 'people', pull: 'clone', put: false }"
             :sort="false"
-            class="d-flex align-content-start flex-wrap"
+            class="d-flex align-content-center flex-wrap"
+            elevation="0"
           >
             <v-card
               v-for="(item, n) in group.elements"
@@ -16,6 +21,7 @@
               outlined
               tile
               class="pa-2"
+              elevation="0"
             >
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
