@@ -132,6 +132,7 @@ const createUnscopedUiSchema = (state, payload) => {
     payload.layoutUUID,
     state.editor.uiSchema,
     (newUiSchema) => {
+      debugger;
       const newUIElement = payload.uiSchemaElement;
       newUIElement.parent = newUiSchema;
       (newUiSchema as EditorLayout).elements.splice(
@@ -152,6 +153,7 @@ const createScopedElementToLayout = (state, payload) => {
     payload.schemaUUID,
     state,
     (newUiSchema, newSchema) => {
+      debugger;
       const newUIElement = payload.uiSchemaElement;
       newUIElement.parent = newUiSchema;
       (newUiSchema as EditorLayout).elements.splice(
@@ -179,6 +181,7 @@ const addPropertyToSchema = (state, payload) => {
     payload.elementUUID,
     state.editor,
     (clonedSchema) => {
+      debugger;
       const newElement = payload.schemaElement;
       newElement.parent = clonedSchema;
       let counter = 0;

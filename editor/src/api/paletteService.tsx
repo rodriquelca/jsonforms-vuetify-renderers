@@ -381,7 +381,7 @@ const controlElements = [
 ];
 const complexElements = [
   {
-    type: 'Control',
+    type: 'GridControl',
     label: 'Grid',
     icon: 'mdi-grid',
     uiSchemaElementProvider: () => {
@@ -415,9 +415,48 @@ const complexElements = [
         control,
         variable: "grid",
         uiOptions: {
-          "extendedType": "grid",
-          "restrict": true,
-          "pageSize": 5
+          "detail":
+          {
+            "type": "SimpleTable",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/date",
+                "label": "Date"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/message",
+                "label": "Message"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/enum",
+                "label": "Enum"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/enum",
+                "label": "Enum"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/enum",
+                "label": "Enum"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/enum",
+                "label": "Enum"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/enum",
+                "label": "Enum"
+              }
+            ]
+          },
+          "showSortButtons": true
         }
       };
     },

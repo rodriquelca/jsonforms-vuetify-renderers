@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="layout.visible" elevation="2">
     <v-card-title v-if="layout.uischema" :class="styles.group.label">
-      Label: {{ layout.uischema.label }}
+      Labelasdas: {{ layout.uischema.label }}
     </v-card-title>
     <v-card-text :class="styles.group.item">
       <component v-bind:is="determinedRenderer" v-bind="layout"></component>
@@ -59,6 +59,6 @@ export default layoutRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: layoutRenderer,
-  tester: rankWith(45, and(isLayout, uiTypeIs('Group'))),
+  tester: rankWith(45, and(isLayout, uiTypeIs('GridControl'))),
 };
 </script>

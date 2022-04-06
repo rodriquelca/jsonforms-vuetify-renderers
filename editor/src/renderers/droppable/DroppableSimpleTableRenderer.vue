@@ -1,39 +1,41 @@
 <template>
-  <div>
-    <draggable
-      :class="draggableClass"
-      :list="[]"
-      group="people"
-      @change="handleChange"
-      :sort="true"
-      :disabled="!enabledDrag"
-      ghost-class="ghost"
-      @start="dragging = true"
-      @end="dragging = false"
-    >
-      <v-row
-        v-for="(element, index) in uischema.elements"
-        :key="`${useJsonForm.layout.value.path}-${index}`"
-        no-gutters
-        :class="{ 'not-draggable': !enabled }"
-      >
-        <v-col cols="12" :class="useJsonForm.styles.verticalLayout.item">
-          <dispatch-renderer
-            :key="element.uuid"
-            updateItemIndex
-            :schema="useJsonForm.layout.value.schema"
-            :uischema="element"
-            :path="useJsonForm.layout.value.path"
-            :enabled="useJsonForm.layout.value.enabled"
-            :renderers="customRenderers"
-            :cells="useJsonForm.layout.value.cells"
-          />
-        </v-col>
-      </v-row>
-    </draggable>
-  </div>
+  <v-container justify-space-around align-content-center>
+    <v-row no-gutters>
+      <v-simple-table class="array-container flex">
+        <tbody>
+          <draggable
+            :value="[]"
+            group="people"
+            @change="handleChange"
+            :key="'draggable' + uischema.uuid"
+            :sort="true"
+            :disabled="!enabledDrag"
+            @start="dragging = true"
+            @end="dragging = false"
+            tag="tr"
+          >
+            <td
+              v-for="(element, index) in uischema.elements"
+              :key="`${useJsonForm.layout.value.path}-${index}`"
+              no-gutters
+            >
+              <dispatch-renderer
+                :key="element.uuid"
+                :schema="useJsonForm.layout.value.schema"
+                :uischema="element"
+                :path="useJsonForm.layout.value.path"
+                :enabled="useJsonForm.layout.value.enabled"
+                :renderers="customRenderers"
+                :cells="useJsonForm.layout.value.cells"
+              />
+            </td>
+          </draggable>
+        </tbody>
+      </v-simple-table>
+    </v-row>
+    <!-- </div> -->
+  </v-container>
 </template>
-
 <script lang="ts">
 import { sync } from 'vuex-pathify';
 import { Uri } from 'monaco-editor/esm/vs/editor/editor.api';
@@ -42,9 +44,9 @@ import { useExportUiSchema } from '../../util';
 import draggable from 'vuedraggable';
 import {
   uiTypeIs,
+  JsonFormsRendererRegistryEntry,
   Layout,
   rankWith,
-  JsonFormsRendererRegistryEntry,
 } from '@jsonforms/core';
 import { defineComponent } from '@vue/composition-api';
 import {
@@ -61,7 +63,7 @@ import { buildSchemaTree } from '../../model/schema';
 import _ from 'lodash';
 
 const droppableRenderer = defineComponent({
-  name: 'dropable-vertical-layout-renderer',
+  name: 'droppable-horizontal-layout-renderer',
   components: {
     DispatchRenderer,
     VContainer,
@@ -69,6 +71,7 @@ const droppableRenderer = defineComponent({
     VCol,
     draggable,
   },
+
   props: {
     ...rendererProps<Layout>(),
   },
@@ -81,7 +84,7 @@ const droppableRenderer = defineComponent({
   },
   computed: {
     draggableClass(): string {
-      return 'dragArea list-group';
+      return 'dragArea  ' + this.useJsonForm.styles.horizontalLayout.item;
     },
     customRenderers(): Array<any> {
       return (
@@ -89,9 +92,10 @@ const droppableRenderer = defineComponent({
       );
     },
     editorUiSchemaModel: sync('app/editor@uiSchema'),
+    editorSchemaModel: sync('app/editor@schema'),
   },
   methods: {
-    handleChange(evt: any) {
+    handleChange(evt) {
       if (evt.added) {
         if (
           evt.added.element &&
@@ -104,13 +108,14 @@ const droppableRenderer = defineComponent({
             evt.added.element.type === 'GridControl' ||
             evt.added.element.type === 'File')
         ) {
-          debugger;
           //here update the schema
+          debugger;
           const property = evt.added.element.uiSchemaElementProvider();
           const newElement = buildSchemaTree(property.control);
+          const parent = this.editorSchemaModel.properties.get(this.path);
           this.$store.dispatch('app/addPropertyToSchema', {
             schemaElement: newElement,
-            elementUUID: this.schema.uuid,
+            elementUUID: parent.items.uuid,
             indexOrProp: property.variable,
           });
 
@@ -126,18 +131,22 @@ const droppableRenderer = defineComponent({
           this.$store.dispatch('locales/addProperty', {
             property: element.key,
           });
+
           schemaElement.options = property.uiOptions;
           const newUIElement = createControl(
             schemaElement,
             evt.added.element.type
           );
-          this.$store.dispatch('app/addScopedElementToLayout', {
-            uiSchemaElement: newUIElement,
-            layoutUUID: this.uischema.uuid,
-            index: evt.added.newIndex,
-            schemaUUID: evt.added.element.uuid,
-            schemaElement,
-          });
+          for (let item of parent.linkedUISchemaElements) {
+            console.log(item);
+            this.$store.dispatch('app/addScopedElementToLayout', {
+              uiSchemaElement: newUIElement,
+              layoutUUID: item,
+              index: evt.added.newIndex,
+              schemaUUID: evt.added.element.uuid,
+              schemaElement,
+            });
+          }
         } else {
           let provider = evt.added.element.uiSchemaElementProvider();
           this.$store.dispatch('app/addUnscopedElementToLayout', {
@@ -188,6 +197,33 @@ export default droppableRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: droppableRenderer,
-  tester: rankWith(45, uiTypeIs('VerticalLayout')),
+  tester: rankWith(45, uiTypeIs('SimpleTable')),
 };
 </script>
+<style scoped>
+.fixed-cell {
+  width: 150px;
+  height: 50px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center;
+}
+
+.fixed-cell-small {
+  width: 50px;
+  height: 50px;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  text-align: center;
+}
+
+.array-container tbody tr td {
+  border-bottom: none !important;
+}
+
+.array-container tbody tr td .container {
+  padding: 0;
+  margin: 0;
+}
+</style>
+
