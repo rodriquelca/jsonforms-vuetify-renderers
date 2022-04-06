@@ -41,7 +41,7 @@ export default {
   position: fixed;
   top: 80px !important;
   height: auto !important;
-  z-index: 100;
+  z-index: 10;
   width: 16% !important;
 }
 </style>
