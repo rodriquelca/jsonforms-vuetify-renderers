@@ -21,16 +21,13 @@ Use Node 12+
 - Install monorepo dependencies: `npm ci`
 - Hook up dependencies between packages: `npm run init`
 
-### Scripts
+### Develop Scripts
+
+- Remove build artifacts: `npm run clean`
+- Run core vue2 app: `npm run vue2:watch`
+- Build and watch the renderer set: `npm run watch`
+- Build editor app for develop: `npm run editor:serve`
+
+### Production Scripts
 
 - Build the renderer set: `npm run build`
-- Build and watch the renderer set: `npm run watch`
-- Remove build artifacts: `npm run clean`
-- Run example app: `npm run example:serve`
-- Build example app for production: `npm run example:build`
-
-Recommendations:
-
-- For development use `npm run watch` combined with `npm run example:serve`.
-- To test production use `npm run build` combined with `npm run example:build`.
-  Then serve the built application from `example/dist` with a web server of your choice, e.g. `npx http-server example/dist`.

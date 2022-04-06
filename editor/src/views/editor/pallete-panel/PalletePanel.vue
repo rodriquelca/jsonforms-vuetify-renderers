@@ -1,10 +1,6 @@
 <template>
-  <v-expansion-panels accordion multiple color="grey lighten-5">
-    <v-expansion-panel
-      class="grey lighten-5"
-      v-for="(group, i) in paletteElements"
-      :key="i"
-    >
+  <v-expansion-panels accordion multiple>
+    <v-expansion-panel v-for="(group, i) in paletteElements" :key="i">
       <v-expansion-panel-header>{{ group.label }}</v-expansion-panel-header>
       <v-expansion-panel-content elevation="0">
         <draggable
@@ -97,5 +93,15 @@ export default {
 .v-list {
   height: 250px; /* or any height you want */
   overflow-y: auto;
+}
+
+.theme--light.v-expansion-panels .v-expansion-panel {
+  background-color: #f5f5f5;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.v-application .blue-grey--text.text--darken-2 {
+  color: #1976d2 !important;
+  caret-color: #e7eef1 !important;
 }
 </style>
