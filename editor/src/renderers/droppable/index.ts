@@ -15,7 +15,7 @@ import { entry as droppableGroupRenderer } from './DroppableGroupRegistration.vu
 import { entry as droppableCategorizationRenderer } from './DroppableCategorizationRenderer.vue';
 import { entry as DroppableCategoryRenderer } from './DroppableCategoryRenderer.vue';
 import { entry as droppableGridControlRendererEntry } from './DroppableGridControlRenderer.vue';
-import { entry as droppableSimpleTableRendererEntry } from './DroppableSimpleTableRenderer.vue';
+// import { entry as droppableSimpleTableRendererEntry } from './DroppableSimpleTableRenderer.vue';
 
 
 export const droppableRenderers = [
@@ -26,5 +26,5 @@ export const droppableRenderers = [
   droppableCategorizationRenderer,
   DroppableCategoryRenderer,
   droppableGridControlRendererEntry,
-  droppableSimpleTableRendererEntry
+  // droppableSimpleTableRendererEntry
 ];

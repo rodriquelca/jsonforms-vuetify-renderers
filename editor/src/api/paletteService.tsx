@@ -405,6 +405,7 @@ const complexElements = [
                 "bar"
               ]
             }
+         
           }
         },
         "minItems": 0,
@@ -414,50 +415,6 @@ const complexElements = [
       return {
         control,
         variable: "grid",
-        uiOptions: {
-          "detail":
-          {
-            "type": "SimpleTable",
-            "elements": [
-              {
-                "type": "Control",
-                "scope": "#/properties/date",
-                "label": "Date"
-              },
-              {
-                "type": "Control",
-                "scope": "#/properties/message",
-                "label": "Message"
-              },
-              {
-                "type": "Control",
-                "scope": "#/properties/enum",
-                "label": "Enum"
-              },
-              {
-                "type": "Control",
-                "scope": "#/properties/enum",
-                "label": "Enum"
-              },
-              {
-                "type": "Control",
-                "scope": "#/properties/enum",
-                "label": "Enum"
-              },
-              {
-                "type": "Control",
-                "scope": "#/properties/enum",
-                "label": "Enum"
-              },
-              {
-                "type": "Control",
-                "scope": "#/properties/enum",
-                "label": "Enum"
-              }
-            ]
-          },
-          "showSortButtons": true
-        }
       };
     },
   },

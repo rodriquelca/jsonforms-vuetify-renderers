@@ -15,18 +15,19 @@
             tag="tr"
           >
             <td
-              v-for="(element, index) in uischema.elements"
-              :key="`${useJsonForm.layout.value.path}-${index}`"
+              v-for="propName in getValidColumnProps(control.schema)"
+              :key="composePaths(composePaths(control.path, 0), propName)"
               no-gutters
             >
+              {{ propName }}
+
               <dispatch-renderer
-                :key="element.uuid"
-                :schema="useJsonForm.layout.value.schema"
-                :uischema="element"
-                :path="useJsonForm.layout.value.path"
-                :enabled="useJsonForm.layout.value.enabled"
-                :renderers="customRenderers"
-                :cells="useJsonForm.layout.value.cells"
+                :schema="control.schema"
+                :uischema="resolveUiSchema(propName)"
+                :path="composePaths(control.path, 0)"
+                :enabled="control.enabled"
+                :renderers="control.renderers"
+                :cells="control.cells"
               />
             </td>
           </draggable>
@@ -120,33 +121,33 @@ const droppableRenderer = defineComponent({
           });
 
           //Here uischema
-          const schemaElement = tryFindByUUID(
-            this.$store.get('app/editor@schema'),
-            newElement.uuid
-          );
-          const element = this.findElementSchema(
-            this.$store.get('app/editor@schema'),
-            schemaElement
-          );
-          this.$store.dispatch('locales/addProperty', {
-            property: element.key,
-          });
+          // const schemaElement = tryFindByUUID(
+          //   this.$store.get('app/editor@schema'),
+          //   newElement.uuid
+          // );
+          // const element = this.findElementSchema(
+          //   this.$store.get('app/editor@schema'),
+          //   schemaElement
+          // );
+          // this.$store.dispatch('locales/addProperty', {
+          //   property: element.key,
+          // });
 
-          schemaElement.options = property.uiOptions;
-          const newUIElement = createControl(
-            schemaElement,
-            evt.added.element.type
-          );
-          for (let item of parent.linkedUISchemaElements) {
-            console.log(item);
-            this.$store.dispatch('app/addScopedElementToLayout', {
-              uiSchemaElement: newUIElement,
-              layoutUUID: item,
-              index: evt.added.newIndex,
-              schemaUUID: evt.added.element.uuid,
-              schemaElement,
-            });
-          }
+          // schemaElement.options = property.uiOptions;
+          // const newUIElement = createControl(
+          //   schemaElement,
+          //   evt.added.element.type
+          // );
+          // for (let item of parent.linkedUISchemaElements) {
+          //   console.log(item);
+          //   this.$store.dispatch('app/addScopedElementToLayout', {
+          //     uiSchemaElement: newUIElement,
+          //     layoutUUID: item,
+          //     index: evt.added.newIndex,
+          //     schemaUUID: evt.added.element.uuid,
+          //     schemaElement,
+          //   });
+          // }
         } else {
           let provider = evt.added.element.uiSchemaElementProvider();
           this.$store.dispatch('app/addUnscopedElementToLayout', {
@@ -197,7 +198,7 @@ export default droppableRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: droppableRenderer,
-  tester: rankWith(45, uiTypeIs('SimpleTable')),
+  tester: rankWith(45, uiTypeIs('GridControl')),
 };
 </script>
 <style scoped>
@@ -226,4 +227,3 @@ export const entry: JsonFormsRendererRegistryEntry = {
   margin: 0;
 }
 </style>
-

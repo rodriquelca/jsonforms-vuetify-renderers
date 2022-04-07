@@ -40,8 +40,8 @@
     <v-card-text>
       <v-container justify-space-around align-content-center>
         <v-row justify="center">
-          <!-- <v-simple-table class="array-container flex"> -->
-          <!-- <thead v-if="control.schema.type === 'object'">
+          <v-simple-table class="array-container flex">
+            <!-- <thead v-if="control.schema.type === 'object'">
               <tr>
                 <th
                   v-for="(prop, index) in getValidColumnProps(control.schema)"
@@ -61,37 +61,34 @@
                 ></th>
               </tr>
             </thead> -->
-          <!-- <tbody> -->
-          <!-- <tr :class="styles.arrayList.item">
+            <tbody>
+              <draggable
+                :value="[]"
+                group="people"
+                @change="handleChange"
+                :key="'draggable' + uischema.uuid"
+                :sort="true"
+                :disabled="!enabledDrag"
+                @start="dragging = true"
+                @end="dragging = false"
+                tag="tr"
+              >
                 <td
                   v-for="propName in getValidColumnProps(control.schema)"
-                  :key="
-                    composePaths(
-                      composePaths(control.path, `${index}`),
-                      propName
-                    )
-                  "
-                > -->
-          <dispatch-renderer
-            :schema="control.schema"
-            :uischema="foundUISchema"
-            :path="composePaths(control.path, 0)"
-            :enabled="control.enabled"
-            :renderers="control.renderers"
-            :cells="control.cells"
-          />
-          <!-- <dispatch-renderer
+                  :key="composePaths(composePaths(control.path, 0), propName)"
+                >
+                  <dispatch-renderer
                     :schema="control.schema"
                     :uischema="resolveUiSchema(propName)"
-                    :path="composePaths(control.path, `${index}`)"
+                    :path="composePaths(control.path, 0)"
                     :enabled="control.enabled"
                     :renderers="control.renderers"
                     :cells="control.cells"
-                  /> -->
-          <!-- </td>
-              </tr> -->
-          <!-- </tbody>
-          </v-simple-table> -->
+                  />
+                </td>
+              </draggable>
+            </tbody>
+          </v-simple-table>
         </v-row>
       </v-container>
     </v-card-text>
@@ -139,7 +136,9 @@ import {
   VSpacer,
   VSimpleTable,
 } from 'vuetify/lib';
-// import { ValidationIcon, ValidationBadge } from '../controls/components/index';
+import { buildSchemaTree } from '../../model/schema';
+import draggable from 'vuedraggable';
+import { sync } from 'vuex-pathify';
 
 const controlRenderer = defineComponent({
   name: 'droppable-grid-control-renderer',
@@ -160,18 +159,23 @@ const controlRenderer = defineComponent({
     VSpacer,
     VContainer,
     VSimpleTable,
+    draggable,
   },
   props: {
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyArrayControl(useJsonFormsArrayControl(props));
+    return {
+      ...useVuetifyArrayControl(useJsonFormsArrayControl(props)),
+      ...{ enabledDrag: true, dragging: false },
+    };
   },
   computed: {
     noData(): boolean {
       return !this.control.data || this.control.data.length === 0;
     },
     foundUISchema(): UISchemaElement {
+      debugger;
       return findUISchema(
         this.control.uischemas,
         this.control.schema,
@@ -188,10 +192,41 @@ const controlRenderer = defineComponent({
         this.control.rootSchema
       );
     },
+    editorUiSchemaModel: sync('app/editor@uiSchema'),
+    editorSchemaModel: sync('app/editor@schema'),
   },
   methods: {
     composePaths,
     createDefaultValue,
+    handleChange(evt) {
+      if (evt.added) {
+        console.log(evt.added);
+        if (
+          evt.added.element &&
+          (evt.added.element.type === 'Control' ||
+            evt.added.element.type === 'RadioGroup' ||
+            evt.added.element.type === 'Suggest' ||
+            evt.added.element.type === 'CheckboxGroup' ||
+            evt.added.element.type === 'Dropdown' ||
+            evt.added.element.type === 'Image' ||
+            evt.added.element.type === 'GridControl' ||
+            evt.added.element.type === 'File')
+        ) {
+          //here update the schema
+          debugger;
+          const property = evt.added.element.uiSchemaElementProvider();
+          const newElement = buildSchemaTree(property.control);
+          const parent = this.editorSchemaModel.properties.get(
+            this.control.path
+          );
+          this.$store.dispatch('app/addPropertyToSchema', {
+            schemaElement: newElement,
+            elementUUID: parent.items.uuid,
+            indexOrProp: property.variable,
+          });
+        }
+      }
+    },
     addButtonClick() {
       this.addItem(
         this.control.path,
