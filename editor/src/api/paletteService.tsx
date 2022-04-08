@@ -405,7 +405,6 @@ const complexElements = [
                 "bar"
               ]
             }
-         
           }
         },
         "minItems": 0,
@@ -415,6 +414,18 @@ const complexElements = [
       return {
         control,
         variable: "grid",
+        uiOptions: {
+          "detail": {
+            "type": "TableLayout",
+            "elements": [
+              // {
+              //   "type": "Control",
+              //   "scope": "#/properties/date",
+              //   "label": "Date"
+              // },
+            ]
+          }
+        }
       };
     },
   },

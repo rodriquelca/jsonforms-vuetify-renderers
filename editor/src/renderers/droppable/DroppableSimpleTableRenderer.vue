@@ -4,6 +4,7 @@
       <v-simple-table class="array-container flex">
         <tbody>
           <draggable
+            :class="draggableClass"
             :value="[]"
             group="people"
             @change="handleChange"
@@ -14,20 +15,16 @@
             @end="dragging = false"
             tag="tr"
           >
-            <td
-              v-for="propName in getValidColumnProps(control.schema)"
-              :key="composePaths(composePaths(control.path, 0), propName)"
-              no-gutters
-            >
-              {{ propName }}
-
+            <td v-for="(element, index) in uischema.elements" :key="index">
               <dispatch-renderer
-                :schema="control.schema"
-                :uischema="resolveUiSchema(propName)"
-                :path="composePaths(control.path, 0)"
-                :enabled="control.enabled"
-                :renderers="control.renderers"
-                :cells="control.cells"
+                :key="element.uuid"
+                updateItemIndex
+                :schema="useJsonForm.layout.value.schema"
+                :uischema="element"
+                :path="useJsonForm.layout.value.path"
+                :enabled="useJsonForm.layout.value.enabled"
+                :renderers="customRenderers"
+                :cells="useJsonForm.layout.value.cells"
               />
             </td>
           </draggable>
@@ -64,7 +61,7 @@ import { buildSchemaTree } from '../../model/schema';
 import _ from 'lodash';
 
 const droppableRenderer = defineComponent({
-  name: 'droppable-horizontal-layout-renderer',
+  name: 'droppable-simple-table-renderer',
   components: {
     DispatchRenderer,
     VContainer,
@@ -120,34 +117,33 @@ const droppableRenderer = defineComponent({
             indexOrProp: property.variable,
           });
 
-          //Here uischema
-          // const schemaElement = tryFindByUUID(
-          //   this.$store.get('app/editor@schema'),
-          //   newElement.uuid
-          // );
-          // const element = this.findElementSchema(
-          //   this.$store.get('app/editor@schema'),
-          //   schemaElement
-          // );
+          // Here uischema
+          const schemaElement = tryFindByUUID(
+            this.$store.get('app/editor@schema'),
+            newElement.uuid
+          );
+          const element = this.findElementSchema(
+            this.$store.get('app/editor@schema'),
+            schemaElement
+          );
           // this.$store.dispatch('locales/addProperty', {
           //   property: element.key,
           // });
 
-          // schemaElement.options = property.uiOptions;
-          // const newUIElement = createControl(
-          //   schemaElement,
-          //   evt.added.element.type
-          // );
-          // for (let item of parent.linkedUISchemaElements) {
-          //   console.log(item);
-          //   this.$store.dispatch('app/addScopedElementToLayout', {
-          //     uiSchemaElement: newUIElement,
-          //     layoutUUID: item,
-          //     index: evt.added.newIndex,
-          //     schemaUUID: evt.added.element.uuid,
-          //     schemaElement,
-          //   });
-          // }
+          schemaElement.options = property.uiOptions;
+          const newUIElement = createControl(
+            schemaElement,
+            evt.added.element.type
+          );
+          for (let item of parent.linkedUISchemaElements) {
+            this.$store.dispatch('app/addScopedElementToTable', {
+              uiSchemaElement: newUIElement,
+              layoutUUID: item,
+              index: evt.added.newIndex,
+              schemaUUID: evt.added.element.uuid,
+              schemaElement,
+            });
+          }
         } else {
           let provider = evt.added.element.uiSchemaElementProvider();
           this.$store.dispatch('app/addUnscopedElementToLayout', {
@@ -198,10 +194,14 @@ export default droppableRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: droppableRenderer,
-  tester: rankWith(45, uiTypeIs('GridControl')),
+  tester: rankWith(45, uiTypeIs('TableLayout')),
 };
 </script>
 <style scoped>
+.dragArea {
+  height: 80px;
+}
+
 .fixed-cell {
   width: 150px;
   height: 50px;

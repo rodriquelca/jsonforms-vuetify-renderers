@@ -40,8 +40,8 @@
     <v-card-text>
       <v-container justify-space-around align-content-center>
         <v-row justify="center">
-          <v-simple-table class="array-container flex">
-            <!-- <thead v-if="control.schema.type === 'object'">
+          <!-- <v-simple-table class="array-container flex"> -->
+          <!-- <thead v-if="control.schema.type === 'object'">
               <tr>
                 <th
                   v-for="(prop, index) in getValidColumnProps(control.schema)"
@@ -61,7 +61,7 @@
                 ></th>
               </tr>
             </thead> -->
-            <tbody>
+          <!-- <tbody>
               <draggable
                 :value="[]"
                 group="people"
@@ -76,19 +76,19 @@
                 <td
                   v-for="propName in getValidColumnProps(control.schema)"
                   :key="composePaths(composePaths(control.path, 0), propName)"
-                >
-                  <dispatch-renderer
-                    :schema="control.schema"
-                    :uischema="resolveUiSchema(propName)"
-                    :path="composePaths(control.path, 0)"
-                    :enabled="control.enabled"
-                    :renderers="control.renderers"
-                    :cells="control.cells"
-                  />
-                </td>
+                > -->
+          <dispatch-renderer
+            :schema="control.schema"
+            :uischema="foundUISchema"
+            :path="composePaths(control.path, 0)"
+            :enabled="control.enabled"
+            :renderers="control.renderers"
+            :cells="control.cells"
+          />
+          <!-- </td>
               </draggable>
             </tbody>
-          </v-simple-table>
+          </v-simple-table> -->
         </v-row>
       </v-container>
     </v-card-text>
