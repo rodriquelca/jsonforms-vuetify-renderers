@@ -21,6 +21,14 @@
               :aria-label="`Add to ${control.label}`"
               v-on="onTooltip"
               :class="styles.arrayList.addButton"
+              :disabled="
+                !control.enabled ||
+                (appliedOptions.restrict &&
+                  arraySchema !== undefined &&
+                  arraySchema.maxItems !== undefined &&
+                  control.data.length >= arraySchema.maxItems)
+              "
+              @click="addButtonClick"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -30,6 +38,7 @@
       </v-toolbar>
     </v-card-title>
     <v-card-text>
+      {{ control.data }}
       <dispatch-renderer
         :schema="control.schema"
         :uischema="foundUISchema"
@@ -53,6 +62,7 @@ import {
   findUISchema,
   UISchemaElement,
   uiTypeIs,
+  createDefaultValue,
 } from '@jsonforms/core';
 import { defineComponent } from '../vue';
 import {
@@ -115,6 +125,13 @@ const controlRenderer = defineComponent({
   },
   methods: {
     composePaths,
+    addButtonClick() {
+      debugger;
+      this.addItem(
+        this.control.path,
+        createDefaultValue(this.control.schema)
+      )();
+    },
   },
 });
 

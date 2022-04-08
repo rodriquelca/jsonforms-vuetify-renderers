@@ -1,22 +1,67 @@
 <template>
   <v-container justify-space-around align-content-center>
-    test
     <v-row no-gutters>
-      <v-simple-table class="array-container flex">
+      <v-simple-table>
+        <thead v-if="useJsonForm.layout.value.schema.type === 'object'">
+          <th
+                  v-for="(prop, index) in getValidColumnProps(useJsonForm.layout.value.schema)"
+                  :key="`${useJsonForm.layout.value.path}-header-${index}`"
+                  scope="col"
+                >
+                  {{ title(prop) }}
+                </th>
+                <th
+                  v-if="useJsonForm.layout.value.enabled"
+                  :class="
+                    useJsonForm.appliedOptions.showSortButtons
+                      ? 'fixed-cell'
+                      : 'fixed-cell-small'
+                  "
+                  scope="col"
+                ></th>
+              </tr>
+        </thead>
         <tbody>
-          <tr :class="styles.arrayList.item">
+          <tr
+            v-for="(row, i) in useJsonForm.layout.value.data"
+            :key="`${useJsonForm.layout.value.path.path}-${i}`"
+            :class="useJsonForm.styles.arrayList.item"
+          >
             <td v-for="(element, index) in uischema.elements" :key="index">
-              <!-- <dispatch-renderer
+              <dispatch-renderer
                 :key="element.uuid"
                 updateItemIndex
                 :schema="useJsonForm.layout.value.schema"
                 :uischema="element"
                 :path="useJsonForm.layout.value.path"
                 :enabled="useJsonForm.layout.value.enabled"
-                :renderers="control.renderers"
+                :renderers="useJsonForm.layout.value.renderers"
                 :cells="useJsonForm.layout.value.cells"
-              /> -->
-              test
+              />
+            </td>
+            <td
+              :class="
+                useJsonForm.appliedOptions.showSortButtons
+                  ? 'fixed-cell'
+                  : 'fixed-cell-small'
+              "
+            >
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on: onTooltip }">
+                  <v-btn
+                    v-on="onTooltip"
+                    fab
+                    text
+                    elevation="0"
+                    small
+                    aria-label="Delete"
+                    :class="useJsonForm.styles.arrayList.itemDelete"
+                  >
+                    <v-icon class="notranslate">mdi-delete</v-icon>
+                  </v-btn>
+                </template>
+                Delete
+              </v-tooltip>
             </td>
           </tr>
         </tbody>
@@ -30,6 +75,7 @@ import {
   JsonFormsRendererRegistryEntry,
   Layout,
   rankWith,
+  JsonSchema,
 } from '@jsonforms/core';
 import { defineComponent } from '@vue/composition-api';
 import {
@@ -37,10 +83,20 @@ import {
   rendererProps,
   useJsonFormsLayout,
   RendererProps,
+  
 } from '@jsonforms/vue2';
 import { useVuetifyLayout } from '../util';
-import { VContainer, VRow, VCol } from 'vuetify/lib';
+import {
+  VContainer,
+  VRow,
+  VCol,
+  VSimpleTable,
+  VTooltip,
+  VBtn,
+  VIcon,
+} from 'vuetify/lib';
 import _ from 'lodash';
+import startCase from 'lodash/startCase';
 
 const droppableRenderer = defineComponent({
   name: 'simple-table-renderer',
@@ -49,12 +105,17 @@ const droppableRenderer = defineComponent({
     VContainer,
     VRow,
     VCol,
+    VSimpleTable,
+    VTooltip,
+    VBtn,
+    VIcon,
   },
 
   props: {
     ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
+    debugger;
     return {
       useJsonForm: useVuetifyLayout(useJsonFormsLayout(props)),
       enabledDrag: true,
@@ -70,6 +131,21 @@ const droppableRenderer = defineComponent({
       const auxElement = this.uischema.elements.splice(item.oldIndex, 1);
       this.uischema.elements.splice(item.newIndex, 0, auxElement[0]);
     },
+     getValidColumnProps(scopedSchema: JsonSchema) {
+      if (
+        scopedSchema.type === 'object' &&
+        typeof scopedSchema.properties === 'object'
+      ) {
+        return Object.keys(scopedSchema.properties).filter(
+          (prop) => scopedSchema.properties![prop].type !== 'array'
+        );
+      }
+      // primitives
+      return [''];
+    },
+    title(prop: string) {
+      return this.control.schema.properties?.[prop]?.title ?? startCase(prop);
+    },
   },
 });
 
@@ -77,7 +153,7 @@ export default droppableRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: droppableRenderer,
-  tester: rankWith(70, uiTypeIs('TableLayout')),
+  tester: rankWith(4, uiTypeIs('TableLayout')),
 };
 </script>
 <style scoped>
