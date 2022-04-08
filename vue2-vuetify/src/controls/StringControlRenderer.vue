@@ -61,6 +61,7 @@
         @change="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
+        v-mask="inputMask"
       />
     </v-hover>
   </control-wrapper>
@@ -86,6 +87,7 @@ import { DisabledIconFocus } from './directives';
 import isArray from 'lodash/isArray';
 import every from 'lodash/every';
 import isString from 'lodash/isString';
+import { mask } from '@titou10/v-mask';
 
 const controlRenderer = defineComponent({
   name: 'string-control-renderer',
@@ -97,6 +99,7 @@ const controlRenderer = defineComponent({
   },
   directives: {
     DisabledIconFocus,
+    mask,
   },
   props: {
     ...rendererProps<ControlElement>(),
@@ -108,6 +111,29 @@ const controlRenderer = defineComponent({
     );
   },
   computed: {
+    inputMask(): any {
+      const mask = this.control.uischema.options?.mask;
+      if (typeof mask !== 'string') {
+        //This section only works with the example
+        //TODO this must work with all type of custom mask
+        return {
+          mask: mask.mask,
+          tokens: {
+            F: {
+              pattern: new RegExp(mask.tokens['F'].pattern.replaceAll('/', '')),
+              transform: eval(mask.tokens['F'].transform) || '',
+            },
+            G: {
+              pattern: new RegExp(mask.tokens['G'].pattern.replaceAll('/', '')),
+              transform: eval(mask.tokens['G'].transform) || '',
+            },
+          },
+        };
+      }
+      return {
+        mask: mask,
+      };
+    },
     suggestions(): string[] | undefined {
       const suggestions = this.control.uischema.options?.suggestion;
 
