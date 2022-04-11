@@ -5,13 +5,11 @@
         <thead v-if="useJsonForm.layout.value.schema.type === 'object'">
           <tr>
             <th
-              v-for="(prop, index) in getValidColumnProps(
-                useJsonForm.layout.value.schema
-              )"
+              v-for="(element, index) in uischema.elements"
               :key="`${useJsonForm.layout.value.path}-header-${index}`"
               scope="col"
             >
-              {{ title(prop) }}
+              {{ title(element.scope) }}
             </th>
           </tr>
         </thead>
@@ -90,7 +88,6 @@ import {
   VIcon,
 } from 'vuetify/lib';
 import _ from 'lodash';
-import startCase from 'lodash/startCase';
 
 const droppableRenderer = defineComponent({
   name: 'simple-table-renderer',
@@ -137,7 +134,10 @@ const droppableRenderer = defineComponent({
       return [''];
     },
     title(prop: string) {
-      return startCase(prop);
+      // return startCase(prop);
+      // debugger;
+      // console.log(this.useJsonForm.layout.value.schema);
+      return prop.split('/').pop();
     },
     removeItemsClick(event: Event, toDelete: number[]): void {
       event.stopPropagation();

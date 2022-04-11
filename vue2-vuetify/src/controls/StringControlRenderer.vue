@@ -118,7 +118,7 @@ const controlRenderer = defineComponent({
         //This section only works with the example
         //TODO this must work with all type of custom mask
         return {
-          mask: mask.mask,
+          mask: mask ? mask.mask : '',
           tokens: {
             F: {
               pattern: new RegExp(mask.tokens['F'].pattern.replaceAll('/', '')),
