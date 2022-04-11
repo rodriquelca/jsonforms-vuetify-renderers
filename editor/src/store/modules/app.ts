@@ -132,6 +132,7 @@ const createUnscopedUiSchema = (state, payload) => {
     payload.layoutUUID,
     state.editor.uiSchema,
     (newUiSchema) => {
+      debugger;
       const newUIElement = payload.uiSchemaElement;
       newUIElement.parent = newUiSchema;
       (newUiSchema as EditorLayout).elements.splice(
@@ -152,6 +153,7 @@ const createScopedElementToLayout = (state, payload) => {
     payload.schemaUUID,
     state,
     (newUiSchema, newSchema) => {
+      debugger;
       const newUIElement = payload.uiSchemaElement;
       newUIElement.parent = newUiSchema;
       (newUiSchema as EditorLayout).elements.splice(
@@ -173,12 +175,43 @@ const createScopedElementToLayout = (state, payload) => {
   );
 };
 
+const createScopedElementToTable = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    payload.layoutUUID,
+    state.editor.schema,
+    payload.schemaUUID,
+    state,
+    (newUiSchema, newSchema) => {
+      debugger;
+      const newUIElement = payload.uiSchemaElement;
+      // newUIElement.parent = newUiSchema;
+      (newUiSchema as EditorLayout).options.detail.elements.splice(
+        payload.index,
+        0,
+        { type: newUIElement.type, scope: newUIElement.scope, label: newUIElement.label }
+      );
+
+      // if (!newSchema || !linkElements(newUIElement, payload.schemaElement)) {
+      //   console.error('Could not add new UI element', newUIElement);
+      //   return state;
+      // }
+
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
+
 const addPropertyToSchema = (state, payload) => {
   return withCloneTree(
     state.editor.schema,
     payload.elementUUID,
     state.editor,
     (clonedSchema) => {
+      debugger;
       const newElement = payload.schemaElement;
       newElement.parent = clonedSchema;
       let counter = 0;
@@ -192,7 +225,8 @@ const addPropertyToSchema = (state, payload) => {
         `${payload.indexOrProp}_${counter}`,
         newElement
       );
-      return clonedSchema;
+      // return clonedSchema;
+      return getRoot(clonedSchema as EditorUISchemaElement);
     }
   );
 };
@@ -517,6 +551,11 @@ const actions = {
   addUnscopedElementToLayout({ commit, state }, payload) {
     const clone = createUnscopedUiSchema(state, payload);
     commit('SET_UI_SCHEMA', clone);
+  },
+
+  addScopedElementToTable({ commit, state }, payload) {
+    const clone = createScopedElementToTable(state, payload);
+    commit('SET_UI_SCHEMA', clone.uiSchema);
   },
   setSchema({ commit }, payload) {
     const clone = createSchema(state, payload);

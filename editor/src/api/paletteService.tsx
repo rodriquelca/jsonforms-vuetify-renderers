@@ -381,7 +381,7 @@ const controlElements = [
 ];
 const complexElements = [
   {
-    type: 'Control',
+    type: 'GridControl',
     label: 'Grid',
     icon: 'mdi-grid',
     uiSchemaElementProvider: () => {
@@ -390,21 +390,6 @@ const complexElements = [
         "items": {
           "type": "object",
           "properties": {
-            "date": {
-              "type": "string",
-              "format": "date"
-            },
-            "message": {
-              "type": "string",
-              "maxLength": 5
-            },
-            "enum": {
-              "type": "string",
-              "enum": [
-                "foo",
-                "bar"
-              ]
-            }
           }
         },
         "minItems": 0,
@@ -415,9 +400,11 @@ const complexElements = [
         control,
         variable: "grid",
         uiOptions: {
-          "extendedType": "grid",
-          "restrict": true,
-          "pageSize": 5
+          "detail": {
+            "type": "TableLayout",
+            "elements": [
+            ]
+          }
         }
       };
     },

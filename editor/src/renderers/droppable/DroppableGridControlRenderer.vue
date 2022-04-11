@@ -3,7 +3,7 @@
     <v-card-title>
       <v-toolbar flat :class="styles.arrayList.toolbar">
         <v-toolbar-title :class="styles.arrayList.label">
-          test Grid Label: {{ computedLabel }}</v-toolbar-title
+          Grid Label: {{ computedLabel }}</v-toolbar-title
         >
         <validation-icon
           v-if="control.childErrors.length > 0"
@@ -21,14 +21,6 @@
               :aria-label="`Add to ${control.label}`"
               v-on="onTooltip"
               :class="styles.arrayList.addButton"
-              :disabled="
-                !control.enabled ||
-                (appliedOptions.restrict &&
-                  arraySchema !== undefined &&
-                  arraySchema.maxItems !== undefined &&
-                  control.data.length >= arraySchema.maxItems)
-              "
-              @click="addButtonClick"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -61,9 +53,8 @@ import {
   findUISchema,
   UISchemaElement,
   uiTypeIs,
-  createDefaultValue,
 } from '@jsonforms/core';
-import { defineComponent } from '../vue';
+import { defineComponent } from '../../util/vue';
 import {
   DispatchCell,
   DispatchRenderer,
@@ -71,7 +62,7 @@ import {
   useJsonFormsArrayControl,
   RendererProps,
 } from '@jsonforms/vue2';
-import { useVuetifyArrayControl } from '../util';
+import { useVuetifyArrayControl } from '@jsonforms/vue2-vuetify';
 import {
   VCard,
   VCardTitle,
@@ -86,13 +77,14 @@ import {
 import draggable from 'vuedraggable';
 
 const controlRenderer = defineComponent({
-  name: 'grid-control-renderer',
+  name: 'droppable-grid-control-renderer',
   components: {
     DispatchCell,
     DispatchRenderer,
     VCard,
     VCardTitle,
     VCardText,
+
     VToolbar,
     VToolbarTitle,
     VTooltip,
@@ -124,13 +116,6 @@ const controlRenderer = defineComponent({
   },
   methods: {
     composePaths,
-    addButtonClick() {
-      debugger;
-      this.addItem(
-        this.control.path,
-        createDefaultValue(this.control.schema)
-      )();
-    },
   },
 });
 
@@ -138,6 +123,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(4, and(isObjectArray, uiTypeIs('GridControl'))),
+  tester: rankWith(5, and(isObjectArray, uiTypeIs('GridControl'))),
 };
 </script>
