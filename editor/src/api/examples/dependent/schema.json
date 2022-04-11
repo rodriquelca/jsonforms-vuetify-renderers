@@ -3,12 +3,12 @@
   "title": "Dynaform",
   "properties": {
     "countries": {
-      "type": "string",
+      "type": "object",
       "description": "",
       "i18n": "countries"
     },
     "subdivision": {
-      "type": "string",
+      "type": "object",
       "description": "",
       "i18n": "subdivision"
     },
