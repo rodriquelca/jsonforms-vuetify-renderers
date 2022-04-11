@@ -13,7 +13,7 @@
 
     <v-dialog v-model="dialog" width="900" height="500">
       <v-card dense>
-        <v-card-title class="text-h5 primary lighten-1">
+        <v-card-title class="text-h6 primary lighten-1">
           Translation
         </v-card-title>
 
