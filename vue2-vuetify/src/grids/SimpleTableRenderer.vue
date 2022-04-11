@@ -3,23 +3,17 @@
     <v-row no-gutters>
       <v-simple-table>
         <thead v-if="useJsonForm.layout.value.schema.type === 'object'">
-          <th
-                  v-for="(prop, index) in getValidColumnProps(useJsonForm.layout.value.schema)"
-                  :key="`${useJsonForm.layout.value.path}-header-${index}`"
-                  scope="col"
-                >
-                  {{ title(prop) }}
-                </th>
-                <th
-                  v-if="useJsonForm.layout.value.enabled"
-                  :class="
-                    useJsonForm.appliedOptions.showSortButtons
-                      ? 'fixed-cell'
-                      : 'fixed-cell-small'
-                  "
-                  scope="col"
-                ></th>
-              </tr>
+          <tr>
+            <th
+              v-for="(prop, index) in getValidColumnProps(
+                useJsonForm.layout.value.schema
+              )"
+              :key="`${useJsonForm.layout.value.path}-header-${index}`"
+              scope="col"
+            >
+              {{ title(prop) }}
+            </th>
+          </tr>
         </thead>
         <tbody>
           <tr
@@ -56,6 +50,7 @@
                     small
                     aria-label="Delete"
                     :class="useJsonForm.styles.arrayList.itemDelete"
+                    @click.native="removeItemsClick($event, [index])"
                   >
                     <v-icon class="notranslate">mdi-delete</v-icon>
                   </v-btn>
@@ -83,7 +78,6 @@ import {
   rendererProps,
   useJsonFormsLayout,
   RendererProps,
-  
 } from '@jsonforms/vue2';
 import { useVuetifyLayout } from '../util';
 import {
@@ -115,7 +109,6 @@ const droppableRenderer = defineComponent({
     ...rendererProps<Layout>(),
   },
   setup(props: RendererProps<Layout>) {
-    debugger;
     return {
       useJsonForm: useVuetifyLayout(useJsonFormsLayout(props)),
       enabledDrag: true,
@@ -131,7 +124,7 @@ const droppableRenderer = defineComponent({
       const auxElement = this.uischema.elements.splice(item.oldIndex, 1);
       this.uischema.elements.splice(item.newIndex, 0, auxElement[0]);
     },
-     getValidColumnProps(scopedSchema: JsonSchema) {
+    getValidColumnProps(scopedSchema: JsonSchema) {
       if (
         scopedSchema.type === 'object' &&
         typeof scopedSchema.properties === 'object'
@@ -144,7 +137,11 @@ const droppableRenderer = defineComponent({
       return [''];
     },
     title(prop: string) {
-      return this.control.schema.properties?.[prop]?.title ?? startCase(prop);
+      return startCase(prop);
+    },
+    removeItemsClick(event: Event, toDelete: number[]): void {
+      event.stopPropagation();
+      console.log('remove item: ' + toDelete);
     },
   },
 });

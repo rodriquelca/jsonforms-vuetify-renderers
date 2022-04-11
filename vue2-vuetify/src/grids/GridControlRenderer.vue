@@ -38,7 +38,6 @@
       </v-toolbar>
     </v-card-title>
     <v-card-text>
-      {{ control.data }}
       <dispatch-renderer
         :schema="control.schema"
         :uischema="foundUISchema"
