@@ -130,7 +130,7 @@ const controlElements = [
           "multipleFile": true,
           "placeholder": "Select your files",
           "multiple": true,
-          "accept": ".png",
+          "accept": ".png, .jpg",
           "maxFileSize": 70000
         }
       };
