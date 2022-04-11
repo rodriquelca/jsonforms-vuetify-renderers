@@ -134,9 +134,6 @@ const droppableRenderer = defineComponent({
       return [''];
     },
     title(prop: string) {
-      // return startCase(prop);
-      // debugger;
-      // console.log(this.useJsonForm.layout.value.schema);
       return prop.split('/').pop();
     },
     removeItemsClick(event: Event, toDelete: number[]): void {
