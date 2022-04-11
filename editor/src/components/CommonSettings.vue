@@ -111,7 +111,7 @@
           </v-tooltip>
         </v-col>
       </v-row>
-      <v-row>
+      <!--<v-row>
         <v-col>
           <v-tooltip bottom>
             <template v-slot:activator="{ on: onTooltip }">
@@ -124,8 +124,8 @@
             If input descriptions should hide when not focused
           </v-tooltip>
         </v-col>
-      </v-row>
-      <v-row>
+      </v-row>-->
+      <!--<v-row>
         <v-col>
           <v-tooltip bottom>
             <template v-slot:activator="{ on: onTooltip }">
@@ -139,7 +139,7 @@
             specified in the JSON schema
           </v-tooltip>
         </v-col>
-      </v-row>
+      </v-row>-->
       <v-row>
         <v-col>
           <v-tooltip bottom>
@@ -154,7 +154,7 @@
           </v-tooltip>
         </v-col>
       </v-row>
-      <v-row>
+      <!--<v-row>
         <v-col>
           <v-tooltip bottom>
             <template v-slot:activator="{ on: onTooltip }">
@@ -167,7 +167,7 @@
             Only applies to basic example
           </v-tooltip>
         </v-col>
-      </v-row>
+      </v-row>-->
     </v-container>
   </div>
 </template>
