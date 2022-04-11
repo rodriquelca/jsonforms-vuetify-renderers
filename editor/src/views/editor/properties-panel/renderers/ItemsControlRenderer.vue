@@ -332,7 +332,7 @@ const controlRenderer = defineComponent({
         body = this.convertArrayToObject(data.body);
 
       JVariables.replaceBraces(headers, '`${', '}');
-      JVariables.replaceBraces(body, '`${', '}');
+      JVariables.replaceBraces(body, '${', '}');
       url = this.processParams(data);
 
       if (data.method == 'GET') {
@@ -355,7 +355,7 @@ const controlRenderer = defineComponent({
       } else {
         functionItems = `return fetch('${data.url}?' ${url}, {
           method: '${data.method}',
-          body: '${JSON.stringify(body)}',
+          body: \`${JSON.stringify(body)}\`,
           headers:${JSON.stringify(headers)},
       })
         .then((res) => res.json())
