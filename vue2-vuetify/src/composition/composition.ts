@@ -197,10 +197,10 @@ export const useVuetifyControlExt = <
 ) => {
   const appliedOptions = useControlAppliedOptions(input);
 
-
   const controlBuilder = reactive({
     items: Controlbuilder.items(input.control.value.uischema),
     itemsBuilder: Controlbuilder.itemsBuilder(input.control.value.uischema),
+    scope: Controlbuilder.pathControlSchema(input.control.value.uischema.scope),
     payload: {}
   });
 

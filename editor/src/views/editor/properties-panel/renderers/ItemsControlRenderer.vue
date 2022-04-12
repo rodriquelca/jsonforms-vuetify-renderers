@@ -228,6 +228,7 @@ const controlRenderer = defineComponent({
         this.mainOption = this.mainOptions[0];
         this.resetStaticItems();
         this.resetDynamicItems();
+        this.resetDependencies();
         return;
       }
 
@@ -235,6 +236,7 @@ const controlRenderer = defineComponent({
       this.setMainOption(data.source);
       this.setStaticItems(data.items);
       this.setDynamicItems(data.request);
+      this.setDependencies(data.dependencies);
     },
     resetDynamicItems() {
       this.keys.dynamic = this.keys.dynamic + 1;
@@ -279,6 +281,12 @@ const controlRenderer = defineComponent({
     },
     setDynamicItems(request: any) {
       this.request = request;
+    },
+    setDependencies(deps: any) {
+      this.dependencies = deps;
+    },
+    resetDependencies() {
+      this.dependencies = [];
     },
     editorBeforeMount() {
       this.$refs['monacoEditorItems']._render();

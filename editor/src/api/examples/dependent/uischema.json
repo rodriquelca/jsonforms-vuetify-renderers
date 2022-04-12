@@ -2,7 +2,7 @@
   "type": "VerticalLayout",
   "elements": [
     {
-      "type": "Dropdown",
+      "type": "Suggest",
       "scope": "#/properties/countries",
       "options": {
         "events": {
@@ -11,7 +11,7 @@
             "body": ""
           }
         },
-        "items": "return fetch('https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/countries/execute-query?' , {\n          method: 'POST',\n          body: '{\"dyn_uid\":\"307644763625433f6d07470067177319\",\"field_id\":\"countries\",\"del_index\":\"\",\"app_uid\":\"\"}',\n          headers:{\"authorization\":\"Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521\",\"content-type\":\"application/json\"},\n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res,(i)=>{\n            return {\n             value:i.value,\n              label:i.text\n            };\n          } \n          ));\n        });",
+        "items": "return fetch('https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/countries/execute-query-suggest?' , {\n          method: 'POST',\n          body: `{\"dyn_uid\":\"307644763625433f6d07470067177319\",\"field_id\":\"countries\",\"del_index\":\"\",\"app_uid\":\"\",\"filter\":\"${payload.countries}\"}`,\n          headers:{\"authorization\":\"Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521\",\"content-type\":\"application/json\"},\n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res,(i)=>{\n            return {\n             value:i.value,\n              label:i.text\n            };\n          } \n          ));\n        });",
         "request": {
           "params": [
             {
@@ -45,6 +45,10 @@
             {
               "key": "app_uid",
               "value": ""
+            },
+            {
+              "key": "filter",
+              "value": "{{payload.countries}}"
             }
           ],
           "output": {
@@ -53,14 +57,14 @@
             "label": "text"
           },
           "method": "POST",
-          "url": "https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/countries/execute-query"
+          "url": "https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/countries/execute-query-suggest"
         },
         "source": "dynamic",
         "dependencies": []
       }
     },
     {
-      "type": "Dropdown",
+      "type": "Suggest",
       "scope": "#/properties/subdivision",
       "options": {
         "events": {
@@ -69,7 +73,7 @@
             "body": ""
           }
         },
-        "items": "return fetch('https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/subdivision/execute-query?' , {\n          method: 'POST',\n          body: `{\"dyn_uid\":\"307644763625433f6d07470067177319\",\"field_id\":\"subdivision\",\"del_index\":\"\",\"app_uid\":\"\",\"countries\":\"${payload.countries.value}\"}`,\n          headers:{\"authorization\":\"Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521\",\"content-type\":\"application/json\"},\n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res,(i)=>{\n            return {\n             value:i.value,\n              label:i.text\n            };\n          } \n          ));\n        });",
+        "items": "return fetch('https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/subdivision/execute-query-suggest?' , {\n          method: 'POST',\n          body: `{\"dyn_uid\":\"307644763625433f6d07470067177319\",\"field_id\":\"subdivision\",\"del_index\":\"\",\"app_uid\":\"\",\"filter\":\"${payload.subdivision}\",\"countries\":\"${payload.countries.value}\"}`,\n          headers:{\"authorization\":\"Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521\",\"content-type\":\"application/json\"},\n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res,(i)=>{\n            return {\n             value:i.value,\n              label:i.text\n            };\n          } \n          ));\n        });",
         "request": {
           "params": [
             {
@@ -105,6 +109,10 @@
               "value": ""
             },
             {
+              "key": "filter",
+              "value": "{{payload.subdivision}}"
+            },
+            {
               "key": "countries",
               "value": "{{payload.countries.value}}"
             }
@@ -115,7 +123,7 @@
             "label": "text"
           },
           "method": "POST",
-          "url": "https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/subdivision/execute-query"
+          "url": "https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/subdivision/execute-query-suggest"
         },
         "source": "dynamic",
         "dependencies": [
@@ -133,7 +141,7 @@
             "body": ""
           }
         },
-        "items": "return fetch('https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/location/execute-query-suggest?' , {\n          method: 'POST',\n          body: `{\"dyn_uid\":\"307644763625433f6d07470067177319\",\"field_id\":\"location\",\"del_index\":\"\",\"app_uid\":\"\",\"countries\":\"${payload.countries.value}\",\"subdivision\":\"${payload.subdivision.value}\"}`,\n          headers:{\"authorization\":\"Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521\",\"content-type\":\"application/json\"},\n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res,(i)=>{\n            return {\n             value:i.value,\n              label:i.text\n            };\n          } \n          ));\n        });",
+        "items": "return fetch('https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/location/execute-query-suggest?' , {\n          method: 'POST',\n          body: `{\"dyn_uid\":\"307644763625433f6d07470067177319\",\"field_id\":\"location\",\"del_index\":\"\",\"app_uid\":\"\",\"filter\":\"${payload.location}\",\"countries\":\"${payload.countries.value}\",\"subdivision\":\"${payload.subdivision.value}\"}`,\n          headers:{\"authorization\":\"Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521\",\"content-type\":\"application/json\"},\n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res,(i)=>{\n            return {\n             value:i.value,\n              label:i.text\n            };\n          } \n          ));\n        });",
         "request": {
           "params": [
             {
@@ -167,6 +175,10 @@
             {
               "key": "app_uid",
               "value": ""
+            },
+            {
+              "key": "filter",
+              "value": "{{payload.location}}"
             },
             {
               "key": "countries",
