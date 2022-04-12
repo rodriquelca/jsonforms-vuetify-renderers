@@ -58,15 +58,12 @@ export const watchScope = (store: any, uiSchema: any, provider: any) => {
             return getters['preview/getDataModel'](scope);
         },
         (n: string, o: string) => {
-
             Vue.nextTick(() => {
                 provider.JReactivex.emit(scope, n);
             });
             Vue.nextTick(() => {
                 fnOnchange(provider.JForm, n, o);
             });
-
-
         }
     );
 }
@@ -134,6 +131,6 @@ export const dependencies = (uiSchema: any) => {
         : [];
 }
 
-const pathControlSchema = (input: string): string => {
+export const pathControlSchema = (input: string): string => {
     return input.split('/').pop() || '';
 };

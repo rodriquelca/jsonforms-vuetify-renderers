@@ -228,6 +228,7 @@ const controlRenderer = defineComponent({
         this.mainOption = this.mainOptions[0];
         this.resetStaticItems();
         this.resetDynamicItems();
+        this.resetDependencies();
         return;
       }
 
@@ -235,6 +236,7 @@ const controlRenderer = defineComponent({
       this.setMainOption(data.source);
       this.setStaticItems(data.items);
       this.setDynamicItems(data.request);
+      this.setDependencies(data.dependencies);
     },
     resetDynamicItems() {
       this.keys.dynamic = this.keys.dynamic + 1;
@@ -279,6 +281,12 @@ const controlRenderer = defineComponent({
     },
     setDynamicItems(request: any) {
       this.request = request;
+    },
+    setDependencies(deps: any) {
+      this.dependencies = deps;
+    },
+    resetDependencies() {
+      this.dependencies = [];
     },
     editorBeforeMount() {
       this.$refs['monacoEditorItems']._render();
@@ -332,7 +340,7 @@ const controlRenderer = defineComponent({
         body = this.convertArrayToObject(data.body);
 
       JVariables.replaceBraces(headers, '`${', '}');
-      JVariables.replaceBraces(body, '`${', '}');
+      JVariables.replaceBraces(body, '${', '}');
       url = this.processParams(data);
 
       if (data.method == 'GET') {
@@ -355,7 +363,7 @@ const controlRenderer = defineComponent({
       } else {
         functionItems = `return fetch('${data.url}?' ${url}, {
           method: '${data.method}',
-          body: '${JSON.stringify(body)}',
+          body: \`${JSON.stringify(body)}\`,
           headers:${JSON.stringify(headers)},
       })
         .then((res) => res.json())

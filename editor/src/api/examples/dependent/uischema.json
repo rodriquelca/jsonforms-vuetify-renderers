@@ -2,8 +2,8 @@
   "type": "VerticalLayout",
   "elements": [
     {
-      "type": "Dropdown",
-      "scope": "#/properties/dropdown_0",
+      "type": "Suggest",
+      "scope": "#/properties/countries",
       "options": {
         "events": {
           "onChange": {
@@ -11,24 +11,61 @@
             "body": ""
           }
         },
-        "items": [
-          {
-            "value": "Animals",
-            "label": "Animals"
+        "items": "return fetch('https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/countries/execute-query-suggest?' , {\n          method: 'POST',\n          body: `{\"dyn_uid\":\"307644763625433f6d07470067177319\",\"field_id\":\"countries\",\"del_index\":\"\",\"app_uid\":\"\",\"filter\":\"${payload.countries}\"}`,\n          headers:{\"authorization\":\"Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521\",\"content-type\":\"application/json\"},\n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res,(i)=>{\n            return {\n             value:i.value,\n              label:i.text\n            };\n          } \n          ));\n        });",
+        "request": {
+          "params": [
+            {
+              "key": "",
+              "value": ""
+            }
+          ],
+          "headers": [
+            {
+              "key": "authorization",
+              "value": "Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "body": [
+            {
+              "key": "dyn_uid",
+              "value": "307644763625433f6d07470067177319"
+            },
+            {
+              "key": "field_id",
+              "value": "countries"
+            },
+            {
+              "key": "del_index",
+              "value": ""
+            },
+            {
+              "key": "app_uid",
+              "value": ""
+            },
+            {
+              "key": "filter",
+              "value": "{{payload.countries}}"
+            }
+          ],
+          "output": {
+            "path": "",
+            "value": "value",
+            "label": "text"
           },
-          {
-            "value": "Anime",
-            "label": "Anime"
-          }
-        ],
-        "request": null,
-        "source": "static",
+          "method": "POST",
+          "url": "https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/countries/execute-query-suggest"
+        },
+        "source": "dynamic",
         "dependencies": []
       }
     },
     {
-      "type": "RadioGroup",
-      "scope": "#/properties/radiogroup_0",
+      "type": "Suggest",
+      "scope": "#/properties/subdivision",
       "options": {
         "events": {
           "onChange": {
@@ -36,27 +73,134 @@
             "body": ""
           }
         },
-        "items": "return fetch('https://api.publicapis.org/random?'+`category=${payload.dropdown_0.value}`, {\n          method: 'GET',\n          headers:{},     \n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res.entries,(i)=>{\n             return {\n              value:i.API,\n              label:i.API\n            };\n          } \n          ));\n        });",
+        "items": "return fetch('https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/subdivision/execute-query-suggest?' , {\n          method: 'POST',\n          body: `{\"dyn_uid\":\"307644763625433f6d07470067177319\",\"field_id\":\"subdivision\",\"del_index\":\"\",\"app_uid\":\"\",\"filter\":\"${payload.subdivision}\",\"countries\":\"${payload.countries.value}\"}`,\n          headers:{\"authorization\":\"Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521\",\"content-type\":\"application/json\"},\n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res,(i)=>{\n            return {\n             value:i.value,\n              label:i.text\n            };\n          } \n          ));\n        });",
         "request": {
           "params": [
             {
-              "key": "category",
-              "value": "{{payload.dropdown_0.value}}"
+              "key": "",
+              "value": ""
             }
           ],
-          "headers": [],
-          "body": [],
+          "headers": [
+            {
+              "key": "authorization",
+              "value": "Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "body": [
+            {
+              "key": "dyn_uid",
+              "value": "307644763625433f6d07470067177319"
+            },
+            {
+              "key": "field_id",
+              "value": "subdivision"
+            },
+            {
+              "key": "del_index",
+              "value": ""
+            },
+            {
+              "key": "app_uid",
+              "value": ""
+            },
+            {
+              "key": "filter",
+              "value": "{{payload.subdivision}}"
+            },
+            {
+              "key": "countries",
+              "value": "{{payload.countries.value}}"
+            }
+          ],
           "output": {
-            "path": "entries",
-            "value": "API",
-            "label": "API"
+            "path": "",
+            "value": "value",
+            "label": "text"
           },
-          "method": "GET",
-          "url": "https://api.publicapis.org/entries"
+          "method": "POST",
+          "url": "https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/subdivision/execute-query-suggest"
         },
         "source": "dynamic",
         "dependencies": [
-          "dropdown_0"
+          "countries"
+        ]
+      }
+    },
+    {
+      "type": "Suggest",
+      "scope": "#/properties/location",
+      "options": {
+        "events": {
+          "onChange": {
+            "arguments": "JForm, nval, oval",
+            "body": ""
+          }
+        },
+        "items": "return fetch('https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/location/execute-query-suggest?' , {\n          method: 'POST',\n          body: `{\"dyn_uid\":\"307644763625433f6d07470067177319\",\"field_id\":\"location\",\"del_index\":\"\",\"app_uid\":\"\",\"filter\":\"${payload.location}\",\"countries\":\"${payload.countries.value}\",\"subdivision\":\"${payload.subdivision.value}\"}`,\n          headers:{\"authorization\":\"Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521\",\"content-type\":\"application/json\"},\n      })\n        .then((res) => res.json())\n        .then((res) => {\n          return (_.map(res,(i)=>{\n            return {\n             value:i.value,\n              label:i.text\n            };\n          } \n          ));\n        });",
+        "request": {
+          "params": [
+            {
+              "key": "",
+              "value": ""
+            }
+          ],
+          "headers": [
+            {
+              "key": "authorization",
+              "value": "Bearer 02efd5dd7fc793ffafe643038fb9837f28df1521"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "body": [
+            {
+              "key": "dyn_uid",
+              "value": "307644763625433f6d07470067177319"
+            },
+            {
+              "key": "field_id",
+              "value": "location"
+            },
+            {
+              "key": "del_index",
+              "value": ""
+            },
+            {
+              "key": "app_uid",
+              "value": ""
+            },
+            {
+              "key": "filter",
+              "value": "{{payload.location}}"
+            },
+            {
+              "key": "countries",
+              "value": "{{payload.countries.value}}"
+            },
+            {
+              "key": "subdivision",
+              "value": "{{payload.subdivision.value}}"
+            }
+          ],
+          "output": {
+            "path": "",
+            "value": "value",
+            "label": "text"
+          },
+          "method": "POST",
+          "url": "https://pm3-n275-dev.processmaker.net/api/1.0/workflow/project/289650576625433cc195332066440091/process-variable/location/execute-query-suggest"
+        },
+        "source": "dynamic",
+        "dependencies": [
+          "countries",
+          "subdivision"
         ]
       }
     }

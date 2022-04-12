@@ -73,13 +73,17 @@ const controlRenderer = defineComponent({
   computed: {},
   methods: {},
   watch: {
-    search() {
+    search(query) {
       if (this.isLoading) return;
-      let prom;
+      let prom, clonePayload;
       //Verify if the controlBuilder.itemsbuilder is a function
       if (isFunction(this.controlBuilder.itemsBuilder)) {
         this.isLoading = true;
-        prom = this.controlBuilder.itemsBuilder(_, this.controlBuilder.payload);
+        clonePayload = {
+          ..._.clone(this.controlBuilder.payload),
+          ...{ [this.controlBuilder.scope]: query },
+        };
+        prom = this.controlBuilder.itemsBuilder(_, clonePayload);
         if (Boolean(prom && typeof prom.then === 'function')) {
           prom
             .then((res: any) => {
