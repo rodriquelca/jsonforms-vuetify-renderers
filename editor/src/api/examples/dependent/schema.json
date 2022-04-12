@@ -2,15 +2,20 @@
   "type": "object",
   "title": "Dynaform",
   "properties": {
-    "dropdown_0": {
-      "type": "string",
+    "countries": {
+      "type": "object",
       "description": "",
-      "i18n": "dropdown_0"
+      "i18n": "countries"
     },
-    "dropdown_1": {
+    "subdivision": {
+      "type": "object",
+      "description": "",
+      "i18n": "subdivision"
+    },
+    "location": {
       "type": "string",
       "description": "",
-      "i18n": "dropdown_1"
+      "i18n": "location"
     }
   }
 }

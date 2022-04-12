@@ -103,7 +103,7 @@ const droppableRenderer = defineComponent({
             evt.added.element.type === 'CheckboxGroup' ||
             evt.added.element.type === 'Dropdown' ||
             evt.added.element.type === 'Image' ||
-            evt.added.element.type === 'Grid' ||
+            evt.added.element.type === 'GridControl' ||
             evt.added.element.type === 'File')
         ) {
           //here update the schema

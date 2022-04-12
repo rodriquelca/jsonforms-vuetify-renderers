@@ -36,10 +36,34 @@ export const inputMask: PropertySchemasDecorator = (
     uiElement.type === 'Control'
   ) {
     addSchemaOptionsProperty(schemas.schema, {
+
       mask: { type: 'string' },
     });
     (schemas.uiSchema as Layout).elements.push(
       createPropertyControl('#/properties/options/properties/mask')
+    );
+  }
+  return schemas;
+};
+
+export const validationDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    schemaElement?.schema.type === 'string' &&
+    !schemaElement?.schema.format &&
+    uiElement.type === 'Control'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      validation: { type: 'string' },
+      validationMessage: { type: 'string' },
+    });
+    (schemas.uiSchema as Layout).elements.push(
+      createPropertyControl('#/properties/options/properties/validation'),
+      createPropertyControl('#/properties/options/properties/validationMessage')
+
     );
   }
   return schemas;
@@ -559,6 +583,7 @@ export const defaultSchemaDecoratorsCollection = new Map<
       requiredDecorator,
       readOnlyDecorator,
       multilineStringOptionDecorator,
+      validationDecorator,
       inputMask,
       minDateDecorator,
       maxDateDecorator,

@@ -58,6 +58,7 @@
             : undefined
         "
         :clearable="hover"
+        :rules="validationRegExp"
         @change="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
@@ -112,12 +113,12 @@ const controlRenderer = defineComponent({
   },
   computed: {
     inputMask(): any {
-      const mask = this.control.uischema.options?.mask;
-      if (typeof mask !== 'string') {
+      const mask = this.control.uischema.options?.mask || '';
+      if (mask && typeof mask !== 'string') {
         //This section only works with the example
         //TODO this must work with all type of custom mask
         return {
-          mask: mask.mask,
+          mask: mask ? mask.mask : '',
           tokens: {
             F: {
               pattern: new RegExp(mask.tokens['F'].pattern.replaceAll('/', '')),
@@ -146,6 +147,19 @@ const controlRenderer = defineComponent({
         return undefined;
       }
       return suggestions;
+    },
+    validationRegExp() {
+      return [
+        (value: string) => {
+          const pattern = new RegExp(
+            this.control.uischema.options?.validation?.replaceAll('/', '')
+          );
+          return (
+            pattern.test(value) ||
+            this.control.uischema.options?.validationMessage
+          );
+        },
+      ];
     },
   },
 });
