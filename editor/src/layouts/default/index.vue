@@ -18,13 +18,17 @@
 </template>
 
 <script lang="ts">
+import AppBar from './AppBar.vue';
+import View from './View.vue';
+import Drawer from './Drawer.vue';
+
 export default {
   name: 'DefaultLayout',
 
   components: {
-    DefaultAppBar: () => import('./AppBar'),
-    DefaultView: () => import('./View'),
-    DefaultDrawer: () => import('./Drawer'),
+    DefaultAppBar: AppBar,
+    DefaultView: View,
+    DefaultDrawer: Drawer,
   },
 };
 </script>
