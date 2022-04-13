@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import DefaultLayout from '../layouts/default/index.vue';
+import DynaformEditor from '../views/editor';
 
 Vue.use(Router);
 
@@ -14,13 +16,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: () => import('../layouts/default/index.vue'),
+      component: DefaultLayout,
       children: [
         {
           path: '',
           name: 'Default',
           // component: () => import('../views/home'),
-          component: () => import('../views/editor'),
+          component: DynaformEditor,
         },
       ],
     },

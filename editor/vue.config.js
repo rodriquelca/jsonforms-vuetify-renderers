@@ -1,4 +1,5 @@
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const path = require("path");
 
 module.exports = {
   chainWebpack: (config) => {
@@ -12,6 +13,12 @@ module.exports = {
       },
     ]);
 
+    config.performance
+      .maxEntrypointSize(40000000)
+      .maxAssetSize(40000000);
+
+    config.plugins.delete('prefetch');
+
     return config;
   },
   devServer: {
@@ -21,4 +28,7 @@ module.exports = {
     },
   },
   transpileDependencies: ['vuetify'],
+  filenameHashing: false,
+  productionSourceMap: false,
+  css: { sourceMap: false }
 };
