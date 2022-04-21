@@ -133,6 +133,14 @@
               </tr>
             </tbody>
           </v-simple-table>
+          <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length="10"
+              prev-icon="mdi-menu-left"
+              next-icon="mdi-menu-right"
+            ></v-pagination>
+          </div>
         </v-row>
       </v-container>
       <v-container v-if="noData" :class="styles.arrayList.noData">
@@ -178,6 +186,7 @@ import {
   VAvatar,
   VSpacer,
   VSimpleTable,
+  VPagination,
 } from 'vuetify/lib';
 import { ValidationIcon, ValidationBadge } from '../controls/components/index';
 
@@ -202,12 +211,18 @@ const controlRenderer = defineComponent({
     ValidationIcon,
     ValidationBadge,
     VSimpleTable,
+    VPagination,
   },
   props: {
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyArrayControl(useJsonFormsArrayControl(props));
+    return {
+      ...useVuetifyArrayControl(useJsonFormsArrayControl(props)),
+      ...{
+        page: 1,
+      },
+    };
   },
   computed: {
     arraySchema(): JsonSchema | undefined {
@@ -221,6 +236,7 @@ const controlRenderer = defineComponent({
       return !this.control.data || this.control.data.length === 0;
     },
   },
+
   methods: {
     composePaths,
     createDefaultValue,
