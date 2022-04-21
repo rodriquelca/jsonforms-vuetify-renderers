@@ -68,7 +68,7 @@ export class PropertiesServiceImpl implements PropertiesService {
       if (!elementSchemas) {
         return undefined;
       }
-      // console.log(`Map key is:${key} and value is:${value}`);
+      // log(`Map key is:${key} and value is:${value}`);
       schemaDecoratorsMapping.set(
         key,
         value.reduce(
