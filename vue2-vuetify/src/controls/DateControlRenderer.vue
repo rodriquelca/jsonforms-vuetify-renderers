@@ -16,7 +16,6 @@
       <template v-slot:activator="{ on, attrs }">
         <v-text-field
           type="date"
-          v-model="date"
           :id="control.id + '-input'"
           :class="styles.control.input"
           :disabled="!control.enabled"
