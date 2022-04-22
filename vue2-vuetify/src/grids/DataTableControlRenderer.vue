@@ -29,24 +29,34 @@
                   <span class="text-h5">{{ formTitle }}</span>
                 </v-card-title>
                 <v-card-text>
-                  <dispatch-renderer
+                  <json-forms
+                    :data="subData"
                     :schema="control.schema"
                     :uischema="foundUISchema"
-                    :path="composePaths(control.path, 0)"
-                    :enabled="control.enabled"
                     :renderers="control.renderers"
-                    :cells="control.cells"
+                    @change="onChange"
                   />
                 </v-card-text>
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue darken-1" text> Cancel </v-btn>
-                  <v-btn color="blue darken-1" text> Save </v-btn>
+                  <v-btn color="blue darken-1" text @click="addItemClick">
+                    Save
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
           </v-toolbar>
+        </template>
+        <template v-slot:item.index="{ item }">
+          {{ control.data.indexOf(item) + 1 }}
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon small class="mr-2" @click="editItem(item)">
+            mdi-pencil
+          </v-icon>
+          <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
         </template>
       </v-data-table>
     </v-card-text>
@@ -64,6 +74,7 @@ import {
   uiTypeIs,
   findUISchema,
   UISchemaElement,
+  mapStateToArrayControlProps,
 } from '@jsonforms/core';
 import startCase from 'lodash/startCase';
 import { defineComponent } from '../vue';
@@ -71,10 +82,16 @@ import {
   DispatchCell,
   DispatchRenderer,
   rendererProps,
-  useJsonFormsArrayControl,
   RendererProps,
+  JsonForms,
+  JsonFormsChangeEvent,
+  useControl,
+  ControlProps,
 } from '@jsonforms/vue2';
-import { useVuetifyArrayControl } from '../util';
+import {
+  useVuetifyArrayControl,
+  mapDispatchToArrayControlPropsEx,
+} from '../util';
 import {
   VCard,
   VCardTitle,
@@ -90,9 +107,18 @@ import {
   VSpacer,
   VBtn,
   VDivider,
+  VIcon,
 } from 'vuetify/lib';
 import { ValidationIcon, ValidationBadge } from '../controls/components/index';
+import { isEqual } from 'lodash';
 
+const useJsonFormsTableControl = (props: ControlProps) => {
+  return useControl(
+    props,
+    mapStateToArrayControlProps,
+    mapDispatchToArrayControlPropsEx
+  );
+};
 const controlRenderer = defineComponent({
   name: 'data-table-control-renderer',
   components: {
@@ -116,31 +142,54 @@ const controlRenderer = defineComponent({
     VSpacer,
     VBtn,
     VDivider,
+    JsonForms,
+    VIcon,
   },
   props: {
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
     return {
-      ...useVuetifyArrayControl(useJsonFormsArrayControl(props)),
+      ...useVuetifyArrayControl(useJsonFormsTableControl(props)),
       ...{
         page: 1,
-
+        subData: {},
+        editedIndex: -1,
         dialog: false,
         dialogDelete: false,
-        headers: [
-          {
-            text: 'Messages',
-            align: 'start',
-            sortable: false,
-            value: 'message',
-          },
-          { text: 'Date', value: 'date' },
-        ],
+        // headers: [
+        //   // {
+        //   //   text: 'Messages',
+        //   //   align: 'start',
+        //   //   sortable: false,
+        //   //   value: 'message',
+        //   // },
+        //   // { text: 'Date', value: 'date' },
+        //   { text: 'Actions', value: 'actions', sortable: false },
+        // ],
       },
     };
   },
   computed: {
+    headers() {
+      const headers: any = [];
+      headers.push({
+        value: 'index',
+        text: '#',
+      });
+      for (const property in this.control.schema.properties) {
+        headers.push({
+          text: property,
+          value: property,
+        });
+      }
+      headers.push({
+        text: 'Actions',
+        value: 'actions',
+        sortable: false,
+      });
+      return headers;
+    },
     foundUISchema(): UISchemaElement {
       return findUISchema(
         this.control.uischemas,
@@ -157,23 +206,25 @@ const controlRenderer = defineComponent({
   methods: {
     composePaths,
     createDefaultValue,
-    addButtonClick() {
-      this.addItem(
-        this.control.path,
-        createDefaultValue(this.control.schema)
-      )();
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.subData = {};
+        this.editedIndex = -1;
+      });
     },
-    moveUpClick(event: Event, toMove: number): void {
-      event.stopPropagation();
-      this.moveUp?.(this.control.path, toMove)();
+    addItemClick() {
+      if (this.editedIndex > -1) {
+        this.updateItem?.(this.control.path, this.editedIndex, this.subData)();
+      } else {
+        this.addItem(this.control.path, this.subData)();
+      }
+      this.close();
     },
-    moveDownClick(event: Event, toMove: number): void {
-      event.stopPropagation();
-      this.moveDown?.(this.control.path, toMove)();
-    },
-    removeItemsClick(event: Event, toDelete: number[]): void {
-      event.stopPropagation();
-      this.removeItems?.(this.control.path, toDelete)();
+
+    deleteItem(item: any): void {
+      const toDelete = this.control.data?.indexOf(item);
+      this.removeItems?.(this.control.path, [toDelete])();
     },
     getValidColumnProps(scopedSchema: JsonSchema) {
       if (
@@ -191,13 +242,24 @@ const controlRenderer = defineComponent({
       return this.control.schema.properties?.[prop]?.title ?? startCase(prop);
     },
 
-    resolveUiSchema(propName: string) {
-      return this.control.schema.properties
-        ? this.controlWithoutLabel(`#/properties/${propName}`)
-        : this.controlWithoutLabel('#');
+    // resolveUiSchema(propName: string) {
+    //   return this.control.schema.properties
+    //     ? this.controlWithoutLabel(`#/properties/${propName}`)
+    //     : this.controlWithoutLabel('#');
+    // },
+    // controlWithoutLabel(scope: string): ControlElement {
+    //   return { type: 'Control', scope: scope, label: false };
+    // },
+    onChange(event: JsonFormsChangeEvent): void {
+      if (!isEqual(event.data, this.subData)) {
+        this.subData = event.data;
+      }
     },
-    controlWithoutLabel(scope: string): ControlElement {
-      return { type: 'Control', scope: scope, label: false };
+    editItem(item: any) {
+      console.log(item);
+      this.editedIndex = this.control.data?.indexOf(item);
+      this.subData = Object.assign({}, item);
+      this.dialog = true;
     },
   },
 });

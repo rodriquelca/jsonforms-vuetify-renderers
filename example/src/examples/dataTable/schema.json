@@ -16,12 +16,15 @@
           },
           "enum": {
             "type": "string",
-            "enum": ["foo", "bar"]
+            "enum": [
+              "foo",
+              "bar"
+            ]
           }
         }
       },
       "minItems": 1,
-      "maxItems": 5
+      "maxItems": 15
     }
   }
 }
