@@ -199,7 +199,6 @@ const controlRenderer = defineComponent({
             schemaElement,
             evt.added.element.type
           );
-          debugger;
           for (let item of parent.linkedUISchemaElements) {
             this.$store.dispatch('app/addScopedElementToTable', {
               uiSchemaElement: newUIElement,

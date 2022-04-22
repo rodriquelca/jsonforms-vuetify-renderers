@@ -141,12 +141,6 @@ const droppableRenderer = defineComponent({
     },
     removeItemsClick(event: Event, toDelete: number[]): void {
       event.stopPropagation();
-      console.log('remove item: ' + toDelete);
-      debugger;
-      // this.useJsonForm.layout.value.removeItems?.(
-      //   this.useJsonForm.layout.value.path,
-      //   toDelete
-      // )();
     },
   },
 });

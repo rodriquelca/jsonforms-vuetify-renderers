@@ -252,21 +252,12 @@ const controlRenderer = defineComponent({
       return this.control.schema.properties?.[prop]?.title ?? startCase(prop);
     },
 
-    // resolveUiSchema(propName: string) {
-    //   return this.control.schema.properties
-    //     ? this.controlWithoutLabel(`#/properties/${propName}`)
-    //     : this.controlWithoutLabel('#');
-    // },
-    // controlWithoutLabel(scope: string): ControlElement {
-    //   return { type: 'Control', scope: scope, label: false };
-    // },
     onChange(event: JsonFormsChangeEvent): void {
       if (!isEqual(event.data, this.subData)) {
         this.subData = event.data;
       }
     },
     editItem(item: any) {
-      console.log(item);
       this.editedIndex = this.control.data?.indexOf(item);
       this.subData = Object.assign({}, item);
       this.dialog = true;
