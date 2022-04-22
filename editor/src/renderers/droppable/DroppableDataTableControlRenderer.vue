@@ -170,7 +170,6 @@ const controlRenderer = defineComponent({
             evt.added.element.type === 'File')
         ) {
           //here update the schema
-          debugger;
           const property = evt.added.element.uiSchemaElementProvider();
           const newElement = buildSchemaTree(property.control);
           const parent = this.editorSchemaModel.properties.get(
@@ -200,6 +199,7 @@ const controlRenderer = defineComponent({
             schemaElement,
             evt.added.element.type
           );
+          debugger;
           for (let item of parent.linkedUISchemaElements) {
             this.$store.dispatch('app/addScopedElementToTable', {
               uiSchemaElement: newUIElement,

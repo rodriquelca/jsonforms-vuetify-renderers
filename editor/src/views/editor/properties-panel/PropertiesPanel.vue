@@ -127,6 +127,7 @@ const PropertiesPanel = defineComponent({
   },
   methods: {
     setSelection: function (newSelection) {
+      debugger;
       this.uiElement = tryFindByUUID(this.uischema, newSelection);
       this.generalData = omit(this.uiElement, [
         'uuid',

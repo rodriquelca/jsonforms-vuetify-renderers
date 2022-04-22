@@ -108,6 +108,7 @@ const droppableRenderer = defineComponent({
           debugger;
           //here update the schema
           const property = evt.added.element.uiSchemaElementProvider();
+          debugger;
           const newElement = buildSchemaTree(property.control);
           this.$store.dispatch('app/addPropertyToSchema', {
             schemaElement: newElement,
