@@ -143,7 +143,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .listTitleTemplate {
   white-space: pre-wrap;
 }

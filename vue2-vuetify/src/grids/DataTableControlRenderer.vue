@@ -4,14 +4,18 @@
       <v-data-table
         :headers="headers"
         :items="control.data"
-        :items-per-page="5"
+        :items-per-page="appliedOptions.perPage || 10"
         class="elevation-1"
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>My CRUD</v-toolbar-title>
-            <v-divider class="mx-4" inset vertical></v-divider>
+            <v-toolbar-title>{{ computedLabel }}</v-toolbar-title>
+            <validation-icon
+              v-if="control.childErrors.length > 0"
+              :errors="control.childErrors"
+            />
             <v-spacer></v-spacer>
+
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
@@ -40,7 +44,9 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text> Cancel </v-btn>
+                  <v-btn color="blue darken-1" text @click="close">
+                    Cancel
+                  </v-btn>
                   <v-btn color="blue darken-1" text @click="addItemClick">
                     Save
                   </v-btn>
@@ -157,6 +163,7 @@ const controlRenderer = defineComponent({
         editedIndex: -1,
         dialog: false,
         dialogDelete: false,
+
         // headers: [
         //   // {
         //   //   text: 'Messages',
@@ -171,6 +178,9 @@ const controlRenderer = defineComponent({
     };
   },
   computed: {
+    formTitle(): string {
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item';
+    },
     headers() {
       const headers: any = [];
       headers.push({
