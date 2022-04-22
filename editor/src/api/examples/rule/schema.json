@@ -4,26 +4,11 @@
     "name": {
       "type": "string"
     },
-    "dead": {
-      "type": "boolean"
-    },
-    "kindOfDead": {
+    "yesOrNo": {
       "type": "string",
       "enum": [
-        "Zombie",
-        "Vampire",
-        "Ghoul"
-      ]
-    },
-    "vegetables": {
-      "type": "boolean"
-    },
-    "kindOfVegetables": {
-      "type": "string",
-      "enum": [
-        "All",
-        "Some",
-        "Only potatoes"
+        "yes",
+        "no"
       ]
     }
   }

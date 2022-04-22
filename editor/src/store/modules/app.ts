@@ -1,6 +1,5 @@
-import { assign, remove } from 'lodash';
+import { assign } from 'lodash';
 // Pathify
-
 import { CategorizationService } from '../../api/categorizationService';
 import { make, Payload } from 'vuex-pathify';
 import { AppState } from './types';
@@ -9,21 +8,16 @@ import { Module } from 'vuex';
 import { createAjv, extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import {
   DefaultPaletteService,
-  PaletteService,
 } from '../../api/paletteService';
-import { createControl } from '../../util/generators/uiSchema';
 const ajv = createAjv({ useDefaults: true });
 
 import { withCloneTree, withCloneTrees } from '../../util/clone';
 import {
   findByUUID,
   getRoot,
-  isEditorControl,
-  isEditorLayout,
   isUUIDError,
   linkElements,
   linkSchemas,
-  traverse,
   UUIDError,
 } from '../../util/schemasUtil';
 import {
@@ -41,6 +35,8 @@ import {
 } from '../../model/uischema';
 
 import { CollectionStore } from '@jsonforms/vue2';
+import mutationsEditor from './editor/mutations';
+import actionsEditor from './editor/actions';
 /** Removes the given UI element from its tree.
  *  If a SchemaElement is provided, the element to remove will be cleaned up from all linkedUISchemaElements fields in the schema.
  */
@@ -132,7 +128,6 @@ const createUnscopedUiSchema = (state, payload) => {
     payload.layoutUUID,
     state.editor.uiSchema,
     (newUiSchema) => {
-      debugger;
       const newUIElement = payload.uiSchemaElement;
       newUIElement.parent = newUiSchema;
       (newUiSchema as EditorLayout).elements.splice(
@@ -153,7 +148,6 @@ const createScopedElementToLayout = (state, payload) => {
     payload.schemaUUID,
     state,
     (newUiSchema, newSchema) => {
-      debugger;
       const newUIElement = payload.uiSchemaElement;
       newUIElement.parent = newUiSchema;
       (newUiSchema as EditorLayout).elements.splice(
@@ -183,7 +177,6 @@ const createScopedElementToTable = (state, payload) => {
     payload.schemaUUID,
     state,
     (newUiSchema, newSchema) => {
-      debugger;
       const newUIElement = payload.uiSchemaElement;
       // newUIElement.parent = newUiSchema;
       (newUiSchema as EditorLayout).options.detail.elements.splice(
@@ -211,7 +204,6 @@ const addPropertyToSchema = (state, payload) => {
     payload.elementUUID,
     state.editor,
     (clonedSchema) => {
-      debugger;
       const newElement = payload.schemaElement;
       newElement.parent = clonedSchema;
       let counter = 0;
@@ -483,6 +475,7 @@ const state: AppState = {
 const mutations = {
   ...make.mutations(state),
   ...CollectionStore.mutations,
+  ...mutationsEditor,
   SET_SCHEMA: (state, value) => {
     state.editor.schema = value;
   },
@@ -530,6 +523,7 @@ const actions = {
   // automatically create only `setItems()` action
   ...make.actions(state),
   ...CollectionStore.actions,
+  ...actionsEditor,
   // manually add load items action
   getPaletteElements({ commit }) {
     const paletteService = new DefaultPaletteService();
