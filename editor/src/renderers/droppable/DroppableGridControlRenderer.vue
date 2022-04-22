@@ -30,14 +30,14 @@
       </v-toolbar>
     </v-card-title>
     <v-card-text>
-      <dispatch-renderer
+      <!-- <dispatch-renderer
         :schema="control.schema"
         :uischema="foundUISchema"
         :path="composePaths(control.path, 0)"
         :enabled="control.enabled"
         :renderers="control.renderers"
         :cells="control.cells"
-      />
+      /> -->
     </v-card-text>
   </v-card>
 </template>

@@ -167,7 +167,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .vpm-settingsi18n-text > div > div > div > .v-label {
   font-size: 12px !important;
 }

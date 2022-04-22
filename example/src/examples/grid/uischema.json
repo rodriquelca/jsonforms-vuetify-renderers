@@ -2,12 +2,19 @@
   "type": "VerticalLayout",
   "elements": [
     {
-      "type": "Control",
+      "type": "GridControl",
       "scope": "#/properties/comments",
       "options": {
-        "extendedType": "grid",
-        "restrict": true,
-        "pageSize": 1
+        "columns": [
+          {
+            "type": "Control",
+            "scope": "#/properties/date"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/message"
+          }
+        ]
       }
     }
   ]

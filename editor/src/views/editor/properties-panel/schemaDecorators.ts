@@ -146,7 +146,7 @@ export const variableDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement
 ) => {
   if (
-    ['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest'].includes(
+    ['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest', 'DataTableControl'].includes(
       uiElement?.type
     )
   ) {
@@ -553,6 +553,33 @@ export const restrictDecorator: PropertySchemasDecorator = (
   return schemas;
 };
 
+export const perPageDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (['DataTableControl'].includes(uiElement?.type)) {
+    addSchemaOptionsProperty(schemas.schema, {
+      perPage: {
+        "type": "integer",
+        "enum": [
+          5,
+          10,
+          15,
+          20,
+          50,
+          100
+        ]
+      },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/perPage'
+    });
+  }
+  return schemas;
+};
+
 export const createPropertyControl = (
   controlScope: string
 ): ControlElement => ({
@@ -595,6 +622,7 @@ export const defaultSchemaDecoratorsCollection = new Map<
       maxLengthDecorator,
       trimDecorator,
       restrictDecorator,
+      perPageDecorator
     ],
   ],
   ['rulesEditor', [ruleEditorDecorator]],

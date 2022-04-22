@@ -178,18 +178,15 @@ const createScopedElementToTable = (state, payload) => {
     state,
     (newUiSchema, newSchema) => {
       const newUIElement = payload.uiSchemaElement;
-      // newUIElement.parent = newUiSchema;
       (newUiSchema as EditorLayout).options.detail.elements.splice(
         payload.index,
         0,
-        { type: newUIElement.type, scope: newUIElement.scope, label: newUIElement.label }
+        newUIElement
       );
-
-      // if (!newSchema || !linkElements(newUIElement, payload.schemaElement)) {
-      //   console.error('Could not add new UI element', newUIElement);
-      //   return state;
-      // }
-
+      if (!newSchema || !linkElements(newUIElement, payload.schemaElement)) {
+        console.error('Could not add new UI element', newUIElement);
+        return state;
+      }
       return {
         schema: getRoot(newSchema),
         uiSchema: getRoot(newUiSchema),

@@ -1,0 +1,32 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "DataTableControl",
+      "scope": "#/properties/comments",
+      "options": {
+        "detail": {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/date",
+                  "label": "date"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/message",
+                  "label": "Message"
+                }
+              ]
+            }
+          ]
+        },
+        "perPage": 5
+      }
+    }
+  ]
+}

@@ -6,6 +6,11 @@ import {
   isDescriptionHidden,
   JsonFormsSubStates,
   Resolve,
+  Dispatch,
+  CoreActions,
+  update,
+  moveUp,
+  moveDown
 } from '@jsonforms/core';
 import { RendererProps } from '@jsonforms/vue2';
 import cloneDeep from 'lodash/cloneDeep';
@@ -337,3 +342,70 @@ export const useVuetifyControlExt = <
 const pathControlSchema = (input: string): string => {
   return input.split('/').pop() || '';
 };
+
+export interface DispatchPropsOfArrayControlEx {
+  addItem(path: string, value: any): () => void;
+  removeItems?(path: string, toDelete: number[]): () => void;
+  updateItem?(path: string, toUpdate: number, value: any): () => void;
+  moveUp?(path: string, toMove: number): () => void;
+  moveDown?(path: string, toMove: number): () => void;
+}
+
+/**
+ * Maps state to dispatch properties of an array control.
+ *
+ * @param dispatch the store's dispatch method
+ * @returns {DispatchPropsOfArrayControl} dispatch props of an array control
+ */
+export const mapDispatchToArrayControlPropsEx = (
+  dispatch: Dispatch<CoreActions>
+): DispatchPropsOfArrayControlEx => ({
+  addItem: (path: string, value: any) => () => {
+    dispatch(
+      update(path, array => {
+        if (array === undefined || array === null) {
+          return [value];
+        }
+
+        array.push(value);
+        return array;
+      })
+    );
+  },
+  removeItems: (path: string, toDelete: number[]) => () => {
+    dispatch(
+      update(path, array => {
+        toDelete
+          .sort()
+          .reverse()
+          .forEach(s => array.splice(s, 1));
+        return array;
+      })
+    );
+  },
+  updateItem: (path: string, toUpdate: number, value: any) => () => {
+    dispatch(
+      update(path, array => {
+        array[toUpdate] = value
+        return array;
+      })
+    );
+  },
+  moveUp: (path, toMove: number) => () => {
+    dispatch(
+      update(path, array => {
+        moveUp(array, toMove);
+        return array;
+      })
+    );
+  },
+  moveDown: (path, toMove: number) => () => {
+    dispatch(
+      update(path, array => {
+        moveDown(array, toMove);
+        return array;
+      })
+    );
+  },
+
+});

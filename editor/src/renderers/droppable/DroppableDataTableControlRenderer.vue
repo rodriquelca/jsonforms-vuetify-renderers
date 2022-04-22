@@ -1,98 +1,161 @@
 <template>
-  <v-container justify-space-around align-content-center>
-    <v-row no-gutters>
-      <v-simple-table class="array-container flex">
-        <tbody>
-          <draggable
-            :class="draggableClass"
-            :value="[]"
-            group="people"
-            @change="handleChange"
-            :key="'draggable' + uischema.uuid"
-            :sort="true"
-            :disabled="!enabledDrag"
-            @start="dragging = true"
-            @end="dragging = false"
-            tag="tr"
-          >
-            <td v-for="(element, index) in uischema.elements" :key="index">
-              <dispatch-renderer
-                :key="element.uuid"
-                updateItemIndex
-                :schema="useJsonForm.layout.value.schema"
-                :uischema="element"
-                :path="useJsonForm.layout.value.path"
-                :enabled="useJsonForm.layout.value.enabled"
-                :renderers="customRenderers"
-                :cells="useJsonForm.layout.value.cells"
-              />
-            </td>
-          </draggable>
-        </tbody>
-      </v-simple-table>
-    </v-row>
-    <!-- </div> -->
-  </v-container>
+  <v-card v-if="control.visible" :class="styles.arrayList.root" elevation="0">
+    <v-card-title>
+      <v-toolbar flat :class="styles.arrayList.toolbar">
+        <v-toolbar-title :class="styles.arrayList.label">
+          Grid Label: {{ computedLabel }}</v-toolbar-title
+        >
+        <validation-icon
+          v-if="control.childErrors.length > 0"
+          :errors="control.childErrors"
+        />
+        <v-spacer></v-spacer>
+
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on: onTooltip }">
+            <v-btn
+              fab
+              text
+              elevation="0"
+              small
+              :aria-label="`Add to ${control.label}`"
+              v-on="onTooltip"
+              :class="styles.arrayList.addButton"
+            >
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          {{ `Add to ${control.label}` }}
+        </v-tooltip>
+      </v-toolbar>
+    </v-card-title>
+    <v-card-text>
+      <v-row no-gutters>
+        <v-simple-table class="array-container flex">
+          <tbody>
+            <draggable
+              :class="draggableClass"
+              :value="[]"
+              group="people"
+              @change="handleChange"
+              :key="'draggable' + uischema.uuid"
+              :sort="true"
+              :disabled="!enabledDrag"
+              @start="dragging = true"
+              @end="dragging = false"
+              tag="tr"
+            >
+              <td
+                v-for="(element, index) in uischema.options.detail.elements"
+                :key="index"
+              >
+                <dispatch-renderer
+                  :key="element.uuid"
+                  updateItemIndex
+                  :schema="control.schema"
+                  :uischema="element"
+                  :path="control.path"
+                  :enabled="control.enabled"
+                  :renderers="customRenderers"
+                  :cells="control.cells"
+                />
+              </td>
+            </draggable>
+          </tbody>
+        </v-simple-table>
+      </v-row>
+    </v-card-text>
+  </v-card>
 </template>
+
 <script lang="ts">
 import { sync } from 'vuex-pathify';
-import { Uri } from 'monaco-editor/esm/vs/editor/editor.api';
-import { getMonacoModelForUri } from '@/core/jsonSchemaValidation';
-import { useExportUiSchema } from '../../util';
-import draggable from 'vuedraggable';
 import {
-  uiTypeIs,
+  isObjectArray,
   JsonFormsRendererRegistryEntry,
-  Layout,
+  and,
   rankWith,
+  composePaths,
+  ControlElement,
+  findUISchema,
+  UISchemaElement,
+  uiTypeIs,
 } from '@jsonforms/core';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from '../../util/vue';
 import {
+  DispatchCell,
   DispatchRenderer,
   rendererProps,
-  useJsonFormsLayout,
+  useJsonFormsArrayControl,
   RendererProps,
 } from '@jsonforms/vue2';
-import { useVuetifyLayout } from '@jsonforms/vue2-vuetify';
-import { VContainer, VRow, VCol } from 'vuetify/lib';
-import { entry as DroppableElementRegistration } from './DroppableElement.vue';
+import { useVuetifyArrayControl } from '@jsonforms/vue2-vuetify';
+import {
+  VCard,
+  VCardTitle,
+  VCardText,
+  VToolbar,
+  VToolbarTitle,
+  VTooltip,
+  VIcon,
+  VBtn,
+  VSpacer,
+} from 'vuetify/lib';
+import draggable from 'vuedraggable';
 import { createControl, tryFindByUUID } from '@/util';
 import { buildSchemaTree } from '../../model/schema';
+import { entry as DroppableElementRegistration } from './DroppableElement.vue';
 import _ from 'lodash';
-
-const droppableRenderer = defineComponent({
-  name: 'droppable-simple-table-renderer',
+const controlRenderer = defineComponent({
+  name: 'droppable-data-table-control-renderer',
   components: {
+    DispatchCell,
     DispatchRenderer,
-    VContainer,
-    VRow,
-    VCol,
+    VCard,
+    VCardTitle,
+    VCardText,
+
+    VToolbar,
+    VToolbarTitle,
+    VTooltip,
+    VIcon,
+    VBtn,
+    VSpacer,
     draggable,
   },
-
   props: {
-    ...rendererProps<Layout>(),
+    ...rendererProps<ControlElement>(),
   },
-  setup(props: RendererProps<Layout>) {
+  setup(props: RendererProps<ControlElement>) {
     return {
-      useJsonForm: useVuetifyLayout(useJsonFormsLayout(props)),
-      enabledDrag: true,
-      dragging: false,
+      ...useVuetifyArrayControl(useJsonFormsArrayControl(props)),
+      ...{ enabledDrag: true, dragging: false },
     };
   },
   computed: {
-    draggableClass(): string {
-      return 'dragArea  ' + this.useJsonForm.styles.horizontalLayout.item;
-    },
     customRenderers(): Array<any> {
       return (
         this.renderers && [...this.renderers, DroppableElementRegistration]
+      );
+    },
+    draggableClass(): string {
+      return 'dragArea  ' + this.styles.horizontalLayout.item;
+    },
+    foundUISchema(): UISchemaElement {
+      return findUISchema(
+        this.control.uischemas,
+        this.control.schema,
+        this.control.uischema.scope,
+        this.control.path,
+        undefined,
+        this.control.uischema
       );
     },
     editorUiSchemaModel: sync('app/editor@uiSchema'),
     editorSchemaModel: sync('app/editor@schema'),
   },
   methods: {
+    composePaths,
     handleChange(evt) {
       if (evt.added) {
         if (
@@ -109,7 +172,9 @@ const droppableRenderer = defineComponent({
           //here update the schema
           const property = evt.added.element.uiSchemaElementProvider();
           const newElement = buildSchemaTree(property.control);
-          const parent = this.editorSchemaModel.properties.get(this.path);
+          const parent = this.editorSchemaModel.properties.get(
+            this.control.path
+          );
           this.$store.dispatch('app/addPropertyToSchema', {
             schemaElement: newElement,
             elementUUID: parent.items.uuid,
@@ -162,17 +227,7 @@ const droppableRenderer = defineComponent({
     updateItemIndex(item: any) {
       const auxElement = this.uischema.elements.splice(item.oldIndex, 1);
       this.uischema.elements.splice(item.newIndex, 0, auxElement[0]);
-      this.setEditorUiSchema(this.editorUiSchemaModel);
-    },
-    /**
-     * Update uiSchema in app/editor
-     */
-    setEditorUiSchema(schemaModel): void {
-      const modelUri = Uri.parse('json://core/specification/uischema.json');
-      getMonacoModelForUri(
-        modelUri,
-        JSON.stringify(useExportUiSchema(schemaModel), null, 2)
-      );
+      //   this.setEditorUiSchema(this.editorUiSchemaModel);
     },
     findElementSchema(schemaGlobal, schemaLocal) {
       let ele;
@@ -189,11 +244,11 @@ const droppableRenderer = defineComponent({
   },
 });
 
-export default droppableRenderer;
+export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
-  renderer: droppableRenderer,
-  tester: rankWith(45, uiTypeIs('TableLayout')),
+  renderer: controlRenderer,
+  tester: rankWith(6, and(isObjectArray, uiTypeIs('DataTableControl'))),
 };
 </script>
 <style scoped>

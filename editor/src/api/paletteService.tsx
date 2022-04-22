@@ -381,7 +381,7 @@ const controlElements = [
 ];
 const complexElements = [
   {
-    type: 'GridControl',
+    type: 'DataTableControl',
     label: 'Grid',
     icon: 'mdi-grid',
     uiSchemaElementProvider: () => {
@@ -398,10 +398,10 @@ const complexElements = [
 
       return {
         control,
-        variable: "grid",
+        variable: "dataTable",
         uiOptions: {
           "detail": {
-            "type": "TableLayout",
+            "type": "VerticalLayout",
             "elements": [
             ]
           }

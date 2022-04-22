@@ -41,6 +41,7 @@ import { input as ruleMultiple } from './rule-multiple';
 import { input as suggest } from './suggest';
 import { input as multipleFile } from './multiple-file';
 import { input as grid } from './grid';
+import { input as dataTable } from './dataTable';
 import { input as variables } from './variables';
 import { input as subForm } from './sub-form';
 import { input as dependent } from './dependent';
@@ -256,6 +257,11 @@ export const examples = [
     id: 'grid',
     title: 'Grid',
     input: grid,
+  },
+  {
+    id: 'dataTable',
+    title: 'Data Table',
+    input: dataTable,
   },
   {
     id: 'variables',

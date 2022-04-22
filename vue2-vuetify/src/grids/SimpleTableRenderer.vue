@@ -4,6 +4,7 @@
       <v-simple-table>
         <thead v-if="useJsonForm.layout.value.schema.type === 'object'">
           <tr>
+            <th scope="col"></th>
             <th
               v-for="(element, index) in uischema.elements"
               :key="`${useJsonForm.layout.value.path}-header-${index}`"
@@ -19,10 +20,12 @@
             :key="`${useJsonForm.layout.value.path.path}-${i}`"
             :class="useJsonForm.styles.arrayList.item"
           >
+            <td>
+              {{ i }}
+            </td>
             <td v-for="(element, index) in uischema.elements" :key="index">
               <dispatch-renderer
                 :key="element.uuid"
-                updateItemIndex
                 :schema="useJsonForm.layout.value.schema"
                 :uischema="element"
                 :path="useJsonForm.layout.value.path"
@@ -48,7 +51,7 @@
                     small
                     aria-label="Delete"
                     :class="useJsonForm.styles.arrayList.itemDelete"
-                    @click.native="removeItemsClick($event, [index])"
+                    @click.native="removeItemsClick($event, [i])"
                   >
                     <v-icon class="notranslate">mdi-delete</v-icon>
                   </v-btn>
@@ -138,7 +141,7 @@ const droppableRenderer = defineComponent({
     },
     removeItemsClick(event: Event, toDelete: number[]): void {
       event.stopPropagation();
-      console.log('remove item: ' + toDelete);
+      console.log(toDelete);
     },
   },
 });
