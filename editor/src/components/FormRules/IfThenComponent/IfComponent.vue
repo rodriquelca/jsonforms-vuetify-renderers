@@ -152,9 +152,6 @@ export default {
             }
         },
     },
-    mounted() {
-        this.items = this.loadScopes();
-    },
     methods: {
         edit(index, item) {
             let selectedItemEdit = this.selectedItemEdit;
