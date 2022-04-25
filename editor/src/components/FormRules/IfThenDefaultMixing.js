@@ -43,7 +43,6 @@ export default {
             };
         },
         parseComplexExpression(data) {
-            debugger;
             let operator = [],
                 res = [],
                 cloneData = _.cloneDeep(data);

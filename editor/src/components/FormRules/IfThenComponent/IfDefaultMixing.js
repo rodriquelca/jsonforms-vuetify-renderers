@@ -14,7 +14,23 @@ export default {
             },
             values: {
                 items: [{ header: 'Create a value' }]
-            }
+            },
+            initialParentheses: {
+                items: [{
+                    text: '(',
+                    value: _.random(0, 10000000),
+                    color: 'orange',
+                    type: 'InitialParentheses'
+                }]
+            },
+            finalParentheses: {
+                items: [{
+                    text: ')',
+                    value: _.random(0, 10000000),
+                    color: 'orange',
+                    type: 'FinalParentheses'
+                }]
+            },
         }
     },
     mounted() {
@@ -35,7 +51,7 @@ export default {
                     text: el,
                     value: el,
                     color: this.scopes.colors[_.random(0, this.scopes.colors.length - 1)],
-                    type: 'field',
+                    type: 'Field',
                 })
             });
             return res;
@@ -46,25 +62,25 @@ export default {
                     text: '=',
                     value: _.random(0, 10000000),
                     color: 'blue',
-                    type: 'operator',
+                    type: 'Operator',
                 },
                 {
                     text: '!=',
                     value: _.random(0, 10000000),
                     color: 'blue',
-                    type: 'operator',
+                    type: 'Operator',
                 },
                 {
                     text: '<',
                     value: _.random(0, 10000000),
                     color: 'blue',
-                    type: 'operator',
+                    type: 'Operator',
                 },
                 {
                     text: '>',
                     value: _.random(0, 10000000),
                     color: 'blue',
-                    type: 'operator',
+                    type: 'Operator',
                 },
             ];
         },
@@ -74,18 +90,38 @@ export default {
                     text: 'AND',
                     value: _.random(0, 10000000),
                     color: 'red',
-                    type: 'logicOperator',
+                    type: 'LogicOperator',
                 },
                 {
                     text: 'OR',
                     value: _.random(0, 10000000),
                     color: 'red',
-                    type: 'logicOperator',
+                    type: 'LogicOperator',
                 }, {
                     text: 'XOR',
                     value: _.random(0, 10000000),
                     color: 'red',
-                    type: 'logicOperator',
+                    type: 'LogicOperator',
+                }
+            ];
+        },
+        loadInitialParentheses() {
+            return [
+                {
+                    text: '(',
+                    value: _.random(0, 10000000),
+                    color: 'orange',
+                    type: 'InitialParentheses'
+                }
+            ];
+        },
+        loadFinalParentheses() {
+            return [
+                {
+                    text: ')',
+                    value: _.random(0, 10000000),
+                    color: 'orange',
+                    type: 'FinalParentheses'
                 }
             ];
         }
