@@ -38,44 +38,6 @@
         <div class="d-block pt-2">
             <slot></slot>
         </div>
-
-        <!--v-row
-            @mouseover="hover = true"
-            @mouseleave="hover = false"
-            @click="onClick"
-        >
-            <v-col>
-                <Icon :type="wrappedElement.type" class="px-2" />
-
-                <span class="d-inline caption" v-if="ruleEffect">
-                    <span class="font-weight-bold">R</span>
-                    <span class="font-italic"> ({{ ruleEffect }})</span>
-                </span>
-
-                <div class="d-inline caption">
-                    {{ wrappedElement.scope }}
-                </div>
-            </v-col>
-
-            <v-col cols="1">
-                <v-btn
-                    class="mx-2"
-                    fab
-                    right
-                    absolute
-                    x-small
-                    v-if="hover"
-                    @click="onRemove"
-                >
-                    <v-icon> mdi-delete </v-icon>
-                </v-btn>
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col>
-                <slot></slot>
-            </v-col>
-        </v-row-->
     </v-card>
 </template>
 
