@@ -6,9 +6,7 @@ import { AppState } from './types';
 import { RootState } from '../types';
 import { Module } from 'vuex';
 import { createAjv, extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
-import {
-  DefaultPaletteService,
-} from '../../api/paletteService';
+import { DefaultPaletteService } from '../../api/paletteService';
 const ajv = createAjv({ useDefaults: true });
 
 import { withCloneTree, withCloneTrees } from '../../util/clone';
@@ -267,7 +265,7 @@ const updateSchemaVariable = (state, payload) => {
           newSchema,
           uiSchemaElement.linkedSchemaElement
         );
-        linkedShemaElement.schema["i18n"] = payload.newVariable;
+        linkedShemaElement.schema['i18n'] = payload.newVariable;
         if (
           linkedShemaElement &&
           linkedShemaElement.parent &&
