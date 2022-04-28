@@ -3,7 +3,7 @@ import _ from "lodash";
  * Predictor class for combobox in IfComponent Expressions
  */
 class FiniteAutomaton {
-    history: Array<any> = [];
+    statesHistory: Array<any> = [];
     expressionGlobal: Array<any> = [];
     state: Array<string> = ["EMPTY"];
     initialParentheses = 0;
@@ -52,13 +52,15 @@ class FiniteAutomaton {
         }
         if (lastSingleExpression.type == "InitialParentheses") {
             state = ["0", "1"];
-            oldState = "0"
+            oldState = "0";
+            this.statesHistory.push(oldState);
             this.updateExpressionGlobal(lastSingleExpression);
             this.initialParentheses = + 1;
         }
         if (lastSingleExpression.type == "Field") {
             state = ["2"];
-            oldState = "1"
+            oldState = "1";
+            this.statesHistory.push(oldState);
             this.updateExpressionGlobal(lastSingleExpression);
         }
 
@@ -79,7 +81,8 @@ class FiniteAutomaton {
         let res, state, oldState = "0";
         if (lastSingleExpression.type == "InitialParentheses") {
             state = ["0", "1"];
-            oldState = "0"
+            oldState = "0";
+            this.statesHistory.push(oldState);
             this.updateExpressionGlobal(lastSingleExpression);
             this.initialParentheses += 1;
         }
@@ -101,6 +104,7 @@ class FiniteAutomaton {
         if (lastSingleExpression.type == "Field") {
             state = "2";
             oldState = "1";
+            this.statesHistory.push(oldState);
             this.updateExpressionGlobal(lastSingleExpression);
         }
         if (state) {
@@ -121,6 +125,7 @@ class FiniteAutomaton {
         if (lastSingleExpression.type == "Operator") {
             state = "3";
             oldState = "2";
+            this.statesHistory.push(oldState);
             this.updateExpressionGlobal(lastSingleExpression);
         }
         if (state) {
@@ -141,6 +146,7 @@ class FiniteAutomaton {
         if (lastSingleExpression.type == "Value") {
             state = this.states["3"].nextState;
             oldState = "3";
+            this.statesHistory.push(oldState);
             this.updateExpressionGlobal(lastSingleExpression);
         }
         if (state) {
@@ -161,6 +167,7 @@ class FiniteAutomaton {
         if (lastSingleExpression.type == "LogicOperator") {
             state = this.states["4"].nextState;
             oldState = "4";
+            this.statesHistory.push(oldState);
             this.updateExpressionGlobal(lastSingleExpression);
         }
         if (state) {
@@ -181,6 +188,7 @@ class FiniteAutomaton {
         if (lastSingleExpression.type == "FinalParentheses") {
             state = this.states["5"].nextState;
             oldState = "5";
+            this.statesHistory.push(oldState);
             this.initialParentheses -= 1;
             this.updateExpressionGlobal(lastSingleExpression);
         }
@@ -193,7 +201,7 @@ class FiniteAutomaton {
         return res;
     }
     /**
-     * Execute the Finite Automaton and verify the states of expression
+     * Execute the Finite Automaton and verify the states of expression, when add new expression
      * @param lastSingleExpression 
      * @returns any
      */
@@ -228,6 +236,30 @@ class FiniteAutomaton {
             }
         }
         return res;
+    }/**
+     * When erase the expression
+     * @returns new accepted states
+     */
+    backExec() {
+        let lastState = "EMPTY";
+        const expression = this.expressionGlobal.pop();
+        // Control in parentheses
+        if (expression.type == "InitialParentheses") {
+            this.initialParentheses--;
+        }
+        if (expression.type == "FinalParentheses") {
+            this.initialParentheses++;
+        }
+        this.statesHistory.pop();
+        // Return new state and set new accepted state this.state
+        if (this.statesHistory.length > 0) {
+            lastState = this.statesHistory[this.statesHistory.length - 1];
+            this.state = this.states[lastState].nextState;
+        }
+        // Return new accepted states validate with parentheses
+        return {
+            nextState: this.verifyFinalParentheses(this.states[lastState].nextState),
+        };
     }
     /**
      * Verify if items returns the final parentheses

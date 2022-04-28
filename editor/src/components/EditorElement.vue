@@ -1,104 +1,160 @@
 <template>
-  <v-card outlined :class="selectedStyle">
-    <v-row
-      @mouseover="hover = true"
-      @mouseleave="hover = false"
-      @click="onClick"
-    >
-      <v-col>
-        <Icon :type="wrappedElement.type" class="px-4" />
+    <v-card outlined :class="selectedStyle" @click="onClick">
+        <div class="d-block">
+            <Icon :type="wrappedElement.type" class="pr-1" />
+            <span class="d-inline caption" v-if="ruleEffect">
+                <span class="font-weight-bold">R</span>
+                <span class="font-italic"> ({{ ruleEffect }})</span>
+            </span>
 
-        <p class="d-inline caption" v-if="ruleEffect">
-          <span class="font-weight-bold">R</span>
-          <span class="font-italic"> ({{ ruleEffect }})</span>
-        </p>
+            <div class="d-inline caption font-weight-bold v-opacity">
+                {{
+                    wrappedElement.scope
+                        ? wrappedElement.scope.split('/').pop()
+                        : ''
+                }}
+            </div>
 
-        <div class="d-inline caption">
-          {{ wrappedElement.scope }}
+            <v-btn
+                fab
+                x-small
+                v-if="hover"
+                @click="onRemove"
+                class="float-right"
+            >
+                <v-icon> mdi-delete </v-icon>
+            </v-btn>
+            <v-btn
+                fab
+                x-small
+                v-if="hover"
+                @click="onRemove"
+                class="float-right"
+            >
+                <v-icon> mdi-pencil-outline </v-icon>
+            </v-btn>
         </div>
-      </v-col>
 
-      <v-col cols="1">
-        <v-btn
-          class="mx-2"
-          fab
-          right
-          absolute
-          x-small
-          v-if="hover"
-          @click="onRemove"
+        <div class="d-block pt-2">
+            <slot></slot>
+        </div>
+
+        <!--v-row
+            @mouseover="hover = true"
+            @mouseleave="hover = false"
+            @click="onClick"
         >
-          <v-icon> mdi-delete </v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <slot></slot>
-      </v-col>
-    </v-row>
-  </v-card>
+            <v-col>
+                <Icon :type="wrappedElement.type" class="px-2" />
+
+                <span class="d-inline caption" v-if="ruleEffect">
+                    <span class="font-weight-bold">R</span>
+                    <span class="font-italic"> ({{ ruleEffect }})</span>
+                </span>
+
+                <div class="d-inline caption">
+                    {{ wrappedElement.scope }}
+                </div>
+            </v-col>
+
+            <v-col cols="1">
+                <v-btn
+                    class="mx-2"
+                    fab
+                    right
+                    absolute
+                    x-small
+                    v-if="hover"
+                    @click="onRemove"
+                >
+                    <v-icon> mdi-delete </v-icon>
+                </v-btn>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col>
+                <slot></slot>
+            </v-col>
+        </v-row-->
+    </v-card>
 </template>
 
 <script lang="ts">
 import { PropType } from 'vue';
 import {
-  EditorUISchemaElement,
-  getUISchemaPath,
-  hasChildren,
+    EditorUISchemaElement,
+    getUISchemaPath,
+    hasChildren,
 } from '../model/uischema';
 import Icon from './Icon.vue';
 import { sync } from 'vuex-pathify';
 export default {
-  name: 'EditorElement',
-  props: {
-    wrappedElement: {
-      required: false,
-      type: Object as PropType<EditorUISchemaElement>,
+    name: 'EditorElement',
+    props: {
+        wrappedElement: {
+            required: false,
+            type: Object as PropType<EditorUISchemaElement>,
+        },
     },
-  },
-  components: {
-    Icon,
-  },
-  data() {
-    return {
-      hover: false,
-    };
-  },
-  computed: {
-    ruleEffect() {
-      return this.wrappedElement.rule?.effect.toLocaleUpperCase();
+    components: {
+        Icon,
     },
-    selectedElement: sync('app/editor@selectedElement'),
-    selectedStyle() {
-      return this.selectedElement === this.wrappedElement.uuid
-        ? 'selected'
-        : '';
+    data() {
+        return {
+            hover: false,
+        };
     },
-  },
+    computed: {
+        ruleEffect() {
+            return this.wrappedElement.rule?.effect.toLocaleUpperCase();
+        },
+        selectedElement: sync('app/editor@selectedElement'),
+        selectedStyle() {
+            return this.selectedElement === this.wrappedElement.uuid
+                ? 'selected pa-2'
+                : 'pa-2';
+        },
+    },
+    watch: {
+        selectedElement() {
+            if (this.selectedElement === this.wrappedElement.uuid) {
+                this.hover = true;
+            } else {
+                this.hover = false;
+            }
+        },
+    },
 
-  methods: {
-    onRemove: function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (!hasChildren(this.wrappedElement)) {
-        this.$store.dispatch(
-          'app/removeUiSchemaElement',
-          this.wrappedElement.uuid
-        );
-      }
+    methods: {
+        onRemove: function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!hasChildren(this.wrappedElement)) {
+                this.$store.dispatch(
+                    'app/removeUiSchemaElement',
+                    this.wrappedElement.uuid
+                );
+            }
+        },
+        onClick: function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            this.selected = true;
+            this.$store.set('app/editor@settings', true);
+            this.$store.set(
+                'app/editor@selectedElement',
+                this.wrappedElement.uuid
+            );
+            this.hover = true;
+        },
     },
-    onClick: function () {
-      this.selected = true;
-      this.$store.set('app/editor@settings', true);
-      this.$store.set('app/editor@selectedElement', this.wrappedElement.uuid);
-    },
-  },
 };
 </script>
 <style scoped>
 .selected {
-  border: 2px dashed rgba(1, 91, 7, 0.982);
-  min-height: 80px;
+    border: 2px solid rgba(53, 225, 144, 0.982);
+}
+.v-opacity {
+    opacity: 0.9;
 }
 </style>
