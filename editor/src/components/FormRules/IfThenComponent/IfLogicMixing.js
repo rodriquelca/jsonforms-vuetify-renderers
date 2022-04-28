@@ -14,15 +14,31 @@ export default {
          * When the expression is erased
          */
         eraseExpression(val, prev) {
-            let res = [];
-            if (val.length % 4 == 0) {
-                res = this.scopes.items;
-            }
-            if (val.length % 4 == 1) {
-                res = this.operators.items;
-            }
-            if (val.length == 2) {
-                res = this.values.items;
+            let res = [], resAutomaton = this.automaton.backExec();
+            if (resAutomaton) {
+                for (const st of resAutomaton.nextState) {
+                    switch (st) {
+                        case "0":
+                            res = res.concat(this.loadInitialParentheses());
+                            break;
+                        case "1":
+                            res = res.concat(this.loadScopes());
+                            break;
+                        case "2":
+                            res = res.concat(this.loadOperators());
+                            break;
+                        case "3":
+                            res = res.concat(this.values.items);
+                            break;
+                        case "4":
+                            res = res.concat(this.loadLogicOperators());
+                            break;
+                        case "5":
+                            res = res.concat(this.loadFinalParentheses());
+                            break;
+
+                    }
+                }
             }
             return res;
         },
@@ -65,7 +81,8 @@ export default {
                     if (typeof v === 'string') {
                         v = {
                             text: v,
-                            color: 'grey',
+                            color: 'white',
+                            value: _.random(0, 10000000),
                             type: 'Value',
                         };
                         this.items.push(v);

@@ -10,7 +10,7 @@
                 </div>
             </v-col>
             <v-col cols="11">
-                <v-card outlined class="pa-3">
+                <v-card outlined class="pa-2">
                     <v-combobox
                         v-model="model"
                         :filter="filter"
@@ -18,12 +18,10 @@
                         :items="items"
                         :search-input.sync="search"
                         hide-selected
-                        label="Search for a field"
                         multiple
                         small-chips
                         class="vpm-thencomp-combobox caption"
                         @blur="onBlurAutocomplete"
-                        @change="$emit('updateIf', model)"
                     >
                         <template v-slot:no-data>
                             <v-list-item>
@@ -40,32 +38,38 @@
                         <template
                             v-slot:selection="{ attrs, item, parent, selected }"
                         >
-                            <v-badge
+                            <!--v-badge
                                 :value="highlightSelectedItem(item)"
                                 :icon="highlightSelectedItem(item)"
                                 color="red"
                                 overlap
+                            -->
+                            <!--v-chip
+                                v-if="item === Object(item)"
+                                v-bind="attrs"
+                                :color="`${item.color} lighten-3`"
+                                :input-value="selected"
+                                label
+                                x-small
+                                @click="clickEditItem(item)"
+                            -->
+                            <CustomChip
+                                :attrs="attrs"
+                                :parent="parent"
+                                :selected="selected"
                             >
-                                <v-chip
-                                    v-if="item === Object(item)"
-                                    v-bind="attrs"
-                                    :color="`${item.color} lighten-3`"
-                                    :input-value="selected"
-                                    label
-                                    small
-                                    @click="clickEditItem(item)"
-                                >
-                                    <span>
-                                        {{ item.text }}
-                                    </span>
-                                    <v-icon
+                                <span>
+                                    {{ item.text }}
+                                </span>
+                            </CustomChip>
+                            <!--v-icon
                                         small
                                         @click="parent.selectItem(item)"
                                     >
                                         $delete
-                                    </v-icon>
-                                </v-chip>
-                            </v-badge>
+                                    </v-icon-->
+
+                            <!--/v-badge-->
                         </template>
                         <template v-slot:item="{ index, item }">
                             <v-text-field
@@ -80,9 +84,9 @@
                             ></v-text-field>
                             <v-chip
                                 v-else
-                                :color="`${item.color} lighten-3`"
                                 dark
                                 label
+                                color="blue-grey darken-1"
                                 x-small
                             >
                                 {{ item.text }}
@@ -91,6 +95,7 @@
                             <v-list-item-action @click.stop>
                                 <v-btn
                                     icon
+                                    x-small
                                     @click.stop.prevent="edit(index, item)"
                                 >
                                     <v-icon>{{
@@ -112,15 +117,16 @@
 import _ from 'lodash';
 import IfDefaultMixing from './IfDefaultMixing';
 import IfLogicMixing from './IfLogicMixing';
+import CustomChip from './CustomChip.vue';
 export default {
     name: 'IfComponent',
-    components: {},
+    components: { CustomChip },
     mixins: [IfDefaultMixing, IfLogicMixing],
     data() {
         return {
             activator: null,
             attach: null,
-            colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
+            colors: ['white'],
             editing: null,
             editingIndex: -1,
             items: [],

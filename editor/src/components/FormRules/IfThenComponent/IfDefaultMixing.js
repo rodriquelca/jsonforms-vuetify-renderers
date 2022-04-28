@@ -4,7 +4,7 @@ export default {
         return {
             scopes: {
                 items: [],
-                colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange', 'red', 'yellow'],
+                colors: ['white'],
             },
             operators: {
                 items: []
@@ -19,7 +19,7 @@ export default {
                 items: [{
                     text: '(',
                     value: _.random(0, 10000000),
-                    color: 'orange',
+                    color: 'white',
                     type: 'InitialParentheses'
                 }]
             },
@@ -27,7 +27,7 @@ export default {
                 items: [{
                     text: ')',
                     value: _.random(0, 10000000),
-                    color: 'orange',
+                    color: 'white',
                     type: 'FinalParentheses'
                 }]
             },
@@ -49,7 +49,7 @@ export default {
             scopes.forEach(el => {
                 res.push({
                     text: el,
-                    value: el,
+                    value: _.random(0, 10000000),
                     color: this.scopes.colors[_.random(0, this.scopes.colors.length - 1)],
                     type: 'Field',
                 })
@@ -61,25 +61,25 @@ export default {
                 {
                     text: '=',
                     value: _.random(0, 10000000),
-                    color: 'blue',
+                    color: 'white',
                     type: 'Operator',
                 },
                 {
                     text: '!=',
                     value: _.random(0, 10000000),
-                    color: 'blue',
+                    color: 'white',
                     type: 'Operator',
                 },
                 {
                     text: '<',
                     value: _.random(0, 10000000),
-                    color: 'blue',
+                    color: 'white',
                     type: 'Operator',
                 },
                 {
                     text: '>',
                     value: _.random(0, 10000000),
-                    color: 'blue',
+                    color: 'white',
                     type: 'Operator',
                 },
             ];
@@ -89,18 +89,18 @@ export default {
                 {
                     text: 'AND',
                     value: _.random(0, 10000000),
-                    color: 'red',
+                    color: 'white',
                     type: 'LogicOperator',
                 },
                 {
                     text: 'OR',
                     value: _.random(0, 10000000),
-                    color: 'red',
+                    color: 'white',
                     type: 'LogicOperator',
                 }, {
                     text: 'XOR',
                     value: _.random(0, 10000000),
-                    color: 'red',
+                    color: 'white',
                     type: 'LogicOperator',
                 }
             ];
@@ -110,7 +110,7 @@ export default {
                 {
                     text: '(',
                     value: _.random(0, 10000000),
-                    color: 'orange',
+                    color: 'white',
                     type: 'InitialParentheses'
                 }
             ];
@@ -120,7 +120,7 @@ export default {
                 {
                     text: ')',
                     value: _.random(0, 10000000),
-                    color: 'orange',
+                    color: 'white',
                     type: 'FinalParentheses'
                 }
             ];
