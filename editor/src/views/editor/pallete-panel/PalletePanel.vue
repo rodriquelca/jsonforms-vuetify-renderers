@@ -1,48 +1,57 @@
 <template>
-    <v-expansion-panels v-model="panel" accordion multiple>
-        <v-expansion-panel
-            class="caption"
-            v-for="(group, i) in paletteElements"
-            :key="i"
-        >
-            <v-expansion-panel-header class="caption">{{
-                group.label
-            }}</v-expansion-panel-header>
-            <v-expansion-panel-content elevation="0">
-                <draggable
-                    v-model="group.elements"
-                    :group="{ name: 'people', pull: 'clone', put: false }"
-                    :sort="false"
-                    class="d-flex align-content-center flex-wrap"
-                    elevation="0"
-                >
-                    <v-card
-                        v-for="(item, n) in group.elements"
-                        :key="n"
-                        outlined
-                        tile
-                        class="pa-2"
-                        elevation="0"
-                    >
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-icon
-                                    color="blue-grey darken-2"
-                                    dark
-                                    v-bind="attrs"
-                                    v-on="on"
-                                    dense
+    <div>
+        <v-expansion-panels v-model="panel" accordion multiple>
+            <v-expansion-panel
+                class="caption"
+                v-for="(group, i) in paletteElements"
+                :key="i"
+            >
+                <v-expansion-panel-header class="caption">{{
+                    group.label
+                }}</v-expansion-panel-header>
+                <v-expansion-panel-content elevation="0">
+                    <div class="vpm-drawer d-flex flex-column">
+                        <div
+                            v-for="(item, n) in group.elements"
+                            :key="n"
+                            class="pa-1 vpm-drawer-item-list"
+                        >
+                            <draggable
+                                v-model="group.elements"
+                                :group="{
+                                    name: 'people',
+                                    pull: 'clone',
+                                    put: false,
+                                }"
+                                :sort="false"
+                                class="flex-wrap"
+                                elevation="0"
+                            >
+                                <v-card
+                                    class="d-flex pa-1"
+                                    flat
+                                    color="transparent"
                                 >
-                                    {{ item.icon }}
-                                </v-icon>
-                            </template>
-                            <span>{{ item.label }}</span>
-                        </v-tooltip>
-                    </v-card>
-                </draggable>
-            </v-expansion-panel-content>
-        </v-expansion-panel>
-    </v-expansion-panels>
+                                    <v-icon
+                                        class="pe-3"
+                                        small
+                                        color="primary"
+                                        v-text="item.icon"
+                                    ></v-icon>
+
+                                    <v-list-item-title
+                                        class="caption vpm-drawer-list-title"
+                                        color="primary"
+                                        v-text="item.label"
+                                    ></v-list-item-title>
+                                </v-card>
+                            </draggable>
+                        </div>
+                    </div>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </v-expansion-panels>
+    </div>
 </template>
 
 <script lang="ts">
@@ -61,13 +70,6 @@ export default {
     },
     data() {
         return {
-            tabs: [],
-            list1: [
-                { name: 'John', id: 1 },
-                { name: 'Joao', id: 2 },
-                { name: 'Jean', id: 3 },
-                { name: 'Gerard', id: 4 },
-            ],
             panel: [0, 1, 2, 3],
         };
     },
@@ -98,9 +100,8 @@ export default {
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, 0.125);
 }
-.v-list {
-    height: 250px; /* or any height you want */
-    overflow-y: auto;
+.vpm-drawer-list-title {
+    font-weight: 500 !important;
 }
 
 .theme--light.v-expansion-panels .v-expansion-panel {
@@ -111,5 +112,12 @@ export default {
 .v-application .blue-grey--text.text--darken-2 {
     color: #1976d2 !important;
     caret-color: #e7eef1 !important;
+}
+.vpm-drawer-icon {
+    margin-right: 5px !important;
+}
+
+.vpm-drawer-item-list {
+    border-bottom: #cbd8e3 1px solid;
 }
 </style>
