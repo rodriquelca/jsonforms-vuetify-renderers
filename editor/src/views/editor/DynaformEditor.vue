@@ -1,5 +1,5 @@
 <template>
-    <v-container class="px-0 my-1" :fluid="true">
+    <v-container class="ps-9 my-1" :fluid="true">
         <v-row no-gutters height="100%">
             <v-col cols="2"> </v-col>
             <v-col cols="10">

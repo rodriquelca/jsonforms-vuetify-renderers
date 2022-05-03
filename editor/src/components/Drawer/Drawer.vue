@@ -124,7 +124,7 @@ export default {
     position: fixed;
     top: 80px !important;
     z-index: 5;
-    width: 16% !important;
+    width: 18% !important;
 }
 
 .v-navigation-drawer__content::-webkit-scrollbar-track {
