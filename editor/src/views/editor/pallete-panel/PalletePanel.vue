@@ -1,5 +1,5 @@
 <template>
-    <v-expansion-panels accordion multiple>
+    <v-expansion-panels v-model="panel" accordion multiple>
         <v-expansion-panel
             class="caption"
             v-for="(group, i) in paletteElements"
@@ -68,6 +68,7 @@ export default {
                 { name: 'Jean', id: 3 },
                 { name: 'Gerard', id: 4 },
             ],
+            panel: [0, 1, 2, 3],
         };
     },
     created: function () {

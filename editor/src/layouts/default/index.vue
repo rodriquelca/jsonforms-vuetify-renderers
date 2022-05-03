@@ -20,7 +20,7 @@
 <script lang="ts">
 import AppBar from './AppBar.vue';
 import View from './View.vue';
-import Drawer from './Drawer.vue';
+import Drawer from '../../components/Drawer/Drawer.vue';
 
 export default {
     name: 'DefaultLayout',
