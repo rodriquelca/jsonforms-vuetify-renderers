@@ -1,5 +1,5 @@
 <template>
-    <v-card outlined :class="selectedStyle" @click="onClick">
+    <v-card outlined :class="selectedStyle" @dblclick="dblClick" @click="click">
         <div class="d-block">
             <Icon :type="wrappedElement.type" class="pr-1" />
             <span class="d-inline caption" v-if="ruleEffect">
@@ -24,13 +24,7 @@
             >
                 <v-icon> mdi-delete </v-icon>
             </v-btn>
-            <v-btn
-                fab
-                x-small
-                v-if="hover"
-                @click="onRemove"
-                class="float-right"
-            >
+            <v-btn fab x-small v-if="hover" @click="onEdit" class="float-right">
                 <v-icon> mdi-pencil-outline </v-icon>
             </v-btn>
         </div>
@@ -43,6 +37,7 @@
 
 <script lang="ts">
 import { PropType } from 'vue';
+import _ from 'lodash';
 import {
     EditorUISchemaElement,
     getUISchemaPath,
@@ -70,16 +65,16 @@ export default {
         ruleEffect() {
             return this.wrappedElement.rule?.effect.toLocaleUpperCase();
         },
-        selectedElement: sync('app/editor@selectedElement'),
+        activeElement: sync('app/editor@element'),
         selectedStyle() {
-            return this.selectedElement === this.wrappedElement.uuid
+            return this.activeElement.selected === this.wrappedElement.uuid
                 ? 'selected pa-2'
                 : 'pa-2';
         },
     },
     watch: {
-        selectedElement() {
-            if (this.selectedElement === this.wrappedElement.uuid) {
+        activeElement() {
+            if (this.activeElement.selected === this.wrappedElement.uuid) {
                 this.hover = true;
             } else {
                 this.hover = false;
@@ -98,13 +93,31 @@ export default {
                 );
             }
         },
-        onClick: function (ev) {
+        onEdit: function (e) {
+            if (!hasChildren(this.wrappedElement)) {
+                this.$store.set('app/editor@element', {
+                    selected: this.wrappedElement.uuid,
+                    edit: _.random(0, 100000),
+                });
+                this.hover = true;
+            }
+        },
+        dblClick: function (ev) {
             ev.preventDefault();
             ev.stopPropagation();
-            this.selected = true;
-            this.$store.set('app/editor@settings', true);
+            // Edit this property to open the properties panel
+            this.$store.set('app/editor@element', {
+                selected: this.wrappedElement.uuid,
+                edit: _.random(0, 100000),
+            });
+
+            this.hover = true;
+        },
+        click: function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
             this.$store.set(
-                'app/editor@selectedElement',
+                'app/editor@element.selected',
                 this.wrappedElement.uuid
             );
             this.hover = true;
@@ -114,7 +127,7 @@ export default {
 </script>
 <style scoped>
 .selected {
-    border: 2px solid rgba(53, 225, 144, 0.982);
+    border: 2px solid rgb(48 201 173 / 98%);
 }
 .v-opacity {
     opacity: 0.9;

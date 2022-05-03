@@ -1,8 +1,8 @@
 import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 import { maxBy } from 'lodash';
 
-import { SchemaElement } from '../../../model';
-import { EditorUISchemaElement } from '../../../model/uischema';
+import { SchemaElement } from '../../model';
+import { EditorUISchemaElement } from '../../model/uischema';
 
 export interface PropertiesService {
   getProperties(

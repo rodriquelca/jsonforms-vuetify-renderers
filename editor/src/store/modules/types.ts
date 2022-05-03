@@ -20,6 +20,7 @@ export interface AppState {
     schema: SchemaElement | undefined;
     settings: boolean | undefined;
     selectedElement: string | undefined;
+    element: any | undefined;
   };
   jsonforms: {
     readonly: boolean;
@@ -42,6 +43,4 @@ export interface AppState {
     dataVariables: monaco.editor.ITextModel | undefined;
   };
   data: object;
-  schemaModel: object;
-  uischemaModel: object;
 }

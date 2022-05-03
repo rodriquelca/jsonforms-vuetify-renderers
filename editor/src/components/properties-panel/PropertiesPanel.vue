@@ -1,5 +1,10 @@
 <template>
-    <v-expansion-panels v-model="panel" multiple no-gutters>
+    <v-expansion-panels
+        v-model="panel"
+        multiple
+        no-gutters
+        :key="selectedElement.edit"
+    >
         <v-expansion-panel>
             <v-expansion-panel-header>
                 <div>
@@ -41,27 +46,28 @@
 </template>
 
 <script lang="ts">
+import {
+    defaultSchemaDecoratorsCollection,
+    defaultSchemaProviders,
+    defaultPropertyRenderers,
+} from '.';
 import { sync } from 'vuex-pathify';
 import { isEqual, omit } from 'lodash';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
-import { defineComponent, inject, ref } from '../../../util/vue';
-import { editorRendererProps, useJsonTest } from '../../../util/composition';
-import {
-    EditorUISchemaElement,
-    getVariableName,
-} from '../../../model/uischema';
-import { tryFindByUUID } from '../../../util/schemasUtil';
+import { defineComponent, inject, ref } from '../../util/vue';
+import { editorRendererProps, useJsonTest } from '../../util/composition';
+import { EditorUISchemaElement, getVariableName } from '../../model/uischema';
+import { tryFindByUUID } from '../../util/schemasUtil';
 import { generateDefaultUISchema } from '@jsonforms/core';
+import {
+    PropertiesServiceImpl,
+    PropertySchemasDecorator,
+    PropertySchemasProvider,
+} from './propertiesService';
 import _ from 'lodash';
 const PropertiesPanel = defineComponent({
     name: 'PropertiesPanel',
-    props: {
-        ...editorRendererProps(),
-        propertiesService: {
-            type: Object,
-            required: false,
-        },
-    },
+    props: {},
     components: {
         JsonForms,
     },
@@ -73,19 +79,31 @@ const PropertiesPanel = defineComponent({
             schemasCollection: undefined,
             hasRule: false,
             uiElement: null,
+            renderers: defaultPropertyRenderers,
+            propertiesService: null,
         };
     },
+    computed: {
+        schema: sync('app/editor@schema'),
+        uischema: sync('app/editor@uiSchema'),
+        selectedElement: sync('app/editor@element'),
+        schemaPropertiesLive: sync('app/editor@selectedElement'),
+    },
     mounted() {
-        this.setSelection(this.selectedElement);
+        const propertiesServiceProvider = (
+            schemaProviders: PropertySchemasProvider[],
+            schemaDecorators: PropertySchemasDecorator[]
+        ) => new PropertiesServiceImpl(schemaProviders, schemaDecorators);
+        this.propertiesService = propertiesServiceProvider(
+            defaultSchemaProviders,
+            defaultSchemaDecoratorsCollection
+        );
+        this.setSelection(this.selectedElement.selected);
     },
     watch: {
-        selectedElement(newSelection) {
-            this.setSelection(newSelection);
+        selectedElement(newSelection, oldSelection) {
+            this.setSelection(newSelection.selected);
         },
-    },
-    computed: {
-        selectedElement: sync('app/editor@selectedElement'),
-        schemaPropertiesLive: sync('app/editor@selectedElement'),
     },
     methods: {
         setSelection: function (newSelection) {

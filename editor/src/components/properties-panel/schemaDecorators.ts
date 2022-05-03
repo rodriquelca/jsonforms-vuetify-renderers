@@ -1,8 +1,8 @@
 import { ControlElement, JsonSchema, Layout } from '@jsonforms/core';
 import { assign } from 'lodash';
 
-import { SchemaElement } from '../../../model';
-import { EditorUISchemaElement } from '../../../model/uischema';
+import { SchemaElement } from '../../model';
+import { EditorUISchemaElement } from '../../model/uischema';
 import { PropertySchemas, PropertySchemasDecorator } from './propertiesService';
 
 export const multilineStringOptionDecorator: PropertySchemasDecorator = (

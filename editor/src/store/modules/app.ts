@@ -451,6 +451,10 @@ const state: AppState = {
     schema: undefined,
     settings: false,
     selectedElement: '',
+    element: {
+      selected: "",
+      edit: 0,
+    }
   },
   jsonforms: {
     readonly: false,
