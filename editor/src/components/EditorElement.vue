@@ -1,6 +1,10 @@
 <template>
-    <v-card outlined :class="selectedStyle" @dblclick="dblClick" @click="click">
-        <div class="d-block">
+    <v-card outlined :class="selectedStyle" @click="click">
+        <div
+            class="d-block"
+            @mouseover.stop.prevent.self="hover = true"
+            @mouseleave.self="hover = false"
+        >
             <Icon :type="wrappedElement.type" class="pr-1" />
             <span class="d-inline caption" v-if="ruleEffect">
                 <span class="font-weight-bold">R</span>
@@ -14,7 +18,6 @@
                         : ''
                 }}
             </div>
-
             <v-btn
                 fab
                 x-small
@@ -102,24 +105,13 @@ export default {
                 this.hover = true;
             }
         },
-        dblClick: function (ev) {
+        click: function (ev) {
             ev.preventDefault();
             ev.stopPropagation();
-            // Edit this property to open the properties panel
             this.$store.set('app/editor@element', {
                 selected: this.wrappedElement.uuid,
                 edit: _.random(0, 100000),
             });
-
-            this.hover = true;
-        },
-        click: function (ev) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            this.$store.set(
-                'app/editor@element.selected',
-                this.wrappedElement.uuid
-            );
             this.hover = true;
         },
     },

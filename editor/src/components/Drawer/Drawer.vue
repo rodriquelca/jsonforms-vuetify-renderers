@@ -60,7 +60,7 @@
                     </v-list>
                 </v-navigation-drawer>
             </div>
-            <div>
+            <div class="vpm-subdrawer">
                 <component
                     v-bind:is="panel.items[panel.active]['component']"
                     ref="component"
@@ -127,18 +127,29 @@ export default {
     width: 18% !important;
 }
 
-.v-navigation-drawer__content::-webkit-scrollbar-track {
+.vpm-floating > .v-navigation-drawer__content {
+    height: 100%;
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+}
+
+.vpm-subdrawer {
+    overflow-y: auto;
+    padding-bottom: 100px;
+}
+
+.vpm-subdrawer::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     background-color: #f5f5f5;
 }
 
-.v-navigation-drawer__content::-webkit-scrollbar {
+.vpm-subdrawer::-webkit-scrollbar {
     width: 4px;
     background-color: #f5f5f5;
 }
 
-.v-navigation-drawer__content::-webkit-scrollbar-thumb {
+.vpm-subdrawer::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: #fff;
