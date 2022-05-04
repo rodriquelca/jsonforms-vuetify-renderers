@@ -112,65 +112,32 @@ export default {
   name: 'ThemeChanger',
   data: () => ({
     menu: false,
-    themes: [
-      defaultTheme,
-      {
-        ...merge(cloneDeep(defaultTheme), {
-          name: 'Basil',
-          light: {
-            primary: '#356859',
-            secondary: '#FD5523',
-            accent: '#37966F',
-            info: '#356859',
-          },
-        }),
-      },
-      {
-        ...merge(cloneDeep(defaultTheme), {
-          name: 'Crane',
-          light: {
-            primary: '#5D1049',
-            secondary: '#E30425',
-            accent: '#4E0D3A',
-            info: '#5D1049',
-          },
-        }),
-      },
-      {
-        ...merge(cloneDeep(defaultTheme), {
-          name: 'Fortnightly',
-          light: {
-            primary: '#6B38FB',
-            secondary: '#6B38FB',
-            info: '#6B38FB',
-          },
-        }),
-      },
-      {
-        ...merge(cloneDeep(defaultTheme), {
-          name: 'Owl',
-          light: {
-            primary: '#FFDE03',
-            secondary: '#0336FF',
-            accent: '#FF0266',
-            info: '#FFDE03',
-          },
-        }),
-      },
-      {
-        ...merge(cloneDeep(defaultTheme), {
-          name: 'Shrine',
-          light: {
-            primary: '#FEDBD0',
-            secondary: '#FEEAE6',
-            accent: '#442C2E',
-            info: '#FEDBD0',
-          },
-        }),
-      },
-    ],
   }),
+  computed: {
+    themes(): any {
+      return this.setThemes();
+    },
+  },
   methods: {
+    setThemes(): any {
+      const themes = this.$store.getters['themes/getSummaryThemes']();
+      const colors = [];
+      colors.push(defaultTheme);
+      themes.forEach((element) => {
+        colors.push({
+          ...merge(cloneDeep(defaultTheme), {
+            name: element.name,
+            light: {
+              primary: element.light.primary,
+              secondary: element.light.secondary,
+              accent: element.light.accent,
+              info: element.light.info,
+            },
+          }),
+        });
+      });
+      return colors;
+    },
     setTheme(theme: {
       name: string;
       dark: VuetifyThemeVariant;

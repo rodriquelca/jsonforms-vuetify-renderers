@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Basil",
+    "light": {
+      "primary": "#356859",
+      "secondary": "#FD5523",
+      "accent": "#37966F",
+      "info": "#356859"
+    }
+  },
+  {
+    "name": "Crane",
+    "light": {
+      "primary": "#5D1049",
+      "secondary": "#E30425",
+      "accent": "#4E0D3A",
+      "info": "#5D1049"
+    }
+  },
+  {
+    "name": "Fortnightly",
+    "light": {
+      "primary": "#6B38FB",
+      "secondary": "#6B38FB",
+      "info": "#6B38FB"
+    }
+  },
+  {
+    "name": "Owl",
+    "light": {
+      "primary": "#FFDE03",
+      "secondary": "#0336FF",
+      "accent": "#FF0266",
+      "info": "#FFDE03"
+    }
+  },
+  {
+    "name": "Shrine",
+    "light": {
+      "primary": "#FEDBD0",
+      "secondary": "#FEEAE6",
+      "accent": "#442C2E",
+      "info": "#FEDBD0"
+    }
+  }
+]

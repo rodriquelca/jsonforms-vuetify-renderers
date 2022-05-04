@@ -19,6 +19,7 @@
     <v-toolbar-items>
       <v-container fill-height fluid justify-end
         ><v-row dense>
+          <v-col><custom-theme /></v-col>
           <v-col><dynaform-preview /></v-col>
           <v-col><download-json /></v-col>
           <v-col><form-rules /></v-col>
@@ -42,6 +43,7 @@ import { AppStore } from '../store/modules/types';
 import Templates from '@/components/Templates.vue';
 import Settingsi18n from '@/components/Settingsi18n.vue';
 import FormRules from '@/components/FormRules.vue';
+import CustomTheme from '../../../src/components/CustomTheme.vue';
 
 export default {
   name: 'DefaultAppBar',
@@ -53,6 +55,7 @@ export default {
     Templates,
     Settingsi18n,
     FormRules,
+    CustomTheme,
   },
   computed: {
     app: sync<AppStore>('app/'),
