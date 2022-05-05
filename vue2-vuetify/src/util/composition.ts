@@ -65,13 +65,13 @@ export const useVuetifyControl = <
   I extends { control: any; handleChange: any }
 >(
   input: I,
-  adaptValue: (target: any) => any = (v) => v
+  adaptValue: (target: any, options: any) => any = (v) => v
 ) => {
   const appliedOptions = useControlAppliedOptions(input);
 
   const isFocused = ref(false);
   const onChange = (value: any) => {
-    input.handleChange(input.control.value.path, adaptValue(value));
+    input.handleChange(input.control.value.path, adaptValue(value, appliedOptions));
   };
 
   const persistentHint = (): boolean => {

@@ -579,6 +579,53 @@ export const perPageDecorator: PropertySchemasDecorator = (
   }
   return schemas;
 };
+export const placeholderDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.type === 'string'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      placeholder: { type: 'string' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/placeholder'
+    });
+  }
+  return schemas;
+};
+export const textTransformToDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.type === 'string'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      textTransformTo: {
+        type: 'string',
+        enum: [
+          "none",
+          "lowercase",
+          "UPPERCASE",
+          "Capital phrase",
+          "Title Case",
+        ]
+      },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/textTransformTo'
+    });
+  }
+  return schemas;
+};
 
 export const createPropertyControl = (
   controlScope: string
@@ -606,6 +653,8 @@ export const defaultSchemaDecoratorsCollection = new Map<
     [
       variableDecorator,
       labelDecorator,
+      placeholderDecorator,
+      textTransformToDecorator,
       descriptionDecorator,
       requiredDecorator,
       readOnlyDecorator,

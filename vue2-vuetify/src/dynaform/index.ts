@@ -4,6 +4,7 @@ export { default as RadioGroupControlRenderer } from './RadioGroupControlRendere
 export { default as CheckboxGroupControlRenderer } from './CheckboxGroupControlRenderer.vue';
 export { default as HtmlViewerControlRenderer } from './HtmlViewerControlRenderer.vue';
 export { default as ImageControlRenderer } from './ImageControlRenderer.vue';
+export { default as StringCustomControlRenderer } from './StringCustomControlRenderer.vue';
 
 import { entry as suggestControlRendererEntry } from './SuggestControlRenderer.vue';
 import { entry as dropdownControlRendererEntry } from './DropdownControlRenderer.vue';
@@ -11,6 +12,7 @@ import { entry as radioGroupControlRendererEntry } from './RadioGroupControlRend
 import { entry as checkboxGroupControlRendererEntry } from './CheckboxGroupControlRenderer.vue';
 import { entry as htmlViewerControlRendererEntry } from './HtmlViewerControlRenderer.vue';
 import { entry as imageControlRendererEntry } from './ImageControlRenderer.vue';
+import { entry as stringCustomControlRendererEntry } from './StringCustomControlRenderer.vue';
 
 export const dynaformRenderers = [
   suggestControlRendererEntry,
@@ -19,4 +21,5 @@ export const dynaformRenderers = [
   radioGroupControlRendererEntry,
   checkboxGroupControlRendererEntry,
   imageControlRendererEntry,
+  stringCustomControlRendererEntry
 ];
