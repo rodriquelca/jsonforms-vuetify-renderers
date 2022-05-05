@@ -14,30 +14,63 @@
       <div class="d-inline caption font-weight-bold v-opacity">
         {{ wrappedElement.scope ? wrappedElement.scope.split('/').pop() : '' }}
       </div>
-      <v-btn
-        fab
-        x-small
-        v-if="hover"
-        @click="onRemove"
-        class="float-right"
-        :color="removeColor"
-        @mouseover="removeColor = 'error'"
-        @mouseleave="removeColor = undefined"
-      >
-        <v-icon> mdi-delete </v-icon>
-      </v-btn>
-      <v-btn
-        fab
-        x-small
-        v-if="hover"
-        @click="onEdit"
-        class="float-right"
-        :color="editColor"
-        @mouseover="editColor = 'success'"
-        @mouseleave="editColor = undefined"
-      >
-        <v-icon> mdi-pencil-outline </v-icon>
-      </v-btn>
+
+      <v-tooltip top v-if="hover" :color="removeColor">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            fab
+            x-small
+            v-if="hover"
+            @click="onRemove"
+            class="float-right"
+            :color="removeColor"
+            @mouseover="removeColor = 'error'"
+            @mouseleave="removeColor = undefined"
+          >
+            <v-icon> mdi-delete </v-icon>
+          </v-btn>
+        </template>
+        <span>Delete</span>
+      </v-tooltip>
+
+      <v-tooltip top v-if="hover" :color="editColor">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            fab
+            x-small
+            @click="onEdit"
+            class="float-right"
+            :color="editColor"
+            @mouseover="editColor = 'success'"
+            @mouseleave="editColor = undefined"
+          >
+            <v-icon> mdi-pencil-outline </v-icon>
+          </v-btn>
+        </template>
+        <span>Edit</span>
+      </v-tooltip>
+      <v-tooltip top v-if="hover" :color="duplicateColor">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            fab
+            x-small
+            class="float-right"
+            :color="duplicateColor"
+            @mouseover="duplicateColor = 'primary'"
+            @mouseleave="duplicateColor = undefined"
+            @click="onDuplicate"
+          >
+            <v-icon> mdi-content-copy</v-icon>
+          </v-btn>
+        </template>
+        <span>Duplicate</span>
+      </v-tooltip>
     </div>
 
     <div class="d-block pt-2">
@@ -72,6 +105,7 @@ export default {
       hover: false,
       editColor: undefined,
       removeColor: undefined,
+      duplicateColor: undefined,
     };
   },
   computed: {
@@ -96,6 +130,17 @@ export default {
   },
 
   methods: {
+    onDuplicate: function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!hasChildren(this.wrappedElement)) {
+        console.log(this.wrappedElement);
+        // this.$store.dispatch(
+        //   'app/removeUiSchemaElement',
+        //   this.wrappedElement.uuid
+        // );
+      }
+    },
     onRemove: function (e) {
       e.preventDefault();
       e.stopPropagation();
