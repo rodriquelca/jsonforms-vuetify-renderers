@@ -11,21 +11,21 @@
                 }}</v-expansion-panel-header>
                 <v-expansion-panel-content elevation="0">
                     <div class="vpm-drawer d-flex flex-column">
-                        <div
-                            v-for="(item, n) in group.elements"
-                            :key="n"
-                            class="pa-1 vpm-drawer-item-list"
+                        <draggable
+                            v-model="group.elements"
+                            :group="{
+                                name: 'people',
+                                pull: 'clone',
+                                put: false,
+                            }"
+                            :sort="false"
+                            class="flex-wrap"
+                            elevation="0"
                         >
-                            <draggable
-                                v-model="group.elements"
-                                :group="{
-                                    name: 'people',
-                                    pull: 'clone',
-                                    put: false,
-                                }"
-                                :sort="false"
-                                class="flex-wrap"
-                                elevation="0"
+                            <div
+                                v-for="(item, n) in group.elements"
+                                :key="n"
+                                class="pa-1 vpm-drawer-item-list"
                             >
                                 <v-card
                                     class="d-flex pa-1"
@@ -45,8 +45,8 @@
                                         v-text="item.label"
                                     ></v-list-item-title>
                                 </v-card>
-                            </draggable>
-                        </div>
+                            </div>
+                        </draggable>
                     </div>
                 </v-expansion-panel-content>
             </v-expansion-panel>

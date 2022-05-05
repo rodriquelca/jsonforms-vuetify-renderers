@@ -2,7 +2,6 @@
   <div>
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
-        <v-spacer></v-spacer>
         <v-btn
           large
           icon
