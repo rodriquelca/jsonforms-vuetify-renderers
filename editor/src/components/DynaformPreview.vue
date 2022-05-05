@@ -1,13 +1,24 @@
 <template>
   <div>
-    <v-tooltip bottom>
+    <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
         <v-btn large icon dark v-bind="attrs" v-on="on">
-          <v-icon size="30" color="primary" @click="onClick">mdi-eye</v-icon>
+          <v-icon size="30" color="primary">mdi-eye</v-icon>
         </v-btn>
       </template>
-      Preview
-    </v-tooltip>
+
+      <v-list dense>
+        <v-list-item
+          link
+          v-for="(item, index) in items"
+          :key="index"
+          @click="onClickMenu(item)"
+        >
+          <v-icon class="pe-2" small v-text="item.icon"></v-icon>
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <v-dialog
       v-model="dialog"
@@ -16,88 +27,40 @@
       transition="dialog-bottom-transition"
     >
       <v-card>
-        <v-toolbar dark color="primary">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon dark v-bind="attrs" v-on="on" @click="modeView = 4">
-                <v-icon>mdi-cellphone</v-icon>
-              </v-btn>
-            </template>
-            <span>Smartphone</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon dark v-bind="attrs" v-on="on" @click="modeView = 6">
-                <v-icon>mdi-tablet-android</v-icon>
-              </v-btn>
-            </template>
-            <span>Tablet</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon dark v-bind="attrs" v-on="on" @click="modeView = 12">
-                <v-icon>mdi-monitor</v-icon>
-              </v-btn>
-            </template>
-            <span>Desktop</span>
-          </v-tooltip>
-          <v-spacer></v-spacer>
-          <v-btn icon dark @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <v-col :cols="modeView">
-          <v-card>
-            <json-forms
-              :data="data"
-              :key="key"
-              :schema="useSchema"
-              :uischema="useUiSchema"
-              :renderers="renderers"
-              @change="onChange"
-              :i18n="i18n"
-              :cells="renderers"
-            />
-            <v-container>
-              <v-row
-                v-if="!resolvedSchema.resolved"
-                class="fill-height"
-                align-content="center"
-                justify="center"
-              >
-                <v-col class="text-subtitle-1 text-center" cols="12">
-                  Resolving Schema Refs
-                </v-col>
-                <v-col cols="6">
-                  <v-progress-linear
-                    indeterminate
-                    rounded
-                    height="6"
-                  ></v-progress-linear>
-                </v-col>
-              </v-row>
-              <v-row
-                v-else-if="resolvedSchema.error !== undefined"
-                class="fill-height"
-                align-content="center"
-                justify="center"
-              >
-                <v-col class="text-subtitle-1 text-center" cols="12">
-                  <v-alert color="red" dark>
-                    {{ resolvedSchema.error }}
-                  </v-alert>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card>
-        </v-col>
+        <component
+          v-bind:is="component"
+          v-if="dialog"
+          type="iPhone8"
+          background="#444"
+          :autoscale="false"
+          picker
+          border
+        >
+          <v-toolbar dark color="primary" dense>
+            <v-btn icon dark @click="dialog = false">
+              <v-icon>mdi-arrow-u-left-top-bold</v-icon>
+            </v-btn>
+          </v-toolbar>
+
+          <json-forms
+            class="pa-5"
+            :data="data"
+            :key="key"
+            :schema="useSchema"
+            :uischema="useUiSchema"
+            :renderers="renderers"
+            @change="onChange"
+            :i18n="i18n"
+            :cells="renderers"
+          />
+        </component>
       </v-card>
     </v-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { ResolvedSchema } from '@/core/types';
+import Device from 'vue-device';
 import { JsonFormsI18nState } from '@jsonforms/core';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
 import { useExportSchema } from '../util';
@@ -111,25 +74,25 @@ export default {
   name: 'dymaform-preview',
   components: {
     JsonForms,
+    Device,
   },
   props: {},
   data() {
     return {
       key: 1,
+      items: [
+        { title: 'Mobile', icon: 'mdi-cellphone', component: 'device' },
+        { title: 'Browser', icon: 'mdi-application-outline', component: 'div' },
+      ],
       dialog: false,
+      component: 'div',
       data: this.$store.get('preview/data'),
-      resolvedSchema: {
-        schema: {},
-        resolved: true,
-        error: undefined,
-      } as ResolvedSchema,
       locale: sync('preview/locale'),
       i18n: {
         locale: this.locale || 'en',
         translate: this.createTranslator(this.locale || 'en'),
       } as JsonFormsI18nState,
       renderers: extendedVuetifyRenderers,
-      modeView: 12,
     };
   },
   computed: {
@@ -162,16 +125,6 @@ export default {
     };
   },
   methods: {
-    /**
-     * On click in icon preview
-     * Load the schemas and refresh the view
-     */
-    onClick() {
-      this.copySchemasFromEditorToPreview();
-      this.createTranslator(this.$store.get('app/jsonforms@locale'));
-      this.dialog = !this.dialog;
-      this.key++;
-    },
     /**
      * Copy schemasfrom editor to preview
      */
@@ -213,6 +166,17 @@ export default {
      */
     onChange(event: JsonFormsChangeEvent): void {
       this.$store.set('preview/data', event.data || {});
+    },
+    /**
+     * On click in icon preview
+     * Load the schemas and refresh the view
+     */
+    onClickMenu(item) {
+      this.component = item.component ? item.component : 'div';
+      this.copySchemasFromEditorToPreview();
+      this.createTranslator(this.$store.get('app/jsonforms@locale'));
+      this.dialog = !this.dialog;
+      this.key++;
     },
   },
 };
