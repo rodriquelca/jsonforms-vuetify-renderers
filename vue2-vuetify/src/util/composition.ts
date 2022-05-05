@@ -10,7 +10,7 @@ import {
   CoreActions,
   update,
   moveUp,
-  moveDown
+  moveDown,
 } from '@jsonforms/core';
 import { RendererProps } from '@jsonforms/vue2';
 import cloneDeep from 'lodash/cloneDeep';
@@ -65,13 +65,17 @@ export const useVuetifyControl = <
   I extends { control: any; handleChange: any }
 >(
   input: I,
-  adaptValue: (target: any) => any = (v) => v
+  adaptValue: (target: any, options: any) => any = (v) => v
 ) => {
   const appliedOptions = useControlAppliedOptions(input);
 
   const isFocused = ref(false);
   const onChange = (value: any) => {
-    input.handleChange(input.control.value.path, adaptValue(value));
+    // input.handleChange(input.control.value.path, adaptValue(value));
+    input.handleChange(
+      input.control.value.path,
+      adaptValue(value, appliedOptions)
+    );
   };
 
   const persistentHint = (): boolean => {
@@ -314,19 +318,19 @@ export const useVuetifyControlExt = <
     indexc
   );
 
-  onBeforeMount(() => { });
-  onMounted(() => { });
-  onBeforeUpdate(() => { });
-  onUpdated(() => { });
-  onBeforeUnmount(() => { });
+  onBeforeMount(() => {});
+  onMounted(() => {});
+  onBeforeUpdate(() => {});
+  onUpdated(() => {});
+  onBeforeUnmount(() => {});
   onUnmounted(() => {
     unwatch();
   });
-  onActivated(() => { });
+  onActivated(() => {});
   onDeactivated(() => {
     unwatch();
   });
-  onErrorCaptured(() => { });
+  onErrorCaptured(() => {});
   return {
     ...input,
     styles,
@@ -362,7 +366,7 @@ export const mapDispatchToArrayControlPropsEx = (
 ): DispatchPropsOfArrayControlEx => ({
   addItem: (path: string, value: any) => () => {
     dispatch(
-      update(path, array => {
+      update(path, (array) => {
         if (array === undefined || array === null) {
           return [value];
         }
@@ -374,26 +378,26 @@ export const mapDispatchToArrayControlPropsEx = (
   },
   removeItems: (path: string, toDelete: number[]) => () => {
     dispatch(
-      update(path, array => {
+      update(path, (array) => {
         toDelete
           .sort()
           .reverse()
-          .forEach(s => array.splice(s, 1));
+          .forEach((s) => array.splice(s, 1));
         return array;
       })
     );
   },
   updateItem: (path: string, toUpdate: number, value: any) => () => {
     dispatch(
-      update(path, array => {
-        array[toUpdate] = value
+      update(path, (array) => {
+        array[toUpdate] = value;
         return array;
       })
     );
   },
   moveUp: (path, toMove: number) => () => {
     dispatch(
-      update(path, array => {
+      update(path, (array) => {
         moveUp(array, toMove);
         return array;
       })
@@ -401,11 +405,10 @@ export const mapDispatchToArrayControlPropsEx = (
   },
   moveDown: (path, toMove: number) => () => {
     dispatch(
-      update(path, array => {
+      update(path, (array) => {
         moveDown(array, toMove);
         return array;
       })
     );
   },
-
 });

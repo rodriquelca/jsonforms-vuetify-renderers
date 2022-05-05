@@ -4,6 +4,7 @@ export { default as RadioGroupControlRendererEditor } from './RadioGroupControlR
 export { default as CheckboxGroupControlRendererEditor } from './CheckboxGroupControlRendererEditor.vue';
 export { default as HtmlViewerControlRendererEditor } from './HtmlViewerControlRendererEditor.vue';
 export { default as ImageControlRendererEditor } from './ImageControlRendererEditor.vue';
+export { default as EditorStringControlRenderer } from './EditorStringControlRenderer.vue';
 
 import { entry as suggestControlRendererEditorEntry } from './SuggestControlRendererEditor.vue';
 import { entry as dropdownControlRendererEditorEntry } from './DropdownControlRendererEditor.vue';
@@ -11,6 +12,7 @@ import { entry as radioGroupControlRendererEditorEntry } from './RadioGroupContr
 import { entry as checkboxGroupControlRendererEditorEntry } from './CheckboxGroupControlRendererEditor.vue';
 import { entry as htmlViewerControlRendererEditorEntry } from './HtmlViewerControlRendererEditor.vue';
 import { entry as imageControlRendererEditorEntry } from './ImageControlRendererEditor.vue';
+import { entry as editorStringControlRendererEntry } from './EditorStringControlRenderer.vue';
 
 export const editorRenderers = [
   suggestControlRendererEditorEntry,
@@ -19,4 +21,5 @@ export const editorRenderers = [
   radioGroupControlRendererEditorEntry,
   checkboxGroupControlRendererEditorEntry,
   imageControlRendererEditorEntry,
+  editorStringControlRendererEntry,
 ];
