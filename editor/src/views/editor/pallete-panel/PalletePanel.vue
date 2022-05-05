@@ -30,6 +30,7 @@
                                 <v-card
                                     class="d-flex pa-1"
                                     flat
+                                    :hover="true"
                                     color="transparent"
                                 >
                                     <v-icon
@@ -41,7 +42,6 @@
 
                                     <v-list-item-title
                                         class="caption vpm-drawer-list-title"
-                                        color="primary"
                                         v-text="item.label"
                                     ></v-list-item-title>
                                 </v-card>
@@ -89,9 +89,6 @@ export default {
 </script>
 
 <style>
-.list-group .v-list-item {
-    cursor: grab;
-}
 .list-group .item {
     border-width: 0 0 1px;
     position: relative;
@@ -102,6 +99,7 @@ export default {
 }
 .vpm-drawer-list-title {
     font-weight: 500 !important;
+    cursor: pointer;
 }
 
 .theme--light.v-expansion-panels .v-expansion-panel {
@@ -119,5 +117,9 @@ export default {
 
 .vpm-drawer-item-list {
     border-bottom: #cbd8e3 1px solid;
+}
+
+.vpm-drawer-item-list:hover {
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1));
 }
 </style>
