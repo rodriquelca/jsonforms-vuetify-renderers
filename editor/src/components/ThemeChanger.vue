@@ -106,6 +106,7 @@ const defaultTheme = {
     success: '#4CAF50',
     warning: '#FB8C00',
   },
+  fontFamily: 'Roboto',
 };
 
 export default {
@@ -120,7 +121,7 @@ export default {
   },
   methods: {
     setThemes(): any {
-      const themes = this.$store.getters['themes/getSummaryThemes']();
+      const themes = this.$store.getters['themes/getSummaryThemes'];
       const colors = [];
       colors.push(defaultTheme);
       themes.forEach((element) => {
@@ -157,6 +158,7 @@ export default {
       });
       // also save theme name to disable selection
       this.$vuetify.theme.currentTheme.name = name;
+      this.$store.set('themes/activeTheme', name);
     },
   },
 };

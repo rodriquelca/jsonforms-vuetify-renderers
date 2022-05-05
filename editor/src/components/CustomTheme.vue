@@ -27,6 +27,13 @@
                 >
                 </v-text-field>
               </v-col>
+              <v-col cols="12" sm="12" md="6">
+                <v-select
+                  :items="selectFont"
+                  label="Select Font"
+                  v-model="fontFamily"
+                ></v-select>
+              </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="6">
@@ -297,6 +304,17 @@ export default {
         success: false,
         warning: false,
       },
+      selectFont: [
+        'Roboto',
+        'Comic Neue',
+        'Fira Code',
+        'Inconsolata',
+        'Oxygen',
+        'Tapestry',
+        'Ubuntu',
+        'Water Brush',
+      ],
+      fontFamily: 'Roboto',
     };
   },
   computed: {},
@@ -312,10 +330,10 @@ export default {
         transition: 'border-radius 200ms ease-in-out',
       };
     },
-    openDialog() {
+    openDialog(): void {
       this.dialog = true;
       this.customThemeName = '';
-      this.color =_.clone(defaultTheme);
+      this.color = _.clone(defaultTheme);
     },
     setCustom(): void {
       this.dialog = false;
@@ -333,7 +351,9 @@ export default {
       this.$store.set('themes/addTheme', {
         name: this.customThemeName,
         light: _.clone(this.color),
+        fontFamily: _.clone(this.fontFamily),
       });
+      this.$store.set('themes/activeTheme', this.customThemeName);
     },
   },
 };
