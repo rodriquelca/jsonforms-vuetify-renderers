@@ -15,10 +15,10 @@
       hide-overlay
       transition="dialog-bottom-transition"
     >
-      <device
-        ><v-card>
+      <device type="iPhone8" background="#444" autoscale="false" picker border>
+        <v-card>
           <v-toolbar dark color="primary">
-            <v-tooltip bottom>
+            <!-- <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn icon dark v-bind="attrs" v-on="on" @click="modeView = 4">
                   <v-icon>mdi-cellphone</v-icon>
@@ -48,7 +48,7 @@
               </template>
               <span>Desktop</span>
             </v-tooltip>
-            <v-spacer></v-spacer>
+            <v-spacer></v-spacer> -->
             <v-btn icon dark @click="dialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
