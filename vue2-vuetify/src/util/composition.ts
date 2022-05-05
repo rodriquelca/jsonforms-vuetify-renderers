@@ -71,7 +71,6 @@ export const useVuetifyControl = <
 
   const isFocused = ref(false);
   const onChange = (value: any) => {
-    // input.handleChange(input.control.value.path, adaptValue(value));
     input.handleChange(
       input.control.value.path,
       adaptValue(value, appliedOptions)
