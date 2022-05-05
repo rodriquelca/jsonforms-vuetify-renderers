@@ -5,7 +5,7 @@
       @mouseover.stop.prevent.self="hover = true"
       @mouseleave.self="hover = false"
     >
-      <Icon :type="wrappedElement.type" class="pr-1" />
+      <v-icon small>{{ computedIcon }}</v-icon>
       <span class="d-inline caption" v-if="ruleEffect">
         <span class="font-weight-bold">R</span>
         <span class="font-italic"> ({{ ruleEffect }})</span>
@@ -85,8 +85,8 @@ import {
   getUISchemaPath,
   hasChildren,
 } from '../model/uischema';
-import Icon from './Icon.vue';
 import { sync } from 'vuex-pathify';
+import { tryFindByUUID } from '@/util';
 export default {
   name: 'EditorElement',
   props: {
@@ -94,9 +94,6 @@ export default {
       required: false,
       type: Object as PropType<EditorUISchemaElement>,
     },
-  },
-  components: {
-    Icon,
   },
   data() {
     return {
@@ -111,6 +108,120 @@ export default {
       return this.wrappedElement.rule?.effect.toLocaleUpperCase();
     },
     activeElement: sync('app/editor@element'),
+    editorSchema: sync('app/editor@schema'),
+    computedIcon() {
+      const schemaElement = tryFindByUUID(
+        this.editorSchema,
+        this.wrappedElement.linkedSchemaElement
+      );
+      switch (this.wrappedElement.type) {
+        case 'HorizontalLayout':
+          return 'mdi-arrow-left-right';
+        case 'VerticalLayout':
+          return 'mdi-arrow-up-down';
+        case 'Group':
+          return 'mdi-focus-field';
+        case 'Categorization':
+          return 'mdi-tab';
+        case 'Label':
+          return 'mdi-format-text';
+        case 'Control':
+          if (
+            schemaElement &&
+            schemaElement.schema &&
+            schemaElement.schema.type === 'boolean'
+          ) {
+            return 'mdi-checkbox-outline';
+          }
+          if (
+            schemaElement &&
+            schemaElement.schema &&
+            schemaElement.schema.format === 'date'
+          ) {
+            return 'mdi-calendar-month';
+          }
+          if (
+            schemaElement &&
+            schemaElement.schema &&
+            schemaElement.schema.format === 'date-time'
+          ) {
+            return 'mdi-calendar-clock-outline';
+          }
+          if (
+            schemaElement &&
+            schemaElement.schema &&
+            schemaElement.schema.format === 'time'
+          ) {
+            return 'mdi-clock-outline';
+          }
+          if (
+            schemaElement &&
+            schemaElement.schema &&
+            schemaElement.schema.format == 'time'
+          ) {
+            return 'mdi-clock-outline';
+          }
+          if (
+            this.wrappedElement &&
+            this.wrappedElement.options &&
+            this.wrappedElement.options.multipleFile
+          ) {
+            return 'mdi-cloud-upload-outline';
+          }
+          if (
+            this.wrappedElement &&
+            this.wrappedElement.options &&
+            this.wrappedElement.options.multi
+          ) {
+            return 'mdi-format-pilcrow';
+          }
+          if (
+            this.wrappedElement &&
+            this.wrappedElement.options &&
+            this.wrappedElement.options.isHtmlViewer
+          ) {
+            return 'mdi-pencil-ruler';
+          }
+          if (
+            schemaElement &&
+            schemaElement.schema &&
+            schemaElement.schema.oneOf
+          ) {
+            return 'mdi-form-dropdown';
+          }
+          if (
+            schemaElement &&
+            schemaElement.schema &&
+            schemaElement.schema.type === 'number'
+          ) {
+            return 'mdi-numeric';
+          }
+          if (
+            schemaElement &&
+            schemaElement.schema &&
+            schemaElement.schema.type === 'integer'
+          ) {
+            return 'mdi-counter';
+          }
+
+          return 'mdi-crop-square';
+        case 'Suggest':
+          return 'mdi-text-box-search-outline';
+        case 'RadioGroup':
+          return 'mdi-radiobox-marked';
+        case 'Dropdown':
+          return 'mdi-form-dropdown';
+        case 'CheckboxGroup':
+          return 'mdi-checkbox-outline';
+        case 'Image':
+          return 'mdi-image-outline';
+        case 'DataTableControl':
+          return 'mdi-grid';
+
+        default:
+          return 'mdi-checkbox-blank-badge-outline';
+      }
+    },
     selectedStyle() {
       return this.activeElement.selected === this.wrappedElement.uuid
         ? 'selected pa-2'
