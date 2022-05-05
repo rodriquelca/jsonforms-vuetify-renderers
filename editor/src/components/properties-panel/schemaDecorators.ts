@@ -36,7 +36,6 @@ export const inputMask: PropertySchemasDecorator = (
     uiElement.type === 'Control'
   ) {
     addSchemaOptionsProperty(schemas.schema, {
-
       mask: { type: 'string' },
     });
     (schemas.uiSchema as Layout).elements.push(
@@ -63,7 +62,6 @@ export const validationDecorator: PropertySchemasDecorator = (
     (schemas.uiSchema as Layout).elements.push(
       createPropertyControl('#/properties/options/properties/validation'),
       createPropertyControl('#/properties/options/properties/validationMessage')
-
     );
   }
   return schemas;
@@ -146,9 +144,14 @@ export const variableDecorator: PropertySchemasDecorator = (
   uiElement: EditorUISchemaElement
 ) => {
   if (
-    ['Control', 'Dropdown', 'RadioGroup', 'CheckboxGroup', 'Suggest', 'DataTableControl'].includes(
-      uiElement?.type
-    )
+    [
+      'Control',
+      'Dropdown',
+      'RadioGroup',
+      'CheckboxGroup',
+      'Suggest',
+      'DataTableControl',
+    ].includes(uiElement?.type)
   ) {
     if (!schemas.schema.properties) {
       schemas.schema.properties = {};
@@ -561,25 +564,36 @@ export const perPageDecorator: PropertySchemasDecorator = (
   if (['DataTableControl'].includes(uiElement?.type)) {
     addSchemaOptionsProperty(schemas.schema, {
       perPage: {
-        "type": "integer",
-        "enum": [
-          5,
-          10,
-          15,
-          20,
-          50,
-          100
-        ]
+        type: 'integer',
+        enum: [5, 10, 15, 20, 50, 100],
       },
     });
     (schemas.uiSchema as Layout).elements.push({
       type: 'Control',
-      scope: '#/properties/options/properties/perPage'
+      scope: '#/properties/options/properties/perPage',
     });
   }
   return schemas;
 };
-
+export const placeholderDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (
+    ['Control'].includes(uiElement?.type) &&
+    schemaElement?.schema.type === 'string'
+  ) {
+    addSchemaOptionsProperty(schemas.schema, {
+      placeholder: { type: 'string' },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/options/properties/placeholder',
+    });
+  }
+  return schemas;
+};
 export const createPropertyControl = (
   controlScope: string
 ): ControlElement => ({
@@ -605,6 +619,7 @@ export const defaultSchemaDecoratorsCollection = new Map<
     'general',
     [
       variableDecorator,
+      placeholderDecorator,
       labelDecorator,
       descriptionDecorator,
       requiredDecorator,
@@ -622,7 +637,7 @@ export const defaultSchemaDecoratorsCollection = new Map<
       maxLengthDecorator,
       trimDecorator,
       restrictDecorator,
-      perPageDecorator
+      perPageDecorator,
     ],
   ],
   ['rulesEditor', [ruleEditorDecorator]],
