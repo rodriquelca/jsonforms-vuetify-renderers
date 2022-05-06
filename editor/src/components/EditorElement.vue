@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined :class="selectedStyle" @click="click">
+  <v-card outlined :class="selectedStyle" @click.self.prevent.stop="click">
     <div
       class="d-block"
       @mouseover.stop.prevent.self="hover = true"
