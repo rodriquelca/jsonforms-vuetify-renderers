@@ -4,6 +4,7 @@
       <v-tab
         v-for="(element, index) in visibleCategories"
         :key="`${layout.path}-${index}`"
+        @click.stop.prevent
       >
         {{ element.label }}
       </v-tab>
