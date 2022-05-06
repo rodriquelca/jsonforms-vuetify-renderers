@@ -52,6 +52,7 @@
             @change="onChange"
             :i18n="i18n"
             :cells="renderers"
+            v-bind:style="getCurrentFont"
           />
         </component>
       </v-card>
@@ -103,9 +104,14 @@ export default {
     previewData: function () {
       return generateEmptyData(this.$store.get('preview@schema'), {});
     },
+    getCurrentFont(): any {
+      return {
+        'font-family': this.$store.getters['themes/getFontFamilyTheme'],
+      };
+    },
   },
   watch: {
-    locale(nValue) {
+    locale(nValue: string): void {
       this.i18n.locale = nValue;
       this.i18n.translate = this.createTranslator(nValue || 'en');
     },
@@ -125,10 +131,13 @@ export default {
     };
   },
   methods: {
+    getFont(): string {
+      return this.$store.getters['themes/getFontFamilyTheme'];
+    },
     /**
      * Copy schemasfrom editor to preview
      */
-    copySchemasFromEditorToPreview() {
+    copySchemasFromEditorToPreview(): void {
       this.$store.dispatch(
         'preview/setSchema',
         this.$store.get('app/editor@schema')
@@ -145,7 +154,7 @@ export default {
     /**
      * Create translator for JSON FORMS based in store locale
      */
-    createTranslator() {
+    createTranslator(): any {
       let i18n = this.$store.get('locales');
       const store = this.$store;
       return (
@@ -171,7 +180,7 @@ export default {
      * On click in icon preview
      * Load the schemas and refresh the view
      */
-    onClickMenu(item) {
+    onClickMenu(item): void {
       this.component = item.component ? item.component : 'div';
       this.copySchemasFromEditorToPreview();
       this.createTranslator(this.$store.get('app/jsonforms@locale'));
