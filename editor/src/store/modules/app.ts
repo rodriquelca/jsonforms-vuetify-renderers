@@ -199,6 +199,7 @@ const addPropertyToSchema = (state, payload) => {
     payload.elementUUID,
     state.editor,
     (clonedSchema) => {
+      debugger;
       const newElement = payload.schemaElement;
       newElement.parent = clonedSchema;
       let counter = 0;
@@ -441,6 +442,32 @@ const updateSchemaElement = (state, payload) => {
     }
   );
 };
+const duplicateElement = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    payload.parent.uuid,
+    state.editor.schema,
+    payload.linkedSchemaElement,
+    state,
+    (newUiSchema, newSchema) => {
+      console.log(getVariableName(payload));
+
+      // const uiSchemaElement: SchemaElement = findByUUID(
+      //   newUiSchema,
+      //   payload.elementUUID
+      // );
+      // const linkedShemaElement: SchemaElement = findByUUID(
+      //   newSchema,
+      //   uiSchemaElement.linkedSchemaElement
+      // );
+      // assign(linkedShemaElement.schema, payload.changedProperties);
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
 
 const state: AppState = {
   editor: {
@@ -450,9 +477,9 @@ const state: AppState = {
     settings: false,
     selectedElement: '',
     element: {
-      selected: "",
+      selected: '',
       edit: 0,
-    }
+    },
   },
   jsonforms: {
     readonly: false,
@@ -531,6 +558,11 @@ const actions = {
   },
   removeUiSchemaElement({ commit }, payload) {
     commit('REMOVE_UISCHEMA_ELEMENT', payload);
+  },
+  duplicateElement({ commit }, payload) {
+    console.log(payload);
+    const clone = duplicateElement(state, payload);
+    // commit('DUPLICATE_ELEMENT', payload);
   },
   addScopedElementToLayout({ commit }, payload) {
     const clone = createScopedElementToLayout(state, payload);
