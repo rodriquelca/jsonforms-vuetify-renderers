@@ -56,6 +56,7 @@
           <div class="my-2">
             <v-chip
               class="mx-1"
+              v-bind:style="theme.fontFamily"
               label
               :color="theme.dark[key]"
               v-for="(key, index) in Object.keys(theme.dark)"
@@ -67,6 +68,7 @@
           <div class="my-2">
             <v-chip
               class="mx-1"
+              v-bind:style="theme.fontFamily"
               label
               :color="theme.light[key]"
               v-for="(key, index) in Object.keys(theme.light)"
@@ -134,6 +136,7 @@ export default {
               accent: element.light.accent,
               info: element.light.info,
             },
+            fontFamily: { 'font-family': element.fontFamily },
           }),
         });
       });
@@ -143,7 +146,7 @@ export default {
       name: string;
       dark: VuetifyThemeVariant;
       light: VuetifyThemeVariant;
-    }) {
+    }): void {
       // close menu
       this.menu = false;
       const name = theme.name;
@@ -163,4 +166,8 @@ export default {
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.mx-1 {
+  width: 70px;
+}
+</style>

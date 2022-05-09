@@ -6,6 +6,7 @@ const getters = {
       return {
         name: value.name,
         light: value.light,
+        fontFamily: value.fontFamily,
       };
     });
   },
