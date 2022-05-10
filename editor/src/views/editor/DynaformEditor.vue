@@ -1,71 +1,53 @@
 <template>
-    <v-container class="ps-9 my-1" :fluid="true">
-        <v-row no-gutters height="100%">
-            <v-col cols="2"> </v-col>
-            <v-col cols="10">
-                <json-forms
-                    :renderers="renderers"
-                    :data="data"
-                    :uischema="useExportUiSchema() || {}"
-                    :schema="useExportSchema() || false"
-                    height="500"
-                />
-            </v-col>
-        </v-row>
-    </v-container>
+  <json-forms
+    :renderers="renderers"
+    :data="data"
+    :uischema="useExportUiSchema() || {}"
+    :schema="useExportSchema() || false"
+    height="500"
+  />
 </template>
 
 <script lang="ts">
 import { JsonForms } from '@jsonforms/vue2';
 import { defaultEditorRenderers } from '../../renderers';
 import { useExportSchema } from '../../util';
-import { createLayout } from '../../util/generators/uiSchema';
 import { JReactivex as JReact, JFormE as JF } from '@jsonforms/vue2';
 
 export default {
-    name: 'DynaformEditor',
-    props: {},
-    components: {
-        JsonForms,
+  name: 'DynaformEditor',
+  props: {},
+  components: {
+    JsonForms,
+  },
+  data() {
+    return {
+      selection: '' as string,
+      renderers: [],
+      data: {},
+    };
+  },
+  mounted() {
+    this.renderers = defaultEditorRenderers;
+  },
+  methods: {
+    useExportSchema() {
+      return useExportSchema(this.$store.get('app/editor@schema'));
     },
-    data() {
-        return {
-            selection: '' as string,
-            renderers: [],
-            data: {},
-        };
+    useExportUiSchema() {
+      return this.$store.get('app/editor@uiSchema');
     },
-    mounted() {
-        this.renderers = defaultEditorRenderers;
-        this.$store.dispatch('app/setSchema', {
-            schema: {
-                type: 'object',
-                title: 'Dynaform',
-                properties: {},
-            },
-        });
-        this.$store.dispatch('app/setUiSchema', {
-            uiSchema: createLayout('VerticalLayout'),
-        });
-    },
-    methods: {
-        useExportSchema() {
-            return useExportSchema(this.$store.get('app/editor@schema'));
+  },
+  provide() {
+    return {
+      store: this.$store,
+      JReactivex: JReact,
+      JForm: new JF({
+        data: {
+          store: this.$store,
         },
-        useExportUiSchema() {
-            return this.$store.get('app/editor@uiSchema');
-        },
-    },
-    provide() {
-        return {
-            store: this.$store,
-            JReactivex: JReact,
-            JForm: new JF({
-                data: {
-                    store: this.$store,
-                },
-            }),
-        };
-    },
+      }),
+    };
+  },
 };
 </script>
