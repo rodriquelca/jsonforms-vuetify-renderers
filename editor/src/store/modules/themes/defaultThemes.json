@@ -6,7 +6,8 @@
       "secondary": "#FD5523",
       "accent": "#37966F",
       "info": "#356859"
-    }
+    },
+    "fontFamily": "Comic Neue"
   },
   {
     "name": "Crane",
@@ -15,7 +16,8 @@
       "secondary": "#E30425",
       "accent": "#4E0D3A",
       "info": "#5D1049"
-    }
+    },
+    "fontFamily": "Fira Code"
   },
   {
     "name": "Fortnightly",
@@ -23,7 +25,8 @@
       "primary": "#6B38FB",
       "secondary": "#6B38FB",
       "info": "#6B38FB"
-    }
+    },
+    "fontFamily": "Inconsolata"
   },
   {
     "name": "Owl",
@@ -32,7 +35,8 @@
       "secondary": "#0336FF",
       "accent": "#FF0266",
       "info": "#FFDE03"
-    }
+    },
+    "fontFamily": "Oxygen"
   },
   {
     "name": "Shrine",
@@ -41,6 +45,7 @@
       "secondary": "#FEEAE6",
       "accent": "#442C2E",
       "info": "#FEDBD0"
-    }
+    },
+    "fontFamily": "Tapestry"
   }
 ]

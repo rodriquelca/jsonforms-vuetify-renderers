@@ -7,9 +7,11 @@ import defaultThemes from './defaultThemes.json';
 
 export interface ThemeState {
   themes: any;
+  active: string;
 }
 const state: ThemeState = {
   themes: defaultThemes,
+  active: 'default',
 };
 const themes: Module<ThemeState, RootState> = {
   namespaced: true,
