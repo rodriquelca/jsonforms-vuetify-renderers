@@ -261,8 +261,13 @@ export default {
     onDuplicate: function (e) {
       e.preventDefault();
       e.stopPropagation();
-      if (!hasChildren(this.wrappedElement)) {
+      if (
+        !hasChildren(this.wrappedElement) &&
+        this.wrappedElement.linkedSchemaElement
+      ) {
         this.$store.dispatch('app/duplicateElement', this.wrappedElement);
+      } else {
+        console.log('duplicate unescoped');
       }
     },
     onRemove: function (e) {

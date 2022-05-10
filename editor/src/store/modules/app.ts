@@ -480,7 +480,13 @@ const duplicateElement = (state, payload) => {
         return state;
       }
 
-      newUiSchema.elements.push(newUIElement);
+      // newUiSchema.elements.push(newUIElement);
+
+      const index = _.findIndex(newUiSchema.elements, function (element) {
+        return element.uuid === payload.uuid;
+      });
+      console.log(result);
+      (newUiSchema as EditorLayout).elements.splice(index + 1, 0, newUIElement);
       return {
         schema: getRoot(newSchema),
         uiSchema: getRoot(newUiSchema),
