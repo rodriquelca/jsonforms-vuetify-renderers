@@ -469,6 +469,12 @@ const state: AppState = {
     locale: 'en',
   },
   data: {},
+  monaco: {
+    schemaModel: undefined,
+    uischemaModel: undefined,
+    dataModel: undefined,
+    dataVariables: undefined
+  }
 };
 // make all mutations
 const mutations = {

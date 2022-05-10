@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import DefaultLayout from '../layouts/default/index.vue';
-import DynaformEditor from '../views/editor';
+//import DynaformEditor from '../views/editor';
+import MainPanel from '../components/MainPanel/mainPanel.vue';
 
 Vue.use(Router);
 
@@ -22,7 +23,7 @@ export default new Router({
           path: '',
           name: 'Default',
           // component: () => import('../views/home'),
-          component: DynaformEditor,
+          component: MainPanel,
         },
       ],
     },
