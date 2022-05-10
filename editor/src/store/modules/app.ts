@@ -31,7 +31,8 @@ import {
   EditorUISchemaElement,
   getVariableName,
 } from '../../model/uischema';
-
+import { v4 as uuid } from 'uuid';
+import { unset } from 'lodash';
 import { CollectionStore } from '@jsonforms/vue2';
 import mutationsEditor from './editor/mutations';
 import actionsEditor from './editor/actions';
@@ -199,7 +200,6 @@ const addPropertyToSchema = (state, payload) => {
     payload.elementUUID,
     state.editor,
     (clonedSchema) => {
-      debugger;
       const newElement = payload.schemaElement;
       newElement.parent = clonedSchema;
       let counter = 0;
@@ -450,17 +450,37 @@ const duplicateElement = (state, payload) => {
     payload.linkedSchemaElement,
     state,
     (newUiSchema, newSchema) => {
-      console.log(getVariableName(payload));
+      const variable = getVariableName(payload);
+      let counter = 0;
+      for (const key of newSchema.parent.properties.keys()) {
+        if (key.includes(variable)) {
+          counter += 1;
+        }
+      }
+      const schemauuid = uuid();
+      newSchema.schema.i18n = `${variable}_${counter}`;
+      newSchema.parent.properties?.set(`${variable}_${counter}`, {
+        options: newSchema.options,
+        parent: newSchema.parent,
+        schema: newSchema.schema,
+        type: newSchema.type,
+        uuid: schemauuid,
+      });
+      const shemaElement: SchemaElement = findByUUID(newSchema, schemauuid);
+      const newUIElement = {
+        options: payload.options,
+        parent: newUiSchema,
+        scope: `#${getScope(shemaElement)}`,
+        type: payload.type,
+        uuid: uuid(),
+      };
 
-      // const uiSchemaElement: SchemaElement = findByUUID(
-      //   newUiSchema,
-      //   payload.elementUUID
-      // );
-      // const linkedShemaElement: SchemaElement = findByUUID(
-      //   newSchema,
-      //   uiSchemaElement.linkedSchemaElement
-      // );
-      // assign(linkedShemaElement.schema, payload.changedProperties);
+      if (!shemaElement || !linkElements(newUIElement, shemaElement)) {
+        console.error('Could not add new UI element', newUIElement);
+        return state;
+      }
+
+      newUiSchema.elements.push(newUIElement);
       return {
         schema: getRoot(newSchema),
         uiSchema: getRoot(newUiSchema),
@@ -562,7 +582,8 @@ const actions = {
   duplicateElement({ commit }, payload) {
     console.log(payload);
     const clone = duplicateElement(state, payload);
-    // commit('DUPLICATE_ELEMENT', payload);
+    commit('SET_SCHEMA', clone.schema);
+    commit('SET_UI_SCHEMA', clone.uiSchema);
   },
   addScopedElementToLayout({ commit }, payload) {
     const clone = createScopedElementToLayout(state, payload);
