@@ -11,7 +11,8 @@ export interface ViewManagerState {
     statusBar: any,
     activityBar: any,
     sidePanel: any,
-    mainPanel: any
+    mainPanel: any,
+    actionsBar: any
 }
 
 const state: ViewManagerState = {
@@ -19,24 +20,29 @@ const state: ViewManagerState = {
     menuBar: {},
     // Menu left
     activityBar: {
+        active: 0,
         items: [
             {
+                id: 'activity-pallete',
                 title: 'Pallete Panel',
                 icon: 'mdi-view-dashboard',
-                sideBar: 'pallete-panel',
             },
             {
+                id: 'activity-properties',
                 title: 'Properties Panel',
                 icon: 'mdi-pencil',
-                sideBar: 'properties-panel',
             },
             {
+                id: 'activity-preview',
+                title: 'Preview',
+                icon: 'mdi-eye',
+            },
+            {
+                id: 'activity-translations',
                 title: 'Translation',
                 icon: 'mdi-translate',
-                sideBar: 'side-bar-i18n',
             },
-        ],
-        active: 0
+        ]
     },
     //Panel bottom
     statusBar: {},
@@ -45,17 +51,21 @@ const state: ViewManagerState = {
         active: 0,
         items: [
             {
-                id: "pallete-panel",
-                mainPanel: 'dynaform-editor',
+                id: "side-bar-pallete",
+                component: 'pallete-panel',
             },
             {
-                id: 'properties-panel',
-                mainPanel: 'dynaform-editor',
+                id: 'side-bar-properties',
+                component: 'properties-panel',
             },
             {
-                id: 'side-bar-i18n',
-                mainPanel: 'main-panel-i18n',
+                id: 'side-bar-translations',
+                component: 'side-bar-i18n',
             },
+            {
+                id: 'side-bar-preview',
+                component: 'side-bar-dynaform-preview',
+            }
         ],
     },
     sidePanel: {
@@ -65,14 +75,32 @@ const state: ViewManagerState = {
         active: 0,
         items: [
             {
-                id: "dynaform-editor",
+                id: "main-editor",
+                component: "dynaform-editor",
                 data: {}
             },
             {
-                id: 'main-panel-i18n',
+                id: 'main-translations',
+                component: 'main-panel-i18n',
                 data: {
                     locale: "en"
                 }
+            },
+            {
+                id: 'main-preview',
+                component: 'main-panel-dynaform-preview',
+                data: {
+                }
+            },
+        ],
+    },
+    actionsBar: {
+        active: 0,
+        items: [
+            {
+                id: "actions-editor",
+                component: "actions-bar-editor",
+                data: {}
             },
         ],
     }

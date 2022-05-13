@@ -13,6 +13,29 @@ const mutations = {
         state.sideBar.active = indexSideBar;
         state.mainPanel.active = indexMainPanel;
     },
+    /**
+     * Set views by Id
+     * @param state 
+     * @param value 
+     */
+    SET_ALL_VIEWS: (state: any, value: any) => {
+        let index = 0;
+        if (value.activityBar) {
+            index = _.findIndex(state.activityBar.items, (el: any) => { return el.id == value.activityBar.id });
+            state.activityBar.active = index;
+        }
+        index = 0;
+        if (value.sideBar) {
+            index = _.findIndex(state.sideBar.items, (el: any) => { return el.id == value.sideBar.id });
+            state.sideBar.active = index;
+        }
+        index = 0;
+        if (value.mainPanel) {
+            index = _.findIndex(state.mainPanel.items, (el: any) => { return el.id == value.mainPanel.id });
+            state.mainPanel.active = index;
+        }
+    },
+
     SET_DATA_MAIN_PANEL: (state: any, value: any) => {
         const index = _.findIndex(state.mainPanel.items, (o: any) => { return o.id == value.id; });
         state.mainPanel.items[index].data = _.extend({}, state.mainPanel.items[index].data, value.data);

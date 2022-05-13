@@ -1,16 +1,10 @@
 <template>
-  <v-app-bar app elevation="0">
+  <v-app-bar dark app color="primary" elevation="0">
     <v-toolbar-title>
       <v-container fill-height fluid
         ><v-row align="center" justify="center">
           <v-col>
-            <v-icon size="40" color="blue darken-2">mdi-code-json</v-icon>
-          </v-col>
-          <v-col>
-            <v-list-item-title class="text-h6"> Dynaform </v-list-item-title>
-            <v-list-item-subtitle class="text-caption">
-              Editor
-            </v-list-item-subtitle>
+            <v-toolbar-title>JSON Forms 2.0</v-toolbar-title>
           </v-col>
         </v-row></v-container
       ></v-toolbar-title
@@ -41,7 +35,7 @@ import ThemeChanger from '@/components/ThemeChanger.vue';
 import { AppStore } from '../store/modules/types';
 import Templates from '@/components/Templates.vue';
 import FormRules from '@/components/FormRules.vue';
-import CustomTheme from '../../../src/components/CustomTheme.vue';
+import CustomTheme from '../../CustomTheme.vue';
 
 export default {
   name: 'DefaultAppBar',

@@ -9,7 +9,7 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on: onTooltip }">
           <v-btn large icon dark v-on="{ ...on, ...onTooltip }">
-            <v-icon size="30" color="primary">mdi-palette</v-icon>
+            <v-icon size="30">mdi-palette</v-icon>
           </v-btn>
         </template>
         Theme Colors

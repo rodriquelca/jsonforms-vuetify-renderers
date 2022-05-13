@@ -10,7 +10,7 @@
           v-bind="attrs"
           v-on="on"
         >
-          <v-icon size="30" color="primary">mdi-download-box</v-icon>
+          <v-icon size="30">mdi-download-box</v-icon>
         </v-btn>
       </template>
       Download Json
