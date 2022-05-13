@@ -47,5 +47,18 @@
       "info": "#FEDBD0"
     },
     "fontFamily": "Tapestry"
+  },
+  {
+    "name": "admin",
+    "light": {
+      "primary": "#32c787",
+      "secondary": "#868e96",
+      "accent": "#2196f3",
+      "error": "#ff6b68",
+      "info": "#03a9f4",
+      "success": "#32c787",
+      "warning": "#ffc721"
+    },
+    "fontFamily": "Tapestry"
   }
 ]

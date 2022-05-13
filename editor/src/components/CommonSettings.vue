@@ -9,7 +9,6 @@
             borderless
             mandatory
             group
-            color="primary"
             style="display: grid; grid-template-columns: 1fr 1fr"
           >
             <v-btn :value="false">

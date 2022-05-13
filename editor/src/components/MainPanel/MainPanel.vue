@@ -1,23 +1,19 @@
 <template>
-  <v-container class="ps-9 my-1" :fluid="true">
-    <v-row no-gutters height="100%">
-      <v-col cols="2"> </v-col>
-      <v-col cols="10">
-        <component v-bind:is="itemsMainPanel[activeMainPanel]['id']" />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-card no-gutters height="100%" width="100%">
+    <component v-bind:is="itemsMainPanel[activeMainPanel]['component']" />
+  </v-card>
 </template>
 
 <script lang="ts">
 import { sync } from 'vuex-pathify';
 import { createLayout } from '../../util';
-import DynaformEditor from '../../views/editor';
+import DynaformEditor from '../DynaformEditor/DynaformEditor.vue';
 import MainPanelI18n from '../i18n/mainPanelI18n.vue';
+import MainPanelDynaformPreview from '../DynaformPreview/mainPanelDynaformPreview.vue';
 export default {
   name: 'mainPanel',
   props: {},
-  components: { DynaformEditor, MainPanelI18n },
+  components: { DynaformEditor, MainPanelI18n, MainPanelDynaformPreview },
   data() {
     return {
       data: {},

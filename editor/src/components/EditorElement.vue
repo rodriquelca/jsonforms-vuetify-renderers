@@ -225,7 +225,7 @@ export default {
     selectedStyle() {
       return this.activeElement.selected === this.wrappedElement.uuid
         ? 'selected pa-2'
-        : 'pa-2';
+        : 'pa-2 vpm-editor-element';
     },
   },
   watch: {
@@ -261,11 +261,18 @@ export default {
     click: function (ev) {
       ev.preventDefault();
       ev.stopPropagation();
+      let activityBar = { id: 'activity-properties' },
+        sideBar = { id: 'side-bar-properties' },
+        mainPanel: { id: 'main-editor' };
       this.$store.set('app/editor@element', {
         selected: this.wrappedElement.uuid,
-        edit: _.random(0, 100000),
       });
       this.hover = true;
+      this.$store.dispatch('viewManager/setAllViews', {
+        activityBar,
+        sideBar,
+        mainPanel,
+      });
     },
   },
 };
@@ -273,8 +280,5 @@ export default {
 <style scoped>
 .selected {
   border: 2px solid rgb(48 201 173 / 98%);
-}
-.v-opacity {
-  opacity: 0.9;
 }
 </style>

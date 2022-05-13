@@ -3,9 +3,7 @@
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-btn large icon dark v-bind="attrs" v-on="on">
-          <v-icon size="30" color="primary" @click="openDialog"
-            >mdi-draw</v-icon
-          >
+          <v-icon size="30" @click="openDialog">mdi-draw</v-icon>
         </v-btn>
       </template>
       Custom Theme

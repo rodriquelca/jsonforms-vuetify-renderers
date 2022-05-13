@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import DefaultLayout from '../layouts/default/index.vue';
+import DefaultLayout from '../components/layouts/default/index.vue';
 //import DynaformEditor from '../views/editor';
-import MainPanel from '../components/MainPanel/mainPanel.vue';
+import MainPanel from '../components/MainPanel/MainPanel.vue';
 
 Vue.use(Router);
 
