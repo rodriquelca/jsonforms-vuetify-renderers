@@ -11,12 +11,14 @@ import _ from 'lodash';
 import PalletePanel from '../../../views/editor/pallete-panel';
 import PropertiesPanel from '../../properties-panel/PropertiesPanel.vue';
 import SideBarI18n from '../../i18n/sideBarI18n.vue';
+import SideBarPreview from '../../DynaformPreview/sideBarDynaformPreview.vue';
 export default {
   name: 'SideBar',
   components: {
     PalletePanel,
     PropertiesPanel,
     SideBarI18n,
+    SideBarPreview,
   },
   data() {
     return {};
@@ -27,5 +29,4 @@ export default {
   },
 };
 </script>
-<style>
-</style>
+<style></style>
