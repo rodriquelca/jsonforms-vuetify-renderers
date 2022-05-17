@@ -1,17 +1,25 @@
 {
-  "personalData": {
-    "type": "object",
-    "properties": {
-      "age": {
-        "type": "integer",
-        "description": "Please enter your age."
+  "type": "object",
+  "properties": {
+    "personalData": {
+      "type": "object",
+      "properties": {
+        "age": {
+          "type": "integer",
+          "description": "Please enter your age."
+        },
+        "height": {
+          "type": "number",
+          "description": "Please enter your height."
+        }
       },
-      "height": {
-        "type": "number",
-        "description": "Please enter your height."
-      }
+      "required": [
+        "age",
+        "height"
+      ]
     },
-    "required": ["age", "height"]
-  },
-  "$ref": "subForm/subForm.json"
+    "subform": {
+      "$ref": "subForm/subForm.json"
+    }
+  }
 }

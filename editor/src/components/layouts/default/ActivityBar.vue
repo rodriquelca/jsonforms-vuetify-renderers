@@ -77,6 +77,12 @@ export default {
           sideBar.id = 'side-bar-translations';
           mainPanel.id = 'main-translations';
           break;
+        case 'activity-forms':
+          debugger;
+          activityBar.id = 'activity-forms';
+          sideBar.id = 'side-bar-translations';
+          mainPanel.id = 'main-translations';
+          break;
       }
 
       this.$store.dispatch('viewManager/setAllViews', {

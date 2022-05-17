@@ -44,17 +44,33 @@ const refUIParserOptions = {
 };
 
 const getSchema = async (): Promise<any> => {
-  const [newSchema] = await Promise.all([
-    $RefParser.dereference(schema, refParserOptions),
-    $RefParser.dereference(uischema, refUIParserOptions),
-  ]);
-  return newSchema;
+  // const [newSchema] = await Promise.all([
+  //   $RefParser.dereference(schema, refParserOptions, function (err, schema) {
+  //     console.log(schema);
+  //   }),
+  //   $RefParser.dereference(uischema, refUIParserOptions),
+  // ]);
+  // return newSchema;
+
+  const $refs = await $RefParser.resolve(schema, refParserOptions);
+
+  // $refs.paths() returns the paths of all the files in your schema
+  const filePaths = $refs.paths();
+
+  console.log(filePaths);
+  // $refs.get() lets you query parts of your schema
+  const name = $refs.get('subForm/subForm.json');
+
+  // $refs.set() lets you change parts of your schema
+  $refs.set('subForm/subForm.json#/properties/name/minLength', 3);
+  console.log(name);
+  console.log($refs);
 };
 
 const newSchema: any = getSchema().then((response) => response);
-
+debugger;
 export const input: {
   schema: JsonSchema;
   uischema: UISchemaElement;
   data: any;
-} = { newSchema, uischema, data };
+} = { schema, uischema, data };

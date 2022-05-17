@@ -380,6 +380,26 @@ const controlElements = [
   },
 ];
 const complexElements = [
+  
+  {
+    type: 'Form',
+    label: 'Sub-Form',
+    icon: 'mdi-newspaper-variant-multiple',
+    uiSchemaElementProvider: () => {
+      const control = {
+        type: "object"
+      }
+      return {
+        control,
+        variable: "form",
+        // uiOptions: {
+        //   image: "https://picsum.photos/id/11/500/300",
+        //   height: 600,
+        //   width: 600,
+        // }
+      };
+    },
+  },
   {
     type: 'DataTableControl',
     label: 'Grid',

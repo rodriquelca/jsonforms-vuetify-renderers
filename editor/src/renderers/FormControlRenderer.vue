@@ -6,11 +6,9 @@
     :appliedOptions="appliedOptions"
   >
     <v-container>
-      <editor
-        :init="editorSettings"
-        :value="appliedOptions.content"
-        v-on:onChange="this.onChangeHandler"
-      />
+      <div class="text-h6 font-weight-regular grey--text">
+        {{ message }}
+      </div>
     </v-container>
   </control-wrapper>
 </template>
@@ -20,9 +18,7 @@ import {
   ControlElement,
   JsonFormsRendererRegistryEntry,
   rankWith,
-  isStringControl,
-  and,
-  optionIs,
+  uiTypeIs,
 } from '@jsonforms/core';
 import { defineComponent } from '@vue/composition-api';
 import {
@@ -52,22 +48,9 @@ const controlRenderer = defineComponent({
         (value) => value || undefined
       ),
       ...{
-        editorSettings: {
-          inline: true,
-          menubar: false,
-        },
+        message: 'Select screen to nest',
       },
     };
-  },
-  methods: {
-    onChangeHandler(e, editor) {
-      this.$store.dispatch('app/updateUISchemaElementOption', {
-        elementUUID: this.control.uischema.uuid,
-        changedProperties: {
-          content: editor.getContent(),
-        },
-      });
-    },
   },
 });
 
@@ -75,6 +58,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(5, and(isStringControl, optionIs('isHtmlViewer', true))),
+  tester: rankWith(5, uiTypeIs('Form')),
 };
 </script>
