@@ -584,7 +584,6 @@ const actions = {
     commit('REMOVE_UISCHEMA_ELEMENT', payload);
   },
   duplicateElement({ commit }, payload) {
-    console.log(payload);
     const clone = duplicateElement(state, payload);
     commit('SET_SCHEMA', clone.schema);
     commit('SET_UI_SCHEMA', clone.uiSchema);

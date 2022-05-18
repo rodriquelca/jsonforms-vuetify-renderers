@@ -106,7 +106,6 @@ const droppableRenderer = defineComponent({
             evt.added.element.type === 'File')
         ) {
           //here update the schema
-          debugger;
           const property = evt.added.element.uiSchemaElementProvider();
           const newElement = buildSchemaTree(property.control);
           this.$store.dispatch('app/addPropertyToSchema', {
