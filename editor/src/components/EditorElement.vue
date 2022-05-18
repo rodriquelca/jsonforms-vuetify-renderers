@@ -266,9 +266,7 @@ export default {
         this.wrappedElement.linkedSchemaElement
       ) {
         this.$store.dispatch('app/duplicateElement', this.wrappedElement);
-      } else {
-        console.log('duplicate unescoped');
-      }
+      } //TODO Duplicated unescoped
     },
     onRemove: function (e) {
       e.preventDefault();
