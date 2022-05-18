@@ -34,6 +34,11 @@ const mutations = {
             index = _.findIndex(state.mainPanel.items, (el: any) => { return el.id == value.mainPanel.id });
             state.mainPanel.active = index;
         }
+        index = 0;
+        if (value.actionsBar) {
+            index = _.findIndex(state.actionsBar.items, (el: any) => { return el.id == value.actionsBar.id });
+            state.actionsBar.active = index;
+        }
     },
 
     SET_DATA_MAIN_PANEL: (state: any, value: any) => {

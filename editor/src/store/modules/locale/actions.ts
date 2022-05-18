@@ -14,5 +14,8 @@ const actions = {
     setSchema: ({ commit }: any, data: any) => {
         commit('SET_SCHEMA', data);
     },
+    setAll: ({ commit }: any, data: any) => {
+        commit('SET_ALL', data);
+    },
 };
 export default actions;

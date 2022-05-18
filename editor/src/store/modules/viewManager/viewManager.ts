@@ -77,19 +77,24 @@ const state: ViewManagerState = {
             {
                 id: "main-editor",
                 component: "dynaform-editor",
-                data: {}
+                data: {
+                    reload: "1"
+                }
             },
             {
                 id: 'main-translations',
                 component: 'main-panel-i18n',
                 data: {
-                    locale: "en"
+                    locale: "en",
+                    reload: "1",
+                    view: "editor"
                 }
             },
             {
                 id: 'main-preview',
                 component: 'main-panel-dynaform-preview',
                 data: {
+                    reload: "1"
                 }
             },
         ],
@@ -100,6 +105,11 @@ const state: ViewManagerState = {
             {
                 id: "actions-editor",
                 component: "actions-bar-editor",
+                data: {}
+            },
+            {
+                id: "actions-translations",
+                component: "actions-bar-translations",
                 data: {}
             },
         ],
