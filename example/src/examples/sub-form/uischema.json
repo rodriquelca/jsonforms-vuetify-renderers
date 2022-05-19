@@ -20,7 +20,8 @@
       "options": {
         "detail": {
           "$ref": "subForm/subformuischema.json"
-        }
+        },
+        "formRef": "subForm/subformuischema.json"
       }
     }
   ]
