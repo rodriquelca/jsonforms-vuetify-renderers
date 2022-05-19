@@ -7,6 +7,9 @@ const getters = {
                 value: value.key
             }
         });
+    },
+    getLocalesKeys: (state: any) => {
+        return Object.keys(state);
     }
 };
 export default getters;

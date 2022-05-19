@@ -56,6 +56,7 @@ import ActivityBar from './ActivityBar.vue';
 import ActionsBar from './ActionsBar.vue';
 import SideBar from './SideBar.vue';
 import MainPanel from '../../MainPanel/MainPanel.vue';
+import Vue from 'vue';
 
 export default {
   name: 'DefaultLayout',
@@ -65,6 +66,12 @@ export default {
     DefaultView: MainPanel,
     DefaultSideBar: SideBar,
     DefaultActivityBar: ActivityBar,
+  },
+  provide() {
+    // use function syntax so that we can access `this`
+    return {
+      bus: new Vue(),
+    };
   },
 };
 </script>
