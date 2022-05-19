@@ -15,7 +15,13 @@
       ]
     },
     {
-      "$ref": "subForm/subformuischema.json"
+      "type": "Control",
+      "scope": "#/properties/subform",
+      "options": {
+        "detail": {
+          "$ref": "subForm/subformuischema.json"
+        }
+      }
     }
   ]
 }

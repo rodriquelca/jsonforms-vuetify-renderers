@@ -42,11 +42,6 @@ const state: ViewManagerState = {
         title: 'Translation',
         icon: 'mdi-translate',
       },
-      {
-        id: 'activity-forms',
-        title: 'Screens',
-        icon: 'mdi-file-document',
-      },
     ],
   },
   //Panel bottom
@@ -82,24 +77,25 @@ const state: ViewManagerState = {
       {
         id: 'main-editor',
         component: 'dynaform-editor',
-        data: {},
+        data: {
+          reload: '1',
+        },
       },
       {
         id: 'main-translations',
         component: 'main-panel-i18n',
         data: {
           locale: 'en',
+          reload: '1',
+          view: 'editor',
         },
       },
       {
         id: 'main-preview',
         component: 'main-panel-dynaform-preview',
-        data: {},
-      },
-      {
-        id: 'form',
-        component: 'main-panel-dynaform-preview',
-        data: {},
+        data: {
+          reload: '1',
+        },
       },
     ],
   },
@@ -109,6 +105,11 @@ const state: ViewManagerState = {
       {
         id: 'actions-editor',
         component: 'actions-bar-editor',
+        data: {},
+      },
+      {
+        id: 'actions-translations',
+        component: 'actions-bar-translations',
         data: {},
       },
     ],

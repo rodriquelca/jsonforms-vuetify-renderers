@@ -1,5 +1,9 @@
 <template>
-  <v-navigation-drawer mini-variant mini-variant-width="48">
+  <v-navigation-drawer
+    mini-variant
+    mini-variant-width="48"
+    color="grey lighten-4"
+  >
     <v-list dense nav>
       <v-list-item-group v-model="active">
         <v-list-item
@@ -55,27 +59,32 @@ export default {
       let id = this.itemsActivityBar[newValue].id,
         activityBar = { id: '' },
         mainPanel = { id: '' },
+        actionsBar = { id: '' },
         sideBar = { id: '' };
       switch (id) {
         case 'activity-pallete':
           activityBar.id = 'activity-pallete';
           sideBar.id = 'side-bar-pallete';
           mainPanel.id = 'main-editor';
+          actionsBar.id = 'actions-editor';
           break;
         case 'activity-properties':
           activityBar.id = 'activity-properties';
           sideBar.id = 'side-bar-properties';
           mainPanel.id = 'main-editor';
+          actionsBar.id = 'actions-editor';
           break;
         case 'activity-preview':
           activityBar.id = 'activity-preview';
           sideBar.id = 'side-bar-preview';
           mainPanel.id = 'main-preview';
+          actionsBar.id = 'actions-editor';
           break;
         case 'activity-translations':
           activityBar.id = 'activity-translations';
           sideBar.id = 'side-bar-translations';
           mainPanel.id = 'main-translations';
+          actionsBar.id = 'actions-translations';
           break;
         case 'activity-forms':
           debugger;
@@ -89,6 +98,7 @@ export default {
         activityBar,
         sideBar,
         mainPanel,
+        actionsBar,
       });
     },
   },
@@ -99,9 +109,9 @@ export default {
   justify-content: inherit !important;
 }
 .vpm-actbar-item-icon:hover {
-  transform: scale(1.4, 1.4);
+  transform: scale(1.6, 1.6);
 }
 .vpm-actbar-item-icon {
-  transition: transform 350ms;
+  transition: transform 250ms;
 }
 </style>

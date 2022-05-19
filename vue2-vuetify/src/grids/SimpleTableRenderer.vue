@@ -139,9 +139,8 @@ const droppableRenderer = defineComponent({
     title(prop: string) {
       return prop.split('/').pop();
     },
-    removeItemsClick(event: Event, toDelete: number[]): void {
+    removeItemsClick(event: Event): void {
       event.stopPropagation();
-      console.log(toDelete);
     },
   },
 });

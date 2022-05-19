@@ -12,7 +12,10 @@ const schemaResolver = {
   canRead: function (file: { url: string | string[] }) {
     return file.url.indexOf('subForm/subForm.json') !== -1;
   },
-  read: function () {
+  read: function (file, callback) {
+    debugger;
+    console.log(file);
+    console.log(callback);
     return JSON.stringify(subFormSchema);
   },
 };
@@ -25,9 +28,11 @@ const refParserOptions = {
   },
 };
 
+// UI
 const schemaUIResolver = {
   order: 1,
   canRead: function (file: { url: string | string[] }) {
+    debugger;
     return file.url.indexOf('subForm/subformuischema.json') !== -1;
   },
   read: function () {
@@ -44,27 +49,18 @@ const refUIParserOptions = {
 };
 
 const getSchema = async (): Promise<any> => {
-  // const [newSchema] = await Promise.all([
-  //   $RefParser.dereference(schema, refParserOptions, function (err, schema) {
-  //     console.log(schema);
-  //   }),
-  //   $RefParser.dereference(uischema, refUIParserOptions),
-  // ]);
-  // return newSchema;
-
-  const $refs = await $RefParser.resolve(schema, refParserOptions);
-
-  // $refs.paths() returns the paths of all the files in your schema
-  const filePaths = $refs.paths();
-
-  console.log(filePaths);
-  // $refs.get() lets you query parts of your schema
-  const name = $refs.get('subForm/subForm.json');
-
-  // $refs.set() lets you change parts of your schema
-  $refs.set('subForm/subForm.json#/properties/name/minLength', 3);
-  console.log(name);
-  console.log($refs);
+  const [newSchema] = await Promise.all([
+    $RefParser.dereference(schema, refParserOptions, function (err, schema) {
+      console.log(schema);
+    }),
+    $RefParser.dereference(
+      uischema,
+      refUIParserOptions,
+      function (err, schema) {
+        console.log(schema);
+      }
+    ),
+  ]);
 };
 
 const newSchema: any = getSchema().then((response) => response);
