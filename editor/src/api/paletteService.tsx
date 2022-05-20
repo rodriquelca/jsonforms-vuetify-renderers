@@ -387,16 +387,17 @@ const complexElements = [
     icon: 'mdi-newspaper-variant-multiple',
     uiSchemaElementProvider: () => {
       const control = {
-        type: "object"
-      }
+        "$ref": "http://json-schema.org/draft-07/schema"
+      };
       return {
         control,
         variable: "form",
-        // uiOptions: {
-        //   image: "https://picsum.photos/id/11/500/300",
-        //   height: 600,
-        //   width: 600,
-        // }
+        uiOptions:{
+          "detail": {
+            "$ref": "subForm/subformuischema.json"
+          },
+          "formRef": "subForm/subformuischema.json"
+        }
       };
     },
   },

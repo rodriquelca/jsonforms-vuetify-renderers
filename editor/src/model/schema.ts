@@ -315,6 +315,32 @@ const determineType = (schema: JsonSchema): SchemaElementType => {
   return OTHER;
 };
 
+export const buildEditorJsonSchema = (element: SchemaElement): JsonSchema => {
+  const result = cloneDeep(element.schema);
+  traverse(result, (current: any) => {
+    delete current.$ref;
+  });
+  debugger;
+  switch (element.type) {
+    case OBJECT:
+      if (element.properties.size > 0) {
+        result.properties = {};
+        element.properties.forEach((propertyElement, propName) => {
+          result.properties[propName] = buildEditorJsonSchema(propertyElement);
+        });
+      }
+      break;
+    case ARRAY:
+      if (Array.isArray(element.items)) {
+        result.items = element.items.map(buildEditorJsonSchema);
+      } else {
+        result.items = buildEditorJsonSchema(element.items);
+      }
+      break;
+  }
+  return result;
+};
+
 export const buildJsonSchema = (element: SchemaElement): JsonSchema => {
   const result = cloneDeep(element.schema);
   switch (element.type) {

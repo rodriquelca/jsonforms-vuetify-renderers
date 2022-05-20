@@ -30,7 +30,7 @@ import { getHierarchy, TreeElement } from '../util/tree';
 
 export interface EditorUISchemaElement
   extends UISchemaElement,
-    TreeElement<EditorUISchemaElement> {
+  TreeElement<EditorUISchemaElement> {
   linkedSchemaElement?: string;
 }
 
@@ -40,7 +40,7 @@ export interface EditorCategoryElement extends Category, EditorUISchemaElement {
 
 export interface CategorizationLayout
   extends Categorization,
-    EditorUISchemaElement {
+  EditorUISchemaElement {
   type: 'Categorization';
   elements: EditorCategoryElement[];
 }

@@ -58,6 +58,6 @@ export default controlRenderer;
 
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(5, uiTypeIs('Form')),
+  tester: rankWith(11, uiTypeIs('Form')),
 };
 </script>

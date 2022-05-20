@@ -11,7 +11,7 @@
 <script lang="ts">
 import { JsonForms } from '@jsonforms/vue2';
 import { defaultEditorRenderers } from '../../renderers';
-import { useExportSchema } from '../../util';
+import { useEditorSchema } from '../../util';
 import { JReactivex as JReact, JFormE as JF } from '@jsonforms/vue2';
 
 export default {
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     useExportSchema() {
-      return useExportSchema(this.$store.get('app/editor@schema'));
+      return useEditorSchema(this.$store.get('app/editor@schema'));
     },
     useExportUiSchema() {
       return this.$store.get('app/editor@uiSchema');

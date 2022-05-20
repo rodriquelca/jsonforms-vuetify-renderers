@@ -5,6 +5,7 @@ export { default as CheckboxGroupControlRenderer } from './CheckboxGroupControlR
 export { default as HtmlViewerControlRenderer } from './HtmlViewerControlRenderer.vue';
 export { default as ImageControlRenderer } from './ImageControlRenderer.vue';
 export { default as DynaformStringControlRenderer } from './DynaformStringControlRenderer.vue';
+// export { default as FormRenderer } from './FormRenderer.vue';
 
 import { entry as suggestControlRendererEntry } from './SuggestControlRenderer.vue';
 import { entry as dropdownControlRendererEntry } from './DropdownControlRenderer.vue';
@@ -13,6 +14,7 @@ import { entry as checkboxGroupControlRendererEntry } from './CheckboxGroupContr
 import { entry as htmlViewerControlRendererEntry } from './HtmlViewerControlRenderer.vue';
 import { entry as imageControlRendererEntry } from './ImageControlRenderer.vue';
 import { entry as dynaformStringControlRendererEntry } from './DynaformStringControlRenderer.vue';
+// import { entry as formRendererEntry } from './FormRenderer.vue';
 
 export const dynaformRenderers = [
   suggestControlRendererEntry,
@@ -22,4 +24,5 @@ export const dynaformRenderers = [
   checkboxGroupControlRendererEntry,
   imageControlRendererEntry,
   dynaformStringControlRendererEntry,
+  // formRendererEntry,
 ];
