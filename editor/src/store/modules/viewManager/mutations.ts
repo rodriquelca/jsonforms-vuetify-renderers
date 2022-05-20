@@ -40,10 +40,13 @@ const mutations = {
             state.actionsBar.active = index;
         }
     },
-
     SET_DATA_MAIN_PANEL: (state: any, value: any) => {
         const index = _.findIndex(state.mainPanel.items, (o: any) => { return o.id == value.id; });
         state.mainPanel.items[index].data = _.extend({}, state.mainPanel.items[index].data, value.data);
+    },
+    SET_MAIN_PANEL: (state: any, value: any) => {
+        const index = _.findIndex(state.mainPanel.items, (o: any) => { return o.id == value.id; });
+        state.mainPanel.items[index] = _.extend({}, state.mainPanel.items[index], value.mainPanel);
     },
 };
 export default mutations;
