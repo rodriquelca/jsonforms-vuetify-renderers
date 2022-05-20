@@ -11,6 +11,7 @@ import { assign, cloneDeep, omit } from 'lodash';
 import { v4 as uuid } from 'uuid';
 
 import { getHierarchy, TreeElement } from '../util/tree';
+import $RefParser from '@apidevtools/json-schema-ref-parser';
 
 export const OBJECT = 'object';
 
@@ -92,9 +93,9 @@ const containsAs = (
         schemaElement.items
       )
         ? schemaElement.items.map((element, index) => [
-          element,
-          `items/${index}`,
-        ])
+            element,
+            `items/${index}`,
+          ])
         : [[schemaElement.items, 'items']];
       containments.push(...itemEntries);
       break;
@@ -168,8 +169,8 @@ export const toPrintableObject = (debugSchema: SchemaElement): any => {
 
 const isElementOfType =
   <T extends SchemaElement>(type: string) =>
-    (schemaElement: SchemaElement | undefined): schemaElement is T =>
-      schemaElement?.type === type;
+  (schemaElement: SchemaElement | undefined): schemaElement is T =>
+    schemaElement?.type === type;
 export const isObjectElement = isElementOfType<ObjectElement>(OBJECT);
 export const isArrayElement = isElementOfType<ArrayElement>(ARRAY);
 export const isPrimitiveElement = isElementOfType<PrimitiveElement>(PRIMITIVE);
@@ -316,11 +317,28 @@ const determineType = (schema: JsonSchema): SchemaElementType => {
 };
 
 export const buildEditorJsonSchema = (element: SchemaElement): JsonSchema => {
-  const result = cloneDeep(element.schema);
-  traverse(result, (current: any) => {
-    delete current.$ref;
-  });
+  let result = cloneDeep(element.schema);
   debugger;
+  // traverse(result, (current: any) => {
+  //   delete current.$ref;
+  // });
+  if (result.$ref) {
+    result = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          minLength: 1,
+        },
+        description: {
+          title: 'Long Description',
+          type: 'string',
+        },
+      },
+      required: ['name'],
+    };
+  }
+
   switch (element.type) {
     case OBJECT:
       if (element.properties.size > 0) {
@@ -338,6 +356,7 @@ export const buildEditorJsonSchema = (element: SchemaElement): JsonSchema => {
       }
       break;
   }
+
   return result;
 };
 

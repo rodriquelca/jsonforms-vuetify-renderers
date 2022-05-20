@@ -3,7 +3,11 @@ import {
   buildEditorJsonSchema,
   SchemaElement,
 } from '../model';
-import { buildUiSchema, EditorUISchemaElement } from '../model/uischema';
+import {
+  buildUiSchema,
+  EditorUISchemaElement,
+  buildEditorUiSchema,
+} from '../model/uischema';
 const doBuildJsonSchema = (schema: SchemaElement | undefined) =>
   schema ? buildJsonSchema(schema) : schema;
 
@@ -12,6 +16,9 @@ const doBuildUiSchema = (uiSchema: EditorUISchemaElement | undefined) =>
 
 const doBuildEditorJsonSchema = (schema: SchemaElement | undefined) =>
   schema ? buildEditorJsonSchema(schema) : schema;
+
+const doBuildEditorUiSchema = (uiSchema: EditorUISchemaElement | undefined) =>
+  uiSchema ? buildEditorUiSchema(uiSchema) : undefined;
 /**
  * Ui Schema for export
  */
@@ -27,6 +34,10 @@ export const useExportSchema = (editorSchema: SchemaElement) => {
 
 export const useEditorSchema = (editorSchema: SchemaElement) => {
   return useTransform(editorSchema, doBuildEditorJsonSchema);
+};
+
+export const useEditorUiSchema = (editorSchema: SchemaElement) => {
+  return useTransform(editorSchema, doBuildEditorUiSchema);
 };
 /**
  * Transforms the given element whenever it changes.

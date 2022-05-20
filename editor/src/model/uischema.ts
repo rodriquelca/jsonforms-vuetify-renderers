@@ -30,7 +30,7 @@ import { getHierarchy, TreeElement } from '../util/tree';
 
 export interface EditorUISchemaElement
   extends UISchemaElement,
-  TreeElement<EditorUISchemaElement> {
+    TreeElement<EditorUISchemaElement> {
   linkedSchemaElement?: string;
 }
 
@@ -40,7 +40,7 @@ export interface EditorCategoryElement extends Category, EditorUISchemaElement {
 
 export interface CategorizationLayout
   extends Categorization,
-  EditorUISchemaElement {
+    EditorUISchemaElement {
   type: 'Categorization';
   elements: EditorCategoryElement[];
 }
@@ -98,6 +98,42 @@ export const buildUiSchema = (
     delete current.linkedSchemaElement;
     delete current.uuid;
   });
+  return clone;
+};
+/**
+ * Creates a copy of the given enriched ui schema and removes all editor
+ * related fields.
+ */
+export const buildEditorUiSchema = (
+  uiSchema: EditorUISchemaElement
+): UISchemaElement => {
+  const clone: EditorUISchemaElement = cloneDeep(uiSchema);
+  debugger;
+  if (clone.options && clone.options.detail && clone.options.detail.$ref) {
+    clone.options.detail = {
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/name',
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/description',
+          options: {
+            multi: true,
+          },
+        },
+      ],
+    };
+  }
+  if (uiSchema.elements && uiSchema.elements.length > 0) {
+    clone.elements = [];
+    uiSchema.elements.forEach((propertyElement, propName) => {
+      clone.elements.push(buildEditorUiSchema(propertyElement));
+    });
+  }
+
   return clone;
 };
 
