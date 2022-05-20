@@ -8,6 +8,7 @@
     <v-container>
       <div class="text-h6 font-weight-regular grey--text">
         {{ message }}
+        test
 
         <json-forms
           :visible="control.visible"
@@ -15,7 +16,7 @@
           :schema="control.schema"
           :uischema="detailUiSchema"
           :path="control.path"
-          :renderers="renderers"
+          :renderers="customRenderers"
           :cells="control.cells"
         />
       </div>
@@ -78,7 +79,7 @@ const controlRenderer = defineComponent({
       // const renderers = this.control.renderers?.filter((r) => {
       //   console.log(r);
       // });
-      return this.control.renderer;
+      return vuetifyRenderers;
     },
     detailUiSchema(): UISchemaElement {
       const result = findUISchema(
