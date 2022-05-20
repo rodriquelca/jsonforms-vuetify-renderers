@@ -111,7 +111,7 @@ export const buildEditorUiSchema = (
   debugger;
   if (clone.options && clone.options.detail && clone.options.detail.$ref) {
     clone.options.detail = {
-      type: 'HorizontalLayout',
+      type: 'VerticalLayout',
       elements: [
         {
           type: 'Control',

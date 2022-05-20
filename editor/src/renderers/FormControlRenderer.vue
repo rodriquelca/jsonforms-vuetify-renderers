@@ -8,6 +8,16 @@
     <v-container>
       <div class="text-h6 font-weight-regular grey--text">
         {{ message }}
+
+        <json-forms
+          :visible="control.visible"
+          :enabled="control.enabled"
+          :schema="control.schema"
+          :uischema="detailUiSchema"
+          :path="control.path"
+          :renderers="renderers"
+          :cells="control.cells"
+        />
       </div>
     </v-container>
   </control-wrapper>
@@ -19,9 +29,15 @@ import {
   JsonFormsRendererRegistryEntry,
   rankWith,
   uiTypeIs,
+  UISchemaElement,
+  findUISchema,
+  GroupLayout,
 } from '@jsonforms/core';
+import { vuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import { defineComponent } from '@vue/composition-api';
+import isEmpty from 'lodash/isEmpty';
 import {
+  JsonForms,
   rendererProps,
   useJsonFormsControl,
   RendererProps,
@@ -34,10 +50,12 @@ import Editor from '@tinymce/tinymce-vue';
 const controlRenderer = defineComponent({
   name: 'form-control-renderer',
   components: {
+    JsonForms,
     ControlWrapper,
     VContainer,
     Editor,
   },
+
   props: {
     ...rendererProps<ControlElement>(),
   },
@@ -51,6 +69,36 @@ const controlRenderer = defineComponent({
         message: 'Select screen to nest',
       },
     };
+  },
+  mounted() {
+    this.renderers = vuetifyRenderers;
+  },
+  computed: {
+    customRenderers(): Array<any> {
+      // const renderers = this.control.renderers?.filter((r) => {
+      //   console.log(r);
+      // });
+      return this.control.renderer;
+    },
+    detailUiSchema(): UISchemaElement {
+      const result = findUISchema(
+        this.control.uischemas,
+        this.control.schema,
+        this.control.uischema.scope,
+        this.control.path,
+        'Group',
+        this.control.uischema,
+        this.control.rootSchema
+      );
+
+      if (isEmpty(this.control.path)) {
+        result.type = 'VerticalLayout';
+      } else {
+        (result as GroupLayout).label = this.control.label;
+      }
+
+      return result;
+    },
   },
 });
 
