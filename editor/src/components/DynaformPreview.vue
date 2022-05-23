@@ -46,8 +46,8 @@
             class="pa-5"
             :data="data"
             :key="key"
-            :schema="useSchema"
-            :uischema="useUiSchema"
+            :schema="useExportSchema"
+            :uischema="useExportUiSchema"
             :renderers="renderers"
             @change="onChange"
             :i18n="i18n"
@@ -64,7 +64,7 @@
 import Device from 'vue-device';
 import { JsonFormsI18nState } from '@jsonforms/core';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
-import { useExportSchema } from '../util';
+import { useEditorSchema, useEditorUiSchema } from '../util';
 import { generateEmptyData } from '../model';
 import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import _ from 'lodash';
@@ -97,12 +97,13 @@ export default {
     };
   },
   computed: {
-    useUiSchema: sync('preview/uiSchema'),
-    useSchema: function () {
-      return useExportSchema(this.$store.get('preview/schema'));
+    // useUiSchema: sync('preview/uiSchema'),
+    useExportSchema() {
+      return useEditorSchema(this.$store.get('app/editor@schema'));
     },
-    previewData: function () {
-      return generateEmptyData(this.$store.get('preview@schema'), {});
+    useExportUiSchema() {
+      // return this.$store.get('app/editor@uiSchema');
+      return useEditorUiSchema(this.$store.get('app/editor@uiSchema'));
     },
     getCurrentFont(): any {
       return {

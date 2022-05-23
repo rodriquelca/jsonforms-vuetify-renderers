@@ -10,7 +10,7 @@
         {{ message }}
         test
 
-        <json-forms
+        <dispatch-renderer
           :visible="control.visible"
           :enabled="control.enabled"
           :schema="control.schema"
@@ -38,7 +38,7 @@ import { vuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import { defineComponent } from '@vue/composition-api';
 import isEmpty from 'lodash/isEmpty';
 import {
-  JsonForms,
+  DispatchRenderer,
   rendererProps,
   useJsonFormsControl,
   RendererProps,
@@ -51,7 +51,7 @@ import Editor from '@tinymce/tinymce-vue';
 const controlRenderer = defineComponent({
   name: 'form-control-renderer',
   components: {
-    JsonForms,
+    DispatchRenderer,
     ControlWrapper,
     VContainer,
     Editor,
@@ -72,7 +72,7 @@ const controlRenderer = defineComponent({
     };
   },
   mounted() {
-    this.renderers = vuetifyRenderers;
+    // this.renderers = vuetifyRenderers;
   },
   computed: {
     customRenderers(): Array<any> {

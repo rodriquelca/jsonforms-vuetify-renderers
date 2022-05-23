@@ -4,7 +4,7 @@
       class="pa-5"
       :data="data"
       :key="key"
-      :schema="useSchema"
+      :schema="useExportSchema"
       :uischema="useUiSchema"
       :renderers="renderers"
       @change="onChange"
@@ -18,7 +18,7 @@
 <script lang="ts">
 import { JsonFormsI18nState } from '@jsonforms/core';
 import { JsonForms, JsonFormsChangeEvent } from '@jsonforms/vue2';
-import { useExportSchema } from '../../util';
+import { useEditorSchema, useEditorUiSchema } from '../../util';
 import { generateEmptyData } from '../../model';
 import { extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import _ from 'lodash';
@@ -50,9 +50,16 @@ export default {
     };
   },
   computed: {
-    useUiSchema: sync('preview/uiSchema'),
-    useSchema: function () {
-      return useExportSchema(this.$store.get('preview/schema'));
+    // useUiSchema: sync('preview/uiSchema'),
+    // useSchema: function () {
+    //   return useExportSchema(this.$store.get('preview/schema'));
+    // },
+    useExportSchema() {
+      return useEditorSchema(this.$store.get('app/editor@schema'));
+    },
+    useExportUiSchema() {
+      // return this.$store.get('app/editor@uiSchema');
+      return useEditorUiSchema(this.$store.get('app/editor@uiSchema'));
     },
     previewData: function () {
       return generateEmptyData(this.$store.get('preview@schema'), {});
