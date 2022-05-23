@@ -154,6 +154,7 @@ const PropertiesPanel = defineComponent({
       }
     },
     updateGeneralSettings: function (event: JsonFormsChangeEvent) {
+      console.log('debo actualizar el ref');
       const elementSchema = this.findElementSchema();
       // variable
       if (this.uiElement && event.errors.length === 0) {
@@ -262,6 +263,15 @@ const PropertiesPanel = defineComponent({
             changedProperties: { maxLength: event.data.maxLength },
           });
           this.generalData['maxLength'] = event.data.maxLength;
+        }
+        // $ref
+        if (event.data.ref && this.generalData['ref'] !== event.data.ref) {
+          console.log();
+          this.$store.dispatch('app/updateElementRef', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { ref: event.data.ref },
+          });
+          this.generalData['ref'] = event.data.ref;
         }
       }
     },

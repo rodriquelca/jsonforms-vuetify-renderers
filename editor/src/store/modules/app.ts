@@ -493,6 +493,33 @@ const duplicateElement = (state, payload) => {
   );
 };
 
+const updateElementRef = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    undefined,
+    state.editor.schema,
+    undefined,
+    state,
+    (newUiSchema, newSchema) => {
+      // const uiSchemaElement: SchemaElement = findByUUID(
+      //   newUiSchema,
+      //   payload.elementUUID
+      // );
+      // const linkedShemaElement: SchemaElement = findByUUID(
+      //   newSchema,
+      //   uiSchemaElement.linkedSchemaElement
+      // );
+      // assign(linkedShemaElement.schema, payload.changedProperties);
+      debugger;
+      console.log(payload);
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
+
 const state: AppState = {
   editor: {
     paletteElements: [],
@@ -524,8 +551,8 @@ const state: AppState = {
     schemaModel: undefined,
     uischemaModel: undefined,
     dataModel: undefined,
-    dataVariables: undefined
-  }
+    dataVariables: undefined,
+  },
 };
 // make all mutations
 const mutations = {
@@ -656,6 +683,12 @@ const actions = {
   updateSchemaElement({ commit, state }, payload) {
     const clone = updateSchemaElement(state, payload);
     commit('SET_SCHEMA', clone.schema);
+  },
+  updateElementRef({ commit, state }, payload) {
+    console.log('updateElementRef -action');
+    const clone = updateElementRef(state, payload);
+    console.log(clone);
+    // commit('SET_SCHEMA', clone.schema);
   },
 };
 

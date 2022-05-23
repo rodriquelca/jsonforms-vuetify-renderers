@@ -62,7 +62,7 @@
 
 <script lang="ts">
 export default {
-  name: 'SideBarI18n',
+  name: 'side-bar-dynaform-preview',
   components: {},
   computed: {},
   data: function () {

@@ -5,7 +5,7 @@
       :data="data"
       :key="key"
       :schema="useExportSchema"
-      :uischema="useUiSchema"
+      :uischema="useExportUiSchema"
       :renderers="renderers"
       @change="onChange"
       :i18n="i18n"

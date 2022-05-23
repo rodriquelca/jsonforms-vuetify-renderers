@@ -622,6 +622,33 @@ export const textTransformToDecorator: PropertySchemasDecorator = (
   }
   return schemas;
 };
+
+export const subformDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (['Form'].includes(uiElement?.type)) {
+    assign(schemas.schema.properties, {
+      ref: {
+        type: 'string',
+        oneOf: [
+          {
+            const: 'subForm/subformuischema-test.json',
+            title: 'Form Screen',
+          },
+        ],
+      },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/ref',
+      label: 'Ref',
+    });
+  }
+  return schemas;
+};
+
 export const createPropertyControl = (
   controlScope: string
 ): ControlElement => ({
@@ -667,6 +694,7 @@ export const defaultSchemaDecoratorsCollection = new Map<
       trimDecorator,
       restrictDecorator,
       perPageDecorator,
+      subformDecorator,
     ],
   ],
   ['rulesEditor', [ruleEditorDecorator]],
