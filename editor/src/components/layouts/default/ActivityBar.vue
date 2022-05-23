@@ -74,24 +74,6 @@ export default {
           mainPanel.id = 'main-editor';
           actionsBar.id = 'actions-editor';
           break;
-        case 'activity-preview':
-          activityBar.id = 'activity-preview';
-          sideBar.id = 'side-bar-preview';
-          mainPanel.id = 'main-preview';
-          actionsBar.id = 'actions-editor';
-          break;
-        case 'activity-translations':
-          activityBar.id = 'activity-translations';
-          sideBar.id = 'side-bar-translations';
-          mainPanel.id = 'main-translations';
-          actionsBar.id = 'actions-translations';
-          break;
-        case 'activity-forms':
-          debugger;
-          activityBar.id = 'activity-forms';
-          sideBar.id = 'side-bar-translations';
-          mainPanel.id = 'main-translations';
-          break;
       }
 
       this.$store.dispatch('viewManager/setAllViews', {
