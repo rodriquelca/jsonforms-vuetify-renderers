@@ -1,11 +1,11 @@
 <template>
   <div>
     <v-list dense color="grey lighten-5" :key="key">
-      <v-list-item-group v-model="selectedItem" color="gray" class="pe-3 ps-3">
+      <v-subheader>TRANSLATIONS</v-subheader>
+      <v-list-item-group v-model="selectedLocale" color="gray">
         <v-list-item
           v-for="(item, i) in locales"
           :key="i"
-          @click="selectLanguage(item)"
           class="vpm-sidebar-i18n-list"
         >
           <div
@@ -67,12 +67,37 @@ const SideBarI18n = defineComponent({
     locales: sync('locales'),
     itemsMainPanel: sync('viewManager/mainPanel.items'),
     activeMainPanel: sync('viewManager/mainPanel.active'),
+    locale: {
+      get() {
+        return this.getDataMainPanel()['locale'];
+      },
+      set(value) {
+        let data: any = {
+          locale: value,
+        };
+        if (this.getDataMainPanel()['view'] == 'json') {
+          data.reload = _.random(0, 1000000);
+        }
+        this.setDataMainPanel(data);
+      },
+    },
+    selectedLocale: {
+      get() {
+        let en = Object.keys(this.locales),
+          index = en.indexOf(this.locale);
+        this.localesKeys = en;
+        return index == -1 ? 0 : index;
+      },
+      set(value) {
+        this.locale = this.localesKeys[value];
+      },
+    },
   },
   data() {
     return {
       key: 1,
-      selectedItem: 0,
       select: '',
+      localesKeys: [],
     };
   },
   setup(props: any) {
@@ -91,32 +116,20 @@ const SideBarI18n = defineComponent({
         content: _.cloneDeep(this.locales['en'].content),
       };
       this.key++;
-      this.$store.dispatch('viewManager/setDataMainPanel', {
-        id: 'main-translations',
-        data: {
-          locale: this.select.key,
-          reload: _.random(0, 1000000),
-        },
+      this.setDataMainPanel({
+        reload: _.random(0, 1000000),
       });
     },
-    /**
-     * Select language and update the main panel
-     */
-    selectLanguage(item) {
-      let data: any = {
-          id: 'main-translations',
-          data: {
-            locale: item.key,
-          },
-        },
-        view = this.itemsMainPanel[this.activeMainPanel]['data']['view'];
-      if (view == 'json') {
-        data.data.reload = _.random(0, 1000000);
-      }
-
-      this.locale = item.key;
-      //Dispatch new info for data main panel
-      this.$store.dispatch('viewManager/setDataMainPanel', data);
+    setDataMainPanel(data) {
+      this.$store.dispatch('viewManager/setDataMainPanel', {
+        id: 'main-translations',
+        data,
+      });
+    },
+    getDataMainPanel() {
+      return this.$store.getters['viewManager/getDataMainPanelById'](
+        'main-translations'
+      );
     },
   },
 });

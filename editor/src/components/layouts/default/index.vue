@@ -76,10 +76,6 @@ export default {
 };
 </script>
 <style>
-.vpm-container-main {
-  display: flex;
-}
-
 .vpm-height-16 {
   height: 64px;
 }
@@ -89,12 +85,12 @@ export default {
 }
 
 .vpm-centralpanel-layout {
-  height: 55%;
+  flex-wrap: nowrap;
+  height: calc(100vh - 10%);
 }
 
 .vpm-sidebar-layout {
   overflow-y: scroll;
-  height: 100%;
 }
 
 .vpm-sidebar-layout::-webkit-scrollbar-track {
@@ -116,7 +112,6 @@ export default {
 
 .vpm-mainpanel-layout {
   overflow-y: scroll;
-  height: 100%;
 }
 
 .vpm-mainpanel-layout::-webkit-scrollbar-track {

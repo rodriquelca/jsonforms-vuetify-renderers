@@ -32,16 +32,6 @@ const state: ViewManagerState = {
                 title: 'Properties Panel',
                 icon: 'mdi-pencil',
             },
-            {
-                id: 'activity-preview',
-                title: 'Preview',
-                icon: 'mdi-eye',
-            },
-            {
-                id: 'activity-translations',
-                title: 'Translation',
-                icon: 'mdi-translate',
-            },
         ]
     },
     //Panel bottom
@@ -87,7 +77,7 @@ const state: ViewManagerState = {
                 data: {
                     locale: "en",
                     reload: "1",
-                    view: "editor"
+                    view: "table"
                 }
             },
             {

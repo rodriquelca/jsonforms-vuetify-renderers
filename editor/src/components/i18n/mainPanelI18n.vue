@@ -1,6 +1,20 @@
 <template>
   <div>
-    <v-container v-if="view == 'editor'">
+    <v-container>
+      <v-btn
+        class="vpm-action-editor-btn float-end"
+        plain
+        small
+        :color="view != 'json' ? 'primary' : 'warning'"
+        @click="toogleMode"
+      >
+        <v-icon small class="me-1">{{
+          view != 'json' ? 'mdi-code-json' : 'mdi-table'
+        }}</v-icon>
+        {{ view != 'json' ? 'JSON' : 'Table' }}
+      </v-btn>
+    </v-container>
+    <v-container v-if="view != 'json'">
       <v-data-table :headers="headers" :items="dataTranslations">
         <template
           v-for="(slot, i) in headers"
@@ -14,6 +28,7 @@
             class="vpm-item-list caption"
             :label="slot.value"
             v-model="item[slot.value]"
+            @blur="contentSave"
           >
             {{ item[slot.value] }}</v-text-field
           >
@@ -35,8 +50,9 @@
     </v-container>
     <v-container v-else>
       <monaco-editor
+        :key="key"
         :theme="$vuetify.theme.dark ? 'vs-dark' : 'vs'"
-        height="500"
+        height="100vh"
         :options="{ minimap: { enabled: false }, fontSize: 11 }"
         :language="`json`"
         v-model="schema"
@@ -56,14 +72,35 @@ const MainPanelI18n = defineComponent({
   inject: ['bus'],
   components: { MonacoEditor },
   computed: {
-    itemsMainPanel: sync('viewManager/mainPanel.items'),
-    activeMainPanel: sync('viewManager/mainPanel.active'),
-    view() {
-      let res = 'editor';
-      if (this.itemsMainPanel[this.activeMainPanel]['data']['view']) {
-        res = this.itemsMainPanel[this.activeMainPanel]['data']['view'];
-      }
-      return res;
+    mainPanel: {
+      get() {
+        return this.$store.getters['viewManager/getMainPanelById'](
+          'main-translations'
+        );
+      },
+      set(value) {
+        this.$store.dispatch('viewManager/setMainPanel', {
+          id: 'main-translations',
+          mainPanel: value,
+        });
+      },
+    },
+    view: {
+      get() {
+        let dt =
+          this.$store.getters['viewManager/getDataMainPanelById'](
+            'main-translations'
+          );
+        return dt.view;
+      },
+      set(value) {
+        this.$store.dispatch('viewManager/setDataMainPanel', {
+          id: 'main-translations',
+          data: {
+            view: value,
+          },
+        });
+      },
     },
     locales: sync('locales'),
     headers() {
@@ -106,16 +143,19 @@ const MainPanelI18n = defineComponent({
       return result;
     },
     locale() {
-      let locale = 'en';
-      if (this.itemsMainPanel[this.activeMainPanel]['data']['locale']) {
-        locale = this.itemsMainPanel[this.activeMainPanel]['data']['locale'];
-      }
-      return locale;
+      let dt =
+        this.$store.getters['viewManager/getDataMainPanelById'](
+          'main-translations'
+        );
+
+      return dt.locale ? dt.locale : 'en';
     },
   },
   data: function () {
     return {
       schema: null,
+      json: false,
+      key: 1,
     };
   },
   mounted() {
@@ -124,12 +164,30 @@ const MainPanelI18n = defineComponent({
       JSON.stringify(this.locales[this.locale]['content'], null, '\t'),
       'json'
     );
+    this.schema.onDidChangeContent(this.contentSaveJson);
   },
   destroyed() {
     this.bus.$off('translations::main-panel::save');
   },
   methods: {
-    saveContent() {
+    toogleMode() {
+      this.view = this.view == 'json' ? 'table' : 'json';
+      //Reload the view JSON
+      if (this.view == 'json') {
+        this.$store.dispatch('viewManager/setDataMainPanel', {
+          id: 'main-translations',
+          data: {
+            reload: _.random(0, 1000000),
+          },
+        });
+      }
+    },
+    contentSaveJson(ev) {
+      if (ev.versionId % 10 == 0) {
+        this.contentSave();
+      }
+    },
+    contentSave() {
       if (this.view == 'json') {
         this.$store.dispatch('locales/updateLanguage', {
           key: this.locales[this.locale].key,
@@ -151,7 +209,7 @@ const MainPanelI18n = defineComponent({
 });
 export default MainPanelI18n;
 </script>
-<style scoped>
+<style>
 .vpm-action-editor-btn {
   text-transform: initial;
   letter-spacing: normal;
