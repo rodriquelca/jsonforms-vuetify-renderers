@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <IfComponent @updateIf="updateIf"> </IfComponent>
-        <ThenComponent @updateThen="updateThen"> </ThenComponent>
-    </div>
+  <v-card outlined class="px-2">
+    <IfComponent @updateIf="updateIf"> </IfComponent>
+    <ThenComponent @updateThen="updateThen"> </ThenComponent>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -10,41 +10,41 @@ import IfComponent from './IfThenComponent/IfComponent.vue';
 import ThenComponent from './IfThenComponent/ThenComponent.vue';
 import IfThenDefaultMixing from './IfThenDefaultMixing';
 export default {
-    name: 'IfThenComponent',
-    components: { ThenComponent, IfComponent },
-    mixins: [IfThenDefaultMixing],
-    props: {},
-    data() {
-        return {
-            ruleSchema: {},
-            scopes: [],
-        };
+  name: 'IfThenComponent',
+  components: { ThenComponent, IfComponent },
+  mixins: [IfThenDefaultMixing],
+  props: {},
+  data() {
+    return {
+      ruleSchema: {},
+      scopes: [],
+    };
+  },
+  mounted() {
+    //this.ruleSchema = this.loadDefaultRulesSchema();
+  },
+  methods: {
+    updateIf(data) {
+      let ifexp = this.parseIfExpression(data);
+      this.ruleSchema = ifexp;
     },
-    mounted() {
-        //this.ruleSchema = this.loadDefaultRulesSchema();
+    updateThen(data) {
+      if (data.effect) {
+        this.ruleSchema.effect = data.effect;
+      }
+      if (data.scopes) {
+        this.scopes = data.scopes;
+      }
     },
-    methods: {
-        updateIf(data) {
-            let ifexp = this.parseIfExpression(data);
-            this.ruleSchema = ifexp;
-        },
-        updateThen(data) {
-            if (data.effect) {
-                this.ruleSchema.effect = data.effect;
-            }
-            if (data.scopes) {
-                this.scopes = data.scopes;
-            }
-        },
-        save() {
-            for (const el of this.scopes) {
-                this.$store.dispatch('app/setScopeRules', {
-                    scope: el,
-                    rule: this.ruleSchema,
-                });
-            }
-        },
+    save() {
+      for (const el of this.scopes) {
+        this.$store.dispatch('app/setScopeRules', {
+          scope: el,
+          rule: this.ruleSchema,
+        });
+      }
     },
+  },
 };
 </script>
 

@@ -18,16 +18,23 @@
         {{ action.title }}
       </v-btn>
 
-      <v-btn
-        :key="index"
-        v-else-if="action.type == 'button-icon'"
-        icon
-        x-small
-        class="pa-5"
-        @click="action.handler"
-      >
-        <v-icon>{{ action.icon }}</v-icon>
-      </v-btn>
+      <v-tooltip v-else-if="action.type == 'button-icon'" bottom :key="index">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            x-small
+            class="pa-5"
+            @click="action.handler"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>{{ action.icon }}</v-icon>
+          </v-btn>
+        </template>
+
+        {{ action.title }}
+      </v-tooltip>
+
       <v-divider
         :key="index"
         v-else-if="action.type == 'divider'"
@@ -99,19 +106,25 @@ export default {
           type: 'button-icon',
           color: 'secondary',
           class: '',
-          icon: 'mdi-translate',
-          handler: this.onClickTranslations,
-          title: 'Translate',
+          icon: 'mdi-vector-combine',
+          handler: this.onClickFormRules,
+          title: 'Form Rules',
         },
         {
           type: 'button-icon',
           color: 'secondary',
           class: '',
-          icon: 'mdi-download-box',
-          handler: () => {
-            return;
-          },
-          title: '',
+          icon: 'mdi-translate',
+          handler: this.onClickTranslations,
+          title: 'Translations',
+        },
+        {
+          type: 'button-icon',
+          color: 'secondary',
+          class: '',
+          icon: 'mdi-code-json',
+          handler: this.onClickSchemaEditor,
+          title: 'JSON Schema',
         },
         {
           type: 'divider',
@@ -122,7 +135,7 @@ export default {
           class: '',
           icon: 'mdi-content-save',
           handler: this.contentSave,
-          title: '',
+          title: 'Save',
         },
       ],
     };
@@ -151,6 +164,18 @@ export default {
       this.$store.dispatch('viewManager/setAllViews', {
         mainPanel,
         sideBar,
+      });
+    },
+    onClickSchemaEditor() {
+      let mainPanel = { id: 'main-schema-editor' };
+      this.$store.dispatch('viewManager/setAllViews', {
+        mainPanel,
+      });
+    },
+    onClickFormRules() {
+      let mainPanel = { id: 'main-form-rules' };
+      this.$store.dispatch('viewManager/setAllViews', {
+        mainPanel,
       });
     },
     contentSave() {

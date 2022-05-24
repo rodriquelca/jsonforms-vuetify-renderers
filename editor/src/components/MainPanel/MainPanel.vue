@@ -13,10 +13,18 @@ import { createLayout } from '../../util';
 import DynaformEditor from '../DynaformEditor/DynaformEditor.vue';
 import MainPanelI18n from '../i18n/mainPanelI18n.vue';
 import MainPanelDynaformPreview from '../DynaformPreview/mainPanelDynaformPreview.vue';
+import MainPanelSchemaEditor from '../SchemaEditor/mainPanelSchemaEditor.vue';
+import MainPanelFormRules from '../FormRules/MainPanelFormRules.vue';
 export default {
   name: 'mainPanel',
   props: {},
-  components: { DynaformEditor, MainPanelI18n, MainPanelDynaformPreview },
+  components: {
+    DynaformEditor,
+    MainPanelI18n,
+    MainPanelDynaformPreview,
+    MainPanelSchemaEditor,
+    MainPanelFormRules,
+  },
   data() {
     return {
       data: {},

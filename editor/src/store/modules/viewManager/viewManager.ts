@@ -87,6 +87,20 @@ const state: ViewManagerState = {
                     reload: "1"
                 }
             },
+            {
+                id: 'main-schema-editor',
+                component: 'main-panel-schema-editor',
+                data: {
+                    reload: "1"
+                }
+            },
+            {
+                id: 'main-form-rules',
+                component: 'main-panel-form-rules',
+                data: {
+                    reload: "1"
+                }
+            },
         ],
     },
     actionsBar: {
