@@ -56,6 +56,7 @@ import ActivityBar from './ActivityBar.vue';
 import ActionsBar from './ActionsBar.vue';
 import SideBar from './SideBar.vue';
 import MainPanel from '../../MainPanel/MainPanel.vue';
+import Vue from 'vue';
 
 export default {
   name: 'DefaultLayout',
@@ -66,13 +67,15 @@ export default {
     DefaultSideBar: SideBar,
     DefaultActivityBar: ActivityBar,
   },
+  provide() {
+    // use function syntax so that we can access `this`
+    return {
+      bus: new Vue(),
+    };
+  },
 };
 </script>
 <style>
-.vpm-container-main {
-  display: flex;
-}
-
 .vpm-height-16 {
   height: 64px;
 }
@@ -82,12 +85,12 @@ export default {
 }
 
 .vpm-centralpanel-layout {
-  height: 55%;
+  flex-wrap: nowrap;
+  height: calc(100vh - 10%);
 }
 
 .vpm-sidebar-layout {
   overflow-y: scroll;
-  height: 100%;
 }
 
 .vpm-sidebar-layout::-webkit-scrollbar-track {
@@ -109,7 +112,6 @@ export default {
 
 .vpm-mainpanel-layout {
   overflow-y: scroll;
-  height: 100%;
 }
 
 .vpm-mainpanel-layout::-webkit-scrollbar-track {

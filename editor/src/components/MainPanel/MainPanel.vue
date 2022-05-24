@@ -1,6 +1,9 @@
 <template>
   <v-card no-gutters height="100%" width="100%">
-    <component v-bind:is="itemsMainPanel[activeMainPanel]['component']" />
+    <component
+      :key="itemsMainPanel[activeMainPanel]['data']['reload']"
+      v-bind:is="itemsMainPanel[activeMainPanel]['component']"
+    />
   </v-card>
 </template>
 

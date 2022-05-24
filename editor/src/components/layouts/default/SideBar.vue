@@ -8,7 +8,7 @@
 <script lang="ts">
 import { sync } from 'vuex-pathify';
 import _ from 'lodash';
-import PalletePanel from '../../../views/editor/pallete-panel';
+import PalletePanel from '../../DynaformEditor/PalletePanel.vue';
 import PropertiesPanel from '../../properties-panel/PropertiesPanel.vue';
 import SideBarI18n from '../../i18n/sideBarI18n.vue';
 import SideBarPreview from '../../DynaformPreview/sideBarDynaformPreview.vue';

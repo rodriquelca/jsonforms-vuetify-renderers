@@ -69,6 +69,24 @@
         </template>
         <span>Edit</span>
       </v-tooltip>
+      <v-tooltip top v-if="hover" :color="duplicateColor">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            v-on="on"
+            fab
+            x-small
+            @click="onDuplicate"
+            class="float-right"
+            :color="duplicateColor"
+            @mouseover="duplicateColor = 'brown lighten-2'"
+            @mouseleave="duplicateColor = undefined"
+          >
+            <v-icon> mdi-content-copy </v-icon>
+          </v-btn>
+        </template>
+        <span>Duplicate</span>
+      </v-tooltip>
     </div>
 
     <div class="d-block pt-2">
@@ -101,6 +119,7 @@ export default {
       editColor: undefined,
       removeColor: undefined,
       moveColor: undefined,
+      duplicateColor: undefined,
     };
   },
   computed: {
@@ -239,6 +258,16 @@ export default {
   },
 
   methods: {
+    onDuplicate: function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (
+        !hasChildren(this.wrappedElement) &&
+        this.wrappedElement.linkedSchemaElement
+      ) {
+        this.$store.dispatch('app/duplicateElement', this.wrappedElement);
+      } //TODO Duplicated unescoped
+    },
     onRemove: function (e) {
       e.preventDefault();
       e.stopPropagation();

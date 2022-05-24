@@ -31,7 +31,8 @@ import {
   EditorUISchemaElement,
   getVariableName,
 } from '../../model/uischema';
-
+import { v4 as uuid } from 'uuid';
+import { unset } from 'lodash';
 import { CollectionStore } from '@jsonforms/vue2';
 import mutationsEditor from './editor/mutations';
 import actionsEditor from './editor/actions';
@@ -441,6 +442,56 @@ const updateSchemaElement = (state, payload) => {
     }
   );
 };
+const duplicateElement = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    payload.parent.uuid,
+    state.editor.schema,
+    payload.linkedSchemaElement,
+    state,
+    (newUiSchema, newSchema) => {
+      const variable = getVariableName(payload);
+      let counter = 0;
+      for (const key of newSchema.parent.properties.keys()) {
+        if (key.includes(variable)) {
+          counter += 1;
+        }
+      }
+      const schemauuid = uuid();
+      newSchema.schema.i18n = `${variable}_${counter}`;
+      newSchema.parent.properties?.set(`${variable}_${counter}`, {
+        options: newSchema.options,
+        parent: newSchema.parent,
+        schema: newSchema.schema,
+        type: newSchema.type,
+        uuid: schemauuid,
+      });
+      const shemaElement: SchemaElement = findByUUID(newSchema, schemauuid);
+      const newUIElement = {
+        options: payload.options,
+        parent: newUiSchema,
+        scope: `#${getScope(shemaElement)}`,
+        type: payload.type,
+        uuid: uuid(),
+      };
+
+      if (!shemaElement || !linkElements(newUIElement, shemaElement)) {
+        console.error('Could not add new UI element', newUIElement);
+        return state;
+      }
+
+      const index = _.findIndex(newUiSchema.elements, function (element) {
+        return element.uuid === payload.uuid;
+      });
+
+      (newUiSchema as EditorLayout).elements.splice(index + 1, 0, newUIElement);
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
 
 const state: AppState = {
   editor: {
@@ -450,9 +501,9 @@ const state: AppState = {
     settings: false,
     selectedElement: '',
     element: {
-      selected: "",
+      selected: '',
       edit: 0,
-    }
+    },
   },
   jsonforms: {
     readonly: false,
@@ -537,6 +588,11 @@ const actions = {
   },
   removeUiSchemaElement({ commit }, payload) {
     commit('REMOVE_UISCHEMA_ELEMENT', payload);
+  },
+  duplicateElement({ commit }, payload) {
+    const clone = duplicateElement(state, payload);
+    commit('SET_SCHEMA', clone.schema);
+    commit('SET_UI_SCHEMA', clone.uiSchema);
   },
   addScopedElementToLayout({ commit }, payload) {
     const clone = createScopedElementToLayout(state, payload);

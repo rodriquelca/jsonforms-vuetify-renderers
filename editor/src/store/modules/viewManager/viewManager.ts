@@ -16,8 +16,7 @@ export interface ViewManagerState {
 }
 
 const state: ViewManagerState = {
-  // Menu Up
-  menuBar: {},
+menuBar: {},
   // Menu left
   activityBar: {
     active: 0,
