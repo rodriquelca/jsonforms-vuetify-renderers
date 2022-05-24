@@ -16,7 +16,8 @@ export interface ViewManagerState {
 }
 
 const state: ViewManagerState = {
-menuBar: {},
+  // Menu Up
+  menuBar: {},
   // Menu left
   activityBar: {
     active: 0,
@@ -31,17 +32,7 @@ menuBar: {},
         title: 'Properties Panel',
         icon: 'mdi-pencil',
       },
-      {
-        id: 'activity-preview',
-        title: 'Preview',
-        icon: 'mdi-eye',
-      },
-      {
-        id: 'activity-translations',
-        title: 'Translation',
-        icon: 'mdi-translate',
-      },
-    ],
+    ]
   },
   //Panel bottom
   statusBar: {},
@@ -50,7 +41,7 @@ menuBar: {},
     active: 0,
     items: [
       {
-        id: 'side-bar-pallete',
+        id: "side-bar-pallete",
         component: 'pallete-panel',
       },
       {
@@ -64,31 +55,51 @@ menuBar: {},
       {
         id: 'side-bar-preview',
         component: 'side-bar-preview',
-      },
+      }
     ],
   },
   sidePanel: {
-    component: 'div',
+    component: "div"
   },
   mainPanel: {
     active: 0,
     items: [
       {
-        id: 'main-editor',
-        component: 'dynaform-editor',
-        data: {},
+        id: "main-editor",
+        component: "dynaform-editor",
+        data: {
+          reload: "1"
+        }
       },
       {
         id: 'main-translations',
         component: 'main-panel-i18n',
         data: {
-          locale: 'en',
-        },
+          locale: "en",
+          reload: "1",
+          view: "table"
+        }
       },
       {
         id: 'main-preview',
         component: 'main-panel-dynaform-preview',
-        data: {},
+        data: {
+          reload: "1"
+        }
+      },
+      {
+        id: 'main-schema-editor',
+        component: 'main-panel-schema-editor',
+        data: {
+          reload: "1"
+        }
+      },
+      {
+        id: 'main-form-rules',
+        component: 'main-panel-form-rules',
+        data: {
+          reload: "1"
+        }
       },
     ],
   },
@@ -96,12 +107,17 @@ menuBar: {},
     active: 0,
     items: [
       {
-        id: 'actions-editor',
-        component: 'actions-bar-editor',
-        data: {},
+        id: "actions-editor",
+        component: "actions-bar-editor",
+        data: {}
+      },
+      {
+        id: "actions-translations",
+        component: "actions-bar-translations",
+        data: {}
       },
     ],
-  },
+  }
 };
 
 const viewManager: Module<ViewManagerState, RootState> = {

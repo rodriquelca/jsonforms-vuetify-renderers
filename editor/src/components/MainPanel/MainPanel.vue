@@ -13,6 +13,8 @@ import { createLayout } from '../../util';
 import DynaformEditor from '../DynaformEditor/DynaformEditor.vue';
 import MainPanelI18n from '../i18n/mainPanelI18n.vue';
 import MainPanelDynaformPreview from '../DynaformPreview/mainPanelDynaformPreview.vue';
+import MainPanelSchemaEditor from '../SchemaEditor/mainPanelSchemaEditor.vue';
+import MainPanelFormRules from '../FormRules/MainPanelFormRules.vue';
 import CustomTheme from '../CustomTheme.vue';
 export default {
   name: 'mainPanel',
@@ -21,6 +23,8 @@ export default {
     DynaformEditor,
     MainPanelI18n,
     MainPanelDynaformPreview,
+    MainPanelSchemaEditor,
+    MainPanelFormRules,
     CustomTheme,
   },
   data() {
