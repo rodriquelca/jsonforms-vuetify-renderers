@@ -19,5 +19,22 @@ const getters = {
     });
     return fontFamily;
   },
+  getThemeSelected: (state: any) => {
+    const defaultTheme = state.themes[0].light;
+    let theme = {};
+    const themes = _.cloneDeep(state.themes);
+    let mergeLight;
+    _.forEach(themes, (value) => {
+      if (state.active === value.name) {
+        mergeLight = _.merge(_.cloneDeep(defaultTheme), value.light);
+        theme = {
+          name: value.name,
+          light: mergeLight,
+          fontFamily: value.fontFamily,
+        };
+      }
+    });
+    return theme;
+  },
 };
 export default getters;
