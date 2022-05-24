@@ -11,7 +11,7 @@ export interface ThemeState {
 }
 const state: ThemeState = {
   themes: defaultThemes,
-  active: 'default',
+  active: 'Default',
 };
 const themes: Module<ThemeState, RootState> = {
   namespaced: true,
