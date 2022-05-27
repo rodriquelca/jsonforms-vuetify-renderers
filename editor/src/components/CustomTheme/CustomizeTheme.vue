@@ -224,7 +224,7 @@
           v-model="customThemeName"
           label="Name of the Theme"
           required
-          @input="updateTheme"
+          @blur="updateTheme"
         >
         </v-text-field>
       </v-col>
