@@ -55,7 +55,7 @@ export default {
     activeSideBar: sync('viewManager/sideBar.active'),
   },
   watch: {
-    active(newValue) {
+    active(newValue: string): void {
       let id = this.itemsActivityBar[newValue].id,
         activityBar = { id: '' },
         mainPanel = { id: '' },

@@ -15,8 +15,6 @@
         ><v-row dense>
           <v-col><custom-theme /></v-col>
           <v-col><dynaform-preview /></v-col>
-          <v-col><download-json /></v-col>
-          <v-col><form-rules /></v-col>
           <v-col><Templates /></v-col>
           <v-col><settings /> </v-col>
           <v-col><theme-changer /> </v-col>
@@ -29,12 +27,10 @@
 <script lang="ts">
 import { sync } from 'vuex-pathify';
 import DynaformPreview from '@/components/DynaformPreview.vue';
-import DownloadJson from '@/components/DownloadJson.vue';
 import Settings from '@/components/Settings.vue';
 import ThemeChanger from '@/components/ThemeChanger.vue';
 import { AppStore } from '../store/modules/types';
 import Templates from '@/components/Templates.vue';
-import FormRules from '@/components/FormRules.vue';
 import CustomTheme from '../../CustomTheme.vue';
 
 export default {
@@ -42,10 +38,8 @@ export default {
   components: {
     ThemeChanger,
     Settings,
-    DownloadJson,
     DynaformPreview,
     Templates,
-    FormRules,
     CustomTheme,
   },
   computed: {

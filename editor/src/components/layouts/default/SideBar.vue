@@ -11,14 +11,14 @@ import _ from 'lodash';
 import PalletePanel from '../../DynaformEditor/PalletePanel.vue';
 import PropertiesPanel from '../../properties-panel/PropertiesPanel.vue';
 import SideBarI18n from '../../i18n/sideBarI18n.vue';
-import sideBarDynaformPreview from '../../DynaformPreview/sideBarDynaformPreview.vue';
+import SideBarPreview from '../../DynaformPreview/sideBarDynaformPreview.vue';
 export default {
   name: 'SideBar',
   components: {
     PalletePanel,
     PropertiesPanel,
     SideBarI18n,
-    sideBarDynaformPreview,
+    SideBarPreview,
   },
   data() {
     return {};

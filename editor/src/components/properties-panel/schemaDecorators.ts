@@ -634,7 +634,7 @@ export const subformDecorator: PropertySchemasDecorator = (
         type: 'string',
         oneOf: [
           {
-            const: 'subForm/subformuischema-test.json',
+            const: 'test1234567890',
             title: 'Form Screen',
           },
         ],

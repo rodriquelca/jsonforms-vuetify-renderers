@@ -54,7 +54,7 @@ const state: ViewManagerState = {
       },
       {
         id: 'side-bar-preview',
-        component: 'side-bar-dynaform-preview',
+        component: 'side-bar-preview',
       },
     ],
   },
@@ -83,6 +83,20 @@ const state: ViewManagerState = {
       {
         id: 'main-preview',
         component: 'main-panel-dynaform-preview',
+        data: {
+          reload: '1',
+        },
+      },
+      {
+        id: 'main-schema-editor',
+        component: 'main-panel-schema-editor',
+        data: {
+          reload: '1',
+        },
+      },
+      {
+        id: 'main-form-rules',
+        component: 'main-panel-form-rules',
         data: {
           reload: '1',
         },

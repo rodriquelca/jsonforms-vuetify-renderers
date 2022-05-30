@@ -7,9 +7,6 @@
   >
     <v-container>
       <div class="text-h6 font-weight-regular grey--text">
-        {{ message }}
-        test
-
         <dispatch-renderer
           :visible="control.visible"
           :enabled="control.enabled"

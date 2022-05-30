@@ -318,10 +318,10 @@ const determineType = (schema: JsonSchema): SchemaElementType => {
 
 export const buildEditorJsonSchema = (element: SchemaElement): JsonSchema => {
   let result = cloneDeep(element.schema);
-  debugger;
   // traverse(result, (current: any) => {
   //   delete current.$ref;
   // });
+  debugger;
   if (result.$ref) {
     result = {
       type: 'object',

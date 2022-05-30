@@ -496,11 +496,26 @@ const duplicateElement = (state, payload) => {
 const updateElementRef = (state, payload) => {
   return withCloneTrees(
     state.editor.uiSchema,
-    undefined,
+    payload.elementUiUUID,
     state.editor.schema,
     undefined,
     state,
     (newUiSchema, newSchema) => {
+      const uiSchemaElement: SchemaElement = findByUUID(
+        newUiSchema,
+        payload.elementUiUUID
+      );
+
+      console.log(uiSchemaElement);
+
+      uiSchemaElement.options.detail.$ref = 'subForm/newsubformschema.json';
+      const linkedShemaElement: SchemaElement = findByUUID(
+        newSchema,
+        uiSchemaElement.linkedSchemaElement
+      );
+
+      console.log(linkedShemaElement.schema);
+
       // const uiSchemaElement: SchemaElement = findByUUID(
       //   newUiSchema,
       //   payload.elementUUID
@@ -510,8 +525,10 @@ const updateElementRef = (state, payload) => {
       //   uiSchemaElement.linkedSchemaElement
       // );
       // assign(linkedShemaElement.schema, payload.changedProperties);
-      debugger;
+      //debugger;
+
       console.log(payload);
+
       return {
         schema: getRoot(newSchema),
         uiSchema: getRoot(newUiSchema),

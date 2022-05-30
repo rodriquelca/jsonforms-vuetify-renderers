@@ -78,6 +78,7 @@ const PropertiesPanel = defineComponent({
       schemasCollection: undefined,
       hasRule: false,
       uiElement: null,
+      element: null,
       renderers: defaultPropertyRenderers,
       propertiesService: null,
     };
@@ -265,10 +266,11 @@ const PropertiesPanel = defineComponent({
           this.generalData['maxLength'] = event.data.maxLength;
         }
         // $ref
+        // console.log(elementSchema);
         if (event.data.ref && this.generalData['ref'] !== event.data.ref) {
-          console.log();
           this.$store.dispatch('app/updateElementRef', {
-            elementUUID: this.uiElement.uuid,
+            elementUiUUID: this.uiElement.uuid,
+            // elementUUID: elementSchema.value.uuid,
             changedProperties: { ref: event.data.ref },
           });
           this.generalData['ref'] = event.data.ref;
