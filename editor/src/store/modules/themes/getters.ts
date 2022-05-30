@@ -36,5 +36,17 @@ const getters = {
     });
     return theme;
   },
+  getPaddings: (state: any) => {
+    return state.customForm.paddings;
+  },
+  getMargins: (state: any) => {
+    return state.customForm.margins;
+  },
+  getBackground: (state: any) => {
+    return state.customForm.background;
+  },
+  getBackgroundColor: (state: any) => {
+    return state.customForm.backgroundColor;
+  },
 };
 export default getters;

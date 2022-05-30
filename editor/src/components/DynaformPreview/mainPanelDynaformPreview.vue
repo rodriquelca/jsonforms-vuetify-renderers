@@ -1,18 +1,20 @@
 <template>
-  <v-card>
-    <json-forms
-      class="pa-5"
-      :data="data"
-      :key="key"
-      :schema="useSchema"
-      :uischema="useUiSchema"
-      :renderers="renderers"
-      @change="onChange"
-      :i18n="i18n"
-      :cells="renderers"
-      v-bind:style="getCurrentFont"
-    />
-  </v-card>
+  <v-parallax :style="getPaddings" height="auto" :src="sourceBackground">
+    <v-card :style="getStyles">
+      <json-forms
+        class="pa-5"
+        :data="data"
+        :key="key"
+        :schema="useSchema"
+        :uischema="useUiSchema"
+        :renderers="renderers"
+        @change="onChange"
+        :i18n="i18n"
+        :cells="renderers"
+        v-bind:style="getCurrentFont"
+      />
+    </v-card>
+  </v-parallax>
 </template>
 
 <script lang="ts">
@@ -60,6 +62,40 @@ export default {
     getCurrentFont(): any {
       return {
         'font-family': this.$store.getters['themes/getFontFamilyTheme'],
+      };
+    },
+    getPaddings(): any {
+      let paddings = this.$store.getters['themes/getPaddings'];
+      return {
+        padding:
+          paddings.paddingTop +
+          'px ' +
+          paddings.paddingRight +
+          'px ' +
+          paddings.paddingBottom +
+          'px ' +
+          paddings.paddingLeft +
+          'px',
+      };
+    },
+    sourceBackground(): string {
+      return this.$store.getters['themes/getBackground'].background;
+    },
+    getStyles(): any {
+      let margins = this.$store.getters['themes/getMargins'];
+      let backgroundColor = this.$store.getters['themes/getBackgroundColor'];
+      debugger;
+      return {
+        padding:
+          margins.top +
+          'px ' +
+          margins.right +
+          'px ' +
+          margins.bottom +
+          'px ' +
+          margins.left +
+          'px',
+        'background-color': backgroundColor.color,
       };
     },
   },
@@ -146,3 +182,8 @@ export default {
   },
 };
 </script>
+<style>
+.test {
+  padding: 100px;
+}
+</style>
