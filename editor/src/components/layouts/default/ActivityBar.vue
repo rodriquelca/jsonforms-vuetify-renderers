@@ -62,17 +62,17 @@ export default {
         actionsBar = { id: '' },
         sideBar = { id: '' };
       switch (id) {
-        case 'activity-pallete':
-          activityBar.id = 'activity-pallete';
+        case 'activity-json-form-editor':
+          activityBar.id = 'activity-json-form-editor';
           sideBar.id = 'side-bar-pallete';
           mainPanel.id = 'main-editor';
           actionsBar.id = 'actions-editor';
           break;
-        case 'activity-properties':
-          activityBar.id = 'activity-properties';
-          sideBar.id = 'side-bar-properties';
-          mainPanel.id = 'main-editor';
-          actionsBar.id = 'actions-editor';
+        case 'activity-data-sources':
+          activityBar.id = 'activity-data-sources';
+          sideBar.id = 'side-bar-data-sources';
+          mainPanel.id = 'main-data-sources';
+          actionsBar.id = 'actions-data-sources';
           break;
       }
 

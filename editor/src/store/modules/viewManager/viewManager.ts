@@ -23,14 +23,14 @@ const state: ViewManagerState = {
     active: 0,
     items: [
       {
-        id: 'activity-pallete',
-        title: 'Pallete Panel',
+        id: 'activity-json-form-editor',
+        title: 'JSON Form Editor',
         icon: 'mdi-view-dashboard',
       },
       {
-        id: 'activity-properties',
-        title: 'Properties Panel',
-        icon: 'mdi-pencil',
+        id: 'activity-data-sources',
+        title: 'Data Sources',
+        icon: 'mdi-database',
       },
     ]
   },
@@ -55,6 +55,10 @@ const state: ViewManagerState = {
       {
         id: 'side-bar-preview',
         component: 'side-bar-preview',
+      },
+      {
+        id: 'side-bar-data-sources',
+        component: 'side-bar-data-sources',
       }
     ],
   },
@@ -101,6 +105,13 @@ const state: ViewManagerState = {
           reload: "1"
         }
       },
+      {
+        id: 'main-data-sources',
+        component: 'main-panel-data-sources',
+        data: {
+          reload: "1"
+        }
+      },
     ],
   },
   actionsBar: {
@@ -114,6 +125,11 @@ const state: ViewManagerState = {
       {
         id: "actions-translations",
         component: "actions-bar-translations",
+        data: {}
+      },
+      {
+        id: "actions-data-sources",
+        component: "actions-bar-data-sources",
         data: {}
       },
     ],
