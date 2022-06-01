@@ -5,12 +5,12 @@
 <script lang="ts">
 import { sync } from 'vuex-pathify';
 import ActionsBarEditor from './../../DynaformEditor/ActionsBarEditor.vue';
-import ActionsBarTranslations from './../../i18n/ActionsBarTranslations.vue';
+import ActionsBarDataSources from '../../../modules/DataSources/ActionsBarDataSources.vue';
 
 export default {
   name: 'ActionsBar',
   props: {},
-  components: { ActionsBarEditor, ActionsBarTranslations },
+  components: { ActionsBarEditor, ActionsBarDataSources },
   data() {
     return {
       data: {},

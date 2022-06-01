@@ -12,6 +12,7 @@ import PalletePanel from '../../DynaformEditor/PalletePanel.vue';
 import PropertiesPanel from '../../properties-panel/PropertiesPanel.vue';
 import SideBarI18n from '../../i18n/sideBarI18n.vue';
 import SideBarPreview from '../../DynaformPreview/sideBarDynaformPreview.vue';
+import SideBarDataSources from '../../../modules/DataSources/SideBarDataSources.vue';
 export default {
   name: 'SideBar',
   components: {
@@ -19,6 +20,7 @@ export default {
     PropertiesPanel,
     SideBarI18n,
     SideBarPreview,
+    SideBarDataSources,
   },
   data() {
     return {};
