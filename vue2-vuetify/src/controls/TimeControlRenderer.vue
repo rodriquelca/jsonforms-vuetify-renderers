@@ -18,7 +18,8 @@
       :required="control.required"
       :error-messages="control.errors"
       :value="control.data"
-      @change="onChange"
+      v-bind="vuetifyProps('v-text-field')"
+      @input="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
@@ -52,7 +53,11 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsControl(props));
+    return useVuetifyControl(
+      useJsonFormsControl(props),
+      (value) => value || undefined,
+      300
+    );
   },
 });
 

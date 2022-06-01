@@ -29,7 +29,8 @@
         "
         :clearable="hover"
         multi-line
-        @change="onChange"
+        v-bind="vuetifyProps('v-textarea')"
+        @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />
@@ -73,7 +74,8 @@ const controlRenderer = defineComponent({
   setup(props: RendererProps<ControlElement>) {
     return useVuetifyControl(
       useJsonFormsControl(props),
-      (value) => value || undefined
+      (value) => value || undefined,
+      300
     );
   },
 });

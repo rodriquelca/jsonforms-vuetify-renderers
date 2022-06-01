@@ -16,6 +16,7 @@
 import {
   ControlElement,
   findUISchema,
+  Generate,
   GroupLayout,
   isObjectControl,
   JsonFormsRendererRegistryEntry,
@@ -23,6 +24,7 @@ import {
   UISchemaElement,
 } from '@jsonforms/core';
 import isEmpty from 'lodash/isEmpty';
+import cloneDeep from 'lodash/cloneDeep';
 import {
   DispatchRenderer,
   rendererProps,
@@ -30,7 +32,7 @@ import {
   useJsonFormsControlWithDetail,
 } from '@jsonforms/vue2';
 import { defineComponent } from '../vue';
-import { useVuetifyControl } from '../util';
+import { useNested, useVuetifyControl } from '../util';
 
 const controlRenderer = defineComponent({
   name: 'object-renderer',
@@ -41,24 +43,43 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsControlWithDetail(props));
+    const control = useVuetifyControl(useJsonFormsControlWithDetail(props));
+    const nested = useNested('object');
+    return {
+      ...control,
+      nested,
+    };
   },
   computed: {
     detailUiSchema(): UISchemaElement {
-      const result = findUISchema(
+      const uiSchemaGenerator = () => {
+        const uiSchema = Generate.uiSchema(this.control.schema, 'Group');
+        if (isEmpty(this.control.path)) {
+          uiSchema.type = 'VerticalLayout';
+        } else {
+          (uiSchema as GroupLayout).label = this.control.label;
+        }
+        return uiSchema;
+      };
+
+      let result = findUISchema(
         this.control.uischemas,
         this.control.schema,
         this.control.uischema.scope,
         this.control.path,
-        'Group',
+        uiSchemaGenerator,
         this.control.uischema,
         this.control.rootSchema
       );
 
-      if (isEmpty(this.control.path)) {
-        result.type = 'VerticalLayout';
-      } else {
-        (result as GroupLayout).label = this.control.label;
+      if (this.nested.level > 0) {
+        result = cloneDeep(result);
+        result.options = {
+          ...result.options,
+          bare: true,
+          alignLeft:
+            this.nested.level >= 4 || this.nested.parentElement === 'array',
+        };
       }
 
       return result;

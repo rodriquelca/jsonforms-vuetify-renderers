@@ -16,6 +16,10 @@ export interface AppState {
       trim: boolean;
       showUnfocusedDescription: boolean;
       hideRequiredAsterisk: boolean;
+      collapseNewItems: boolean;
+      initCollapsed: boolean;
+      breakHorizontal: false | string;
+      hideAvatar: boolean;
     };
     renderers: JsonFormsRendererRegistryEntry[];
     cells: JsonFormsCellRendererRegistryEntry[];

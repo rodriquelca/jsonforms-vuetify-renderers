@@ -31,7 +31,8 @@
         :value="control.data"
         :items="suggestions"
         hide-no-data
-        @change="onChange"
+        v-bind="vuetifyProps('v-combobox')"
+        @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />
@@ -58,7 +59,8 @@
             : undefined
         "
         :clearable="hover"
-        @change="onChange"
+        v-bind="vuetifyProps('v-text-field')"
+        @input="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"
       />
@@ -104,7 +106,8 @@ const controlRenderer = defineComponent({
   setup(props: RendererProps<ControlElement>) {
     return useVuetifyControl(
       useJsonFormsControl(props),
-      (value) => value || undefined
+      (value) => value || undefined,
+      300
     );
   },
   computed: {

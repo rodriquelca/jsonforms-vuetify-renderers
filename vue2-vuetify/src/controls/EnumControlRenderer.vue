@@ -23,6 +23,7 @@
         :items="control.options"
         item-text="label"
         item-value="value"
+        v-bind="vuetifyProps('v-select')"
         @change="onChange"
         @focus="isFocused = true"
         @blur="isFocused = false"

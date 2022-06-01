@@ -99,6 +99,7 @@
         <v-row>
           <v-col>
             <v-select
+              attach
               outlined
               persistent-hint
               dense
@@ -192,12 +193,54 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on: onTooltip }">
                 <v-switch
-                  v-model="locale"
-                  label="Switch beetwen english and german locale"
+                  v-model="collapseNewItems"
+                  label="Collapse new array items"
                   v-on="onTooltip"
                 ></v-switch>
               </template>
-              Only applies to basic example
+              If true, new array items are not expanded by default
+            </v-tooltip>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on: onTooltip }">
+                <v-switch
+                  v-model="initCollapsed"
+                  label="Collapse arrays initially"
+                  v-on="onTooltip"
+                ></v-switch>
+              </template>
+              If true, arrays are not expanded initially
+            </v-tooltip>
+          </v-col>
+        </v-row>
+        <v-container>
+          <v-row>
+            <v-row><v-col>Break horizontal layouts</v-col></v-row>
+            <v-col>
+              <v-select
+                outlined
+                persistent-hint
+                dense
+                v-model="breakHorizontal"
+                :items="breakHorizontals"
+              ></v-select>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-row>
+          <v-col>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on: onTooltip }">
+                <v-switch
+                  v-model="hideAvatar"
+                  label="Hide Array Item Avatar"
+                  v-on="onTooltip"
+                ></v-switch>
+              </template>
+              Whether the array index avatars shall be shown
             </v-tooltip>
           </v-col>
         </v-row>
@@ -220,8 +263,12 @@ export default {
       'app/jsonforms@config.showUnfocusedDescription'
     ),
     restrict: sync('app/jsonforms@config.restrict'),
+    collapseNewItems: sync('app/jsonforms@config.collapseNewItems'),
+    initCollapsed: sync('app/jsonforms@config.initCollapsed'),
+    breakHorizontal: sync('app/jsonforms@config.breakHorizontal'),
     readonly: sync('app/jsonforms@readonly'),
     locale: sync('app/jsonforms@locale'),
+    hideAvatar: sync('app/jsonforms@config.hideAvatar'),
   },
   data: function () {
     return {
@@ -234,6 +281,14 @@ export default {
       locales: [
         { text: 'English (en)', value: 'en' },
         { text: 'German (de)', value: 'de' },
+      ],
+      breakHorizontals: [
+        { text: 'None', value: false },
+        { text: 'xs', value: 'xs' },
+        { text: 'sm', value: 'sm' },
+        { text: 'md', value: 'md' },
+        { text: 'lg', value: 'lg' },
+        { text: 'xl', value: 'xl' },
       ],
     };
   },

@@ -18,6 +18,7 @@
       :required="control.required"
       :error-messages="control.errors"
       :value="dataTime"
+      v-bind="vuetifyProps('v-text-field')"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
@@ -51,7 +52,11 @@ const controlRenderer = defineComponent({
     ...rendererProps<ControlElement>(),
   },
   setup(props: RendererProps<ControlElement>) {
-    return useVuetifyControl(useJsonFormsControl(props));
+    return useVuetifyControl(
+      useJsonFormsControl(props),
+      (value) => value || undefined,
+      300
+    );
   },
   computed: {
     dataTime: {

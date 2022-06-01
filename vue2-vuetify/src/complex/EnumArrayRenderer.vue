@@ -10,6 +10,7 @@
           :error-messages="control.errors"
           :disabled="!control.enabled"
           :indeterminate="control.data === undefined"
+          v-bind="vuetifyProps(`v-checkbox[${o.value}]`)"
           @change="(value) => toggle(o.value, value)"
         ></v-checkbox>
       </v-col>
@@ -24,8 +25,6 @@ import {
   hasType,
   JsonFormsRendererRegistryEntry,
   JsonSchema,
-  mapDispatchToMultiEnumProps,
-  mapStateToMultiEnumControlProps,
   rankWith,
   schemaMatches,
   schemaSubPathMatches,
@@ -37,20 +36,10 @@ import {
   DispatchRenderer,
   rendererProps,
   RendererProps,
-  useControl,
-  ControlProps,
+  useJsonFormsMultiEnumControl,
 } from '@jsonforms/vue2';
 import { defineComponent } from '../vue';
 import { useVuetifyBasicControl } from '../util';
-
-//TODO: move into JsonForm Vue project under src/components/jsonFormsCompositions.ts
-const useJsonFormsMultiEnumControl = (props: ControlProps) => {
-  return useControl(
-    props,
-    mapStateToMultiEnumControlProps,
-    mapDispatchToMultiEnumProps
-  );
-};
 
 const controlRenderer = defineComponent({
   name: 'enum-array-renderer',

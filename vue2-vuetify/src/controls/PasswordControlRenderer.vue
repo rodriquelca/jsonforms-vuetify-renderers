@@ -28,7 +28,8 @@
           ? control.schema.maxLength
           : undefined
       "
-      @change="onChange"
+      v-bind="vuetifyProps('v-text-field')"
+      @input="onChange"
       @focus="isFocused = true"
       @blur="isFocused = false"
     />
@@ -69,7 +70,8 @@ const controlRenderer = defineComponent({
     return {
       ...useVuetifyControl(
         useJsonFormsControl(props),
-        (value) => value || undefined
+        (value) => value || undefined,
+        300
       ),
       passwordVisible,
     };
