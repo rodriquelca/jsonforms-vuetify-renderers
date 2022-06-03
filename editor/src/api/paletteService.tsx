@@ -381,6 +381,26 @@ const controlElements = [
 ];
 const complexElements = [
   {
+    type: 'Form',
+    label: 'Sub-Form',
+    icon: 'mdi-newspaper-variant-multiple',
+    uiSchemaElementProvider: () => {
+      const control = {
+        "$ref": ""
+      };
+      return {
+        control,
+        variable: "form",
+        uiOptions:{
+          "detail": {
+            "$ref": ""
+          },
+          "formRef": ""
+        }
+      };
+    },
+  },
+  {
     type: 'DataTableControl',
     label: 'Grid',
     icon: 'mdi-grid',
