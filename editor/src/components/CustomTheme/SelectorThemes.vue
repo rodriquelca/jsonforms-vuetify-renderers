@@ -19,7 +19,7 @@
         </v-card-text>
         <v-card flat>
           <v-card-subtitle>Customize the current theme</v-card-subtitle>
-          <customize-theme />
+          <panels-custom-theme />
         </v-card>
       </v-window-item>
       <v-window-item :value="2">
@@ -37,13 +37,13 @@
 
 <script lang="ts">
 import ShowTheme from '../CustomTheme/ShowTheme.vue';
-import CustomizeTheme from './CustomizeTheme.vue';
+import PanelsCustomTheme from './PanelsCustomTheme.vue';
 
 export default {
   name: 'SideBarPreview',
   components: {
     ShowTheme,
-    CustomizeTheme,
+    PanelsCustomTheme,
   },
   data(): any {
     return {

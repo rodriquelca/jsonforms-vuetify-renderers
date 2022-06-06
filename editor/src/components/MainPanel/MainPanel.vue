@@ -1,5 +1,11 @@
 <template>
-	<v-card no-gutters height="100%" width="100%" color="transparent">
+	<v-card
+		no-gutters
+		height="auto"
+		width="100%"
+		color="transparent"
+		elevation="0"
+	>
 		<component
 			:key="itemsMainPanel[activeMainPanel]['data']['reload']"
 			v-bind:is="itemsMainPanel[activeMainPanel]['component']"
