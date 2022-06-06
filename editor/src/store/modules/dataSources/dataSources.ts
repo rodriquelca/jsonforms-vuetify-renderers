@@ -15,7 +15,7 @@ export interface DataSourcesState {
 const state: DataSourcesState = {
   lists: [
     {
-      id: 'abcdario',
+      id: 'u1oiwe786123io',
       name: 'Alphabet',
       type: 'list',
       schema: [
@@ -98,8 +98,8 @@ const state: DataSourcesState = {
       ],
     },
     {
-      id: 'asd123987',
-      name: 'Employees',
+      id: '123uiqae90182',
+      name: 'Gender',
       type: 'list',
       schema: [
         {
@@ -115,16 +115,63 @@ const state: DataSourcesState = {
       ],
       data: [
         {
-          id: 'fabio',
-          value: 'Fabio',
+          id: 'M',
+          value: 'Male',
         },
         {
-          id: 'jona',
-          value: 'Jonas',
+          id: 'F',
+          value: 'Female',
+        },
+      ],
+    },
+    {
+      id: '1y3y2378hns989',
+      name: 'Programming Languages',
+      type: 'list',
+      schema: [
+        {
+          id: 'id',
+          type: 'string',
+          name: 'Id',
         },
         {
-          id: 'rodri',
-          value: 'Rodrigo',
+          id: 'value',
+          type: 'string',
+          name: 'Value',
+        },
+      ],
+      data: [
+        {
+          id: 'java',
+          value: 'Java',
+        },
+        {
+          id: 'js',
+          value: 'Javascript',
+        },
+        {
+          id: 'php',
+          value: 'PHP',
+        },
+        {
+          id: 'pearl',
+          value: 'Pearl',
+        },
+        {
+          id: 'ruby',
+          value: 'Ruby',
+        },
+        {
+          id: 'python',
+          value: 'Python',
+        },
+        {
+          id: 'flutter',
+          value: 'Flutter',
+        },
+        {
+          id: 'c',
+          value: 'C#',
         },
       ],
     },
@@ -237,7 +284,21 @@ const state: DataSourcesState = {
       ],
     },
   },
-  apis: {},
+  apis: [
+    {
+      id: '123uiqae90182',
+      name: 'Processmaker',
+      data: {
+        url: 'http://www.google.com',
+        method: 'POST',
+        params: { p: 'p' },
+        headers: { h: 'h' },
+        body: { b: 'b' },
+        dataInputVariables: ['var1', 'var2'],
+        output: 'outputPath',
+      },
+    },
+  ],
   databases: {},
 };
 

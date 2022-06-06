@@ -8,7 +8,6 @@
 			<template v-slot:item.value="{ item }">
 				<v-text-field
 					dense
-					filled
 					single-line
 					class="vpm-item-list caption"
 					:label="valueTitle"
@@ -18,22 +17,24 @@
 			</template>
 
 			<template v-slot:item.actions="{ item, index }">
-				<v-btn
-					small
-					icon
-					@click="addItem(item, index)"
-					color="primary lighten-1"
-				>
-					<v-icon small> mdi-plus-circle </v-icon>
-				</v-btn>
+				<div class="float-end">
+					<v-btn
+						small
+						icon
+						@click="addItem(item, index)"
+						color="primary lighten-1"
+					>
+						<v-icon small> mdi-plus-circle </v-icon>
+					</v-btn>
 
-				<v-btn
-					small
-					icon
-					color="error lighten-1"
-					@click="removeItem(item, index)"
-					><v-icon small> mdi-delete </v-icon>
-				</v-btn>
+					<v-btn
+						small
+						icon
+						color="error lighten-1"
+						@click="removeItem(item, index)"
+						><v-icon small> mdi-delete </v-icon>
+					</v-btn>
+				</div>
 			</template>
 
 			<template v-slot:item.label="{ item }">

@@ -32,7 +32,7 @@ const state: ViewManagerState = {
         title: 'Data Sources',
         icon: 'mdi-database',
       },
-    ]
+    ],
   },
   //Panel bottom
   statusBar: {},
@@ -41,7 +41,7 @@ const state: ViewManagerState = {
     active: 0,
     items: [
       {
-        id: "side-bar-pallete",
+        id: 'side-bar-pallete',
         component: 'pallete-panel',
       },
       {
@@ -59,58 +59,65 @@ const state: ViewManagerState = {
       {
         id: 'side-bar-data-sources',
         component: 'side-bar-data-sources',
-      }
+      },
     ],
   },
   sidePanel: {
-    component: "div"
+    component: 'div',
   },
   mainPanel: {
     active: 0,
     items: [
       {
-        id: "main-editor",
-        component: "dynaform-editor",
+        id: 'main-editor',
+        component: 'dynaform-editor',
         data: {
-          reload: "1"
-        }
+          reload: '1',
+        },
       },
       {
         id: 'main-translations',
         component: 'main-panel-i18n',
         data: {
-          locale: "en",
-          reload: "1",
-          view: "table"
-        }
+          locale: 'en',
+          reload: '1',
+          view: 'table',
+        },
       },
       {
         id: 'main-preview',
         component: 'main-panel-dynaform-preview',
         data: {
-          reload: "1"
-        }
+          reload: '1',
+        },
       },
       {
         id: 'main-schema-editor',
         component: 'main-panel-schema-editor',
         data: {
-          reload: "1"
-        }
+          reload: '1',
+        },
       },
       {
         id: 'main-form-rules',
         component: 'main-panel-form-rules',
         data: {
-          reload: "1"
-        }
+          reload: '1',
+        },
       },
       {
-        id: 'main-data-sources',
-        component: 'main-panel-data-sources',
+        id: 'main-data-sources-simple-lists',
+        component: 'main-panel-data-sources-simple-lists',
         data: {
-          reload: "1"
-        }
+          reload: '1',
+        },
+      },
+      {
+        id: 'main-data-sources-api',
+        component: 'main-panel-data-sources-api',
+        data: {
+          reload: '1',
+        },
       },
     ],
   },
@@ -118,22 +125,22 @@ const state: ViewManagerState = {
     active: 0,
     items: [
       {
-        id: "actions-editor",
-        component: "actions-bar-editor",
-        data: {}
+        id: 'actions-editor',
+        component: 'actions-bar-editor',
+        data: {},
       },
       {
-        id: "actions-translations",
-        component: "actions-bar-translations",
-        data: {}
+        id: 'actions-translations',
+        component: 'actions-bar-translations',
+        data: {},
       },
       {
-        id: "actions-data-sources",
-        component: "actions-bar-data-sources",
-        data: {}
+        id: 'actions-data-sources',
+        component: 'actions-bar-data-sources',
+        data: {},
       },
     ],
-  }
+  },
 };
 
 const viewManager: Module<ViewManagerState, RootState> = {
