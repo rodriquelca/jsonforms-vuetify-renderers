@@ -96,7 +96,7 @@ export default {
 					color: 'warning',
 					class: 'vpm-action-editor-btn',
 					icon: 'mdi-cellphone',
-					handler: this.onClickTranslations,
+					handler: this.onClickPreviewDevice,
 					title: 'Device',
 				},
 				{
@@ -151,13 +151,34 @@ export default {
 			});
 		},
 		onClickPreviewBrowser() {
-			let mainPanel = { id: 'main-preview' },
+			let mainPanel = {
+					id: 'main-preview',
+					data: {
+						mode: 'web',
+						reload: _.random(0, 1000000),
+					},
+				},
 				sideBar = { id: 'side-bar-preview' };
 			this.$store.dispatch('viewManager/setAllViews', {
 				mainPanel,
 				sideBar,
 			});
 		},
+		onClickPreviewDevice() {
+			let mainPanel = {
+					id: 'main-preview',
+					data: {
+						mode: 'device',
+						reload: _.random(0, 1000000),
+					},
+				},
+				sideBar = { id: 'side-bar-preview' };
+			this.$store.dispatch('viewManager/setAllViews', {
+				mainPanel,
+				sideBar,
+			});
+		},
+
 		onClickTranslations() {
 			let mainPanel = { id: 'main-translations' },
 				sideBar = { id: 'side-bar-translations' };
