@@ -1,8 +1,8 @@
 <template>
-  <component
-    v-bind:is="itemsSideBar[activeSideBar]['component']"
-    ref="component"
-  ></component>
+	<component
+		v-bind:is="itemsSideBar[activeSideBar]['component']"
+		ref="component"
+	></component>
 </template>
 
 <script lang="ts">
@@ -14,21 +14,21 @@ import SideBarI18n from '../../i18n/sideBarI18n.vue';
 import SideBarPreview from '../../DynaformPreview/sideBarDynaformPreview.vue';
 import SideBarDataSources from '../../../modules/DataSources/SideBarDataSources.vue';
 export default {
-  name: 'SideBar',
-  components: {
-    PalletePanel,
-    PropertiesPanel,
-    SideBarI18n,
-    SideBarPreview,
-    SideBarDataSources,
-  },
-  data() {
-    return {};
-  },
-  computed: {
-    itemsSideBar: sync('viewManager/sideBar.items'),
-    activeSideBar: sync('viewManager/sideBar.active'),
-  },
+	name: 'SideBar',
+	components: {
+		PalletePanel,
+		PropertiesPanel,
+		SideBarI18n,
+		SideBarPreview,
+		SideBarDataSources,
+	},
+	data() {
+		return {};
+	},
+	computed: {
+		itemsSideBar: sync('viewManager/sideBar.items'),
+		activeSideBar: sync('viewManager/sideBar.active'),
+	},
 };
 </script>
 <style></style>
