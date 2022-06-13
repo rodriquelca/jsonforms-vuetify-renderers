@@ -1,5 +1,11 @@
 <template>
-	<v-card no-gutters height="100%" width="100%">
+	<v-card
+		no-gutters
+		height="auto"
+		width="100%"
+		color="transparent"
+		elevation="0"
+	>
 		<component
 			:key="itemsMainPanel[activeMainPanel]['data']['reload']"
 			v-bind:is="itemsMainPanel[activeMainPanel]['component']"
@@ -15,8 +21,8 @@ import MainPanelI18n from '../i18n/mainPanelI18n.vue';
 import MainPanelDynaformPreview from '../DynaformPreview/mainPanelDynaformPreview.vue';
 import MainPanelSchemaEditor from '../SchemaEditor/mainPanelSchemaEditor.vue';
 import MainPanelFormRules from '../FormRules/MainPanelFormRules.vue';
-import MainPanelDataSourcesS from '../../modules/DataSources/MainPanelDataSources.vue';
-import MainPanelDataSources from '../../modules/DataSources/MainPanelDataSourcesSimpleList.vue';
+import MainPanelDataSourcesSimpleLists from '../../modules/DataSources/MainPanelDataSourcesSimpleList.vue';
+import MainPanelDataSourcesApi from '../../modules/DataSources/MainPanelDataSourcesApi.vue';
 
 import CustomTheme from '../CustomTheme.vue';
 export default {
@@ -29,7 +35,8 @@ export default {
 		MainPanelSchemaEditor,
 		MainPanelFormRules,
 		CustomTheme,
-		MainPanelDataSources,
+		MainPanelDataSourcesSimpleLists,
+		MainPanelDataSourcesApi,
 	},
 	data() {
 		return {
