@@ -7,6 +7,7 @@ import { RootState } from '../types';
 import { Module } from 'vuex';
 import { createAjv, extendedVuetifyRenderers } from '@jsonforms/vue2-vuetify';
 import { DefaultPaletteService } from '../../api/paletteService';
+import { DefaultScreenService } from '../../api/screenService';
 const ajv = createAjv({ useDefaults: true });
 
 import { withCloneTree, withCloneTrees } from '../../util/clone';
@@ -442,6 +443,121 @@ const updateSchemaElement = (state, payload) => {
     }
   );
 };
+
+const updateScreenReference = (state, payload) => {
+  return withCloneTrees(
+    state.editor.uiSchema,
+    undefined,
+    state.editor.schema,
+    undefined,
+    state,
+    (newUiSchema, newSchema) => {
+      const uiSchemaElement: SchemaElement = findByUUID(
+        newUiSchema,
+        payload.elementUUID
+      );
+      const linkedShemaElement: SchemaElement = findByUUID(
+        newSchema,
+        uiSchemaElement.linkedSchemaElement
+      );
+      debugger;
+      linkedShemaElement.schema.$ref =
+        '#/definitions/' + payload.changedProperties.screen;
+
+      const screenService = new DefaultScreenService();
+      const screen = screenService.getScreenById(
+        payload.changedProperties.screen
+      );
+      newSchema.schema.definitions = newSchema.schema.definitions || {};
+
+      newSchema.schema.definitions[payload.changedProperties.screen] =
+        screen.schema;
+      // this need to be rendered dinamically
+      // newSchema.schema.definitions = {
+      //   address: {
+      //     type: 'object',
+      //     title: 'Address',
+      //     properties: {
+      //       street_address: {
+      //         type: 'string',
+      //       },
+      //       city: {
+      //         type: 'string',
+      //       },
+      //       state: {
+      //         type: 'string',
+      //       },
+      //     },
+      //     required: ['street_address', 'city', 'state'],
+      //   },
+      //   user: {
+      //     type: 'object',
+      //     title: 'User',
+      //     properties: {
+      //       name: {
+      //         type: 'string',
+      //       },
+      //       mail: {
+      //         type: 'string',
+      //       },
+      //     },
+      //     required: ['name', 'mail'],
+      //   },
+      // };
+
+      // const detailUISchema: any = {
+      //   address: {
+      //     type: 'VerticalLayout',
+      //     elements: [
+      //       {
+      //         type: 'HorizontalLayout',
+      //         elements: [
+      //           {
+      //             type: 'Control',
+      //             scope: '#/properties/city',
+      //             label: 'city',
+      //           },
+      //           {
+      //             type: 'Control',
+      //             scope: '#/properties/state',
+      //             label: 'State',
+      //           },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      //   user: {
+      //     type: 'VerticalLayout',
+      //     elements: [
+      //       {
+      //         type: 'HorizontalLayout',
+      //         elements: [
+      //           {
+      //             type: 'Control',
+      //             scope: '#/properties/name',
+      //             label: 'Name',
+      //           },
+      //           {
+      //             type: 'Control',
+      //             scope: '#/properties/mail',
+      //             label: 'Mail',
+      //           },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      // };
+
+      uiSchemaElement.options.detail = screen.uiSchema;
+      uiSchemaElement.options.formRef = payload.changedProperties.screen;
+      // assign(linkedShemaElement.schema, payload.changedProperties);
+      return {
+        schema: getRoot(newSchema),
+        uiSchema: getRoot(newUiSchema),
+      };
+    }
+  );
+};
 const duplicateElement = (state, payload) => {
   return withCloneTrees(
     state.editor.uiSchema,
@@ -524,8 +640,8 @@ const state: AppState = {
     schemaModel: undefined,
     uischemaModel: undefined,
     dataModel: undefined,
-    dataVariables: undefined
-  }
+    dataVariables: undefined,
+  },
 };
 // make all mutations
 const mutations = {
@@ -656,6 +772,12 @@ const actions = {
   updateSchemaElement({ commit, state }, payload) {
     const clone = updateSchemaElement(state, payload);
     commit('SET_SCHEMA', clone.schema);
+  },
+  updateScreenReference({ commit, state }, payload) {
+    const clone = updateScreenReference(state, payload);
+    // console.log(clone);
+    commit('SET_SCHEMA', clone.schema);
+    commit('SET_UI_SCHEMA', clone.uiSchema);
   },
 };
 

@@ -154,6 +154,7 @@ const PropertiesPanel = defineComponent({
       }
     },
     updateGeneralSettings: function (event: JsonFormsChangeEvent) {
+      debugger;
       const elementSchema = this.findElementSchema();
       // variable
       if (this.uiElement && event.errors.length === 0) {
@@ -262,6 +263,17 @@ const PropertiesPanel = defineComponent({
             changedProperties: { maxLength: event.data.maxLength },
           });
           this.generalData['maxLength'] = event.data.maxLength;
+        }
+        // screen
+        if (
+          event.data.screen &&
+          this.generalData['screen'] !== event.data.screen
+        ) {
+          this.$store.dispatch('app/updateScreenReference', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { screen: event.data.screen },
+          });
+          this.generalData['screen'] = event.data.screen;
         }
       }
     },

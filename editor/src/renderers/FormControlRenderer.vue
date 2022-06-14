@@ -7,14 +7,11 @@
   >
     <v-container>
       <div class="text-h6 font-weight-regular grey--text">
-        <span
-          class="d-inline caption"
-          v-if="!control.uischema.options.detail.$ref"
-        >
-          select a screen
+        <span class="d-inline caption" v-if="!control.uischema.options.formRef">
+          {{ message }}
         </span>
 
-        <!-- <dispatch-renderer
+        <dispatch-renderer
           v-else
           :visible="control.visible"
           :enabled="control.enabled"
@@ -23,7 +20,7 @@
           :path="control.path"
           :renderers="customRenderers"
           :cells="control.cells"
-        /> -->
+        />
       </div>
     </v-container>
   </control-wrapper>
