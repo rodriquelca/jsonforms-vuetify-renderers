@@ -173,10 +173,10 @@ const CustomForm = defineComponent({
     onChange(val: number) {
       if (val <= this.maxPixel) {
         this.$store.dispatch('themes/updatePaddings', {
-          paddingLeft: this.marginLeft || 0,
-          paddingTop: this.marginTop || 0,
-          paddingBottom: this.marginBottom || 0,
-          paddingRight: this.marginRight || 0,
+          left: this.marginLeft || 0,
+          top: this.marginTop || 0,
+          bottom: this.marginBottom || 0,
+          right: this.marginRight || 0,
         });
       }
     },

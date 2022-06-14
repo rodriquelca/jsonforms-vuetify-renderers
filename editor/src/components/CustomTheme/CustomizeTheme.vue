@@ -9,7 +9,13 @@
     </v-col>
     <v-col cols="12" sm="12" md="12">
       <span>Color Primary</span>
-      <v-text-field v-model="color.primary" hide-details solo readonly>
+      <v-text-field
+        v-model="color.primary"
+        @change="setCustom"
+        hide-details
+        solo
+        readonly
+      >
         <template v-slot:append>
           <v-menu
             v-model="menu.primary"
@@ -17,7 +23,6 @@
             nudge-bottom="105"
             nudge-left="16"
             :close-on-content-click="false"
-            @input="setCustom"
           >
             <template v-slot:activator="{ on }">
               <div :style="swatchStyle('primary')" v-on="on" />
@@ -40,7 +45,13 @@
     </v-col>
     <v-col cols="12" sm="12" md="12">
       <span>Color secondary</span>
-      <v-text-field v-model="color.secondary" readonly hide-details solo>
+      <v-text-field
+        v-model="color.secondary"
+        @change="setCustom"
+        readonly
+        hide-details
+        solo
+      >
         <template v-slot:append>
           <v-menu
             v-model="menu.secondary"
@@ -48,7 +59,6 @@
             nudge-bottom="105"
             nudge-left="16"
             :close-on-content-click="false"
-            @input="setCustom"
           >
             <template v-slot:activator="{ on }">
               <div :style="swatchStyle('secondary')" v-on="on" />
@@ -70,7 +80,13 @@
     </v-col>
     <v-col cols="12" sm="12" md="12">
       <span>Color accent</span>
-      <v-text-field v-model="color.accent" readonly hide-details solo>
+      <v-text-field
+        v-model="color.accent"
+        @change="setCustom"
+        readonly
+        hide-details
+        solo
+      >
         <template v-slot:append>
           <v-menu
             v-model="menu.accent"
@@ -78,7 +94,6 @@
             nudge-bottom="105"
             nudge-left="16"
             :close-on-content-click="false"
-            @input="setCustom"
           >
             <template v-slot:activator="{ on }">
               <div :style="swatchStyle('accent')" v-on="on" />
@@ -100,7 +115,13 @@
     </v-col>
     <v-col cols="12" sm="12" md="12">
       <span>Color error</span>
-      <v-text-field v-model="color.error" readonly hide-details solo>
+      <v-text-field
+        v-model="color.error"
+        @change="setCustom"
+        readonly
+        hide-details
+        solo
+      >
         <template v-slot:append>
           <v-menu
             v-model="menu.error"
@@ -108,7 +129,6 @@
             nudge-bottom="105"
             nudge-left="16"
             :close-on-content-click="false"
-            @input="setCustom"
           >
             <template v-slot:activator="{ on }">
               <div :style="swatchStyle('error')" v-on="on" />
@@ -130,7 +150,13 @@
     </v-col>
     <v-col cols="12" sm="12" md="12">
       <span>Color info</span>
-      <v-text-field v-model="color.info" readonly hide-details solo>
+      <v-text-field
+        v-model="color.info"
+        @change="setCustom"
+        readonly
+        hide-details
+        solo
+      >
         <template v-slot:append>
           <v-menu
             v-model="menu.info"
@@ -138,7 +164,6 @@
             nudge-bottom="105"
             nudge-left="16"
             :close-on-content-click="false"
-            @input="setCustom"
           >
             <template v-slot:activator="{ on }">
               <div :style="swatchStyle('info')" v-on="on" />
@@ -160,7 +185,13 @@
     </v-col>
     <v-col cols="12" sm="12" md="12">
       <span>Color sucess</span>
-      <v-text-field v-model="color.success" readonly hide-details solo>
+      <v-text-field
+        v-model="color.success"
+        @change="setCustom"
+        readonly
+        hide-details
+        solo
+      >
         <template v-slot:append>
           <v-menu
             v-model="menu.success"
@@ -168,7 +199,6 @@
             nudge-bottom="105"
             nudge-left="16"
             :close-on-content-click="false"
-            @input="setCustom"
           >
             <template v-slot:activator="{ on }">
               <div :style="swatchStyle('success')" v-on="on" />
@@ -190,7 +220,13 @@
     </v-col>
     <v-col cols="12" sm="12" md="12">
       <span>Color warning</span>
-      <v-text-field v-model="color.warning" readonly hide-details solo>
+      <v-text-field
+        v-model="color.warning"
+        @change="setCustom"
+        readonly
+        hide-details
+        solo
+      >
         <template v-slot:append>
           <v-menu
             v-model="menu.warning"
@@ -198,7 +234,6 @@
             nudge-bottom="105"
             nudge-left="16"
             :close-on-content-click="false"
-            @input="setCustom"
           >
             <template v-slot:activator="{ on }">
               <div :style="swatchStyle('warning')" v-on="on" />
@@ -223,7 +258,7 @@
         v-model="customThemeName"
         label="Name of the Theme"
         required
-        @blur="updateTheme"
+        @change="updateTheme"
       >
       </v-text-field>
     </v-col>
@@ -301,13 +336,13 @@ const CustomizeTheme = defineComponent({
     setCustom(): void {
       const name = this.customThemeName;
       const light = this.color;
-      if (!_.isEqual(light, this.defaultColor)) {
-        Object.keys(light).forEach((i) => {
-          this.$vuetify.theme.themes.light[i] = light[i];
-        });
-        this.$vuetify.theme.currentTheme.name = name;
-        this.updateTheme();
-      }
+      //if (!_.isEqual(light, this.defaultColor)) {
+      Object.keys(light).forEach((i) => {
+        this.$vuetify.theme.themes.light[i] = light[i];
+      });
+      this.$vuetify.theme.currentTheme.name = name;
+      this.updateTheme();
+      //}
     },
     updateTheme(font: string): void {
       let fontFamily = font ? font : _.clone(this.fontFamily);
