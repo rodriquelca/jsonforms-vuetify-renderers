@@ -15,16 +15,17 @@
 
 <script lang="ts">
 import { sync } from 'vuex-pathify';
-import { createLayout } from '../../util';
-import DynaformEditor from '../DynaformEditor/DynaformEditor.vue';
-import MainPanelI18n from '../i18n/mainPanelI18n.vue';
-import MainPanelDynaformPreview from '../DynaformPreview/mainPanelDynaformPreview.vue';
+import { createLayout } from '../../../util';
+import DynaformEditor from '../../DynaformEditor/DynaformEditor.vue';
+import MainPanelI18n from '../../i18n/mainPanelI18n.vue';
+import MainPanelDynaformPreview from '../../DynaformPreview/mainPanelDynaformPreview.vue';
 
-import MainPanelSchemaEditor from '../SchemaEditor/mainPanelSchemaEditor.vue';
-import MainPanelFormRules from '../FormRules/MainPanelFormRules.vue';
-import MainPanelDataSourcesSimpleLists from '../../modules/DataSources/MainPanelDataSourcesSimpleList.vue';
-import MainPanelDataSourcesApi from '../../modules/DataSources/MainPanelDataSourcesApi.vue';
-import MainPanelJsonForms from '../JsonForms/MainPanelJsonForms.vue';
+import MainPanelSchemaEditor from '../../SchemaEditor/mainPanelSchemaEditor.vue';
+import MainPanelFormRules from '../../FormRules/MainPanelFormRules.vue';
+import MainPanelDataSourcesSimpleLists from '../../../modules/DataSources/MainPanelDataSourcesSimpleList.vue';
+import MainPanelDataSourcesApi from '../../../modules/DataSources/MainPanelDataSourcesApi.vue';
+import MainPanelDashboard from '../../../modules/Dashboard/MainPanelDashboard.vue';
+import MainPanelDashboardTemplates from '../../../modules/Dashboard/MainPanelDashboardTemplates.vue';
 
 export default {
 	name: 'mainPanel',
@@ -37,7 +38,8 @@ export default {
 		MainPanelFormRules,
 		MainPanelDataSourcesSimpleLists,
 		MainPanelDataSourcesApi,
-		MainPanelJsonForms,
+		MainPanelDashboard,
+		MainPanelDashboardTemplates,
 	},
 	data() {
 		return {

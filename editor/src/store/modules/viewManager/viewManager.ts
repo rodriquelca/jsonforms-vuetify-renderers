@@ -46,8 +46,8 @@ const state: ViewManagerState = {
     active: 0,
     items: [
       {
-        id: 'side-bar-json-forms',
-        component: 'side-bar-json-forms',
+        id: 'side-bar-dashboard',
+        component: 'side-bar-dashboard',
       },
       {
         id: 'side-bar-pallete',
@@ -78,8 +78,8 @@ const state: ViewManagerState = {
     active: 0,
     items: [
       {
-        id: 'main-json-forms',
-        component: 'main-panel-json-forms',
+        id: 'main-dashboard',
+        component: 'main-panel-dashboard',
         data: {
           reload: '1',
           form: null,
@@ -145,11 +145,28 @@ const state: ViewManagerState = {
           reload: '1',
         },
       },
+      {
+        id: 'main-dashboard-templates',
+        component: 'main-panel-dashboard-templates',
+        data: {
+          reload: '1',
+        },
+      },
     ],
   },
   actionsBar: {
     active: 0,
     items: [
+      {
+        id: 'empty',
+        component: 'empty',
+        data: {},
+      },
+      {
+        id: 'actions-dashboard',
+        component: 'actions-bar-dashboard',
+        data: {},
+      },
       {
         id: 'actions-editor',
         component: 'actions-bar-editor',
