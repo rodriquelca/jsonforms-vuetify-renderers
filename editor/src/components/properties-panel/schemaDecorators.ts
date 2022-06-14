@@ -630,7 +630,7 @@ export const referenceDecorator: PropertySchemasDecorator = (
 ) => {
   if (['Form'].includes(uiElement?.type)) {
     assign(schemas.schema.properties, {
-      screen: { type: 'string', enum: ['address', 'user'] },
+      screen: { type: 'string', enum: ['demo', 'shipping'] },
     });
     (schemas.uiSchema as Layout).elements.push({
       type: 'Control',

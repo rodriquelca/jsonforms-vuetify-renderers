@@ -472,85 +472,9 @@ const updateScreenReference = (state, payload) => {
 
       newSchema.schema.definitions[payload.changedProperties.screen] =
         screen.schema;
-      // this need to be rendered dinamically
-      // newSchema.schema.definitions = {
-      //   address: {
-      //     type: 'object',
-      //     title: 'Address',
-      //     properties: {
-      //       street_address: {
-      //         type: 'string',
-      //       },
-      //       city: {
-      //         type: 'string',
-      //       },
-      //       state: {
-      //         type: 'string',
-      //       },
-      //     },
-      //     required: ['street_address', 'city', 'state'],
-      //   },
-      //   user: {
-      //     type: 'object',
-      //     title: 'User',
-      //     properties: {
-      //       name: {
-      //         type: 'string',
-      //       },
-      //       mail: {
-      //         type: 'string',
-      //       },
-      //     },
-      //     required: ['name', 'mail'],
-      //   },
-      // };
-
-      // const detailUISchema: any = {
-      //   address: {
-      //     type: 'VerticalLayout',
-      //     elements: [
-      //       {
-      //         type: 'HorizontalLayout',
-      //         elements: [
-      //           {
-      //             type: 'Control',
-      //             scope: '#/properties/city',
-      //             label: 'city',
-      //           },
-      //           {
-      //             type: 'Control',
-      //             scope: '#/properties/state',
-      //             label: 'State',
-      //           },
-      //         ],
-      //       },
-      //     ],
-      //   },
-      //   user: {
-      //     type: 'VerticalLayout',
-      //     elements: [
-      //       {
-      //         type: 'HorizontalLayout',
-      //         elements: [
-      //           {
-      //             type: 'Control',
-      //             scope: '#/properties/name',
-      //             label: 'Name',
-      //           },
-      //           {
-      //             type: 'Control',
-      //             scope: '#/properties/mail',
-      //             label: 'Mail',
-      //           },
-      //         ],
-      //       },
-      //     ],
-      //   },
-      // };
 
       uiSchemaElement.options.detail = screen.uiSchema;
       uiSchemaElement.options.formRef = payload.changedProperties.screen;
-      // assign(linkedShemaElement.schema, payload.changedProperties);
       return {
         schema: getRoot(newSchema),
         uiSchema: getRoot(newUiSchema),

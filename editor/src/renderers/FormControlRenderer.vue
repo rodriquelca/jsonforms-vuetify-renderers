@@ -70,14 +70,8 @@ const controlRenderer = defineComponent({
       },
     };
   },
-  mounted() {
-    // this.renderers = vuetifyRenderers;
-  },
   computed: {
     customRenderers(): Array<any> {
-      // const renderers = this.control.renderers?.filter((r) => {
-      //   console.log(r);
-      // });
       return vuetifyRenderers;
     },
     detailUiSchema(): UISchemaElement {
@@ -103,6 +97,6 @@ const controlRenderer = defineComponent({
 export default controlRenderer;
 export const entry: JsonFormsRendererRegistryEntry = {
   renderer: controlRenderer,
-  tester: rankWith(11, uiTypeIs('Form')),
+  tester: rankWith(2, uiTypeIs('Form')),
 };
 </script>

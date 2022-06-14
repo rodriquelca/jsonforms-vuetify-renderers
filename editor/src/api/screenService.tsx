@@ -5,89 +5,20 @@ import {
   createLayout,
 } from '../util/generators/uiSchema';
 import { createControl } from '../util/generators/schema'
+import { examples } from './examples';
 export interface scrennService {
   getScreenById(id:any): any;
 }
 
 
-
 const screens:any = {
-      address: {
-        schema: {
-          type: 'object',
-          title: 'Address',
-          properties: {
-            street_address: {
-              type: 'string',
-            },
-            city: {
-              type: 'string',
-            },
-            state: {
-              type: 'string',
-            },
-          },
-          required: ['street_address', 'city', 'state'],
-        },
-        uiSchema:{
-                type: 'VerticalLayout',
-                elements: [
-                  {
-                    type: 'HorizontalLayout',
-                    elements: [
-                      {
-                        type: 'Control',
-                        scope: '#/properties/city',
-                        label: 'city',
-                      },
-                      {
-                        type: 'Control',
-                        scope: '#/properties/state',
-                        label: 'State',
-                      },
-                    ],
-                  },
-                ],
-        }
-      },
-      
-      
-     
-      user: {
-        schema:{
-          type: 'object',
-          title: 'User',
-          properties: {
-            name: {
-              type: 'string',
-            },
-            mail: {
-              type: 'string',
-            },
-          },
-          required: ['name', 'mail'],
-        },
-        uiSchema:{
-          type: 'VerticalLayout',
-              elements: [
-                {
-                  type: 'HorizontalLayout',
-                  elements: [
-                    {
-                      type: 'Control',
-                      scope: '#/properties/name',
-                      label: 'Name',
-                    },
-                    {
-                      type: 'Control',
-                      scope: '#/properties/mail',
-                      label: 'Mail',
-                    },
-                  ],
-                },
-              ],
-        }
-       
+      demo: {
+        schema: examples[1].items[0].input.schema,
+        uiSchema:examples[1].items[0].input.uischema
+      },     
+      shipping: {
+        schema:examples[1].items[1].input.schema,
+        uiSchema:examples[1].items[1].input.uischema,
       },
     };
 
