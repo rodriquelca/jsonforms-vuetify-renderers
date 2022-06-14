@@ -13,6 +13,8 @@ import PropertiesPanel from '../../properties-panel/PropertiesPanel.vue';
 import SideBarI18n from '../../i18n/sideBarI18n.vue';
 import SideBarPreview from '../../DynaformPreview/sideBarDynaformPreview.vue';
 import SideBarDataSources from '../../../modules/DataSources/SideBarDataSources.vue';
+import SideBarDashboard from '../../../modules/Dashboard/SideBarDashboard.vue';
+
 export default {
 	name: 'SideBar',
 	components: {
@@ -21,6 +23,7 @@ export default {
 		SideBarI18n,
 		SideBarPreview,
 		SideBarDataSources,
+		SideBarDashboard,
 	},
 	data() {
 		return {};

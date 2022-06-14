@@ -1,28 +1,25 @@
 <template>
-	<component
-		v-bind:is="mode"
-		type="iPhone8"
-		picker
-		border
-		:class="mode == 'Device' ? 'vpm-device' : ''"
+	<v-parallax
+		:style="getPaddings"
+		height="auto"
+		:src="sourceBackground"
+		class="vpm-scale-preview"
 	>
-		<v-parallax :style="getPaddings" height="auto" :src="sourceBackground">
-			<v-card :style="getStyles" elevation="0">
-				<json-forms
-					class="pa-5"
-					:data="data"
-					:key="key"
-					:schema="useSchema"
-					:uischema="useUiSchema"
-					:renderers="renderers"
-					@change="onChange"
-					:i18n="i18n"
-					:cells="renderers"
-					v-bind:style="getCurrentFont"
-				/>
-			</v-card>
-		</v-parallax>
-	</component>
+		<v-card :style="getStyles" elevation="0" plain>
+			<json-forms
+				class="pa-5"
+				:data="data"
+				:key="key"
+				:schema="useSchema"
+				:uischema="useUiSchema"
+				:renderers="renderers"
+				@change="onChange"
+				:i18n="i18n"
+				:cells="renderers"
+				v-bind:style="getCurrentFont"
+			/>
+		</v-card>
+	</v-parallax>
 </template>
 
 <script lang="ts">
@@ -35,12 +32,10 @@ import _ from 'lodash';
 import store from '../../store';
 import { JReactivex as JReact, JForm as JF } from '@jsonforms/vue2';
 import { sync } from 'vuex-pathify';
-import Device from 'vue-device';
 export default {
-	name: 'dymaform-preview',
+	name: 'template-preview',
 	components: {
 		JsonForms,
-		Device,
 	},
 	props: {},
 	data() {
@@ -203,7 +198,7 @@ export default {
 .vpm-device {
 	position: initial !important;
 }
-#device .picker {
-	margin-top: 0px !important;
+.vpm-scale-preview {
+	transform: scale(0.6);
 }
 </style>

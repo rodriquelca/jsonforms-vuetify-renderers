@@ -23,9 +23,14 @@ const state: ViewManagerState = {
     active: 0,
     items: [
       {
+        id: 'activity-json-forms',
+        title: 'JSON Forms',
+        icon: 'mdi-view-dashboard',
+      },
+      {
         id: 'activity-json-form-editor',
         title: 'JSON Form Editor',
-        icon: 'mdi-view-dashboard',
+        icon: 'mdi-drawing-box',
       },
       {
         id: 'activity-data-sources',
@@ -40,6 +45,10 @@ const state: ViewManagerState = {
   sideBar: {
     active: 0,
     items: [
+      {
+        id: 'side-bar-dashboard',
+        component: 'side-bar-dashboard',
+      },
       {
         id: 'side-bar-pallete',
         component: 'pallete-panel',
@@ -69,6 +78,14 @@ const state: ViewManagerState = {
     active: 0,
     items: [
       {
+        id: 'main-dashboard',
+        component: 'main-panel-dashboard',
+        data: {
+          reload: '1',
+          form: null,
+        },
+      },
+      {
         id: 'main-editor',
         component: 'dynaform-editor',
         data: {
@@ -89,8 +106,17 @@ const state: ViewManagerState = {
         component: 'main-panel-dynaform-preview',
         data: {
           reload: '1',
+          mode: 'web',
         },
       },
+      {
+        id: 'main-preview-device',
+        component: 'main-panel-dynaform-device-preview',
+        data: {
+          reload: '1',
+        },
+      },
+
       {
         id: 'main-schema-editor',
         component: 'main-panel-schema-editor',
@@ -119,11 +145,28 @@ const state: ViewManagerState = {
           reload: '1',
         },
       },
+      {
+        id: 'main-dashboard-templates',
+        component: 'main-panel-dashboard-templates',
+        data: {
+          reload: '1',
+        },
+      },
     ],
   },
   actionsBar: {
     active: 0,
     items: [
+      {
+        id: 'empty',
+        component: 'empty',
+        data: {},
+      },
+      {
+        id: 'actions-dashboard',
+        component: 'actions-bar-dashboard',
+        data: {},
+      },
       {
         id: 'actions-editor',
         component: 'actions-bar-editor',

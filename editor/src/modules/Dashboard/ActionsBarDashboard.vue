@@ -69,73 +69,11 @@ export default {
 		return {
 			actions: [
 				{
-					title: 'Form Title',
+					title: 'Create a new Form',
 					type: 'title',
 				},
 				{
 					type: 'spacer',
-				},
-				{
-					type: 'button-flat',
-					color: 'secondary',
-					class: 'vpm-action-editor-btn',
-					icon: 'mdi-pencil-ruler',
-					handler: this.onClickEditor,
-					title: 'Editor',
-				},
-				{
-					type: 'button-flat',
-					color: 'primary',
-					class: 'vpm-action-editor-btn',
-					icon: 'mdi-application-outline',
-					handler: this.onClickPreviewBrowser,
-					title: 'Browser',
-				},
-				{
-					type: 'button-flat',
-					color: 'warning',
-					class: 'vpm-action-editor-btn',
-					icon: 'mdi-cellphone',
-					handler: this.onClickPreviewDevice,
-					title: 'Device',
-				},
-				{
-					type: 'spacer',
-				},
-				{
-					type: 'button-icon',
-					color: 'secondary',
-					class: '',
-					icon: 'mdi-vector-combine',
-					handler: this.onClickFormRules,
-					title: 'Form Rules',
-				},
-				{
-					type: 'button-icon',
-					color: 'secondary',
-					class: '',
-					icon: 'mdi-translate',
-					handler: this.onClickTranslations,
-					title: 'Translations',
-				},
-				{
-					type: 'button-icon',
-					color: 'secondary',
-					class: '',
-					icon: 'mdi-code-json',
-					handler: this.onClickSchemaEditor,
-					title: 'JSON Schema',
-				},
-				{
-					type: 'divider',
-				},
-				{
-					type: 'button-icon',
-					color: 'warning',
-					class: '',
-					icon: 'mdi-content-save',
-					handler: this.contentSave,
-					title: 'Save',
 				},
 			],
 		};
