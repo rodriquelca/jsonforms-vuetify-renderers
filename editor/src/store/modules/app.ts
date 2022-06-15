@@ -699,7 +699,6 @@ const actions = {
   },
   updateScreenReference({ commit, state }, payload) {
     const clone = updateScreenReference(state, payload);
-    // console.log(clone);
     commit('SET_SCHEMA', clone.schema);
     commit('SET_UI_SCHEMA', clone.uiSchema);
   },
