@@ -622,6 +622,23 @@ export const textTransformToDecorator: PropertySchemasDecorator = (
   }
   return schemas;
 };
+
+export const referenceDecorator: PropertySchemasDecorator = (
+  schemas: PropertySchemas,
+  uiElement: EditorUISchemaElement,
+  schemaElement?: SchemaElement
+) => {
+  if (['Form'].includes(uiElement?.type)) {
+    assign(schemas.schema.properties, {
+      screen: { type: 'string', enum: ['demo', 'shipping'] },
+    });
+    (schemas.uiSchema as Layout).elements.push({
+      type: 'Control',
+      scope: '#/properties/screen',
+    });
+  }
+  return schemas;
+};
 export const createPropertyControl = (
   controlScope: string
 ): ControlElement => ({
@@ -667,6 +684,7 @@ export const defaultSchemaDecoratorsCollection = new Map<
       trimDecorator,
       restrictDecorator,
       perPageDecorator,
+      referenceDecorator,
     ],
   ],
   ['rulesEditor', [ruleEditorDecorator]],

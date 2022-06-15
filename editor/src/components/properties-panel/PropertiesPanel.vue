@@ -263,6 +263,17 @@ const PropertiesPanel = defineComponent({
           });
           this.generalData['maxLength'] = event.data.maxLength;
         }
+        // screen
+        if (
+          event.data.screen &&
+          this.generalData['screen'] !== event.data.screen
+        ) {
+          this.$store.dispatch('app/updateScreenReference', {
+            elementUUID: this.uiElement.uuid,
+            changedProperties: { screen: event.data.screen },
+          });
+          this.generalData['screen'] = event.data.screen;
+        }
       }
     },
     updateAdvancedSetting: function (event: JsonFormsChangeEvent) {

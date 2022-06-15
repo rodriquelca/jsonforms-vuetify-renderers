@@ -8,3 +8,4 @@
 // export * from './schemaService';
 export * from './paletteService';
 export * from './exampleSchemaService';
+export * from './screenService';
