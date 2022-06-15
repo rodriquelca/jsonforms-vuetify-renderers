@@ -460,7 +460,6 @@ const updateScreenReference = (state, payload) => {
         newSchema,
         uiSchemaElement.linkedSchemaElement
       );
-      debugger;
       linkedShemaElement.schema.$ref =
         '#/definitions/' + payload.changedProperties.screen;
 

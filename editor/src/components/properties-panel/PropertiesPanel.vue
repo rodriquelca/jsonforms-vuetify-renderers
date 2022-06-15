@@ -154,7 +154,6 @@ const PropertiesPanel = defineComponent({
       }
     },
     updateGeneralSettings: function (event: JsonFormsChangeEvent) {
-      debugger;
       const elementSchema = this.findElementSchema();
       // variable
       if (this.uiElement && event.errors.length === 0) {

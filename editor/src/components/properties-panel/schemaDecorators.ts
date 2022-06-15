@@ -638,15 +638,6 @@ export const referenceDecorator: PropertySchemasDecorator = (
     });
   }
   return schemas;
-
-  if (uiElement?.type === 'Label') {
-    assign(schemas.schema.properties, { text: { type: 'string' } });
-
-    (schemas.uiSchema as Layout).elements.push(
-      createPropertyControl('#/properties/text')
-    );
-  }
-  return schemas;
 };
 export const createPropertyControl = (
   controlScope: string
